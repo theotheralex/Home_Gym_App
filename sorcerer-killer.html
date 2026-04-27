@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sorcerer Killer">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Sorcerer Killer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ESK%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ESK%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Sorcerer%20Killer%22%2C%22short_name%22%3A%22Sorcerer%20Killer%22%2C%22description%22%3A%22Adaptive%20home%20gym%20training%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527102%2527%2520fill%253D%2527%2523dc2626%2527%252F%253E%253Ctext%2520x%253D%2527256%2527%2520y%253D%2527338%2527%2520font-size%253D%2527266%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%2520font-family%253D%2527system-ui%2527%2520font-weight%253D%2527700%2527%253ESK%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #161616;
+    --surface-2: #1f1f1f;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.16);
+    --text: #f5f5f5;
+    --text-2: #a0a0a0;
+    --text-3: #6a6a6a;
+    --accent: #dc2626;
+    --success-bg: rgba(34,197,94,0.15);
+    --success-fg: #4ade80;
+    --success-border: rgba(34,197,94,0.4);
+    --info-bg: rgba(59,130,246,0.15);
+    --info-fg: #60a5fa;
+    --info-border: rgba(59,130,246,0.4);
+    --warn-bg: rgba(234,179,8,0.15);
+    --warn-fg: #facc15;
+    --warn-border: rgba(234,179,8,0.4);
+    --danger-bg: rgba(239,68,68,0.15);
+    --danger-fg: #f87171;
+    --danger-border: rgba(239,68,68,0.4);
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-size: 16px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: contain;
+  }
+  body {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    min-height: 100vh;
+  }
+  #app { padding: 16px; max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+  h1, h2, h3 { margin: 0; font-weight: 600; }
+  h1 { font-size: 24px; }
+  h2 { font-size: 20px; }
+  h3 { font-size: 16px; color: var(--text-2); }
+  p { margin: 0; }
+  button {
+    font-family: inherit; font-size: 14px;
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border-strong);
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.1s, transform 0.05s;
+  }
+  button:active { transform: scale(0.98); background: var(--surface-2); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: white; font-weight: 600; }
+  button.primary:active { background: #b91c1c; }
+  button.ghost { border: none; color: var(--text-2); padding: 8px 12px; }
+  input, select {
+    font-family: inherit; font-size: 14px;
+    background: var(--surface-2); color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px 10px; border-radius: var(--radius);
+    width: 64px; text-align: center;
+  }
+  select { padding-right: 24px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .subtitle { color: var(--text-2); font-size: 13px; margin-bottom: 16px; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .stat { background: var(--surface); border-radius: var(--radius); padding: 12px; }
+  .stat-label { font-size: 11px; color: var(--text-2); margin-bottom: 4px; }
+  .stat-value { font-size: 22px; font-weight: 600; }
+  .recovery-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px; border-radius: var(--radius);
+    margin-bottom: 4px; font-size: 13px;
+  }
+  .rec-fresh { background: var(--success-bg); color: var(--success-fg); }
+  .rec-recovering { background: var(--warn-bg); color: var(--warn-fg); }
+  .rec-fatigued { background: var(--danger-bg); color: var(--danger-fg); }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 14px; margin-bottom: 10px;
+  }
+  .card-clickable { cursor: pointer; }
+  .card-clickable:active { background: var(--surface-2); }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500; }
+  .pill-rec { background: var(--info-bg); color: var(--info-fg); margin-left: 6px; }
+  .ex-name { font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+  .tag {
+    display: inline-block; font-size: 10px; padding: 2px 8px;
+    border-radius: 999px; background: var(--surface-2); color: var(--text-2);
+    margin-right: 4px;
+  }
+  .set {
+    background: var(--surface-2); border-radius: var(--radius);
+    padding: 10px; margin-bottom: 6px;
+    border-left: 3px solid transparent;
+    transition: background 0.15s;
+  }
+  .set.logged-easy { background: var(--danger-bg); border-left-color: var(--danger-fg); }
+  .set.logged-good { background: var(--warn-bg); border-left-color: var(--warn-fg); }
+  .set.logged-hard { background: var(--info-bg); border-left-color: var(--info-fg); }
+  .set.logged-fail { background: var(--success-bg); border-left-color: var(--success-fg); }
+  .set-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px; flex-wrap: wrap; gap: 6px;
+  }
+  .set-label { font-size: 12px; color: var(--text-2); }
+  .set-inputs { display: flex; gap: 6px; align-items: center; font-size: 12px; }
+  .set-inputs input, .set-inputs select { padding: 6px 8px; font-size: 13px; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; margin-left: 6px; }
+  .feedback-row { display: flex; gap: 4px; }
+  .feedback-btn {
+    flex: 1; padding: 10px 4px; border-radius: var(--radius);
+    border: 1px solid var(--border-strong); background: transparent;
+    color: var(--text); font-size: 13px;
+  }
+  .feedback-btn.sel-easy { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-fg); }
+  .feedback-btn.sel-good { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-fg); }
+  .feedback-btn.sel-hard { background: var(--info-bg); border-color: var(--info-border); color: var(--info-fg); }
+  .feedback-btn.sel-fail { background: var(--success-bg); border-color: var(--success-border); color: var(--success-fg); }
+  .toast {
+    padding: 10px 14px; border-radius: var(--radius);
+    font-size: 13px; margin-bottom: 8px;
+  }
+  .session-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .full-width { width: 100%; margin-bottom: 6px; }
+  .key-row {
+    padding: 12px; border-radius: var(--radius);
+    margin-bottom: 6px; font-size: 14px;
+  }
+  .install-hint {
+    background: var(--info-bg); color: var(--info-fg);
+    padding: 12px; border-radius: var(--radius);
+    font-size: 12px; margin-bottom: 12px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="install-hint" class="install-hint"></div>
+
+  <div id="screen-home" class="screen active">
+    <div class="header">
+      <h1>Sorcerer Killer</h1>
+      <span id="streak" class="set-label"></span>
+    </div>
+    <p class="subtitle">Adaptive home gym training</p>
+
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="stat-label">Sessions</div>
+        <div id="stat-sessions" class="stat-value">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Total volume</div>
+        <div id="stat-volume" class="stat-value">0 lb</div>
+      </div>
+    </div>
+
+    <h3 style="margin: 16px 0 8px;">Recovery</h3>
+    <div id="recovery"></div>
+
+    <h3 style="margin: 16px 0 8px;">Start a session</h3>
+    <div class="button-grid">
+      <button class="primary" onclick="startFlow(30)">30 min</button>
+      <button class="primary" onclick="startFlow(60)">60 min</button>
+    </div>
+    <button class="full-width" onclick="showHistory()">View history</button>
+    <button class="full-width" onclick="showFeedbackKey()">What do the colors mean?</button>
+    <button class="full-width" onclick="resetConfirm()" style="color: var(--text-3); border-color: var(--border);">Reset all data</button>
+  </div>
+
+  <div id="screen-pick" class="screen">
+    <button class="ghost" onclick="goHome()">← Back</button>
+    <h2 style="margin: 8px 0 4px;">Pick today's focus</h2>
+    <p id="pick-time" class="subtitle"></p>
+    <div id="pick-options"></div>
+  </div>
+
+  <div id="screen-session" class="screen">
+    <div class="session-bar">
+      <button class="ghost" onclick="abandonSession()">Cancel</button>
+      <span id="session-progress" class="set-label"></span>
+    </div>
+    <h2 id="session-title"></h2>
+    <p id="session-subtitle" class="subtitle"></p>
+    <div id="toast-area"></div>
+    <div id="session-body"></div>
+    <button id="session-finish" class="primary full-width" onclick="finishSession()" style="margin-top: 12px; display: none;">Finish session</button>
+  </div>
+
+  <div id="screen-history" class="screen">
+    <button class="ghost" onclick="goHome()">← Back</button>
+    <h2 style="margin: 8px 0 16px;">Training history</h2>
+    <div id="history-body"></div>
+  </div>
+
+  <div id="screen-key" class="screen">
+    <button class="ghost" onclick="goHome()">← Back</button>
+    <h2 style="margin: 8px 0 8px;">Feedback colors</h2>
+    <p class="subtitle">For hypertrophy, you want sets near failure. Easy sets aren't pushing you.</p>
+    <div class="key-row" style="background: var(--danger-bg); color: var(--danger-fg);"><strong>Easy</strong> — too light, weight will jump</div>
+    <div class="key-row" style="background: var(--warn-bg); color: var(--warn-fg);"><strong>Good</strong> — solid set, small rep bump</div>
+    <div class="key-row" style="background: var(--info-bg); color: var(--info-fg);"><strong>Hard</strong> — near failure, hold the line</div>
+    <div class="key-row" style="background: var(--success-bg); color: var(--success-fg);"><strong>Failed</strong> — pushed past it, ideal stimulus</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'sorcerer-killer-state-v1';
+  const MUSCLES = ['back', 'chest', 'shoulders', 'biceps', 'triceps', 'legs', 'core', 'traps', 'forearms'];
+  const DB_WEIGHTS = [5, 10, 20, 30, 40, 50];
+
+  function nearestDB(w) { let best = DB_WEIGHTS[0]; for (const v of DB_WEIGHTS) if (v <= w) best = v; return best; }
+  function nextDB(w) { for (const v of DB_WEIGHTS) if (v > w) return v; return DB_WEIGHTS[DB_WEIGHTS.length - 1]; }
+  function prevDB(w) { let best = DB_WEIGHTS[0]; for (const v of DB_WEIGHTS) if (v < w) best = v; return best; }
+
+  const EXERCISES = {
+    db_row: { name: 'DB chest-supported row', muscles: { back: 1, biceps: 0.3 }, type: 'compound', equip: ['db','bench'], repRange: [8,12] },
+    single_arm_row: { name: 'Single-arm DB row', muscles: { back: 1, biceps: 0.3, core: 0.2 }, type: 'compound', equip: ['db','bench'], repRange: [8,12] },
+    db_pullover: { name: 'DB pullover', muscles: { back: 0.7, chest: 0.4 }, type: 'accessory', equip: ['db','bench'], repRange: [10,12] },
+    kb_swing: { name: 'Kettlebell swing', muscles: { back: 0.6, legs: 0.6, core: 0.4 }, type: 'compound', equip: ['kb'], repRange: [12,15], fixedWeight: 50 },
+    kb_row: { name: 'Single-arm KB row', muscles: { back: 1, biceps: 0.3 }, type: 'compound', equip: ['kb','bench'], repRange: [10,12], fixedWeight: 50 },
+
+    db_floor_press: { name: 'DB floor press (neutral grip)', muscles: { chest: 1, triceps: 0.4, shoulders: 0.3 }, type: 'compound', equip: ['db'], repRange: [8,12] },
+    db_bench_press: { name: 'DB bench press (neutral grip)', muscles: { chest: 1, triceps: 0.4, shoulders: 0.3 }, type: 'compound', equip: ['db','bench'], repRange: [8,12] },
+    db_incline_press: { name: 'DB incline press (neutral grip)', muscles: { chest: 1, shoulders: 0.4, triceps: 0.3 }, type: 'compound', equip: ['db','bench'], repRange: [8,12] },
+    db_fly: { name: 'DB fly', muscles: { chest: 0.8 }, type: 'accessory', equip: ['db','bench'], repRange: [12,15] },
+    db_squeeze_press: { name: 'DB squeeze press', muscles: { chest: 0.9, triceps: 0.3 }, type: 'accessory', equip: ['db','bench'], repRange: [10,12] },
+
+    db_ohp: { name: 'DB overhead press (neutral grip)', muscles: { shoulders: 1, triceps: 0.4, traps: 0.3 }, type: 'compound', equip: ['db'], repRange: [8,12] },
+    db_lateral: { name: 'DB lateral raise', muscles: { shoulders: 1 }, type: 'accessory', equip: ['db'], repRange: [12,15] },
+    db_rear_delt: { name: 'DB rear delt raise', muscles: { shoulders: 0.7, back: 0.3 }, type: 'accessory', equip: ['db'], repRange: [12,15] },
+    db_y_raise: { name: 'DB Y-raise', muscles: { shoulders: 0.7, traps: 0.4 }, type: 'accessory', equip: ['db','bench'], repRange: [12,15] },
+
+    db_shrug: { name: 'DB shrug', muscles: { traps: 1 }, type: 'accessory', equip: ['db'], repRange: [12,15] },
+    farmer_carry: { name: 'Farmer carry', muscles: { traps: 0.7, forearms: 0.8, core: 0.4 }, type: 'compound', equip: ['db'], repRange: [40,60], unit: 'sec' },
+    kb_high_pull: { name: 'Kettlebell high pull', muscles: { traps: 0.7, shoulders: 0.5, back: 0.4 }, type: 'compound', equip: ['kb'], repRange: [10,12], fixedWeight: 50 },
+
+    db_curl: { name: 'DB hammer curl (neutral grip)', muscles: { biceps: 1, forearms: 0.4 }, type: 'accessory', equip: ['db'], repRange: [10,12] },
+    db_incline_curl: { name: 'DB incline curl (neutral grip)', muscles: { biceps: 1 }, type: 'accessory', equip: ['db','bench'], repRange: [10,12] },
+    db_skullcrusher: { name: 'DB skullcrusher (neutral grip)', muscles: { triceps: 1 }, type: 'accessory', equip: ['db','bench'], repRange: [10,12] },
+    db_kickback: { name: 'DB tricep kickback', muscles: { triceps: 0.9 }, type: 'accessory', equip: ['db'], repRange: [12,15] },
+    db_overhead_extension: { name: 'DB overhead tricep extension', muscles: { triceps: 1 }, type: 'accessory', equip: ['db'], repRange: [10,12] },
+
+    goblet_squat: { name: 'Goblet squat', muscles: { legs: 1, core: 0.3 }, type: 'compound', equip: ['db'], repRange: [10,12] },
+    db_rdl: { name: 'DB Romanian deadlift', muscles: { legs: 0.9, back: 0.4 }, type: 'compound', equip: ['db'], repRange: [10,12] },
+    bulgarian: { name: 'Bulgarian split squat', muscles: { legs: 1 }, type: 'compound', equip: ['db','bench'], repRange: [8,10], perSide: true },
+    db_step_up: { name: 'DB step-up', muscles: { legs: 1 }, type: 'compound', equip: ['db','step'], repRange: [10,12], perSide: true },
+    sl_rdl: { name: 'Single-leg DB RDL', muscles: { legs: 0.9, core: 0.4 }, type: 'compound', equip: ['db'], repRange: [8,10], perSide: true },
+    kb_goblet_squat: { name: 'KB goblet squat', muscles: { legs: 1, core: 0.3 }, type: 'compound', equip: ['kb'], repRange: [10,12], fixedWeight: 50 },
+    db_calf_raise: { name: 'DB calf raise', muscles: { legs: 0.6 }, type: 'accessory', equip: ['db','step'], repRange: [15,20] },
+
+    ab_wheel: { name: 'Ab wheel rollout', muscles: { core: 1 }, type: 'accessory', equip: [], repRange: [8,12], noWeight: true },
+    hanging_leg_raise: { name: 'Hanging or lying leg raise', muscles: { core: 1 }, type: 'accessory', equip: [], repRange: [10,12], noWeight: true },
+    side_plank: { name: 'Side plank', muscles: { core: 0.8 }, type: 'accessory', equip: [], repRange: [30,45], unit: 'sec', perSide: true, noWeight: true },
+    dead_bug: { name: 'Dead bug', muscles: { core: 0.7 }, type: 'accessory', equip: [], repRange: [10,12], perSide: true, noWeight: true },
+    plank: { name: 'Plank', muscles: { core: 0.7 }, type: 'accessory', equip: [], repRange: [45,60], unit: 'sec', noWeight: true },
+
+    jump_rope: { name: 'Jump rope intervals', muscles: { legs: 0.3, core: 0.2 }, type: 'finisher', equip: ['rope'], repRange: [60,60], unit: 'sec', noWeight: true, rounds: 5 },
+  };
+
+  const TEMPLATES = {
+    pull_focus: {
+      name: 'Pull + back', subtitle: 'Lats, traps, rear delts, biceps', emphasis: ['back','traps','biceps'],
+      slots60: ['db_row','single_arm_row','db_shrug','db_pullover','db_curl','farmer_carry','db_rear_delt','ab_wheel'],
+      slots30: ['db_row','db_shrug','db_curl','farmer_carry'],
+    },
+    push_focus: {
+      name: 'Push + chest', subtitle: 'Chest, shoulders, triceps', emphasis: ['chest','shoulders','triceps'],
+      slots60: ['db_bench_press','db_ohp','db_incline_press','db_fly','db_lateral','db_skullcrusher','db_overhead_extension','hanging_leg_raise'],
+      slots30: ['db_bench_press','db_ohp','db_lateral','db_skullcrusher'],
+    },
+    legs_focus: {
+      name: 'Legs + posterior', subtitle: 'Quads, hams, glutes, core', emphasis: ['legs','core'],
+      slots60: ['goblet_squat','db_rdl','bulgarian','db_step_up','sl_rdl','kb_swing','db_calf_raise','ab_wheel'],
+      slots30: ['goblet_squat','db_rdl','bulgarian','kb_swing'],
+    },
+    upper_full: {
+      name: 'Upper full', subtitle: 'Balanced push + pull', emphasis: ['back','chest','shoulders'],
+      slots60: ['db_row','db_bench_press','db_ohp','db_rear_delt','db_curl','db_skullcrusher','db_shrug','ab_wheel'],
+      slots30: ['db_row','db_bench_press','db_ohp','db_curl'],
+    },
+    conditioning: {
+      name: 'Conditioning', subtitle: 'Fighter circuit, lower volume lifts', emphasis: ['core','legs','back'],
+      slots60: ['kb_swing','kb_high_pull','farmer_carry','goblet_squat','db_row','jump_rope','ab_wheel','side_plank'],
+      slots30: ['kb_swing','farmer_carry','goblet_squat','jump_rope'],
+    },
+  };
+
+  let state = { sessions: [], progressions: {}, lastSession: null, currentSession: null };
+  let pendingTime = null;
+
+  function load() {
+    try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) state = Object.assign(state, JSON.parse(raw)); } catch(e) {}
+  }
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+  }
+
+  function getStartingWeight(exId) {
+    const ex = EXERCISES[exId];
+    if (ex.noWeight || ex.unit === 'sec') return null;
+    if (ex.fixedWeight) return ex.fixedWeight;
+    const defaults = {
+      db_row: 30, single_arm_row: 30, db_pullover: 20,
+      db_floor_press: 30, db_bench_press: 30, db_incline_press: 20, db_fly: 10, db_squeeze_press: 20,
+      db_ohp: 20, db_lateral: 10, db_rear_delt: 10, db_y_raise: 5,
+      db_shrug: 40, farmer_carry: 50,
+      db_curl: 20, db_incline_curl: 10, db_skullcrusher: 10, db_kickback: 10, db_overhead_extension: 20,
+      goblet_squat: 40, db_rdl: 30, bulgarian: 20, db_step_up: 20, sl_rdl: 20, db_calf_raise: 30,
+    };
+    return nearestDB(defaults[exId] || 20);
+  }
+
+  function getProgression(exId) {
+    if (!state.progressions[exId]) {
+      const ex = EXERCISES[exId];
+      state.progressions[exId] = {
+        weight: getStartingWeight(exId), reps: ex.repRange[0],
+        consecutiveEasy: 0, consecutiveHard: 0, lastResult: null,
+      };
+    }
+    return state.progressions[exId];
+  }
+
+  function adaptProgression(exId, feedback, actualReps, actualWeight) {
+    const ex = EXERCISES[exId];
+    const prog = getProgression(exId);
+    if (actualWeight != null && !ex.fixedWeight) {
+      prog.weight = (ex.equip && ex.equip.includes('db')) ? nearestDB(actualWeight) : actualWeight;
+    }
+    if (actualReps != null) prog.reps = actualReps;
+    const usesDB = ex.equip && ex.equip.includes('db') && !ex.fixedWeight && !ex.noWeight && ex.unit !== 'sec';
+
+    if (feedback === 'easy') {
+      prog.consecutiveEasy = (prog.consecutiveEasy || 0) + 1;
+      prog.consecutiveHard = 0;
+      if (ex.noWeight || ex.unit === 'sec' || ex.fixedWeight) {
+        prog.reps = Math.min(prog.reps + 2, ex.repRange[1] + 4);
+      } else if (usesDB) {
+        if (prog.reps >= ex.repRange[1]) {
+          prog.weight = nextDB(prog.weight); prog.reps = ex.repRange[0]; prog.consecutiveEasy = 0;
+        } else {
+          prog.reps = Math.min(prog.reps + 2, ex.repRange[1]);
+        }
+      }
+    } else if (feedback === 'good') {
+      prog.consecutiveEasy = 0; prog.consecutiveHard = 0;
+      if (prog.reps < ex.repRange[1]) prog.reps = Math.min(prog.reps + 1, ex.repRange[1]);
+    } else if (feedback === 'hard') {
+      prog.consecutiveHard = (prog.consecutiveHard || 0) + 1; prog.consecutiveEasy = 0;
+    } else if (feedback === 'fail') {
+      prog.consecutiveHard = (prog.consecutiveHard || 0) + 1; prog.consecutiveEasy = 0;
+      if (prog.consecutiveHard >= 2) {
+        if (usesDB) prog.weight = prevDB(prog.weight);
+        else if (!ex.fixedWeight && !ex.noWeight && ex.unit !== 'sec') prog.weight = Math.max(5, prog.weight - 5);
+        else prog.reps = Math.max(ex.repRange[0], prog.reps - 2);
+        prog.consecutiveHard = 0;
+      }
+    }
+    prog.lastResult = feedback;
+  }
+
+  function getRecoveryScores() {
+    const now = Date.now();
+    const HOURS = 1000 * 60 * 60;
+    const scores = {};
+    MUSCLES.forEach(m => scores[m] = 100);
+    state.sessions.slice(-5).forEach(sess => {
+      const ageHours = (now - sess.timestamp) / HOURS;
+      sess.exercises.forEach(e => {
+        const ex = EXERCISES[e.id];
+        if (!ex) return;
+        Object.keys(ex.muscles).forEach(m => {
+          const intensity = ex.muscles[m] * (ex.type === 'compound' ? 1 : 0.6);
+          const decay = Math.max(0, 1 - (ageHours / 48));
+          scores[m] = Math.max(0, scores[m] - intensity * decay * 60);
+        });
+      });
+    });
+    Object.keys(scores).forEach(k => scores[k] = Math.round(scores[k]));
+    return scores;
+  }
+
+  function pickTemplates(time) {
+    const recovery = getRecoveryScores();
+    return Object.keys(TEMPLATES).map(key => {
+      const t = TEMPLATES[key];
+      const avgRecovery = t.emphasis.reduce((s, m) => s + recovery[m], 0) / t.emphasis.length;
+      const lastSame = state.lastSession === key ? -30 : 0;
+      return { key, template: t, score: avgRecovery + lastSame, avgRecovery: Math.round(avgRecovery) };
+    }).sort((a,b) => b.score - a.score).slice(0, 4);
+  }
+
+  function buildSession(templateKey, time) {
+    const t = TEMPLATES[templateKey];
+    const slots = time === 30 ? t.slots30 : t.slots60;
+    return {
+      templateKey, templateName: t.name, time, timestamp: Date.now(),
+      exercises: slots.map(id => {
+        const ex = EXERCISES[id];
+        const prog = getProgression(id);
+        const numSets = ex.type === 'compound' ? 3 : (ex.rounds || (time === 30 ? 2 : 3));
+        const sets = [];
+        for (let i = 0; i < numSets; i++) {
+          sets.push({
+            targetWeight: prog.weight, targetReps: prog.reps,
+            actualWeight: prog.weight, actualReps: prog.reps,
+            feedback: null, done: false,
+          });
+        }
+        return { id, name: ex.name, sets };
+      }),
+    };
+  }
+
+  function recoveryLabel(score) {
+    if (score >= 75) return { cls: 'rec-fresh', label: 'Fresh' };
+    if (score >= 40) return { cls: 'rec-recovering', label: 'Recovering' };
+    return { cls: 'rec-fatigued', label: 'Fatigued' };
+  }
+
+  function renderHome() {
+    document.getElementById('stat-sessions').textContent = state.sessions.length;
+    const totalVol = state.sessions.reduce((s, sess) => s + (sess.totalVolume || 0), 0);
+    document.getElementById('stat-volume').textContent = Math.round(totalVol).toLocaleString() + ' lb';
+    document.getElementById('streak').textContent = state.sessions.length > 0 ? state.sessions.length + ' done' : '';
+    const recovery = getRecoveryScores();
+    document.getElementById('recovery').innerHTML = MUSCLES.map(m => {
+      const c = recoveryLabel(recovery[m]);
+      return '<div class="recovery-row ' + c.cls + '"><span style="text-transform: capitalize;">' + m + '</span><span>' + c.label + ' · ' + recovery[m] + '%</span></div>';
+    }).join('');
+  }
+
+  window.startFlow = function(time) {
+    pendingTime = time;
+    document.getElementById('pick-time').textContent = time + ' minute session';
+    const opts = pickTemplates(time);
+    document.getElementById('pick-options').innerHTML = opts.map((o, i) => {
+      const rec = i === 0 ? '<span class="pill pill-rec">Recommended</span>' : '';
+      return '<div class="card card-clickable" onclick="pickTemplate(\'' + o.key + '\')">'
+        + '<div style="display: flex; justify-content: space-between; align-items: center;">'
+        + '<div><div class="ex-name">' + o.template.name + rec + '</div>'
+        + '<div class="set-label">' + o.template.subtitle + '</div></div>'
+        + '<div class="set-label">' + o.avgRecovery + '% fresh</div></div></div>';
+    }).join('');
+    showScreen('pick');
+  };
+
+  window.pickTemplate = function(key) {
+    state.currentSession = buildSession(key, pendingTime);
+    save();
+    renderSession();
+    showScreen('session');
+  };
+
+  function updateProgress() {
+    const sess = state.currentSession;
+    if (!sess) return;
+    let total = 0, done = 0;
+    sess.exercises.forEach(e => e.sets.forEach(s => { total++; if (s.done) done++; }));
+    document.getElementById('session-progress').textContent = done + ' / ' + total + ' sets';
+    document.getElementById('session-finish').style.display = done > 0 ? 'block' : 'none';
+  }
+
+  function renderSession() {
+    const sess = state.currentSession;
+    if (!sess) return;
+    document.getElementById('session-title').textContent = sess.templateName;
+    document.getElementById('session-subtitle').textContent = sess.time + ' min · ' + sess.exercises.length + ' exercises';
+    updateProgress();
+    document.getElementById('session-body').innerHTML = sess.exercises.map((e, ei) => {
+      const ex = EXERCISES[e.id];
+      const tags = [];
+      if (ex.type === 'compound') tags.push('Compound');
+      if (ex.perSide) tags.push('Per side');
+      if (ex.unit === 'sec') tags.push('Seconds');
+      const tagHtml = tags.map(t => '<span class="tag">' + t + '</span>').join('');
+      const setsHtml = e.sets.map((s, si) => renderSet(ei, si, s, ex)).join('');
+      return '<div class="card"><div class="ex-name">' + e.name + '</div>'
+        + '<div style="margin-bottom: 8px;">' + tagHtml + '</div>' + setsHtml + '</div>';
+    }).join('');
+  }
+
+  function badgeFor(fb) {
+    const map = {
+      easy: { bg: 'var(--danger-bg)', fg: 'var(--danger-fg)', label: 'Too easy' },
+      good: { bg: 'var(--warn-bg)', fg: 'var(--warn-fg)', label: 'Good' },
+      hard: { bg: 'var(--info-bg)', fg: 'var(--info-fg)', label: 'Hard' },
+      fail: { bg: 'var(--success-bg)', fg: 'var(--success-fg)', label: 'Failed ✓' },
+    };
+    return map[fb];
+  }
+
+  function renderSet(ei, si, s, ex) {
+    let wInput = '';
+    if (!ex.noWeight && ex.unit !== 'sec') {
+      const usesDB = ex.equip && ex.equip.includes('db') && !ex.fixedWeight;
+      if (usesDB) {
+        const opts = DB_WEIGHTS.map(w => '<option value="' + w + '"' + (s.actualWeight === w ? ' selected' : '') + '>' + w + '</option>').join('');
+        wInput = '<select onchange="updateSet(' + ei + ',' + si + ',\'actualWeight\',this.value)">' + opts + '</select> lb';
+      } else {
+        wInput = '<input type="number" inputmode="numeric" value="' + s.actualWeight + '" onchange="updateSet(' + ei + ',' + si + ',\'actualWeight\',this.value)" /> lb';
+      }
+    }
+    const rLabel = ex.unit === 'sec' ? 's' : 'reps';
+    const rInput = '<input type="number" inputmode="numeric" value="' + s.actualReps + '" onchange="updateSet(' + ei + ',' + si + ',\'actualReps\',this.value)" /> ' + rLabel;
+    const fbButtons = ['easy','good','hard','fail'].map(f => {
+      const sel = s.feedback === f ? ' sel-' + f : '';
+      const labels = { easy: 'Easy', good: 'Good', hard: 'Hard', fail: 'Failed' };
+      return '<button class="feedback-btn' + sel + '" onclick="setFeedback(' + ei + ',' + si + ',\'' + f + '\')">' + labels[f] + '</button>';
+    }).join('');
+    const loggedClass = s.done && s.feedback ? ' logged-' + s.feedback : '';
+    let badgeHtml = '';
+    if (s.done && s.feedback) {
+      const b = badgeFor(s.feedback);
+      badgeHtml = '<span class="badge" style="background: ' + b.bg + '; color: ' + b.fg + ';">' + b.label + '</span>';
+    }
+    return '<div class="set' + loggedClass + '" id="set-' + ei + '-' + si + '">'
+      + '<div class="set-header"><span class="set-label">Set ' + (si + 1) + badgeHtml + '</span>'
+      + '<div class="set-inputs">' + wInput + (wInput ? ' · ' : '') + rInput + '</div></div>'
+      + '<div class="feedback-row">' + fbButtons + '</div></div>';
+  }
+
+  function rerenderSet(ei, si) {
+    const sess = state.currentSession;
+    if (!sess) return;
+    const ex = EXERCISES[sess.exercises[ei].id];
+    const s = sess.exercises[ei].sets[si];
+    const el = document.getElementById('set-' + ei + '-' + si);
+    if (el) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = renderSet(ei, si, s, ex);
+      el.replaceWith(tmp.firstChild);
+    }
+  }
+
+  function showToast(msg, kind) {
+    const colors = {
+      easy: { bg: 'var(--danger-bg)', fg: 'var(--danger-fg)' },
+      good: { bg: 'var(--warn-bg)', fg: 'var(--warn-fg)' },
+      hard: { bg: 'var(--info-bg)', fg: 'var(--info-fg)' },
+      fail: { bg: 'var(--success-bg)', fg: 'var(--success-fg)' },
+    };
+    const c = colors[kind] || colors.good;
+    const id = 'toast-' + Date.now();
+    const div = document.createElement('div');
+    div.className = 'toast'; div.id = id;
+    div.style.background = c.bg; div.style.color = c.fg;
+    div.textContent = msg;
+    document.getElementById('toast-area').appendChild(div);
+    setTimeout(() => { const e = document.getElementById(id); if (e) e.remove(); }, 1800);
+  }
+
+  window.updateSet = function(ei, si, field, val) {
+    state.currentSession.exercises[ei].sets[si][field] = parseFloat(val) || 0;
+    save();
+  };
+
+  window.setFeedback = function(ei, si, fb) {
+    const set = state.currentSession.exercises[ei].sets[si];
+    set.feedback = fb; set.done = true;
+    save(); rerenderSet(ei, si); updateProgress();
+    const labels = {
+      easy: 'Too easy — bumping weight',
+      good: 'Good — small rep bump',
+      hard: 'Hard — holding the line',
+      fail: 'Failed — perfect stimulus',
+    };
+    showToast(labels[fb] || 'Logged', fb);
+  };
+
+  window.finishSession = function() {
+    const sess = state.currentSession;
+    let totalVolume = 0;
+    sess.exercises.forEach(e => {
+      const completed = e.sets.filter(s => s.done);
+      if (completed.length === 0) return;
+      const counts = { easy: 0, good: 0, hard: 0, fail: 0 };
+      completed.forEach(s => counts[s.feedback]++);
+      let aggregate = 'good';
+      if (counts.fail > 0) aggregate = 'fail';
+      else if (counts.hard > counts.easy) aggregate = 'hard';
+      else if (counts.easy > counts.hard && counts.easy >= completed.length / 2) aggregate = 'easy';
+      const last = completed[completed.length - 1];
+      adaptProgression(e.id, aggregate, last.actualReps, last.actualWeight);
+      completed.forEach(s => {
+        const ex = EXERCISES[e.id];
+        if (!ex.noWeight && ex.unit !== 'sec') totalVolume += (s.actualWeight || 0) * (s.actualReps || 0) * (ex.perSide ? 2 : 1);
+      });
+    });
+    sess.totalVolume = totalVolume; sess.completed = true;
+    state.sessions.push(sess);
+    state.lastSession = sess.templateKey;
+    state.currentSession = null;
+    save(); renderHome(); showScreen('home');
+  };
+
+  window.abandonSession = function() {
+    if (confirm('Discard this session?')) {
+      state.currentSession = null; save(); showScreen('home');
+    }
+  };
+
+  window.showHistory = function() {
+    const body = document.getElementById('history-body');
+    if (state.sessions.length === 0) {
+      body.innerHTML = '<p class="set-label">No sessions yet. Get to work.</p>';
+    } else {
+      body.innerHTML = state.sessions.slice().reverse().map(s => {
+        const date = new Date(s.timestamp);
+        const completed = s.exercises.reduce((n, e) => n + e.sets.filter(x => x.done).length, 0);
+        return '<div class="card"><div style="display: flex; justify-content: space-between;">'
+          + '<div><div class="ex-name">' + s.templateName + '</div>'
+          + '<div class="set-label">' + date.toLocaleDateString() + ' · ' + s.time + ' min · ' + completed + ' sets</div></div>'
+          + '<div class="set-label">' + Math.round(s.totalVolume || 0).toLocaleString() + ' lb</div>'
+          + '</div></div>';
+      }).join('');
+    }
+    showScreen('history');
+  };
+
+  window.showFeedbackKey = function() { showScreen('key'); };
+
+  window.resetConfirm = function() {
+    if (confirm('Wipe all training data? This cannot be undone.')) {
+      state = { sessions: [], progressions: {}, lastSession: null, currentSession: null };
+      save(); renderHome();
+    }
+  };
+
+  window.goHome = function() { showScreen('home'); renderHome(); };
+
+  function showScreen(name) {
+    ['home','pick','session','history','key'].forEach(s => {
+      const el = document.getElementById('screen-' + s);
+      if (el) el.classList.toggle('active', s === name);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const hint = document.getElementById('install-hint');
+    hint.innerHTML = 'Install this app to your home screen for offline use. <button onclick="installPWA()" style="margin-left: 8px; padding: 4px 10px; font-size: 12px;">Install</button>';
+    hint.style.display = 'block';
+  });
+
+  window.installPWA = async function() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('install-hint').style.display = 'none';
+  };
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      const swCode = `
+        const CACHE = 'sorcerer-killer-v1';
+        self.addEventListener('install', e => {
+          e.waitUntil(caches.open(CACHE).then(c => c.add('./')));
+          self.skipWaiting();
+        });
+        self.addEventListener('activate', e => { self.clients.claim(); });
+        self.addEventListener('fetch', e => {
+          e.respondWith(
+            caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
+              const clone = resp.clone();
+              caches.open(CACHE).then(c => c.put(e.request, clone));
+              return resp;
+            }).catch(() => caches.match('./')))
+          );
+        });
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swUrl).catch(() => {});
+    });
+  }
+
+  load();
+  if (state.currentSession) { renderSession(); showScreen('session'); }
+  else { renderHome(); }
+})();
+</script>
+</body>
+</html>
