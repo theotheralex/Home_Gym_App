@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<!--
+  The Toji Method — Adaptive home gym training PWA
+  © 2025 Alexander Ortega (theotheralex)
+  https://github.com/theotheralex
+  https://ko-fi.com/theotheralex
+
+  Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+  (CC BY-NC-SA 4.0) — https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+  You may share and adapt this work for non-commercial purposes with
+  attribution. Commercial use is not permitted without explicit permission.
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -27,7 +39,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
 html{font-size:16px;}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;}
-#app{max-width:430px;margin:0 auto;padding:20px 16px 120px;}
+#app{max-width:430px;margin:0 auto;padding:20px 16px 160px;}
 .screen{display:none;}.screen.active{display:block;}
 h1{font-size:28px;font-weight:700;letter-spacing:-.5px;}
 h2{font-size:22px;font-weight:700;letter-spacing:-.3px;}
@@ -80,11 +92,15 @@ button:active{opacity:.75;transform:scale(.97);}
 .ex-timer-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .ex-tbtn{font-size:15px;font-weight:700;min-height:50px;border-radius:var(--r);}
 .sets-wrap{padding:0 10px 12px;display:flex;flex-direction:column;gap:8px;}
-.set-card{background:var(--surface-2);border-radius:var(--rl);padding:14px;border-left:4px solid transparent;transition:background .15s,border-color .15s;}
+.set-card{background:var(--surface-2);border-radius:var(--rl);padding:14px;border-left:4px solid transparent;transition:background .15s,border-color .15s,box-shadow .15s;}
 .set-card.logged-easy{background:var(--d-bg);border-left-color:var(--d-fg);}
 .set-card.logged-good{background:var(--w-bg);border-left-color:var(--w-fg);}
 .set-card.logged-hard{background:var(--i-bg);border-left-color:var(--i-fg);}
 .set-card.logged-fail{background:var(--s-bg);border-left-color:var(--s-fg);}
+.set-card.set-current{border-left-color:var(--accent);box-shadow:0 0 0 1px var(--accent), 0 2px 12px rgba(220,38,38,0.15);}
+.set-card.set-current .set-lbl{color:var(--accent);}
+.set-next-pill{display:inline-block;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:8px;letter-spacing:0.5px;animation:pulse-pill 2s ease-in-out infinite;}
+@keyframes pulse-pill{0%,100%{opacity:1;}50%{opacity:0.7;}}
 .set-row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
 .set-lbl{font-size:13px;color:var(--text-2);font-weight:700;}
 .set-bdg{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:6px;}
@@ -173,6 +189,52 @@ button:active{opacity:.75;transform:scale(.97);}
 .str-cat-item-spark{width:100%;height:40px;margin-top:6px;}
 .str-cat-item-spark svg{width:100%;height:100%;}
 .str-recent-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+
+/* Strength score card */
+.str-score-card{background:linear-gradient(135deg,var(--surface) 0%,var(--surface-2) 100%);border-radius:var(--rl);padding:20px 18px;margin-bottom:12px;cursor:pointer;border:1px solid var(--border);}
+.str-score-card:active{transform:scale(0.99);transition:transform 0.1s;}
+.str-score-card-detail{cursor:default;margin-bottom:20px;padding:24px 20px;}
+.str-score-card-detail:active{transform:none;}
+.str-score-label{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;}
+.str-score-val{font-size:48px;font-weight:800;line-height:1;margin-bottom:4px;letter-spacing:-1px;}
+.str-score-card-detail .str-score-val{font-size:64px;}
+.str-score-tier{font-size:16px;font-weight:700;margin-bottom:14px;}
+.str-progress-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:6px;}
+.str-progress-fill{height:100%;border-radius:4px;transition:width 0.3s ease;}
+.str-progress-meta{font-size:12px;color:var(--text-3);font-weight:500;}
+.str-tier-list{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
+.str-tier-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;opacity:0.4;}
+.str-tier-item.reached{opacity:1;}
+.str-tier-item.current{opacity:1;transform:scale(1.05);}
+.str-tier-dot{width:12px;height:12px;border-radius:50%;}
+.str-tier-name{font-size:10px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;}
+.str-tier-min{font-size:10px;color:var(--text-3);}
+
+/* PR preview on dashboard */
+.str-pr-preview{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.str-pr-item{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:var(--rl);padding:12px 14px;}
+.str-pr-trophy{font-size:20px;flex-shrink:0;}
+.str-pr-text{flex:1;min-width:0;}
+.str-pr-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.str-pr-detail{font-size:11px;color:var(--text-3);font-weight:500;margin-top:1px;}
+
+/* Detailed PR feed */
+.pr-feed{display:flex;flex-direction:column;gap:8px;}
+.pr-card{background:var(--surface);border-radius:var(--rl);padding:14px;border-left:3px solid var(--w-fg);}
+.pr-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:8px;}
+.pr-card-name{font-size:15px;font-weight:700;color:var(--text);}
+.pr-card-improv{font-size:12px;font-weight:700;color:var(--w-fg);background:var(--w-bg);padding:2px 8px;border-radius:999px;white-space:nowrap;}
+.pr-card-detail{font-size:13px;color:var(--text-2);font-weight:500;}
+.pr-card-date{font-size:11px;color:var(--text-3);margin-top:4px;}
+
+/* Muscle group bests */
+.muscle-best-list{display:flex;flex-direction:column;gap:6px;}
+.muscle-best-row{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border-radius:var(--rl);padding:14px;}
+.muscle-best-name{font-size:14px;font-weight:700;}
+.muscle-best-via{font-size:11px;color:var(--text-3);margin-top:2px;}
+.muscle-best-vals{display:flex;align-items:center;gap:10px;}
+.muscle-best-e1rm{font-size:18px;font-weight:700;color:var(--i-fg);}
+.muscle-best-arrow{font-size:18px;font-weight:700;}
 .support-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 16px;margin-top:20px;text-align:center;}
 .support-card p{font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:12px;}
 .support-link{display:inline-flex;align-items:center;justify-content:center;padding:10px 24px;border-radius:var(--r);background:var(--surface-2);color:var(--text);font-size:14px;font-weight:600;text-decoration:none;border:1px solid var(--border-strong);}
@@ -265,9 +327,54 @@ button:active{opacity:.75;transform:scale(.97);}
 .set-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--surface);border-radius:var(--r);margin-bottom:6px;}
 .set-row-label{font-size:15px;font-weight:500;}
 .set-row-value{font-size:15px;font-weight:600;color:var(--text-2);}
+.set-row.editable{cursor:pointer;transition:background .15s;}
+.set-row.editable:active{background:var(--surface-2);}
+.set-row.editable .set-row-value::after{content:'›';margin-left:8px;color:var(--text-3);font-weight:700;}
+
+/* Edit modal */
+.edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;animation:fade-in 0.2s ease;}
+.edit-overlay.show{display:flex;}
+.edit-card{background:var(--surface);border-radius:var(--rl);padding:20px;width:100%;max-width:380px;max-height:80vh;overflow-y:auto;}
+.edit-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.edit-title{font-size:18px;font-weight:700;}
+.edit-close{background:none;border:none;color:var(--text-2);font-size:22px;cursor:pointer;padding:4px 8px;}
+.edit-body{margin-bottom:20px;}
+.edit-label{font-size:12px;color:var(--text-2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;}
+.edit-input{width:100%;background:var(--bg);color:var(--text);border:1.5px solid var(--border-strong);border-radius:var(--r);padding:12px 14px;font-size:16px;font-weight:600;font-family:inherit;height:48px;}
+.edit-input:focus{outline:none;border-color:var(--accent);}
+.edit-radio{display:flex;flex-direction:column;gap:8px;}
+.edit-radio-opt{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:15px;font-weight:500;}
+.edit-radio-opt.sel{border-color:var(--accent);background:rgba(220,38,38,0.08);}
+.edit-radio-opt-circle{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border-strong);flex-shrink:0;}
+.edit-radio-opt.sel .edit-radio-opt-circle{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 4px var(--surface-2);}
+.edit-radio-opt-label{flex:1;}
+.edit-radio-opt-sub{font-size:12px;color:var(--text-3);margin-top:2px;font-weight:400;}
+.edit-actions{display:flex;gap:10px;}
+.edit-actions button{flex:1;}
+.edit-row-double{display:flex;gap:10px;}
+.edit-row-double>*{flex:1;}
+.edit-help{font-size:12px;color:var(--text-3);line-height:1.5;margin-top:8px;}
+.edit-wt-chip{display:flex;align-items:center;justify-content:center;height:44px;background:transparent;border:1.5px solid var(--border-strong);border-radius:10px;font-size:14px;font-weight:600;color:var(--text-3);cursor:pointer;transition:all 0.15s;}
+.edit-wt-chip.sel{background:var(--accent);border-color:var(--accent);color:#fff;}
+@keyframes fade-in{from{opacity:0;}to{opacity:1;}}
 </style>
 </head>
 <body>
+
+<!-- Edit modal -->
+<div class="edit-overlay" id="edit-overlay">
+  <div class="edit-card">
+    <div class="edit-header">
+      <span class="edit-title" id="edit-title">Edit</span>
+      <button class="edit-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="edit-body" id="edit-body"></div>
+    <div class="edit-actions">
+      <button class="bs" onclick="closeEditModal()">Cancel</button>
+      <button class="bp" onclick="saveEditModal()">Save</button>
+    </div>
+  </div>
+</div>
 
 <div id="rest-overlay">
   <div class="rest-title">Rest</div>
@@ -366,10 +473,10 @@ button:active{opacity:.75;transform:scale(.97);}
         <div class="ob-goal" onclick="obSelectGoal(this,'general')"><div class="ob-goal-name">General fitness</div><div class="ob-goal-desc">Stay healthy, feel good, no specific aesthetic target.</div></div>
         <div class="ob-goal" onclick="obSelectGoal(this,'custom')"><div class="ob-goal-name">Custom physique</div><div class="ob-goal-desc">Set your own muscle group priorities.</div></div>
       </div>
-      <div class="ob-field" style="margin-top:16px;" id="ob-goal-weight-field">
-        <div class="ob-label">Target weight (lb) — optional</div>
-        <input class="ob-input" id="ob-goal-weight" type="number" inputmode="decimal" placeholder="Auto-set from body fat %">
-        <div id="ob-goal-hint" style="font-size:12px;color:var(--text-3);margin-top:6px;min-height:18px;"></div>
+      <div class="ob-field" style="margin-top:20px;">
+        <div class="ob-label">Body composition target</div>
+        <div style="font-size:12px;color:var(--text-3);margin-bottom:10px;">What body composition are you working toward? Pick the one that fits the lifestyle you want.</div>
+        <div class="ob-goal-grid" id="ob-bodycomp-grid"></div>
       </div>
       <div class="ob-priority" id="ob-priority">
         <div class="ob-label" style="margin-bottom:10px;">Set priority for each muscle group</div>
@@ -426,20 +533,10 @@ button:active{opacity:.75;transform:scale(.97);}
       <div id="body-comp"></div>
       <h3>Strength (e1RM)</h3>
       <div id="strength-dash"></div>
-      <h3>Recovery</h3>
-      <div id="recovery"></div>
       <div class="stack" style="margin-top:16px;">
-        <button class="bs" onclick="showHistory()">Training history</button>
         <button class="bs" onclick="showFeedbackKey()">How it works</button>
         <button class="bs" onclick="showSettings()">Settings</button>
       </div>
-    </div>
-
-    <div id="screen-history" class="screen">
-      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
-      <h2 style="margin-bottom:16px;">Training history</h2>
-      <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;">📋 Copy for AI coach</button>
-      <div id="history-body"></div>
     </div>
 
     <div id="screen-key" class="screen">
@@ -447,19 +544,27 @@ button:active{opacity:.75;transform:scale(.97);}
       <h2 style="margin-bottom:16px;">How it works</h2>
 
       <h3 style="margin-top:0;">Set feedback</h3>
+      <h3 style="margin-top:0;">Set feedback</h3>
       <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">After each set, rate how it felt. The app uses this to adjust your workout in real time and plan your next session. Your target zone is Hard or Failed — if everything feels Easy or Good, the weight isn't heavy enough.</p>
       <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Easy</strong> — not hard enough. Weight jumps immediately for remaining sets, and again next session.</div>
       <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Good</strong> — still comfortable. Reps push to top of range. If already at top, weight jumps.</div>
       <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hard</strong> — target zone. Reps nudge up +1 each session. After 2 consecutive Hard sessions at top of range, weight jumps.</div>
       <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Failed</strong> — ideal stimulus. Weight drops for remaining sets with no rest — go straight into the next set. Between sessions: hold weight, build reps. 3 consecutive fails = slight deload.</div>
 
-      <h3>Body composition</h3>
+      <h3>Body composition target</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Instead of picking an arbitrary goal weight, you pick the body composition you're working toward. The app calculates the actual target weight from your current lean mass and the body fat % range you're aiming for. Change your target anytime in Settings — Goal → Body comp target.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Athletic</strong> — Visible abs, defined musculature. Very high effort. 12–18% BF (men) / 18–22% (women).</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fitness</strong> — Lean and healthy without abs. High effort. 14–22% BF (men) / 21–26% (women).</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Healthy</strong> — Good proportions, doctor-approved. Moderate effort. Most sustainable for long term. 18–25% BF (men) / 24–30% (women).</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Average</strong> — Medically fine, soft appearance. Low effort. 22–28% BF (men) / 28–32% (women).</div>
+
+      <h3>Body composition tracking</h3>
       <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The body comp card tracks your weight trend and composition over time. The app asks for your weight once per day and body fat once per month.</p>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>7-day average</strong> — your real weight. Daily weight swings 2–4 lb from water, sodium, and food. The weekly average smooths this out so you see the actual trend, not the noise.</div>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rate (lb/week)</strong> — how fast you're losing or gaining. For fat loss, 0.5–1.0 lb/week is ideal. Faster than 1.5 lb/week means you're likely losing muscle too. Flat for 2+ weeks means the deficit isn't real or you're recomping.</div>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fat mass vs lean mass</strong> — calculated from your monthly body fat check-in. During a cut, you want fat mass going down while lean mass stays flat or goes up. If lean mass is dropping fast, eat more protein or reduce the deficit.</div>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>FFMI (Fat-Free Mass Index)</strong> — normalizes your lean mass to your height. It answers "how muscular am I for my frame?" Average is under 20, Athletic is 20–22, Muscular is 22–25, Elite is 25+. The natural ceiling for most people is around 25.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>ETA to goal</strong> — weeks remaining at your current rate. This shifts as your rate changes. Don't chase this number — focus on consistency and the ETA takes care of itself.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>ETA to target</strong> — weeks remaining at your current rate. This shifts as your rate changes. Don't chase this number — focus on consistency and the ETA takes care of itself.</div>
       <p style="color:var(--text-2);font-size:13px;margin:10px 0;">The card border color tells you the overall trend:</p>
       <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);border-left:4px solid var(--s-fg);"><strong>Green</strong> — weight trending down. Cut is working.</div>
       <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);border-left:4px solid var(--w-fg);"><strong>Yellow</strong> — weight flat. Could be a stall or recomp — check body fat trend monthly.</div>
@@ -471,16 +576,32 @@ button:active{opacity:.75;transform:scale(.97);}
       <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Recovering (40–74%)</strong> — still repairing. Can train but expect lower performance.</div>
       <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Fatigued (0–39%)</strong> — needs rest. Training this muscle again risks junk volume and injury.</div>
 
-      <h3>Strength (e1RM)</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Your estimated one-rep max, calculated automatically from your best set each session using the Epley formula: weight × (1 + reps/30). You never need to actually test your 1RM — the app estimates it from your working sets. Lifts are organized by category: Pressing, Pulling, Legs, and Power. Tap a category to see individual lifts with sparkline charts.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Compound total</strong> — the sum of your top 6 lifts. This is your single "am I getting stronger" number. Tap it on the dashboard to see the full breakdown.</div>
-      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Green change</strong> — e1RM went up. Getting stronger.</div>
-      <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Red change</strong> — e1RM went down. Could be fatigue, undereating, or poor sleep.</div>
+      <h3>Strength score &amp; tiers</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Your single "am I getting stronger" number. Calculated from your best e1RM across tracked compound lifts, normalized to your bodyweight, then multiplied by 100. The score updates automatically after every session. Tap the strength card on the dashboard to see your full breakdown including PRs and per-muscle bests.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text-3);"><strong>Beginner</strong> — 0–149. Just starting out. Focus on consistency and form.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--i-fg);"><strong>Novice</strong> — 150–399. Built a base. Strength gains come fast.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--w-fg);"><strong>Intermediate</strong> — 400–699. Solid lifter. Progress requires more deliberate effort.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--accent);"><strong>Advanced</strong> — 700–999. Strong by any measure. Years of consistent training.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--s-fg);"><strong>Elite</strong> — 1000+. Top tier. Most lifters never reach this.</div>
+
+      <h3>Personal records</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">PRs are detected automatically every session. When you beat a previous best, you get a banner celebration and the PR is logged to your strength screen. Three types are tracked:</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight PRs</strong> — when your e1RM (estimated 1-rep max from Epley formula) on a compound lift beats your previous best.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rep PRs</strong> — when you do more reps than ever before on a bodyweight exercise (push-ups, pull-ups, etc.).</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Time PRs</strong> — when you hold a timed exercise (plank, farmer carry, etc.) longer than ever before.</div>
+      <p style="color:var(--text-2);font-size:13px;margin:10px 0;">Tap the strength card to see your recent PRs feed and best-ever lifts grouped by muscle group.</p>
+
+      <h3>Equipment &amp; weight pools</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app builds workouts using only the equipment you actually own. You set this once during onboarding and can change it anytime in Settings.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight only</strong> — full calisthenics program with 30+ exercises. Push-ups, squats, lunges, planks, supermans. The app prioritizes harder variations as you progress.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight + weights</strong> — weighted exercises take priority for muscle building. Bodyweight rotates in for variety.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Dumbbell pool</strong> — pick exactly which weights you have (5–100 lb in 5 lb increments). The app only uses weights from your pool, never suggests something you don't own.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Kettlebell pool</strong> — same system as dumbbells, separate selection. Used for KB-specific exercises like swings, snatches, and Turkish get-ups.</div>
 
       <h3>Supersets and dropsets</h3>
       <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Two techniques to increase workout density and muscle stimulus.</p>
-      <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Supersets</strong> — two exercises paired back-to-back with no rest between them (marked with a blue bracket). You do a set of exercise A, immediately do a set of exercise B, then rest. The app auto-scrolls to the partner exercise and back.</div>
-      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Dropsets</strong> — tap the "+ Drop set" button on any weighted exercise to add an extra set at a lower weight with no rest. Use it when you want to push past failure for extra stimulus. The app drops the weight one step down your dumbbell increments.</div>
+      <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Supersets</strong> — two exercises paired back-to-back with no rest between them (marked with a blue bracket). After each set, a banner appears telling you to go to the partner exercise. The "GO" pill on your set cards rotates between partners so you always know which set is next.</div>
+      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Dropsets</strong> — tap the "+ Drop set" button on any weighted exercise to add an extra set at a lower weight with no rest. Use it when you want to push past failure for extra stimulus. The weight drops one step down in your dumbbell or kettlebell pool — whatever weight you actually have.</div>
 
       <h3>Timed exercises</h3>
       <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Exercises like farmer carry, planks, and jump rope use a countdown timer instead of reps.</p>
@@ -540,6 +661,9 @@ button:active{opacity:.75;transform:scale(.97);}
       </div>
       <h3>Quick recovery check</h3>
       <div id="recovery-train"></div>
+      <div class="stack" style="margin-top:16px;">
+        <button class="bs" onclick="showHistory()">Training history</button>
+      </div>
     </div>
 
     <div id="screen-pick" class="screen">
@@ -558,8 +682,15 @@ button:active{opacity:.75;transform:scale(.97);}
       <p id="session-subtitle" class="sub"></p>
       <div id="action-banner-area"></div>
       <div id="session-body"></div>
-      <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:8px;">Complete session ✓</button>
+      <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:16px;margin-bottom:8px;">Complete session ✓</button>
       <div id="session-support-nudge"></div>
+    </div>
+
+    <div id="screen-history" class="screen">
+      <button class="bg" onclick="goTrain()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:16px;">Training history</h2>
+      <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;">📋 Copy for AI coach</button>
+      <div id="history-body"></div>
     </div>
 
   </div>
@@ -573,7 +704,17 @@ button:active{opacity:.75;transform:scale(.97);}
 </div>
 
 <script>
+/*
+ * The Toji Method · v6
+ * Built by Alexander Ortega (theotheralex) — © 2025
+ * github.com/theotheralex · ko-fi.com/theotheralex
+ *
+ * This source code is part of an open project licensed under
+ * CC BY-NC-SA 4.0. If you're reading this and want to support
+ * the work, the Ko-fi link above keeps the app free and ad-free.
+ */
 (function(){
+  // toji-method-state-v2 — built by theotheralex
   const SK='toji-method-state-v2';
   const MUSCLES=['back','chest','shoulders','biceps','triceps','legs','core','traps','forearms'];
   let DBW=[5,10,20,30,40,50];
@@ -597,6 +738,163 @@ button:active{opacity:.75;transform:scale(.97);}
     legs:{name:'Legs',ids:['goblet_squat','db_rdl','bulgarian','db_step_up','sl_rdl','bw_lunge','jump_lunge','bw_squat','squat_jump','cossack_squat']},
     power:{name:'Power',ids:['kb_clean_press','kb_snatch','burpees','bear_crawl']},
   };
+
+  // ── STRENGTH TIERS ───────────────────────────────────────
+  const STRENGTH_TIERS=[
+    {name:'Beginner',min:0,color:'var(--text-3)'},
+    {name:'Novice',min:150,color:'var(--i-fg)'},
+    {name:'Intermediate',min:400,color:'var(--w-fg)'},
+    {name:'Advanced',min:700,color:'var(--accent)'},
+    {name:'Elite',min:1000,color:'var(--s-fg)'},
+  ];
+
+  function getStrengthScore(){
+    // Score = sum of best e1RM across tracked compounds, normalized to bodyweight
+    if(!state.e1rmHistory||!Object.keys(state.e1rmHistory).length)return 0;
+    const bw=getCurrentWeight()||state.profile?.startWeight||180;
+    let total=0;
+    ALL_COMPOUNDS.forEach(id=>{
+      const hist=state.e1rmHistory[id];
+      if(!hist||!hist.length)return;
+      const best=Math.max(...hist.map(h=>h.e1rm));
+      total+=best;
+    });
+    return Math.round((total/bw)*100);
+  }
+
+  function getStrengthTier(score){
+    let tier=STRENGTH_TIERS[0];
+    for(const t of STRENGTH_TIERS){if(score>=t.min)tier=t;}
+    return tier;
+  }
+
+  function getNextTier(currentTier){
+    const idx=STRENGTH_TIERS.indexOf(currentTier);
+    return idx<STRENGTH_TIERS.length-1?STRENGTH_TIERS[idx+1]:null;
+  }
+
+  function getBestE1RM(id){
+    const hist=state.e1rmHistory&&state.e1rmHistory[id];
+    if(!hist||!hist.length)return 0;
+    return Math.max(...hist.map(h=>h.e1rm));
+  }
+
+  function getBestReps(id){
+    // Best rep count for bodyweight exercises
+    if(!state.prs)return 0;
+    const prs=state.prs.filter(p=>p.exerciseId===id&&p.type==='reps');
+    if(!prs.length)return 0;
+    return Math.max(...prs.map(p=>p.reps));
+  }
+
+  function getBestTime(id){
+    if(!state.prs)return 0;
+    const prs=state.prs.filter(p=>p.exerciseId===id&&p.type==='time');
+    if(!prs.length)return 0;
+    return Math.max(...prs.map(p=>p.seconds));
+  }
+
+  function getBestForMuscle(muscle){
+    // Find exercise with highest e1RM that primarily targets this muscle
+    let bestExId=null,bestE1RM=0;
+    Object.keys(EX).forEach(id=>{
+      const ex=EX[id];
+      if(!ex.muscles||!ex.muscles[muscle])return;
+      if(ex.muscles[muscle]<0.5)return; // must be a primary target
+      const e=getBestE1RM(id);
+      if(e>bestE1RM){bestE1RM=e;bestExId=id;}
+    });
+    return bestExId?{id:bestExId,e1rm:bestE1RM,name:EX[bestExId].name}:null;
+  }
+
+  // Check if e1RM is a new all-time best for an exercise
+  function checkPRsForSession(sess){
+    if(!state.prs)state.prs=[];
+    const newPRs=[];
+    sess.exercises.forEach(e=>{
+      const ex=EX[e.id];
+      const completed=e.sets.filter(s=>s.done&&s.feedback!=='fail');
+      if(!completed.length)return;
+
+      if(exIsWeighted(ex)&&ex.type==='compound'){
+        // Weight-based PR — best e1RM beat previous best
+        let sessBest=0,bestSet=null;
+        completed.forEach(s=>{
+          const w=s.actualWeight||0,r=s.actualReps||0;
+          if(w>0&&r>0){const est=e1rm(w,r);if(est>sessBest){sessBest=est;bestSet=s;}}
+        });
+        if(sessBest>0&&bestSet){
+          // Compare to previous best (excluding what we just logged)
+          const hist=state.e1rmHistory&&state.e1rmHistory[e.id];
+          const prevBest=hist&&hist.length>1?Math.max(...hist.slice(0,-1).map(h=>h.e1rm)):0;
+          if(sessBest>prevBest&&prevBest>0){
+            newPRs.push({
+              date:sess.timestamp,
+              exerciseId:e.id,
+              exerciseName:ex.name,
+              type:'weight',
+              weight:bestSet.actualWeight,
+              reps:bestSet.actualReps,
+              e1rm:Math.round(sessBest),
+              improvement:Math.round(sessBest-prevBest),
+            });
+          }
+        }
+      }else if(exIsBW(ex)&&ex.unit!=='sec'){
+        // Rep-based PR for bodyweight reps
+        const maxReps=Math.max(...completed.map(s=>s.actualReps||0));
+        if(maxReps>0){
+          const prev=getBestReps(e.id);
+          if(maxReps>prev&&prev>0){
+            newPRs.push({
+              date:sess.timestamp,
+              exerciseId:e.id,
+              exerciseName:ex.name,
+              type:'reps',
+              reps:maxReps,
+              improvement:maxReps-prev,
+            });
+          }
+          // Always log the new max for tracking
+          if(maxReps>=prev){
+            state.prs.push({date:sess.timestamp,exerciseId:e.id,type:'reps',reps:maxReps});
+          }
+        }
+      }else if(ex.unit==='sec'){
+        // Time-based PR for timed exercises
+        const maxTime=Math.max(...completed.map(s=>s.actualReps||0));
+        if(maxTime>0){
+          const prev=getBestTime(e.id);
+          if(maxTime>prev&&prev>0){
+            newPRs.push({
+              date:sess.timestamp,
+              exerciseId:e.id,
+              exerciseName:ex.name,
+              type:'time',
+              seconds:maxTime,
+              improvement:maxTime-prev,
+            });
+          }
+          if(maxTime>=prev){
+            state.prs.push({date:sess.timestamp,exerciseId:e.id,type:'time',seconds:maxTime});
+          }
+        }
+      }
+    });
+    // Add notable PRs (with improvements) to the main PR feed
+    newPRs.forEach(pr=>{
+      state.prs.push(pr);
+    });
+    return newPRs;
+  }
+
+  function getRecentPRs(limit){
+    if(!state.prs)return[];
+    return state.prs
+      .filter(p=>p.improvement&&p.exerciseName) // Only show improvement PRs in feed
+      .sort((a,b)=>b.date-a.date)
+      .slice(0,limit||5);
+  }
 
   // ── UTILITY HELPERS ──────────────────────────────────────
   function nDB(w){let b=DBW[0];for(const v of DBW)if(v<=w)b=v;return b;}
@@ -900,7 +1198,7 @@ button:active{opacity:.75;transform:scale(.97);}
     return result;
   }
 
-  let state={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
+  let state={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},prs:[],weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
   let pendingTime=null,restIv=null,restTotal=0,restRem=0,pendingScroll=-1;
 
   function load(){try{const r=localStorage.getItem(SK);if(r)state=Object.assign(state,JSON.parse(r));}catch(e){}loadDBW();loadKBW();}
@@ -1179,10 +1477,6 @@ button:active{opacity:.75;transform:scale(.97);}
     // Body composition
     renderBodyComp();
 
-    // Recovery
-    const rec=getRec();
-    document.getElementById('recovery').innerHTML=MUSCLES.map(m=>{const c=recLabel(rec[m]);return'<div class="rec-row '+c.cls+'"><span style="text-transform:capitalize;">'+m+'</span><span style="font-size:12px;opacity:.8;">'+c.label+' · '+rec[m]+'%</span></div>';}).join('');
-
     // Strength dashboard
     renderStrDash();
   }
@@ -1201,53 +1495,38 @@ button:active{opacity:.75;transform:scale(.97);}
       return;
     }
 
-    let totalE1rm=0,totalStart=0,trackedCount=0;
-    ALL_COMPOUNDS.forEach(id=>{
-      const hist=state.e1rmHistory[id];
-      if(!hist||!hist.length)return;
-      trackedCount++;
-      const current=hist[hist.length-1].e1rm;
-      const first=hist[0].e1rm;
-      if(KEY_LIFTS.includes(id)){totalE1rm+=current;totalStart+=first;}
-    });
+    const score=getStrengthScore();
+    const tier=getStrengthTier(score);
+    const next=getNextTier(tier);
+    const progressPct=next?Math.min(100,Math.round(((score-tier.min)/(next.min-tier.min))*100)):100;
+    const toNext=next?next.min-score:0;
 
-    const totalChange=totalE1rm-totalStart;
-    const totalChangeStr=totalChange>0?'+'+totalChange+' lb':totalChange<0?totalChange+' lb':'';
-    const totalChangeColor=totalChange>0?'var(--s-fg)':totalChange<0?'var(--d-fg)':'var(--text-2)';
-    let html='<div class="str-total" onclick="showStrength()">'
-      +'<div class="str-total-label">Compound total (top 6 lifts)</div>'
-      +'<div class="str-total-val">'+totalE1rm+' <span style="font-size:16px;font-weight:500;color:var(--text-2);">lb</span>'
-      +(totalChangeStr?' <span style="font-size:14px;font-weight:700;color:'+totalChangeColor+';">'+totalChangeStr+'</span>':'')
-      +'</div>'
-      +'<div class="str-total-sub">'+trackedCount+' lifts tracked · Tap for breakdown</div>'
+    let html='<div class="str-score-card" onclick="showStrength()">'
+      +'<div class="str-score-label">Strength Score</div>'
+      +'<div class="str-score-val">'+score+'</div>'
+      +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
+      +'<div class="str-progress-bar"><div class="str-progress-fill" style="width:'+progressPct+'%;background:'+tier.color+';"></div></div>'
+      +(next?'<div class="str-progress-meta">'+toNext+' to '+next.name+'</div>':'<div class="str-progress-meta" style="color:var(--s-fg);font-weight:700;">Maximum tier reached</div>')
       +'</div>';
 
-    // Recent — lifts from last session
-    const lastSess=state.sessions.length?state.sessions[state.sessions.length-1]:null;
-    if(lastSess){
-      const recentIds=[];
-      const seen=new Set();
-      lastSess.exercises.forEach(e=>{
-        if(state.e1rmHistory[e.id]&&!seen.has(e.id)){recentIds.push(e.id);seen.add(e.id);}
+    // Recent PRs preview (top 3)
+    const recentPRs=getRecentPRs(3);
+    if(recentPRs.length){
+      html+='<div class="str-pr-preview">';
+      recentPRs.forEach(pr=>{
+        const dt=new Date(pr.date);
+        const days=Math.round((Date.now()-pr.date)/86400000);
+        const dateStr=days===0?'Today':days===1?'Yesterday':days+' days ago';
+        let detail='';
+        if(pr.type==='weight')detail=pr.weight+' lb × '+pr.reps;
+        else if(pr.type==='reps')detail=pr.reps+' reps';
+        else if(pr.type==='time')detail=pr.seconds+'s';
+        html+='<div class="str-pr-item">'
+          +'<span class="str-pr-trophy">🏆</span>'
+          +'<div class="str-pr-text"><div class="str-pr-name">'+pr.exerciseName+'</div><div class="str-pr-detail">'+detail+' · '+dateStr+'</div></div>'
+          +'</div>';
       });
-      if(recentIds.length){
-        html+='<div class="str-recent-grid">';
-        recentIds.forEach(id=>{
-          const hist=state.e1rmHistory[id];
-          const ex=EX[id];if(!ex||!hist||!hist.length)return;
-          const current=hist[hist.length-1].e1rm;
-          const first=hist[0].e1rm;
-          const change=current-first;
-          const changeStr=change>0?'+'+change:change<0?''+change:'—';
-          const changeColor=change>0?'var(--s-fg)':change<0?'var(--d-fg)':'var(--text-3)';
-          html+='<div class="str-mini">'
-            +'<div class="str-mini-name">'+ex.name.replace(/ \(neutral grip\)/,'')+'</div>'
-            +'<div class="str-mini-val">'+current+' <span style="font-size:13px;font-weight:500;color:var(--text-2);">lb</span></div>'
-            +'<div class="str-mini-change" style="color:'+changeColor+';">'+changeStr+' lb</div>'
-            +'</div>';
-        });
-        html+='</div>';
-      }
+      html+='</div>';
     }
 
     dash.innerHTML=html;
@@ -1344,7 +1623,7 @@ button:active{opacity:.75;transform:scale(.97);}
       const tags=[];if(ex.type==='compound')tags.push('Compound');if(ex.perSide)tags.push('Per side');if(ex.unit==='sec')tags.push('Timed');
       const tagHtml=tags.map(t=>'<span class="tag">'+t+'</span>').join('');
       const demoQuery=encodeURIComponent('how to '+ex.name.replace(/ \(.*\)/,'')+' form');
-      const demoLink='<a class="cue-demo" href="https://www.youtube.com/results?search_query='+demoQuery+'" onclick="event.preventDefault();window.open(this.href);">Watch a demo ›</a>';
+      const demoLink='<a class="cue-demo" href="https://www.youtube.com/results?search_query='+demoQuery+'" onclick="event.preventDefault();openExt(this.href);">Watch a demo ›</a>';
       const cueHtml=ex.cues&&ex.cues.length?'<button class="cue-toggle" onclick="toggleCues(\'cue-'+ei+'\')" id="cue-btn-'+ei+'">▶ Form cues</button><div class="cue-panel" id="cue-'+ei+'"><ol>'+ex.cues.map(c=>'<li>'+c+'</li>').join('')+'</ol>'+demoLink+'</div>':'';
       const tSecs=ex.unit==='sec'?ex.repRange[0]:null;
       const tHtml=tSecs?'<div class="ex-timer-wrap" id="ex-timer-'+ei+'"><div class="ex-timer-disp">'+Math.floor(tSecs/60)+':'+(tSecs%60<10?'0':'')+tSecs%60+'</div><div class="ex-timer-row"><button class="ex-tbtn bs ex-sbt">Start</button><button class="ex-tbtn bs ex-rbt">Reset</button></div></div>':'';
@@ -1385,6 +1664,47 @@ button:active{opacity:.75;transform:scale(.97);}
 
   function bdgFor(fb){return{easy:{bg:'var(--d-bg)',fg:'var(--d-fg)',label:'Too easy'},good:{bg:'var(--w-bg)',fg:'var(--w-fg)',label:'Good'},hard:{bg:'var(--i-bg)',fg:'var(--i-fg)',label:'Hard ✓'},fail:{bg:'var(--s-bg)',fg:'var(--s-fg)',label:'Failed ✓'}}[fb];}
 
+  function getCurrentSet(){
+    const sess=state.currentSession;
+    if(!sess)return{ei:-1,si:-1};
+
+    // Find first exercise with any incomplete set
+    let firstEi=-1;
+    for(let ei=0;ei<sess.exercises.length;ei++){
+      if(sess.exercises[ei].sets.some(s=>!s.done)){firstEi=ei;break;}
+    }
+    if(firstEi<0)return{ei:-1,si:-1};
+
+    const firstEx=sess.exercises[firstEi];
+
+    // If part of a superset, rotate to the partner with the fewest completed sets
+    if(firstEx.group!=null){
+      const members=[];
+      for(let ei=0;ei<sess.exercises.length;ei++){
+        if(sess.exercises[ei].group===firstEx.group)members.push(ei);
+      }
+      let bestEi=-1,minDone=Infinity;
+      for(const ei of members){
+        const e=sess.exercises[ei];
+        const doneCount=e.sets.filter(s=>s.done).length;
+        const hasIncomplete=e.sets.some(s=>!s.done);
+        if(hasIncomplete&&doneCount<minDone){minDone=doneCount;bestEi=ei;}
+      }
+      if(bestEi>=0){
+        const e=sess.exercises[bestEi];
+        for(let si=0;si<e.sets.length;si++){
+          if(!e.sets[si].done)return{ei:bestEi,si};
+        }
+      }
+    }
+
+    // Not a superset — first incomplete set in this exercise
+    for(let si=0;si<firstEx.sets.length;si++){
+      if(!firstEx.sets[si].done)return{ei:firstEi,si};
+    }
+    return{ei:-1,si:-1};
+  }
+
   function rSet(ei,si,s,ex){
     let wIn='';
     const showWeight=exIsWeighted(ex)||ex.hasWeight;
@@ -1401,12 +1721,29 @@ button:active{opacity:.75;transform:scale(.97);}
     const rIn='<input class="rinput" type="number" inputmode="numeric" value="'+s.actualReps+'" onchange="updSet('+ei+','+si+',\'actualReps\',this.value)"><span class="iunit">'+rLbl+'</span>';
     const fbs=['easy','good','hard','fail'].map(f=>{const sel=s.feedback===f?' sel-'+f:'';const lbl={easy:'Easy',good:'Good',hard:'Hard',fail:'Fail'};return'<button class="fb-btn'+sel+'" onclick="setFB('+ei+','+si+',\''+f+'\')">'+lbl[f]+'</button>';}).join('');
     const lc=s.done&&s.feedback?' logged-'+s.feedback:'';
+    const current=getCurrentSet();
+    const isCurrent=(current.ei===ei&&current.si===si)?' set-current':'';
     let bdg='';if(s.done&&s.feedback){const b=bdgFor(s.feedback);bdg='<span class="set-bdg" style="background:'+b.bg+';color:'+b.fg+';">'+b.label+'</span>';}
+    const currentPill=isCurrent?'<span class="set-next-pill">GO</span>':'';
     const dropTag=s.isDropset?'<span class="tag" style="background:var(--w-bg);color:var(--w-fg);">Dropset</span>':'';
-    return'<div class="set-card'+lc+'" id="set-'+ei+'-'+si+'"><div class="set-row1"><span class="set-lbl">Set '+(si+1)+dropTag+bdg+'</span><div class="set-inputs">'+wIn+(wIn?'<span class="set-sep">·</span>':'')+rIn+'</div></div><div class="fb-row">'+fbs+'</div></div>';
+    return'<div class="set-card'+lc+isCurrent+'" id="set-'+ei+'-'+si+'"><div class="set-row1"><span class="set-lbl">Set '+(si+1)+currentPill+dropTag+bdg+'</span><div class="set-inputs">'+wIn+(wIn?'<span class="set-sep">·</span>':'')+rIn+'</div></div><div class="fb-row">'+fbs+'</div></div>';
   }
 
-  function reRSet(ei,si){const sess=state.currentSession;if(!sess)return;const ex=EX[sess.exercises[ei].id];const s=sess.exercises[ei].sets[si];const el=document.getElementById('set-'+ei+'-'+si);if(el){const tmp=document.createElement('div');tmp.innerHTML=rSet(ei,si,s,ex);el.replaceWith(tmp.firstChild);}}
+  function reRSet(ei,si){
+    const sess=state.currentSession;if(!sess)return;
+    const ex=EX[sess.exercises[ei].id];
+    const s=sess.exercises[ei].sets[si];
+    const el=document.getElementById('set-'+ei+'-'+si);
+    if(el){const tmp=document.createElement('div');tmp.innerHTML=rSet(ei,si,s,ex);el.replaceWith(tmp.firstChild);}
+    // Also re-render the new "current" set so its highlight updates
+    const c=getCurrentSet();
+    if(c.ei>=0&&c.si>=0&&!(c.ei===ei&&c.si===si)){
+      const cs=sess.exercises[c.ei].sets[c.si];
+      const cex=EX[sess.exercises[c.ei].id];
+      const cel=document.getElementById('set-'+c.ei+'-'+c.si);
+      if(cel){const tmp=document.createElement('div');tmp.innerHTML=rSet(c.ei,c.si,cs,cex);cel.replaceWith(tmp.firstChild);}
+    }
+  }
 
   function toast(msg,kind,duration){
     const dur=duration||3000;
@@ -1442,6 +1779,14 @@ button:active{opacity:.75;transform:scale(.97);}
   window.dismissBanner=function(){
     if(bannerEl){bannerEl.style.animation='banner-out 0.2s ease forwards';setTimeout(()=>{if(bannerEl){bannerEl.remove();bannerEl=null;}},200);}
     if(bannerTimer){clearTimeout(bannerTimer);bannerTimer=null;}
+  };
+
+  // Reliable external link opener — works in iOS PWAs by creating a fresh anchor each time
+  window.openExt=function(url){
+    const a=document.createElement('a');
+    a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+    document.body.appendChild(a);a.click();
+    setTimeout(()=>document.body.removeChild(a),100);
   };
 
   window.toggleCues=function(id){const p=document.getElementById(id),b=document.getElementById('cue-btn-'+id.replace('cue-',''));if(!p)return;const o=p.classList.toggle('open');if(b)b.textContent=(o?'▼':'▶')+' Form cues';};
@@ -1744,7 +2089,20 @@ button:active{opacity:.75;transform:scale(.97);}
         }
       }
     });
-    sess.totalVolume=vol;sess.completed=true;sess.endTimestamp=Date.now();sess.durationMin=Math.round((sess.endTimestamp-sess.timestamp)/60000);state.sessions.push(sess);state.lastSession=sess.templateKey;state.currentSession=null;
+    sess.totalVolume=vol;sess.completed=true;sess.endTimestamp=Date.now();sess.durationMin=Math.round((sess.endTimestamp-sess.timestamp)/60000);
+
+    // Check for tier upgrade BEFORE adding session (so score reflects new e1RMs)
+    const oldScore=getStrengthScore();
+    const oldTier=getStrengthTier(oldScore);
+
+    state.sessions.push(sess);state.lastSession=sess.templateKey;state.currentSession=null;
+
+    // Detect PRs and check tier crossing
+    const newPRs=checkPRsForSession(sess);
+    const newScore=getStrengthScore();
+    const newTier=getStrengthTier(newScore);
+    const tierUp=newTier!==oldTier&&STRENGTH_TIERS.indexOf(newTier)>STRENGTH_TIERS.indexOf(oldTier);
+
     invalidateRecCache();
     // Trim old session detail (keep last 50 full, archive older to summary)
     if(state.sessions.length>50){
@@ -1754,10 +2112,33 @@ button:active{opacity:.75;transform:scale(.97);}
     }
     saveNow();
     // Reset train tab to home so it's clean when user goes back
-    ['train-home','pick','session'].forEach(s=>{
+    ['train-home','pick','session','history'].forEach(s=>{
       const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('active',s==='train-home');
     });
     renderHome();showDashScreen('home');switchTab('dash');
+
+    // Tier-up celebration (highest priority, shows first)
+    if(tierUp){
+      setTimeout(()=>{
+        banner('Tier up! '+oldTier.name+' → '+newTier.name,'Strength score: '+newScore,'easy');
+      },800);
+    }
+    // PR notifications (after tier-up)
+    if(newPRs.length>0){
+      const delay=tierUp?7000:1200;
+      setTimeout(()=>{
+        if(newPRs.length===1){
+          const pr=newPRs[0];
+          let detail='';
+          if(pr.type==='weight')detail=pr.weight+' lb × '+pr.reps+' (+'+pr.improvement+' e1RM)';
+          else if(pr.type==='reps')detail=pr.reps+' reps (+'+pr.improvement+')';
+          else if(pr.type==='time')detail=pr.seconds+'s (+'+pr.improvement+'s)';
+          banner('🏆 New PR · '+pr.exerciseName,detail,'good');
+        }else{
+          banner('🏆 '+newPRs.length+' new PRs!','Tap Strength on the dashboard to see them','good');
+        }
+      },delay);
+    }
 
     // Subtle support nudge every 10 sessions
     if(state.sessions.length>0&&state.sessions.length%10===0){
@@ -1765,7 +2146,7 @@ button:active{opacity:.75;transform:scale(.97);}
         const el=document.getElementById('dash-greeting');
         if(el){
           const orig=el.textContent;
-          el.innerHTML=orig+'<div class="support-nudge" style="margin-top:8px;"><a href="https://ko-fi.com/theotheralex" onclick="event.preventDefault();window.open(this.href);">Enjoying the app? Support development ›</a></div>';
+          el.innerHTML=orig+'<div class="support-nudge" style="margin-top:8px;"><a href="https://ko-fi.com/theotheralex" onclick="event.preventDefault();openExt(this.href);">Enjoying the app? Support development ›</a></div>';
         }
       },1500);
     }
@@ -1819,7 +2200,8 @@ button:active{opacity:.75;transform:scale(.97);}
     const p=state.profile||{};
     const goalLabels={fat_loss:'Fat loss',muscle:'Build muscle',recomp:'Recomposition',general:'General fitness',custom:'Custom physique'};
     out+='Height: '+(p.heightDisplay||'—')+' | Starting: '+(p.startWeight||'—')+' lb'+(p.startBf?' / '+p.startBf+'% BF':'')+'\n';
-    out+='Goal: '+(goalLabels[p.goal]||'General fitness')+(p.goalWeight?' (target ~'+p.goalWeight+' lb)':'')+'\n';
+    const target=calcTargetWeight();
+    out+='Goal: '+(goalLabels[p.goal]||'General fitness')+(target?' (target ~'+target.weight+' lb · '+target.categoryName+' · '+target.targetBF+'% BF)':p.goalWeight?' (target ~'+p.goalWeight+' lb)':'')+'\n';
     out+='Equipment: DB weights ['+(p.dbWeights?p.dbWeights.join(', '):'')+'] lb'+(p.kbWeights&&p.kbWeights.length?', KB ['+p.kbWeights.join(', ')+'] lb':(p.kbWeight?', KB '+p.kbWeight+' lb':''))+(p.equipment?', '+p.equipment.join(', '):'')+'\n';
     out+='Training frequency target: '+(p.daysPerWeek||3)+' days/week\n';
     if(p.goal==='custom'&&p.priorities){
@@ -2007,11 +2389,88 @@ button:active{opacity:.75;transform:scale(.97);}
   window.showStrength=function(){
     const body=document.getElementById('strength-body');
     if(!state.e1rmHistory||!Object.keys(state.e1rmHistory).length){
-      body.innerHTML='<p style="color:var(--text-2);font-size:15px;padding:8px 0;">No strength data yet. Complete a few sessions to see your e1RM trends.</p>';
+      body.innerHTML='<p style="color:var(--text-2);font-size:15px;padding:8px 0;">No strength data yet. Complete a few sessions to see your strength score grow.</p>';
       showScreen('strength');return;
     }
 
-    // Build lift data map
+    // ── STRENGTH SCORE + TIER ──
+    const score=getStrengthScore();
+    const tier=getStrengthTier(score);
+    const next=getNextTier(tier);
+    const progressPct=next?Math.min(100,Math.round(((score-tier.min)/(next.min-tier.min))*100)):100;
+    const toNext=next?next.min-score:0;
+
+    let html='<div class="str-score-card str-score-card-detail">'
+      +'<div class="str-score-label">Strength Score</div>'
+      +'<div class="str-score-val">'+score+'</div>'
+      +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
+      +'<div class="str-progress-bar"><div class="str-progress-fill" style="width:'+progressPct+'%;background:'+tier.color+';"></div></div>'
+      +(next?'<div class="str-progress-meta">'+toNext+' to '+next.name+'</div>':'<div class="str-progress-meta" style="color:var(--s-fg);font-weight:700;">Maximum tier reached</div>')
+      +'<div class="str-tier-list">';
+
+    STRENGTH_TIERS.forEach((t,i)=>{
+      const reached=score>=t.min;
+      const isCurrent=t===tier;
+      html+='<div class="str-tier-item'+(reached?' reached':'')+(isCurrent?' current':'')+'">'
+        +'<div class="str-tier-dot" style="background:'+(reached?t.color:'var(--border)')+';"></div>'
+        +'<div class="str-tier-name">'+t.name+'</div>'
+        +'<div class="str-tier-min">'+t.min+'+</div>'
+        +'</div>';
+    });
+    html+='</div></div>';
+
+    // ── RECENT PRs ──
+    const recentPRs=getRecentPRs(10);
+    if(recentPRs.length){
+      html+='<h3 style="margin-top:24px;margin-bottom:12px;">🏆 Recent Personal Records</h3>';
+      html+='<div class="pr-feed">';
+      recentPRs.forEach(pr=>{
+        const days=Math.round((Date.now()-pr.date)/86400000);
+        const dateStr=days===0?'Today':days===1?'Yesterday':days+' days ago';
+        let detail='',improv='';
+        if(pr.type==='weight'){detail=pr.weight+' lb × '+pr.reps+' reps · e1RM '+pr.e1rm;improv='+'+pr.improvement+' e1RM';}
+        else if(pr.type==='reps'){detail=pr.reps+' reps';improv='+'+pr.improvement+' reps';}
+        else if(pr.type==='time'){detail=pr.seconds+' seconds';improv='+'+pr.improvement+'s';}
+        html+='<div class="pr-card">'
+          +'<div class="pr-card-head"><span class="pr-card-name">'+pr.exerciseName+'</span><span class="pr-card-improv">'+improv+'</span></div>'
+          +'<div class="pr-card-detail">'+detail+'</div>'
+          +'<div class="pr-card-date">'+dateStr+'</div>'
+          +'</div>';
+      });
+      html+='</div>';
+    }else{
+      html+='<div style="font-size:13px;color:var(--text-3);text-align:center;padding:16px;background:var(--surface);border-radius:var(--rl);margin-top:20px;">PRs will appear here as you train. Every weight bump, every extra rep, every second longer counts.</div>';
+    }
+
+    // ── MUSCLE GROUP BESTS ──
+    const muscleBests=[];
+    MUSCLES.forEach(m=>{
+      const best=getBestForMuscle(m);
+      if(best)muscleBests.push({muscle:m,...best});
+    });
+    if(muscleBests.length){
+      muscleBests.sort((a,b)=>b.e1rm-a.e1rm);
+      html+='<h3 style="margin-top:24px;margin-bottom:12px;">Best by muscle group</h3>';
+      html+='<div class="muscle-best-list">';
+      muscleBests.forEach(mb=>{
+        const ex=EX[mb.id];
+        const hist=state.e1rmHistory[mb.id];
+        const change=hist.length>1?Math.round(hist[hist.length-1].e1rm-hist[0].e1rm):0;
+        const arrow=change>5?'↑↑':change>0?'↑':change<-5?'↓↓':change<0?'↓':'→';
+        const arrowColor=change>0?'var(--s-fg)':change<0?'var(--d-fg)':'var(--text-3)';
+        html+='<div class="muscle-best-row">'
+          +'<div><div class="muscle-best-name">'+mb.muscle.charAt(0).toUpperCase()+mb.muscle.slice(1)+'</div>'
+          +'<div class="muscle-best-via">via '+ex.name.replace(/ \(neutral grip\)/,'')+'</div></div>'
+          +'<div class="muscle-best-vals">'
+          +'<div class="muscle-best-e1rm">'+Math.round(mb.e1rm)+' lb</div>'
+          +'<div class="muscle-best-arrow" style="color:'+arrowColor+';">'+arrow+'</div>'
+          +'</div>'
+          +'</div>';
+      });
+      html+='</div>';
+    }
+
+    // ── DETAILED CATEGORIES (collapsible, kept for drilling in) ──
     const liftData={};
     ALL_COMPOUNDS.forEach(id=>{
       const hist=state.e1rmHistory[id];
@@ -2023,29 +2482,12 @@ button:active{opacity:.75;transform:scale(.97);}
       liftData[id]={ex,hist,current,first,change};
     });
 
-    if(!Object.keys(liftData).length){
-      body.innerHTML='<p style="color:var(--text-2);font-size:15px;">No compound lift data yet.</p>';
-      showScreen('strength');return;
-    }
-
-    // Compound total
-    let totalE1rm=0,totalStart=0;
-    KEY_LIFTS.forEach(id=>{if(liftData[id]){totalE1rm+=liftData[id].current;totalStart+=liftData[id].first;}});
-    const totalChange=totalE1rm-totalStart;
-    const totalChangeStr=totalChange>0?'+'+totalChange+' lb':totalChange<0?totalChange+' lb':'';
-    const totalChangeColor=totalChange>0?'var(--s-fg)':totalChange<0?'var(--d-fg)':'var(--text-2)';
-
-    let html='<div class="str-total">'
-      +'<div class="str-total-label">Compound total (top 6 lifts)</div>'
-      +'<div class="str-total-val">'+totalE1rm+' <span style="font-size:16px;font-weight:500;color:var(--text-2);">lb</span>'
-      +(totalChangeStr?' <span style="font-size:14px;font-weight:700;color:'+totalChangeColor+';">'+totalChangeStr+'</span>':'')
-      +'</div></div>';
-
-    // CATEGORIES — collapsible
+    let hasCategories=false;
     Object.keys(LIFT_CATS).forEach(catKey=>{
       const cat=LIFT_CATS[catKey];
       const catLifts=cat.ids.filter(id=>liftData[id]);
       if(!catLifts.length)return;
+      if(!hasCategories){html+='<h3 style="margin-top:24px;margin-bottom:12px;">All lifts</h3>';hasCategories=true;}
 
       html+='<div class="str-cat">'
         +'<button class="str-cat-toggle" onclick="toggleStrCat(\'str-cat-'+catKey+'\')">'
@@ -2150,7 +2592,7 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   function showDashScreen(name){
-    ['home','history','key','strength','settings'].forEach(s=>{
+    ['home','key','strength','settings'].forEach(s=>{
       const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('active',s===name);
     });
     if(activeTab!=='dash')switchTab('dash');
@@ -2158,7 +2600,7 @@ button:active{opacity:.75;transform:scale(.97);}
   }
 
   function showTrainScreen(name){
-    ['train-home','pick','session'].forEach(s=>{
+    ['train-home','pick','session','history'].forEach(s=>{
       const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('active',s===name);
     });
     if(activeTab!=='train')switchTab('train');
@@ -2167,8 +2609,8 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // Override showScreen for backward compat
   function showScreen(name){
-    const dashScreens=['home','history','key','strength','settings'];
-    const trainScreens=['train-home','pick','session'];
+    const dashScreens=['home','key','strength','settings'];
+    const trainScreens=['train-home','pick','session','history'];
     if(dashScreens.includes(name))showDashScreen(name);
     else if(trainScreens.includes(name))showTrainScreen(name);
     else{showDashScreen(name);}
@@ -2294,10 +2736,19 @@ button:active{opacity:.75;transform:scale(.97);}
     }
 
     // Goal
-    const goalWeight=state.profile&&state.profile.goalWeight?state.profile.goalWeight:165;
-    const remaining=Math.round((avg7-goalWeight)*10)/10;
-    const eta=ratePerWeek&&ratePerWeek<-0.1?Math.round(remaining/Math.abs(ratePerWeek))+'wk':'—';
-    const goalHtml='<div class="bc-row"><span>To goal ('+goalWeight+' lb)</span><span>'+remaining+' lb · ETA '+eta+'</span></div>';
+    const target=calcTargetWeight();
+    let goalHtml='';
+    if(target){
+      const remaining=Math.round((avg7-target.weight)*10)/10;
+      const eta=ratePerWeek&&ratePerWeek<-0.1&&remaining>0?Math.round(remaining/Math.abs(ratePerWeek))+'wk':'—';
+      goalHtml='<div class="bc-row"><span>Target ('+target.categoryName+', '+target.targetBF+'% BF)</span><span>~'+target.weight+' lb</span></div>';
+      if(remaining>0)goalHtml+='<div class="bc-row"><span>To go</span><span>'+remaining+' lb · ETA '+eta+'</span></div>';
+    }else if(state.profile&&state.profile.goalWeight){
+      const goalWeight=state.profile.goalWeight;
+      const remaining=Math.round((avg7-goalWeight)*10)/10;
+      const eta=ratePerWeek&&ratePerWeek<-0.1?Math.round(remaining/Math.abs(ratePerWeek))+'wk':'—';
+      goalHtml='<div class="bc-row"><span>To goal ('+goalWeight+' lb)</span><span>'+remaining+' lb · ETA '+eta+'</span></div>';
+    }
 
     // Sparkline
     let sparkHtml='';
@@ -2317,7 +2768,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // ── ONBOARDING ──────────────────────────────────────────
   let obStep=1;
-  let obData={name:'',sex:'male',heightFt:0,heightIn:0,weight:0,bf:null,equipment:[],dbWeights:[],kbWeights:[],daysPerWeek:3,goal:'general',priorities:{}};
+  let obData={name:'',sex:'male',heightFt:0,heightIn:0,weight:0,bf:null,equipment:[],dbWeights:[],kbWeights:[],daysPerWeek:3,goal:'general',priorities:{},bodyCompTarget:'healthy'};
 
   const OB_MUSCLES=['back','chest','shoulders','biceps','triceps','legs','core','traps','forearms'];
   const OB_ALL_DB_WEIGHTS=[5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100];
@@ -2366,7 +2817,27 @@ button:active{opacity:.75;transform:scale(.97);}
   function obRender(){
     document.querySelectorAll('.ob-step').forEach((s,i)=>s.classList.toggle('active',i+1===obStep));
     if(obStep===2){obRenderDBGrid();obRenderKBGrid();}
+    if(obStep===4){obRenderBodyCompGrid();}
   }
+
+  function obRenderBodyCompGrid(){
+    const grid=document.getElementById('ob-bodycomp-grid');
+    if(!grid)return;
+    const cats=getBodyCompCategories(obData.sex||'male');
+    grid.innerHTML=cats.map(([v,l,desc,bf,effort])=>{
+      const sel=obData.bodyCompTarget===v?' selected':'';
+      return'<div class="ob-goal'+sel+'" onclick="obSelectBodyComp(this,\''+v+'\')">'
+        +'<div class="ob-goal-name">'+l+'</div>'
+        +'<div class="ob-goal-desc">'+desc+' · '+bf+' · '+effort+'</div>'
+        +'</div>';
+    }).join('');
+  }
+
+  window.obSelectBodyComp=function(el,target){
+    document.querySelectorAll('#ob-bodycomp-grid .ob-goal').forEach(g=>g.classList.remove('selected'));
+    el.classList.add('selected');
+    obData.bodyCompTarget=target;
+  };
 
   window.obToggle=function(el,key){
     el.classList.toggle('checked');
@@ -2476,25 +2947,19 @@ button:active{opacity:.75;transform:scale(.97);}
       daysPerWeek:obData.daysPerWeek,
       goal:obData.goal,
       priorities:obData.goal==='custom'?obData.priorities:{},
+      bodyCompTarget:obData.bodyCompTarget||'healthy',
       goalWeight:null,
       createdAt:Date.now(),
     };
 
-    // Set goal weight: manual input takes priority, auto-calculate as fallback
-    const manualGoalW=parseFloat(document.getElementById('ob-goal-weight').value);
-    if(manualGoalW&&manualGoalW>80&&manualGoalW<500){
-      profile.goalWeight=Math.round(manualGoalW);
-    }else if(obData.goal==='fat_loss'||obData.goal==='recomp'){
-      // Estimate target: 15% BF for men, 22% for women
-      const targetBf=obData.sex==='male'?0.15:0.22;
-      const currentBf=obData.bf?obData.bf/100:0.25;
-      const leanMass=obData.weight*(1-currentBf);
-      profile.goalWeight=Math.round(leanMass/(1-targetBf));
-    }else{
-      profile.goalWeight=null;
+    // Calculate goal weight from body composition target
+    state.profile=profile; // Set early so calcTargetWeight can use it
+    if(obData.weight&&obData.bf){
+      const targetBF=getBodyCompTargetBF(profile.bodyCompTarget,profile.sex);
+      const leanMass=obData.weight*(1-obData.bf/100);
+      profile.goalWeight=Math.round(leanMass/(1-targetBF/100));
     }
 
-    state.profile=profile;
     DBW=profile.dbWeights;
     loadKBW();
 
@@ -2540,22 +3005,302 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   // ── SETTINGS ──────────────────────────────────────────
+  // ── EDIT MODAL ───────────────────────────────────────────
+  let editConfig=null;
+
+  window.closeEditModal=function(){
+    document.getElementById('edit-overlay').classList.remove('show');
+    editConfig=null;
+  };
+
+  window.saveEditModal=function(){
+    if(!editConfig)return;
+    const result=editConfig.collect();
+    if(result===null)return; // validation failed
+    editConfig.onSave(result);
+    closeEditModal();
+    saveNow();
+    showSettings();
+  };
+
+  function openEditModal(title,bodyHTML,collect,onSave){
+    editConfig={collect,onSave};
+    document.getElementById('edit-title').textContent=title;
+    document.getElementById('edit-body').innerHTML=bodyHTML;
+    document.getElementById('edit-overlay').classList.add('show');
+  }
+
+  // ── INDIVIDUAL FIELD EDITORS ─────────────────────────────
+  window.editName=function(){
+    const cur=state.profile?.name||'';
+    openEditModal('Name',
+      '<div class="edit-label">What should I call you?</div><input class="edit-input" id="edit-input-name" type="text" value="'+cur.replace(/"/g,'&quot;')+'" maxlength="40">',
+      ()=>{const v=document.getElementById('edit-input-name').value.trim();if(!v){toast('Name can\'t be empty','fail');return null;}return v;},
+      v=>{state.profile.name=v;}
+    );
+    setTimeout(()=>document.getElementById('edit-input-name').focus(),100);
+  };
+
+  window.editSex=function(){
+    const cur=state.profile?.sex||'male';
+    const opts=[['male','Male'],['female','Female']].map(([v,l])=>{
+      return'<div class="edit-radio-opt'+(cur===v?' sel':'')+'" data-val="'+v+'" onclick="document.querySelectorAll(\'.edit-radio-opt\').forEach(o=>o.classList.remove(\'sel\'));this.classList.add(\'sel\');"><div class="edit-radio-opt-circle"></div><div class="edit-radio-opt-label">'+l+'</div></div>';
+    }).join('');
+    openEditModal('Sex',
+      '<div class="edit-label">Used for body composition calculations</div><div class="edit-radio">'+opts+'</div>',
+      ()=>{const sel=document.querySelector('.edit-radio-opt.sel');return sel?sel.dataset.val:null;},
+      v=>{state.profile.sex=v;}
+    );
+  };
+
+  window.editHeight=function(){
+    const ft=state.profile?.heightFt||5;
+    const totalIn=state.profile?.heightIn||0;
+    const inches=totalIn>=12?totalIn%12:totalIn;
+    openEditModal('Height',
+      '<div class="edit-label">Your height</div>'
+      +'<div class="edit-row-double">'
+      +'<div><input class="edit-input" id="edit-ft" type="number" inputmode="numeric" value="'+ft+'" placeholder="ft"><div class="edit-help" style="text-align:center;">feet</div></div>'
+      +'<div><input class="edit-input" id="edit-in" type="number" inputmode="numeric" value="'+inches+'" placeholder="in"><div class="edit-help" style="text-align:center;">inches</div></div>'
+      +'</div>',
+      ()=>{
+        const f=parseInt(document.getElementById('edit-ft').value)||0;
+        const i=parseInt(document.getElementById('edit-in').value)||0;
+        if(f<3||f>8||i<0||i>11){toast('Enter a realistic height','fail');return null;}
+        return{ft:f,inches:i,total:f*12+i};
+      },
+      v=>{
+        state.profile.heightFt=v.ft;
+        state.profile.heightIn=v.total;
+        state.profile.heightDisplay=v.ft+"'"+v.inches+'"';
+      }
+    );
+  };
+
+  window.editStartWeight=function(){
+    const cur=state.profile?.startWeight||'';
+    openEditModal('Starting weight',
+      '<div class="edit-label">Your weight when you started using the app</div>'
+      +'<input class="edit-input" id="edit-input-w" type="number" inputmode="decimal" value="'+cur+'" step="0.1">'
+      +'<div class="edit-help">This is your baseline. Use the daily check-in for current weight.</div>',
+      ()=>{const v=parseFloat(document.getElementById('edit-input-w').value);if(!v||v<50||v>500){toast('Enter a realistic weight','fail');return null;}return v;},
+      v=>{state.profile.startWeight=v;}
+    );
+    setTimeout(()=>document.getElementById('edit-input-w').focus(),100);
+  };
+
+  window.editStartBf=function(){
+    const cur=state.profile?.startBf||'';
+    openEditModal('Starting body fat %',
+      '<div class="edit-label">Your body fat % when you started</div>'
+      +'<input class="edit-input" id="edit-input-bf" type="number" inputmode="decimal" value="'+cur+'" step="0.1" placeholder="e.g. 22">'
+      +'<div class="edit-help">Optional. Estimate from a scale or DEXA scan.</div>',
+      ()=>{const v=parseFloat(document.getElementById('edit-input-bf').value);if(v&&(v<3||v>50)){toast('Enter a realistic percentage','fail');return null;}return v||null;},
+      v=>{state.profile.startBf=v;}
+    );
+    setTimeout(()=>document.getElementById('edit-input-bf').focus(),100);
+  };
+
+  window.editDaysPerWeek=function(){
+    const cur=state.profile?.daysPerWeek||3;
+    const opts=[3,4,5,6].map(n=>{
+      return'<div class="edit-radio-opt'+(cur===n?' sel':'')+'" data-val="'+n+'" onclick="document.querySelectorAll(\'.edit-radio-opt\').forEach(o=>o.classList.remove(\'sel\'));this.classList.add(\'sel\');"><div class="edit-radio-opt-circle"></div><div class="edit-radio-opt-label">'+n+' days/week<div class="edit-radio-opt-sub">'+(n===3?'Recommended for most':n===4?'Solid balance':n===5?'High volume':'Very high volume')+'</div></div></div>';
+    }).join('');
+    openEditModal('Training frequency',
+      '<div class="edit-label">How many days per week do you want to train?</div><div class="edit-radio">'+opts+'</div>',
+      ()=>{const sel=document.querySelector('.edit-radio-opt.sel');return sel?parseInt(sel.dataset.val):null;},
+      v=>{state.profile.daysPerWeek=v;}
+    );
+  };
+
+  window.editGoal=function(){
+    const cur=state.profile?.goal||'general';
+    const goals=[
+      ['fat_loss','Fat loss','Lose body fat while preserving muscle'],
+      ['muscle','Build muscle','Add lean mass with a moderate surplus'],
+      ['recomp','Recomposition','Lose fat and gain muscle simultaneously'],
+      ['general','General fitness','Get healthier and stronger overall'],
+      ['custom','Custom physique','Build a specific look (advanced)'],
+    ];
+    const opts=goals.map(([v,l,s])=>{
+      return'<div class="edit-radio-opt'+(cur===v?' sel':'')+'" data-val="'+v+'" onclick="document.querySelectorAll(\'.edit-radio-opt\').forEach(o=>o.classList.remove(\'sel\'));this.classList.add(\'sel\');"><div class="edit-radio-opt-circle"></div><div class="edit-radio-opt-label">'+l+'<div class="edit-radio-opt-sub">'+s+'</div></div></div>';
+    }).join('');
+    openEditModal('Training goal',
+      '<div class="edit-label">What are you optimizing for?</div><div class="edit-radio">'+opts+'</div>',
+      ()=>{const sel=document.querySelector('.edit-radio-opt.sel');return sel?sel.dataset.val:null;},
+      v=>{state.profile.goal=v;}
+    );
+  };
+
+  // ── BODY COMPOSITION TARGET ──────────────────────────────
+  // Replaces the static "goal weight" field with a body-comp-based target
+  function getBodyCompCategories(sex){
+    if(sex==='female'){
+      return[
+        ['athletic','Athletic','Visible abs, defined arms and legs','18-22% body fat','Very high effort'],
+        ['fitness','Fitness','Toned and lean, no visible abs','21-26% body fat','High effort'],
+        ['healthy','Healthy','Athletic curves, doctor-approved','24-30% body fat','Moderate effort'],
+        ['average','Average','Soft curves, healthy weight range','28-32% body fat','Low effort'],
+      ];
+    }
+    return[
+      ['athletic','Athletic','Visible abs, defined musculature','12-18% body fat','Very high effort'],
+      ['fitness','Fitness','Lean and healthy, no abs','14-22% body fat','High effort'],
+      ['healthy','Healthy','Good proportions, doctor-approved','18-25% body fat','Moderate effort'],
+      ['average','Average','Medically fine, soft appearance','22-28% body fat','Low effort'],
+    ];
+  }
+
+  function getBodyCompTargetBF(category,sex){
+    // Midpoint of each range
+    if(sex==='female')return{athletic:20,fitness:23,healthy:27,average:30}[category]||27;
+    return{athletic:15,fitness:18,healthy:21,average:25}[category]||21;
+  }
+
+  function getCategoryName(category){
+    return{athletic:'Athletic',fitness:'Fitness',healthy:'Healthy',average:'Average'}[category]||'Healthy';
+  }
+
+  function calcTargetWeight(){
+    const p=state.profile;
+    if(!p)return null;
+    const cat=p.bodyCompTarget||'healthy';
+    const targetBF=getBodyCompTargetBF(cat,p.sex||'male');
+
+    // Get current lean mass
+    const currentWeight=getCurrentWeight();
+    const currentBF=getCurrentBF();
+    if(!currentWeight||!currentBF)return null;
+
+    const leanMass=currentWeight*(1-currentBF/100);
+    const targetWeight=Math.round(leanMass/(1-targetBF/100));
+    return{weight:targetWeight,targetBF,category:cat,categoryName:getCategoryName(cat)};
+  }
+
+  function getCurrentWeight(){
+    if(state.weightLog&&state.weightLog.length){
+      return state.weightLog[state.weightLog.length-1].weight;
+    }
+    return state.profile?.startWeight||null;
+  }
+
+  function getCurrentBF(){
+    if(state.bfLog&&state.bfLog.length){
+      return state.bfLog[state.bfLog.length-1].bf;
+    }
+    return state.profile?.startBf||null;
+  }
+
+  window.editBodyCompTarget=function(){
+    const p=state.profile||{};
+    const sex=p.sex||'male';
+    const cur=p.bodyCompTarget||'healthy';
+    const cats=getBodyCompCategories(sex);
+    const opts=cats.map(([v,l,s,bf,e])=>{
+      return'<div class="edit-radio-opt'+(cur===v?' sel':'')+'" data-val="'+v+'" onclick="document.querySelectorAll(\'.edit-radio-opt\').forEach(o=>o.classList.remove(\'sel\'));this.classList.add(\'sel\');"><div class="edit-radio-opt-circle"></div><div class="edit-radio-opt-label">'+l+'<div class="edit-radio-opt-sub">'+s+' · '+bf+' · '+e+'</div></div></div>';
+    }).join('');
+    openEditModal('Body composition target',
+      '<div class="edit-label">What body composition are you working toward?</div><div class="edit-radio">'+opts+'</div>'
+      +'<div class="edit-help">Pick what fits the lifestyle you want to maintain. Healthy is sustainable for most people.</div>',
+      ()=>{const sel=document.querySelector('.edit-radio-opt.sel');return sel?sel.dataset.val:null;},
+      v=>{
+        state.profile.bodyCompTarget=v;
+        const target=calcTargetWeight();
+        if(target)state.profile.goalWeight=target.weight;
+      }
+    );
+  };
+
+  window.editEquipment=function(){
+    const p=state.profile||{};
+    const cur=new Set(p.equipment||[]);
+    const items=[
+      ['bodyweight','Bodyweight'],
+      ['db','Dumbbells'],
+      ['kb','Kettlebell'],
+      ['bench','Adjustable bench'],
+      ['step','Step platform'],
+      ['ab_wheel','Ab wheel'],
+      ['rope','Jump rope'],
+      ['pullup_bar','Pull-up bar'],
+      ['dip_bars','Dip bars / dip station'],
+      ['bands','Resistance bands'],
+    ];
+    const opts=items.map(([v,l])=>{
+      return'<div class="edit-radio-opt'+(cur.has(v)?' sel':'')+'" data-val="'+v+'" onclick="this.classList.toggle(\'sel\');"><div class="edit-radio-opt-circle"></div><div class="edit-radio-opt-label">'+l+'</div></div>';
+    }).join('');
+    openEditModal('Equipment',
+      '<div class="edit-label">What do you have access to?</div><div class="edit-radio">'+opts+'</div>'
+      +'<div class="edit-help">Changes apply to your next session.</div>',
+      ()=>{
+        const sels=document.querySelectorAll('.edit-radio-opt.sel');
+        const list=Array.from(sels).map(s=>s.dataset.val);
+        if(!list.length){toast('Select at least one option','fail');return null;}
+        return list;
+      },
+      v=>{state.profile.equipment=v;}
+    );
+  };
+
+  window.editDBWeights=function(){
+    const cur=new Set(state.profile?.dbWeights||[]);
+    const opts=OB_ALL_DB_WEIGHTS.map(w=>{
+      return'<div class="edit-wt-chip'+(cur.has(w)?' sel':'')+'" data-w="'+w+'" onclick="this.classList.toggle(\'sel\');">'+w+'</div>';
+    }).join('');
+    openEditModal('Dumbbell weights',
+      '<div class="edit-label">Tap your available weights (lb)</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">'+opts+'</div>',
+      ()=>{
+        const sels=document.querySelectorAll('.edit-wt-chip.sel');
+        const list=Array.from(sels).map(s=>parseInt(s.dataset.w)).sort((a,b)=>a-b);
+        if(!list.length){toast('Select at least one weight','fail');return null;}
+        return list;
+      },
+      v=>{
+        state.profile.dbWeights=v;
+        DBW=v.slice();
+      }
+    );
+  };
+
+  window.editKBWeights=function(){
+    const cur=new Set(state.profile?.kbWeights||[]);
+    const opts=OB_ALL_KB_WEIGHTS.map(w=>{
+      return'<div class="edit-wt-chip'+(cur.has(w)?' sel':'')+'" data-w="'+w+'" onclick="this.classList.toggle(\'sel\');">'+w+'</div>';
+    }).join('');
+    openEditModal('Kettlebell weights',
+      '<div class="edit-label">Tap your available weights (lb)</div>'
+      +'<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">'+opts+'</div>',
+      ()=>{
+        const sels=document.querySelectorAll('.edit-wt-chip.sel');
+        const list=Array.from(sels).map(s=>parseInt(s.dataset.w)).sort((a,b)=>a-b);
+        return list;
+      },
+      v=>{
+        state.profile.kbWeights=v;
+        KBW=v.length?v.slice():[25,35,50];
+      }
+    );
+  };
+
   window.showSettings=function(){
     const body=document.getElementById('settings-body');
     const p=state.profile||{};
     const goalLabels={fat_loss:'Fat loss',muscle:'Build muscle',recomp:'Recomposition',general:'General fitness',custom:'Custom physique'};
+    const target=calcTargetWeight();
 
     let html='<div class="set-section"><div class="set-section-title">Profile</div>'
-      +'<div class="set-row"><span class="set-row-label">Name</span><span class="set-row-value">'+(p.name||'—')+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">Sex</span><span class="set-row-value">'+(p.sex||'—')+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">Height</span><span class="set-row-value">'+(p.heightDisplay||'—')+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">Starting weight</span><span class="set-row-value">'+(p.startWeight?p.startWeight+' lb':'—')+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">Starting BF%</span><span class="set-row-value">'+(p.startBf?p.startBf+'%':'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editName()"><span class="set-row-label">Name</span><span class="set-row-value">'+(p.name||'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editSex()"><span class="set-row-label">Sex</span><span class="set-row-value">'+(p.sex==='male'?'Male':p.sex==='female'?'Female':'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editHeight()"><span class="set-row-label">Height</span><span class="set-row-value">'+(p.heightDisplay||'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editStartWeight()"><span class="set-row-label">Starting weight</span><span class="set-row-value">'+(p.startWeight?p.startWeight+' lb':'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editStartBf()"><span class="set-row-label">Starting BF%</span><span class="set-row-value">'+(p.startBf?p.startBf+'%':'—')+'</span></div>'
       +'</div>';
 
     html+='<div class="set-section"><div class="set-section-title">Goal</div>'
-      +'<div class="set-row"><span class="set-row-label">Training goal</span><span class="set-row-value">'+(goalLabels[p.goal]||'—')+'</span></div>'
-      +(p.goalWeight?'<div class="set-row"><span class="set-row-label">Target weight</span><span class="set-row-value">'+p.goalWeight+' lb</span></div>':'')
+      +'<div class="set-row editable" onclick="editGoal()"><span class="set-row-label">Training goal</span><span class="set-row-value">'+(goalLabels[p.goal]||'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editBodyCompTarget()"><span class="set-row-label">Body comp target</span><span class="set-row-value">'+(target?target.categoryName+' · '+target.targetBF+'% BF':p.bodyCompTarget?getCategoryName(p.bodyCompTarget):'—')+'</span></div>'
+      +(target?'<div class="set-row"><span class="set-row-label">Target weight</span><span class="set-row-value">~'+target.weight+' lb</span></div>':'')
       +'</div>';
 
     if(p.goal==='custom'&&p.priorities){
@@ -2569,13 +3314,13 @@ button:active{opacity:.75;transform:scale(.97);}
     }
 
     html+='<div class="set-section"><div class="set-section-title">Equipment</div>'
-      +'<div class="set-row"><span class="set-row-label">Dumbbell weights</span><span class="set-row-value">'+(p.dbWeights&&p.dbWeights.length?p.dbWeights.join(', ')+' lb':'—')+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">Kettlebell weights</span><span class="set-row-value">'+(p.kbWeights&&p.kbWeights.length?p.kbWeights.join(', ')+' lb':(p.kbWeight?p.kbWeight+' lb':'—'))+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">Equipment</span><span class="set-row-value">'+(p.equipment?p.equipment.join(', ').replace(/_/g,' '):'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editEquipment()"><span class="set-row-label">Equipment</span><span class="set-row-value">'+(p.equipment&&p.equipment.length?p.equipment.length+' items':'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editDBWeights()"><span class="set-row-label">Dumbbell weights</span><span class="set-row-value">'+(p.dbWeights&&p.dbWeights.length?p.dbWeights.length+' selected':'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editKBWeights()"><span class="set-row-label">Kettlebell weights</span><span class="set-row-value">'+(p.kbWeights&&p.kbWeights.length?p.kbWeights.length+' selected':(p.kbWeight?'1 selected':'—'))+'</span></div>'
       +'</div>';
 
     html+='<div class="set-section"><div class="set-section-title">Schedule</div>'
-      +'<div class="set-row"><span class="set-row-label">Training days/week</span><span class="set-row-value">'+(p.daysPerWeek||3)+'</span></div>'
+      +'<div class="set-row editable" onclick="editDaysPerWeek()"><span class="set-row-label">Training days/week</span><span class="set-row-value">'+(p.daysPerWeek||3)+'</span></div>'
       +'</div>';
 
     html+='<div class="set-section"><div class="set-section-title">Data</div>'
@@ -2588,7 +3333,13 @@ button:active{opacity:.75;transform:scale(.97);}
 
     html+='<div class="support-card">'
       +'<p>The Toji Method is free, ad-free, and built by one person. Your support keeps it that way.</p>'
-      +'<a class="support-link" href="https://ko-fi.com/theotheralex" onclick="event.preventDefault();window.open(this.href);">Support this project ›</a>'
+      +'<a class="support-link" href="https://ko-fi.com/theotheralex" onclick="event.preventDefault();openExt(this.href);">Support this project ›</a>'
+      +'</div>';
+
+    html+='<div style="text-align:center;margin-top:24px;padding:16px 0;font-size:11px;color:var(--text-3);line-height:1.6;">'
+      +'The Toji Method · v6<br>'
+      +'© 2025 Alexander Ortega · <a href="https://github.com/theotheralex" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">theotheralex</a><br>'
+      +'<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">Licensed under CC BY-NC-SA 4.0</a>'
       +'</div>';
 
     body.innerHTML=html;
