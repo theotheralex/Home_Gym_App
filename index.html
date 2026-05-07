@@ -2871,14 +2871,43 @@ button:active{opacity:.75;transform:scale(.97);}
     const score=getStrengthScore();
     const tier=getStrengthTier(score);
     const next=getNextTier(tier);
-    const progressPct=next?Math.min(100,Math.round(((score-tier.min)/(next.min-tier.min))*100)):100;
-    const toNext=next?next.min-score:0;
     const tierIdx=STRENGTH_TIERS.indexOf(tier);
 
-    // Tier dots row showing all 5 tiers
-    const tierDotsHtml='<div class="str-tier-list">'+STRENGTH_TIERS.map((t,i)=>{
-      const reached=i<=tierIdx;
-      const current=i===tierIdx;
+    // Goal-aware: when a goal is set, the dots row spans Beginner → goal tier,
+    // and the progress bar tracks score against the goal tier minimum.
+    const activeGoal=getActiveGoal();
+    let goalTier=null;
+    let dotTiers=STRENGTH_TIERS;
+    if(activeGoal){
+      goalTier=STRENGTH_TIERS.find(t=>t.name===activeGoal.targetTier);
+      if(goalTier){
+        const gIdx=STRENGTH_TIERS.indexOf(goalTier);
+        dotTiers=STRENGTH_TIERS.slice(0,gIdx+1);
+      }
+    }
+    const dotTierIdx=Math.min(tierIdx,dotTiers.length-1);
+
+    // Progress bar: goal-relative if goal set, else tier-relative
+    let progressPct, progressLabel, progressReached=false;
+    if(goalTier){
+      progressPct=Math.min(100,Math.round((score/goalTier.min)*100));
+      const toGoal=Math.max(0,goalTier.min-score);
+      if(toGoal>0){
+        progressLabel=toGoal+' to '+goalTier.name;
+      }else{
+        progressLabel=goalTier.name+' reached!';
+        progressReached=true;
+      }
+    }else{
+      progressPct=next?Math.min(100,Math.round(((score-tier.min)/(next.min-tier.min))*100)):100;
+      progressLabel=next?(next.min-score)+' to '+next.name:'Maximum tier reached';
+      if(!next)progressReached=true;
+    }
+
+    // Tier dots row
+    const tierDotsHtml='<div class="str-tier-list">'+dotTiers.map((t,i)=>{
+      const reached=i<=dotTierIdx;
+      const current=i===dotTierIdx;
       const cls='str-tier-item'+(reached?' reached':'')+(current?' current':'');
       return'<div class="'+cls+'"><div class="str-tier-dot" style="background:'+(reached?t.color:'var(--surface-2)')+';"></div><div class="str-tier-name">'+t.name+'</div><div class="str-tier-min">'+t.min+'</div></div>';
     }).join('')+'</div>';
@@ -2888,7 +2917,7 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="str-score-val">'+score+'</div>'
       +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
       +'<div class="str-progress-bar"><div class="str-progress-fill" style="width:'+progressPct+'%;background:'+tier.color+';"></div></div>'
-      +(next?'<div class="str-progress-meta">'+toNext+' to '+next.name+'</div>':'<div class="str-progress-meta" style="color:var(--s-fg);font-weight:700;">Maximum tier reached</div>')
+      +'<div class="str-progress-meta"'+(progressReached?' style="color:var(--s-fg);font-weight:700;"':'')+'>'+progressLabel+'</div>'
       +tierDotsHtml
       +'</div>';
 
