@@ -146,21 +146,21 @@ button:active{opacity:.75;transform:scale(.97);}
 
 /* Action banner (tier 2 — instructions, fixed floating) */
 .action-banner{
-  position:fixed;top:calc(env(safe-area-inset-top) + 8px);left:8px;right:8px;z-index:90;
-  margin:0;padding:16px;border-radius:var(--rl);
-  font-size:16px;font-weight:700;line-height:1.4;
-  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
-  animation:banner-in 0.25s ease;
+  position:fixed;bottom:calc(env(safe-area-inset-bottom) + 76px);left:8px;right:8px;z-index:90;
+  margin:0;padding:10px 14px;border-radius:var(--rl);
+  font-size:14px;font-weight:700;line-height:1.3;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  animation:banner-in 0.2s ease;
   box-shadow:0 4px 24px rgba(0,0,0,0.5);
 }
-@keyframes banner-in{from{opacity:0;transform:translateY(-100%);}to{opacity:1;transform:translateY(0);}}
-@keyframes banner-out{to{opacity:0;transform:translateY(-100%);}}
-.action-banner .ab-msg{flex:1;}
-.action-banner .ab-sub{font-size:13px;font-weight:500;opacity:0.8;margin-top:2px;}
+@keyframes banner-in{from{opacity:0;transform:translateY(100%);}to{opacity:1;transform:translateY(0);}}
+@keyframes banner-out{to{opacity:0;transform:translateY(100%);}}
+.action-banner .ab-msg{flex:1;min-width:0;}
+.action-banner .ab-sub{font-size:12px;font-weight:500;opacity:0.85;margin-top:1px;}
 .action-banner .ab-x{
-  background:none;border:none;color:inherit;font-size:18px;font-weight:700;
-  min-height:32px;min-width:32px;padding:0;opacity:0.6;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;border-radius:50%;
+  background:none;border:none;color:inherit;font-size:16px;font-weight:700;
+  min-height:28px;min-width:28px;padding:0;opacity:0.6;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;
 }
 .action-banner .ab-x:active{opacity:1;}
 .key-row{padding:14px 16px;border-radius:var(--rl);margin-bottom:8px;font-size:15px;line-height:1.5;}
@@ -1648,8 +1648,25 @@ button:active{opacity:.75;transform:scale(.97);}
   function adapt(id,fb,aReps,aWeight){
     const ex=EX[id],prog=gProg(id);
     if(aWeight!=null&&!ex.fixedWeight)prog.weight=exIsAdj(ex)?nW(ex,aWeight):aWeight;
-    if(aReps!=null)prog.reps=aReps;
+    // Use max of prescribed and actual — declining sets shouldn't ratchet the next session's reps backward.
+    // Overachieving (doing more than prescribed) still gets recognized.
+    if(aReps!=null)prog.reps=Math.max(prog.reps,aReps);
     const usAdj=exIsAdj(ex), noL=exIsBW(ex);
+
+    // Helper: bump weight if pool allows, otherwise climb reps past range (equipment ceiling)
+    // Returns true if weight actually bumped, false if at ceiling.
+    function bumpOrExtend(){
+      if(!usAdj)return false;
+      const newW=xW(ex,prog.weight);
+      if(newW>prog.weight){
+        prog.weight=newW;
+        prog.reps=ex.repRange[0];
+        return true;
+      }
+      // At equipment ceiling — keep climbing reps with cap at top + 8
+      prog.reps=Math.min(prog.reps+1,ex.repRange[1]+8);
+      return false;
+    }
 
     if(fb==='easy'){
       prog.consecutiveHard=0;
@@ -1657,8 +1674,10 @@ button:active{opacity:.75;transform:scale(.97);}
       if(noL){
         prog.reps=Math.min(prog.reps+4,ex.repRange[1]+6);
       }else if(usAdj){
-        prog.weight=xW(ex,prog.weight);
-        prog.reps=ex.repRange[0];
+        if(!bumpOrExtend()){
+          // At ceiling — Easy gets a +1 rep on top of the ceiling logic (more aggressive bump)
+          prog.reps=Math.min(prog.reps+1,ex.repRange[1]+8);
+        }
       }
     }else if(fb==='good'){
       prog.consecutiveHard=0;
@@ -1667,8 +1686,7 @@ button:active{opacity:.75;transform:scale(.97);}
         prog.reps=Math.min(prog.reps+3,ex.repRange[1]+4);
       }else if(usAdj){
         if(prog.reps>=ex.repRange[1]){
-          prog.weight=xW(ex,prog.weight);
-          prog.reps=ex.repRange[0];
+          bumpOrExtend();
         }else{
           prog.reps=ex.repRange[1];
         }
@@ -1681,11 +1699,10 @@ button:active{opacity:.75;transform:scale(.97);}
       }else if(usAdj&&prog.reps<ex.repRange[1]){
         prog.reps=Math.min(prog.reps+1,ex.repRange[1]);
       }
-      // 2 consecutive hard at top → weight jump
+      // 2 consecutive hard at top → weight jump (or rep extension if at ceiling)
       if(prog.consecutiveHard>=2&&(noL||prog.reps>=ex.repRange[1])){
         if(usAdj){
-          prog.weight=xW(ex,prog.weight);
-          prog.reps=ex.repRange[0];
+          bumpOrExtend();
         }else if(noL){
           prog.reps=Math.min(prog.reps+1,ex.repRange[1]+6);
         }
@@ -2182,7 +2199,7 @@ button:active{opacity:.75;transform:scale(.97);}
     bannerTimer=setTimeout(()=>{
       if(bannerEl){bannerEl.style.animation='banner-out 0.3s ease forwards';setTimeout(()=>{if(bannerEl){bannerEl.remove();bannerEl=null;}},300);}
       bannerTimer=null;
-    },6000);
+    },3500);
   }
   window.dismissBanner=function(){
     if(bannerEl){bannerEl.style.animation='banner-out 0.2s ease forwards';setTimeout(()=>{if(bannerEl){bannerEl.remove();bannerEl=null;}},200);}
@@ -2198,7 +2215,35 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   window.toggleCues=function(ei){const p=document.getElementById('cue-'+ei),chev=document.getElementById('cue-chev-'+ei);if(!p)return;const o=p.classList.toggle('open');if(chev){chev.style.transform=o?'rotate(90deg)':'rotate(0deg)';chev.style.transition='transform 0.15s';}};
-  window.updSet=function(ei,si,f,v){state.currentSession.exercises[ei].sets[si][f]=parseFloat(v)||0;save();};
+  window.updSet=function(ei,si,f,v){
+    const sess=state.currentSession;
+    if(!sess||!sess.exercises[ei])return;
+    const exData=sess.exercises[ei];
+    const set=exData.sets[si];
+    if(!set)return;
+    const newVal=parseFloat(v)||0;
+    set[f]=newVal;
+    // Propagate manual change to all unfinished sets after this one,
+    // so a single bump (heavier weight, more reps) carries through the rest of the session
+    // and reaches the progression engine at session end.
+    const targetField=f==='actualWeight'?'targetWeight':(f==='actualReps'?'targetReps':null);
+    if(targetField){
+      for(let i=si+1;i<exData.sets.length;i++){
+        const next=exData.sets[i];
+        if(next.done)continue;
+        next[f]=newVal;
+        next[targetField]=newVal;
+        reRSet(ei,i);
+      }
+      // For timed exercises, reset the running timer to match new target
+      const ex=EX[exData.id];
+      if(ex&&ex.unit==='sec'&&exTimers[ei]&&f==='actualReps'){
+        const nextUnfinished=exData.sets.find((s,i)=>i>si&&!s.done);
+        if(nextUnfinished)exTimers[ei].reset(nextUnfinished.actualReps);
+      }
+    }
+    save();
+  };
 
   window.setFB=function(ei,si,fb){
     const sess=state.currentSession;
@@ -2393,7 +2438,8 @@ button:active{opacity:.75;transform:scale(.97);}
       if(isLastSet){
         if(partnerNeedsWork()){
           const nextIdx=findNextExercise();
-          banner('Done — go to superset partner',ex.name+' complete','fail');
+          const partnerName=nextIdx>=0?EX[state.currentSession.exercises[nextIdx].id].name:'next';
+          banner('Next: '+partnerName,null,'fail');
           scrollToExercise(nextIdx);
         }else{
           startRest(ex.type);
@@ -2405,11 +2451,12 @@ button:active{opacity:.75;transform:scale(.97);}
           toast('Failed → '+(failDesc||'next set adjusted'),'fail');
         }else{
           const nextIdx=findNextExercise();
-          banner('Go to next exercise — no rest',failDesc||'Adjusted for remaining sets','fail');
+          const partnerName=nextIdx>=0?EX[state.currentSession.exercises[nextIdx].id].name:'next';
+          banner('Next: '+partnerName+' · no rest',failDesc||null,'fail');
           scrollToExercise(nextIdx);
         }
       }else{
-        banner('No rest — do next set',failDesc||'Adjusted for remaining sets','fail');
+        banner('No rest — next set',failDesc||null,'fail');
       }
     }else{
       // NON-FAIL FEEDBACK
@@ -2417,7 +2464,8 @@ button:active{opacity:.75;transform:scale(.97);}
 
       if(isDropsetSet&&partnerNeedsWork()){
         const nextIdx=findNextExercise();
-        banner('Superset → go to next exercise','Dropset complete — partner has sets remaining',fb);
+        const partnerName=nextIdx>=0?EX[state.currentSession.exercises[nextIdx].id].name:'next';
+        banner('Next: '+partnerName,'Dropset done',fb);
         scrollToExercise(nextIdx);
       }else if(hasPartner&&!isDropsetSet){
         if(roundComplete()){
@@ -2427,7 +2475,8 @@ button:active{opacity:.75;transform:scale(.97);}
           if(nextIdx>=0)pendingScroll=nextIdx;
         }else{
           const nextIdx=findNextExercise();
-          banner('Superset → go to next exercise','No rest between superset exercises',fb);
+          const partnerName=nextIdx>=0?EX[state.currentSession.exercises[nextIdx].id].name:'next';
+          banner('Next: '+partnerName+' · no rest',null,fb);
           scrollToExercise(nextIdx);
         }
       }else{
@@ -2460,7 +2509,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const dropR=ex.unit==='sec'?lastSet.actualReps:Math.round((ex.repRange[0]+ex.repRange[1])/2);
     exData.sets.push({targetWeight:dropW,targetReps:dropR,actualWeight:dropW,actualReps:dropR,feedback:null,done:false,isDropset:true});
     save();renderSess();
-    banner('Dropset added — no rest',ex.name+' → '+dropW+' lb','fail');
+    banner('Dropset → '+dropW+' lb',null,'fail');
   };
 
   // Epley e1RM formula
