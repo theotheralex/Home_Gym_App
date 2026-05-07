@@ -21,6 +21,7 @@
 <meta name="apple-mobile-web-app-title" content="The Toji Method">
 <meta name="mobile-web-app-capable" content="yes">
 <title>The Toji Method</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.34.0/dist/tabler-icons.min.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ETM%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ETM%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22The%20Toji%20Method%22%2C%22short_name%22%3A%22The%20Toji%20Method%22%2C%22description%22%3A%22Adaptive%20home%20gym%20training%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527102%2527%2520fill%253D%2527%2523dc2626%2527%252F%253E%253Ctext%2520x%253D%2527256%2527%2520y%253D%2527338%2527%2520font-size%253D%2527266%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%2520font-family%253D%2527system-ui%2527%2520font-weight%253D%2527700%2527%253ETM%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
@@ -43,7 +44,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .screen{display:none;}.screen.active{display:block;}
 h1{font-size:28px;font-weight:700;letter-spacing:-.5px;}
 h2{font-size:22px;font-weight:700;letter-spacing:-.3px;}
-h3{font-size:12px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:1px;margin:20px 0 8px;}
+h3{font-size:13px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:0.8px;margin:24px 0 10px;}
 .sub{color:var(--text-2);font-size:14px;margin-top:2px;margin-bottom:20px;}
 button{font-family:inherit;font-size:16px;font-weight:600;border:none;border-radius:var(--r);cursor:pointer;min-height:var(--tap);display:flex;align-items:center;justify-content:center;transition:opacity .1s,transform .08s;-webkit-user-select:none;user-select:none;-webkit-appearance:none;appearance:none;background:transparent;color:var(--text);}
 button:active{opacity:.75;transform:scale(.97);}
@@ -54,13 +55,23 @@ button:active{opacity:.75;transform:scale(.97);}
 .bdanger{background:transparent;color:var(--text-3);font-size:14px;font-weight:500;min-height:44px;border:1px solid var(--border);width:100%;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
 .stack{display:flex;flex-direction:column;gap:10px;}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px;}
-.stat-card{background:var(--surface);border-radius:var(--rl);padding:16px;}
-.stat-label{font-size:12px;color:var(--text-2);font-weight:500;margin-bottom:4px;}
-.stat-value{font-size:26px;font-weight:700;}
-.stat-sub{font-size:11px;color:var(--text-3);margin-top:2px;font-weight:500;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;display:flex;flex-direction:column;cursor:default;}
+.stat-head{display:flex;align-items:center;gap:6px;margin-bottom:12px;}
+.stat-icon{font-size:15px;color:var(--text-2);display:flex;align-items:center;}
+.stat-label{flex:1;font-size:12px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
+.stat-value{font-size:32px;font-weight:800;line-height:1;letter-spacing:-0.5px;margin-bottom:6px;}
+.stat-sub{font-size:12px;color:var(--text-2);font-weight:600;line-height:1.35;margin-top:auto;}
 .stat-alert .stat-value{color:var(--d-fg);}
 .stat-good .stat-value{color:var(--s-fg);}
+.stat-viz{margin-top:8px;}
+.stat-dots{display:flex;gap:4px;align-items:center;}
+.stat-dot{width:8px;height:8px;border-radius:50%;background:var(--bg);border:1px solid var(--border-strong);}
+.stat-dot.on{background:var(--accent);border-color:var(--accent);}
+.stat-bar{height:5px;background:var(--bg);border-radius:3px;overflow:hidden;}
+.stat-bar-fill{height:100%;border-radius:3px;}
+.stat-spark{width:100%;height:22px;}
+.stat-spark svg{display:block;width:100%;height:100%;}
 .rec-row{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:var(--r);margin-bottom:6px;font-size:14px;font-weight:600;}
 .rec-fresh{background:var(--s-bg);color:var(--s-fg);}
 .rec-recovering{background:var(--w-bg);color:var(--w-fg);}
@@ -78,7 +89,7 @@ button:active{opacity:.75;transform:scale(.97);}
 .ex-name{font-size:17px;font-weight:700;margin-bottom:6px;}
 .ex-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
 .tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--text-2);}
-.cue-toggle{background:none;border:none;color:var(--text-3);font-size:13px;font-weight:500;min-height:36px;padding:0;justify-content:flex-start;gap:6px;width:auto;}
+.cue-toggle{background:none;border:none;color:var(--text-2);font-size:13px;font-weight:600;min-height:36px;padding:0;justify-content:flex-start;gap:6px;width:auto;display:flex;align-items:center;}
 .cue-toggle:active{color:var(--text-2);transform:none;}
 .cue-demo{display:block;margin-top:10px;padding:10px 0 0;font-size:13px;font-weight:500;color:var(--text-3);text-decoration:none;border-top:1px solid var(--border);}
 .cue-panel{display:none;padding:0 16px 14px;}
@@ -191,24 +202,25 @@ button:active{opacity:.75;transform:scale(.97);}
 .str-recent-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
 
 /* Strength score card */
-.str-score-card{background:linear-gradient(135deg,var(--surface) 0%,var(--surface-2) 100%);border-radius:var(--rl);padding:20px 18px;margin-bottom:12px;cursor:pointer;border:1px solid var(--border);}
+.str-score-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:8px;cursor:pointer;}
 .str-score-card:active{transform:scale(0.99);transition:transform 0.1s;}
-.str-score-card-detail{cursor:default;margin-bottom:20px;padding:24px 20px;}
+.str-score-card-detail{cursor:default;margin-bottom:20px;padding:22px 20px;}
 .str-score-card-detail:active{transform:none;}
-.str-score-label{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;}
-.str-score-val{font-size:48px;font-weight:800;line-height:1;margin-bottom:4px;letter-spacing:-1px;}
-.str-score-card-detail .str-score-val{font-size:64px;}
-.str-score-tier{font-size:16px;font-weight:700;margin-bottom:14px;}
-.str-progress-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:6px;}
-.str-progress-fill{height:100%;border-radius:4px;transition:width 0.3s ease;}
-.str-progress-meta{font-size:12px;color:var(--text-3);font-weight:500;}
-.str-tier-list{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
-.str-tier-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;opacity:0.4;}
-.str-tier-item.reached{opacity:1;}
-.str-tier-item.current{opacity:1;transform:scale(1.05);}
-.str-tier-dot{width:12px;height:12px;border-radius:50%;}
-.str-tier-name{font-size:10px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;}
-.str-tier-min{font-size:10px;color:var(--text-3);}
+.str-score-label{font-size:12px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;}
+.str-score-row{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
+.str-score-val{font-size:48px;font-weight:800;line-height:1;letter-spacing:-1.5px;}
+.str-score-card-detail .str-score-val{font-size:60px;}
+.str-score-tier{font-size:15px;font-weight:700;}
+.str-progress-bar{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;margin-bottom:6px;}
+.str-progress-fill{height:100%;border-radius:3px;transition:width 0.3s ease;}
+.str-progress-meta{font-size:12px;color:var(--text-3);font-weight:600;}
+.str-tier-list{display:flex;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);}
+.str-tier-item{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;}
+.str-tier-dot{width:8px;height:8px;border-radius:50%;background:transparent;border:1px solid var(--border-strong);}
+.str-tier-item.reached .str-tier-dot{background:var(--text-3);border:none;}
+.str-tier-item.current .str-tier-dot{width:14px;height:14px;border:none;outline:2px solid;outline-offset:2px;}
+.str-tier-name{font-size:9px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.4px;}
+.str-tier-item.current .str-tier-name{color:var(--text);}
 
 /* PR preview on dashboard */
 .str-pr-preview{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
@@ -237,18 +249,24 @@ button:active{opacity:.75;transform:scale(.97);}
 .muscle-best-arrow{font-size:18px;font-weight:700;}
 
 /* New strength overview cards */
-.str-cards-grid{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
-.str-overview-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;cursor:pointer;transition:transform 0.1s,background 0.15s;}
+.str-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.str-overview-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;cursor:pointer;transition:transform 0.1s,background 0.15s;display:flex;flex-direction:column;}
 .str-overview-card:active{transform:scale(0.99);background:var(--surface-2);}
-.str-card-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-.str-card-icon{font-size:16px;}
-.str-card-title{flex:1;font-size:14px;font-weight:600;color:var(--text);}
-.str-card-arrow{font-size:18px;color:var(--text-3);font-weight:700;}
-.str-card-stat{font-size:22px;font-weight:800;line-height:1.1;margin-bottom:2px;}
-.str-card-sub{font-size:11px;color:var(--text-3);font-weight:500;}
+.str-card-head{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.str-card-icon{display:flex;align-items:center;justify-content:center;color:var(--text-2);}
+.str-card-title{flex:1;font-size:12px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:0.8px;}
+.str-card-arrow{display:flex;align-items:center;justify-content:center;color:var(--text-3);}
+.str-card-stat{font-size:32px;font-weight:800;line-height:1;margin-bottom:6px;letter-spacing:-0.5px;}
+.str-card-sub{font-size:13px;color:var(--text-2);font-weight:600;line-height:1.35;margin-top:auto;}
 .str-card-cta{border-color:var(--accent);background:rgba(220,38,38,0.05);}
-.str-card-cta .str-card-title{color:var(--accent);}
+.str-card-cta .str-card-stat{color:var(--accent);font-size:22px;}
 .str-card-goal{border-color:rgba(220,38,38,0.4);}
+.str-card-spark{margin-top:auto;width:100%;height:24px;}
+.str-card-spark svg{display:block;width:100%;height:100%;}
+.str-card-bars{display:flex;gap:3px;align-items:flex-end;height:20px;margin-top:auto;}
+.str-card-bars div{flex:1;border-radius:1px;background:var(--i-fg);}
+.str-card-progress{height:5px;background:var(--bg);border-radius:3px;overflow:hidden;margin-top:auto;}
+.str-card-progress div{height:100%;border-radius:3px;}
 
 .str-card-pr-mini{font-size:11px;color:var(--text-2);margin-top:4px;line-height:1.4;}
 .str-card-pr-mini strong{color:var(--text);font-weight:600;}
@@ -319,13 +337,13 @@ button:active{opacity:.75;transform:scale(.97);}
 /* Achievements detail */
 .ach-summary{background:var(--surface);border-radius:var(--rl);padding:14px;text-align:center;color:var(--text-2);font-size:14px;}
 .ach-summary-num{font-size:24px;font-weight:800;color:var(--w-fg);margin-right:4px;}
-.achievement{background:var(--surface);border-radius:var(--rl);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
-.ach-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--w-fg),#f59e0b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.achievement{background:var(--surface);border-radius:var(--rl);padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+.ach-icon{width:42px;height:42px;background:var(--w-bg);color:var(--w-fg);border:1px solid var(--w-br);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .ach-text{flex:1;}
 .ach-name{font-size:14px;font-weight:700;}
-.ach-desc{font-size:11px;color:var(--text-3);margin-top:2px;line-height:1.4;}
-.ach-pending{opacity:0.6;}
-.ach-pending .ach-icon{background:var(--surface-2);opacity:0.5;}
+.ach-desc{font-size:12px;color:var(--text-3);margin-top:2px;line-height:1.4;}
+.ach-pending{opacity:0.7;}
+.ach-pending .ach-icon{background:var(--surface-2);color:var(--text-3);border-color:var(--border);}
 .ach-progress-mini{height:4px;background:var(--bg);border-radius:2px;margin-top:6px;overflow:hidden;}
 .ach-progress-fill{height:100%;background:var(--accent);border-radius:2px;}
 .ach-progress-label{font-size:10px;color:var(--text-3);margin-top:2px;font-weight:500;}
@@ -348,9 +366,10 @@ button:active{opacity:.75;transform:scale(.97);}
 
 /* Tab bar */
 .tab-bar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(10,10,10,0.97);border-top:1px solid var(--border);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom));gap:6px;}
-.tab-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 0;background:var(--surface);border:none;border-radius:var(--r);min-height:44px;color:var(--text-3);font-size:14px;font-weight:600;letter-spacing:0.3px;}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 0;background:var(--surface);border:none;border-radius:var(--r);min-height:48px;color:var(--text-3);font-size:12px;font-weight:600;letter-spacing:0.3px;}
 .tab-btn:active{transform:none;opacity:1;}
 .tab-btn.active{background:var(--surface-2);color:var(--text);}
+.tab-btn-icon{font-size:18px;}
 .tab-page{display:none;}
 .tab-page.active{display:block;}
 
@@ -470,7 +489,7 @@ button:active{opacity:.75;transform:scale(.97);}
   <div class="edit-card">
     <div class="edit-header">
       <span class="edit-title" id="edit-title">Edit</span>
-      <button class="edit-close" onclick="closeEditModal()">✕</button>
+      <button class="edit-close" onclick="closeEditModal()" aria-label="Close"><i class="ti ti-x"></i></button>
     </div>
     <div class="edit-body" id="edit-body"></div>
     <div class="edit-actions">
@@ -492,7 +511,7 @@ button:active{opacity:.75;transform:scale(.97);}
   <div class="rest-actions">
     <button class="rest-btn rest-skip" onclick="skipRest()">Skip</button>
     <button class="rest-add" onclick="addRestTime(30)">+30s</button>
-    <button class="rest-btn rest-done" onclick="skipRest()">Done ✓</button>
+    <button class="rest-btn rest-done" onclick="skipRest()">Done</button>
   </div>
 </div>
 
@@ -628,15 +647,15 @@ button:active{opacity:.75;transform:scale(.97);}
       </div>
       <p class="sub" id="dash-greeting">Adaptive home gym training</p>
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-label">Week streak</div><div id="stat-streak" class="stat-value">0</div><div class="stat-sub" id="stat-streak-sub"></div></div>
-        <div class="stat-card"><div class="stat-label">This week</div><div id="stat-week" class="stat-value">0</div><div class="stat-sub" id="stat-week-sub"></div></div>
-        <div class="stat-card" id="stat-days-card"><div class="stat-label">Days since last</div><div id="stat-days" class="stat-value">—</div><div class="stat-sub" id="stat-days-sub"></div></div>
-        <div class="stat-card"><div class="stat-label">Avg vol / session</div><div id="stat-avgvol" class="stat-value">0</div><div class="stat-sub" id="stat-avgvol-sub"></div></div>
+        <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-streak-icon"></span><span class="stat-label">Week streak</span></div><div id="stat-streak" class="stat-value">0</div><div class="stat-sub" id="stat-streak-sub"></div><div class="stat-viz" id="stat-streak-viz"></div></div>
+        <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-week-icon"></span><span class="stat-label">This week</span></div><div id="stat-week" class="stat-value">0</div><div class="stat-sub" id="stat-week-sub"></div><div class="stat-viz" id="stat-week-viz"></div></div>
+        <div class="stat-card" id="stat-days-card"><div class="stat-head"><span class="stat-icon" id="stat-days-icon"></span><span class="stat-label">Days since last</span></div><div id="stat-days" class="stat-value">—</div><div class="stat-sub" id="stat-days-sub"></div></div>
+        <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-avgvol-icon"></span><span class="stat-label">Avg vol / session</span></div><div id="stat-avgvol" class="stat-value">0</div><div class="stat-sub" id="stat-avgvol-sub"></div><div class="stat-viz" id="stat-avgvol-viz"></div></div>
       </div>
       <h3>Body composition</h3>
       <div id="body-comp"></div>
-      <h3>Strength (e1RM)</h3>
-      <div id="strength-dash"></div>
+      <h3>Strength</h3>
+      <div id="strength-body"></div>
       <div class="stack" style="margin-top:16px;">
         <button class="bs" onclick="showFeedbackKey()">How it works</button>
         <button class="bs" onclick="showSettings()">Settings</button>
@@ -648,7 +667,6 @@ button:active{opacity:.75;transform:scale(.97);}
       <h2 style="margin-bottom:16px;">How it works</h2>
 
       <h3 style="margin-top:0;">Set feedback</h3>
-      <h3 style="margin-top:0;">Set feedback</h3>
       <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">After each set, rate how it felt. The app uses this to adjust your workout in real time and plan your next session. Your target zone is Hard or Failed — if everything feels Easy or Good, the weight isn't heavy enough.</p>
       <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Easy</strong> — not hard enough. Weight jumps immediately for remaining sets, and again next session.</div>
       <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Good</strong> — still comfortable. Reps push to top of range. If already at top, weight jumps.</div>
@@ -656,7 +674,7 @@ button:active{opacity:.75;transform:scale(.97);}
       <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Failed</strong> — ideal stimulus. Weight drops for remaining sets with no rest — go straight into the next set. Between sessions: hold weight, build reps. 3 consecutive fails = slight deload.</div>
 
       <h3>Body composition target</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Instead of picking an arbitrary goal weight, you pick the body composition you're working toward. The app calculates the actual target weight from your current lean mass and the body fat % range you're aiming for. Change your target anytime in Settings — Goal → Body comp target.</p>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Instead of picking an arbitrary goal weight, you pick the body composition you're working toward. The app calculates the actual target weight from your current lean mass and the body fat % range you're aiming for. Change your target anytime in Settings → Goal → Body comp target.</p>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Athletic</strong> — Visible abs, defined musculature. Very high effort. 12–18% BF (men) / 18–22% (women).</div>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fitness</strong> — Lean and healthy without abs. High effort. 14–22% BF (men) / 21–26% (women).</div>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Healthy</strong> — Good proportions, doctor-approved. Moderate effort. Most sustainable for long term. 18–25% BF (men) / 24–30% (women).</div>
@@ -680,20 +698,46 @@ button:active{opacity:.75;transform:scale(.97);}
       <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Recovering (40–74%)</strong> — still repairing. Can train but expect lower performance.</div>
       <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Fatigued (0–39%)</strong> — needs rest. Training this muscle again risks junk volume and injury.</div>
 
+      <h3>Strength section</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The Strength section on the dashboard is your training overview. The big card at the top shows your current score and tier with a row of dots showing your position across all 5 tiers. Below it is a grid of 8 cards — each is a tappable shortcut to a deeper view.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Score</strong> — your strength score change over the last 90 days, with a sparkline. Tap for the full history chart and per-lift breakdown.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Goal</strong> — your active strength goal (or a CTA to set one). Shows points remaining and ETA. Tap to manage.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>PRs</strong> — total personal records earned, plus the most recent one. Tap for the full PR feed.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight</strong> — your top bodyweight benchmark (max push-ups, pull-ups, plank, etc.). Tap for the full grid.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Muscles</strong> — number of muscle groups with tracked lifts, plus a mini bar chart of relative strength. Tap for top 3 lifts per muscle.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Achievements</strong> — earned vs total, with a progress bar. Tap to see what you've unlocked and what's next.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Lifts</strong> — number of compound lifts you're tracking. Tap for category-grouped progression sparklines.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Career</strong> — total sessions and training age. Tap for lifetime stats (volume, PR streak, etc.).</div>
+
       <h3>Strength score &amp; tiers</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Your single "am I getting stronger" number. Calculated from your best e1RM across tracked compound lifts, normalized to your bodyweight, then multiplied by 100. The score updates automatically after every session. Tap the strength card on the dashboard to see your full breakdown including PRs and per-muscle bests.</p>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Your single "am I getting stronger" number. Calculated from your best e1RM across tracked compound lifts, normalized to your bodyweight, then multiplied by 100. The score updates automatically after every session and is saved daily so you can see how it's grown over weeks and months.</p>
       <div class="key-row" style="background:var(--surface);color:var(--text-3);"><strong>Beginner</strong> — 0–149. Just starting out. Focus on consistency and form.</div>
       <div class="key-row" style="background:var(--surface);color:var(--i-fg);"><strong>Novice</strong> — 150–399. Built a base. Strength gains come fast.</div>
       <div class="key-row" style="background:var(--surface);color:var(--w-fg);"><strong>Intermediate</strong> — 400–699. Solid lifter. Progress requires more deliberate effort.</div>
       <div class="key-row" style="background:var(--surface);color:var(--accent);"><strong>Advanced</strong> — 700–999. Strong by any measure. Years of consistent training.</div>
       <div class="key-row" style="background:var(--surface);color:var(--s-fg);"><strong>Elite</strong> — 1000+. Top tier. Most lifters never reach this.</div>
 
+      <h3>Strength goals</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Pick a tier to chase from the Goal card. The app records your starting score and tracks your rate of progress to estimate how many weeks until you hit the target.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Picking a tier</strong> — tap Goal → see your current score and a list of tiers higher than your current. Tap a tier to set it as your target.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>ETA calculation</strong> — based on your average pts/day since you set the goal. Needs at least a week of data before showing an estimate. Goes up if you're making progress, fades to "—" if you stall.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Reaching it</strong> — when your score crosses the target, the Goal card celebrates and prompts you to set a new one. You can clear and re-pick a goal anytime.</div>
+
       <h3>Personal records</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">PRs are detected automatically every session. When you beat a previous best, you get a banner celebration and the PR is logged to your strength screen. Three types are tracked:</p>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">PRs are detected automatically every session. When you beat a previous best, you get a banner celebration and the PR is logged. Three types are tracked:</p>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight PRs</strong> — when your e1RM (estimated 1-rep max from Epley formula) on a compound lift beats your previous best.</div>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rep PRs</strong> — when you do more reps than ever before on a bodyweight exercise (push-ups, pull-ups, etc.).</div>
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Time PRs</strong> — when you hold a timed exercise (plank, farmer carry, etc.) longer than ever before.</div>
-      <p style="color:var(--text-2);font-size:13px;margin:10px 0;">Tap the strength card to see your recent PRs feed and best-ever lifts grouped by muscle group.</p>
+      <p style="color:var(--text-2);font-size:13px;margin:10px 0;">Major PRs (e1RM jumps of 8+ lb, 3+ extra reps, or 15+ extra seconds) get a red accent and "MAJOR PR" tag in the PR feed.</p>
+
+      <h3>Achievements</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">20 milestones spread across 5 categories. They unlock automatically as you train — no manual claiming. Each comes with its own banner celebration.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Tier crossings</strong> — Reach Novice, Intermediate, Advanced, and Elite scores.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight milestones</strong> — First pull-up, 10 pull-ups, 25 push-ups, 50 push-ups, 1-min plank, 2-min plank.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>PR streaks</strong> — 4, 12, and 26 consecutive weeks with at least one PR. Consistency rewards.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Volume milestones</strong> — 100k, 500k, and 1M lb of lifetime volume lifted.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Session count</strong> — 50, 100, 250, and 500 sessions completed.</div>
+      <p style="color:var(--text-2);font-size:13px;margin:10px 0;">The Achievements detail screen shows everything you've earned plus the closest unearned ones with progress bars — so you can see what's coming.</p>
 
       <h3>Equipment &amp; weight pools</h3>
       <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app builds workouts using only the equipment you actually own. You set this once during onboarding and can change it anytime in Settings.</p>
@@ -720,11 +764,11 @@ button:active{opacity:.75;transform:scale(.97);}
       <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Deload (sessions 19–21)</strong> — weights drop to 60%, sets are halved. Easy and Good are expected. This isn't laziness — it's recovery. Your muscles grow during rest, not during lifting. After deload, the cycle repeats and you'll be stronger.</div>
 
       <h3>Dashboard stats</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The four cards at the top of the dashboard.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Week streak</strong> — consecutive weeks where you completed 3+ sessions. The single best predictor of long-term results. Protect this number.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>This week</strong> — sessions completed Monday through Sunday. Target matches your schedule setting from onboarding.</div>
-      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Green stat</strong> — on track. Trained today, or hit your weekly target.</div>
-      <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Red stat</strong> — falling behind. 3+ days since last session.</div>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The four cards at the top of the dashboard. Each shows a number, label, and a small visual hint about what it means.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Week streak</strong> — consecutive weeks where you completed 3+ sessions. The single best predictor of long-term results. Below the number, a row of 4 dots shows the last 4 weeks — filled red means you hit 3+ sessions that week.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>This week</strong> — sessions completed Monday through Sunday. Target matches your schedule setting from onboarding. The bar fills red while you're under target, green when you hit it.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Days since last</strong> — how recent your last session was. Turns red after 3+ days to nudge you back in.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Avg vol / session</strong> — average pounds lifted per session across your full history. The sparkline shows your last 10 sessions so you can see if volume is trending up or down.</div>
 
       <h3>Your data</h3>
       <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">All your data stays on your device. Nothing is sent to a server.</p>
@@ -733,64 +777,57 @@ button:active{opacity:.75;transform:scale(.97);}
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>AI coach export</strong> — copy a structured training report to your clipboard from Training History. Paste it into Claude for personalized coaching analysis.</div>
     </div>
 
-    <div id="screen-strength" class="screen">
-      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
-      <h2 style="margin-bottom:4px;">Strength</h2>
-      <p class="sub" id="strength-sub">Your training progress at a glance</p>
-      <div id="strength-body"></div>
-    </div>
-
     <div id="screen-strength-history" class="screen">
-      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:4px;">Score History</h2>
       <p class="sub">Watch your strength score grow over time</p>
       <div id="strength-history-body"></div>
     </div>
 
     <div id="screen-strength-goal" class="screen">
-      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:4px;">Strength Goal</h2>
       <p class="sub">Pick a tier to chase</p>
       <div id="strength-goal-body"></div>
     </div>
 
     <div id="screen-strength-prs" class="screen">
-      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:4px;">Personal Records</h2>
       <p class="sub">Every PR you've ever earned</p>
       <div id="strength-prs-body"></div>
     </div>
 
     <div id="screen-strength-bw" class="screen">
-      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:4px;">Bodyweight Benchmarks</h2>
       <p class="sub">Your max reps and times across all bodyweight exercises</p>
       <div id="strength-bw-body"></div>
     </div>
 
     <div id="screen-strength-muscles" class="screen">
-      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:4px;">By Muscle Group</h2>
       <p class="sub">Top lifts targeting each muscle</p>
       <div id="strength-muscles-body"></div>
     </div>
 
     <div id="screen-strength-lifts" class="screen">
-      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:4px;">All Tracked Lifts</h2>
       <p class="sub">Every compound lift with progression charts</p>
       <div id="strength-lifts-body"></div>
     </div>
 
     <div id="screen-strength-achievements" class="screen">
-      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:4px;">Achievements</h2>
       <p class="sub">Earned milestones and what's next</p>
       <div id="strength-achievements-body"></div>
     </div>
 
     <div id="screen-strength-career" class="screen">
-      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:4px;">Career Stats</h2>
       <p class="sub">Lifetime training totals</p>
       <div id="strength-career-body"></div>
@@ -835,21 +872,21 @@ button:active{opacity:.75;transform:scale(.97);}
 
     <div id="screen-session" class="screen">
       <div class="sess-hdr">
-        <button class="bg" id="cancel-btn" onclick="abandonSession()">✕ Cancel</button>
+        <button class="bg" id="cancel-btn" onclick="abandonSession()"><i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel</button>
         <span id="session-progress" class="sess-prog"></span>
       </div>
       <h2 id="session-title" style="margin-bottom:2px;"></h2>
       <p id="session-subtitle" class="sub"></p>
       <div id="action-banner-area"></div>
       <div id="session-body"></div>
-      <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:16px;margin-bottom:8px;">Complete session ✓</button>
+      <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:16px;margin-bottom:8px;"><i class="ti ti-check" style="font-size:18px;margin-right:6px;"></i>Complete session</button>
       <div id="session-support-nudge"></div>
     </div>
 
     <div id="screen-history" class="screen">
       <button class="bg" onclick="goTrain()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:16px;">Training history</h2>
-      <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;">📋 Copy for AI coach</button>
+      <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;"><i class="ti ti-clipboard-text" style="font-size:16px;margin-right:6px;"></i>Copy for AI coach</button>
       <div id="history-body"></div>
     </div>
 
@@ -859,8 +896,8 @@ button:active{opacity:.75;transform:scale(.97);}
 
 <!-- TAB BAR -->
 <div class="tab-bar">
-  <button class="tab-btn active" id="tab-btn-dash" onclick="switchTab('dash')">Dashboard</button>
-  <button class="tab-btn" id="tab-btn-train" onclick="switchTab('train')">Train</button>
+  <button class="tab-btn active" id="tab-btn-dash" onclick="switchTab('dash')"><i class="ti ti-layout-dashboard tab-btn-icon"></i><span>Dashboard</span></button>
+  <button class="tab-btn" id="tab-btn-train" onclick="switchTab('train')"><i class="ti ti-barbell tab-btn-icon"></i><span>Train</span></button>
 </div>
 
 <script>
@@ -876,6 +913,43 @@ button:active{opacity:.75;transform:scale(.97);}
 (function(){
   // toji-method-state-v2 — built by theotheralex
   const SK='toji-method-state-v2';
+
+  // ── INLINE SVG ICON SYSTEM ──────────────────────────────
+  // Tabler-style outline icons, no external dependency, works offline
+  const ICONS={
+    'chart-line':'<path d="M3 3v18h18"/><path d="M7 14l4 -4 4 4 6 -6"/>',
+    'target':'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+    'trophy':'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1 -10 0z"/><path d="M17 5h2a2 2 0 0 1 2 2v0a4 4 0 0 1 -4 4M7 5h-2a2 2 0 0 0 -2 2v0a4 4 0 0 0 4 4"/>',
+    'stretching':'<circle cx="16" cy="4" r="1"/><path d="M8 21l3 -4M16 21l-2 -4l-3 -3l1 -6M5 12l3 -3l5 .5l3 2.5"/>',
+    'chart-bar':'<rect x="3" y="12" width="6" height="8" rx="1"/><rect x="9" y="8" width="6" height="12" rx="1"/><rect x="15" y="4" width="6" height="16" rx="1"/>',
+    'trending-up':'<polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/>',
+    'medal':'<circle cx="12" cy="14" r="6"/><path d="M9 8l-3 -5h12l-3 5"/><path d="M10 14l2 2l4 -4"/>',
+    'calendar':'<rect x="4" y="5" width="16" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="4" y1="11" x2="20" y2="11"/>',
+    'chevron-right':'<polyline points="9 6 15 12 9 18"/>',
+    'arrow-left':'<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
+    'flame':'<path d="M12 12c2 -2.96 0 -7 -1 -8c0 3.038 -1.773 4.741 -3 6c-1.226 1.26 -2 3.24 -2 5a6 6 0 1 0 12 0c0 -1.532 -1.056 -3.94 -2 -5c-1.786 3 -2.791 3 -4 2z"/>',
+    'package':'<path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"/><path d="M12 12l8 -4.5"/><line x1="12" y1="12" x2="12" y2="21"/><line x1="12" y1="12" x2="4" y2="7.5"/>',
+    'mountain':'<path d="M3 20l5 -8l4 4l4 -8l5 12z"/>',
+    'check':'<polyline points="20 6 9 17 4 12"/>',
+    'x':'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="6"/>',
+    'plus':'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+    'star':'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    'bolt':'<path d="M13 3l-9 12h7l-1 6l9 -12h-7l1 -6z"/>',
+    'shield':'<path d="M12 22s8 -4 8 -10v-7l-8 -3l-8 3v7c0 6 8 10 8 10"/>',
+    'crown':'<path d="M3 7l4 5l5 -8l5 8l4 -5v11h-18z"/>',
+    'activity':'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+    'clock':'<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>',
+    'barbell':'<line x1="2" y1="12" x2="22" y2="12"/><rect x="3" y="9" width="3" height="6" rx="0.5"/><rect x="18" y="9" width="3" height="6" rx="0.5"/><rect x="6" y="10" width="2" height="4" rx="0.5"/><rect x="16" y="10" width="2" height="4" rx="0.5"/>',
+  };
+  function icon(name,size){
+    const sz=size||16;
+    const path=ICONS[name];if(!path)return'';
+    return'<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">'+path+'</svg>';
+  }
+  // Helper: build card header (icon + title + chevron)
+  function cardHead(iconName,title){
+    return'<div class="str-card-head"><span class="str-card-icon">'+icon(iconName,18)+'</span><span class="str-card-title">'+title+'</span><span class="str-card-arrow">'+icon('chevron-right',16)+'</span></div>';
+  }
   const MUSCLES=['back','chest','shoulders','biceps','triceps','legs','core','traps','forearms'];
   let DBW=[5,10,20,30,40,50];
   let KBW=[25,35,50];
@@ -1154,30 +1228,30 @@ button:active{opacity:.75;transform:scale(.97);}
   // Each achievement: {id, name, desc, icon, check(state) → boolean, progress(state) → {current, target}}
   const ACHIEVEMENTS=[
     // Tier crossings
-    {id:'tier_novice',name:'Reached Novice',desc:'Crossed 150 strength score',icon:'🥉',check:()=>getStrengthScore()>=150,progress:()=>({current:getStrengthScore(),target:150})},
-    {id:'tier_intermediate',name:'Reached Intermediate',desc:'Crossed 400 strength score',icon:'🥈',check:()=>getStrengthScore()>=400,progress:()=>({current:getStrengthScore(),target:400})},
-    {id:'tier_advanced',name:'Reached Advanced',desc:'Crossed 700 strength score',icon:'🥇',check:()=>getStrengthScore()>=700,progress:()=>({current:getStrengthScore(),target:700})},
-    {id:'tier_elite',name:'Reached Elite',desc:'Crossed 1000 strength score',icon:'👑',check:()=>getStrengthScore()>=1000,progress:()=>({current:getStrengthScore(),target:1000})},
+    {id:'tier_novice',name:'Reached Novice',desc:'Crossed 150 strength score',icon:'medal',check:()=>getStrengthScore()>=150,progress:()=>({current:getStrengthScore(),target:150})},
+    {id:'tier_intermediate',name:'Reached Intermediate',desc:'Crossed 400 strength score',icon:'medal-2',check:()=>getStrengthScore()>=400,progress:()=>({current:getStrengthScore(),target:400})},
+    {id:'tier_advanced',name:'Reached Advanced',desc:'Crossed 700 strength score',icon:'award',check:()=>getStrengthScore()>=700,progress:()=>({current:getStrengthScore(),target:700})},
+    {id:'tier_elite',name:'Reached Elite',desc:'Crossed 1000 strength score',icon:'crown',check:()=>getStrengthScore()>=1000,progress:()=>({current:getStrengthScore(),target:1000})},
     // Bodyweight milestones
-    {id:'first_pullup',name:'First Pull-up',desc:'Logged a pull-up rep',icon:'💪',check:()=>getBestReps('pull_up')>=1,progress:()=>({current:getBestReps('pull_up'),target:1})},
-    {id:'pullups_10',name:'10 Pull-ups',desc:'10 pull-ups in a single set',icon:'💪',check:()=>getBestReps('pull_up')>=10,progress:()=>({current:getBestReps('pull_up'),target:10})},
-    {id:'pushups_25',name:'25 Push-ups',desc:'25 push-ups in a single set',icon:'⚡',check:()=>getBestReps('push_up')>=25,progress:()=>({current:getBestReps('push_up'),target:25})},
-    {id:'pushups_50',name:'50 Push-ups',desc:'50 push-ups in a single set',icon:'⚡',check:()=>getBestReps('push_up')>=50,progress:()=>({current:getBestReps('push_up'),target:50})},
-    {id:'plank_60',name:'1 Minute Plank',desc:'Hold a plank for 60 seconds',icon:'🧱',check:()=>getBestTime('plank')>=60,progress:()=>({current:getBestTime('plank'),target:60})},
-    {id:'plank_120',name:'2 Minute Plank',desc:'Hold a plank for 120 seconds',icon:'🧱',check:()=>getBestTime('plank')>=120,progress:()=>({current:getBestTime('plank'),target:120})},
+    {id:'first_pullup',name:'First Pull-up',desc:'Logged a pull-up rep',icon:'stretching',check:()=>getBestReps('pull_up')>=1,progress:()=>({current:getBestReps('pull_up'),target:1})},
+    {id:'pullups_10',name:'10 Pull-ups',desc:'10 pull-ups in a single set',icon:'stretching',check:()=>getBestReps('pull_up')>=10,progress:()=>({current:getBestReps('pull_up'),target:10})},
+    {id:'pushups_25',name:'25 Push-ups',desc:'25 push-ups in a single set',icon:'bolt',check:()=>getBestReps('push_up')>=25,progress:()=>({current:getBestReps('push_up'),target:25})},
+    {id:'pushups_50',name:'50 Push-ups',desc:'50 push-ups in a single set',icon:'bolt',check:()=>getBestReps('push_up')>=50,progress:()=>({current:getBestReps('push_up'),target:50})},
+    {id:'plank_60',name:'1 Minute Plank',desc:'Hold a plank for 60 seconds',icon:'wall',check:()=>getBestTime('plank')>=60,progress:()=>({current:getBestTime('plank'),target:60})},
+    {id:'plank_120',name:'2 Minute Plank',desc:'Hold a plank for 120 seconds',icon:'wall',check:()=>getBestTime('plank')>=120,progress:()=>({current:getBestTime('plank'),target:120})},
     // Streak achievements
-    {id:'streak_4',name:'4-Week PR Streak',desc:'4 consecutive weeks with a PR',icon:'🔥',check:()=>getPRStreak()>=4,progress:()=>({current:getPRStreak(),target:4})},
-    {id:'streak_12',name:'12-Week PR Streak',desc:'12 consecutive weeks with a PR',icon:'🔥',check:()=>getPRStreak()>=12,progress:()=>({current:getPRStreak(),target:12})},
-    {id:'streak_26',name:'Half-Year PR Streak',desc:'26 consecutive weeks with a PR',icon:'🔥',check:()=>getPRStreak()>=26,progress:()=>({current:getPRStreak(),target:26})},
+    {id:'streak_4',name:'4-Week PR Streak',desc:'4 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=4,progress:()=>({current:getPRStreak(),target:4})},
+    {id:'streak_12',name:'12-Week PR Streak',desc:'12 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=12,progress:()=>({current:getPRStreak(),target:12})},
+    {id:'streak_26',name:'Half-Year PR Streak',desc:'26 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=26,progress:()=>({current:getPRStreak(),target:26})},
     // Volume milestones
-    {id:'vol_100k',name:'100k Volume Lifted',desc:'100,000 lb of total lifetime volume',icon:'📦',check:()=>getLifetimeStats().totalVolume>=100000,progress:()=>({current:getLifetimeStats().totalVolume,target:100000})},
-    {id:'vol_500k',name:'500k Volume Lifted',desc:'500,000 lb of total lifetime volume',icon:'📦',check:()=>getLifetimeStats().totalVolume>=500000,progress:()=>({current:getLifetimeStats().totalVolume,target:500000})},
-    {id:'vol_1m',name:'1M Volume Lifted',desc:'1 million lb of total lifetime volume',icon:'🏔',check:()=>getLifetimeStats().totalVolume>=1000000,progress:()=>({current:getLifetimeStats().totalVolume,target:1000000})},
+    {id:'vol_100k',name:'100k Volume Lifted',desc:'100,000 lb of total lifetime volume',icon:'package',check:()=>getLifetimeStats().totalVolume>=100000,progress:()=>({current:getLifetimeStats().totalVolume,target:100000})},
+    {id:'vol_500k',name:'500k Volume Lifted',desc:'500,000 lb of total lifetime volume',icon:'package',check:()=>getLifetimeStats().totalVolume>=500000,progress:()=>({current:getLifetimeStats().totalVolume,target:500000})},
+    {id:'vol_1m',name:'1M Volume Lifted',desc:'1 million lb of total lifetime volume',icon:'mountain',check:()=>getLifetimeStats().totalVolume>=1000000,progress:()=>({current:getLifetimeStats().totalVolume,target:1000000})},
     // Session count
-    {id:'sess_50',name:'50 Sessions',desc:'Completed 50 training sessions',icon:'🎯',check:()=>state.sessions.length>=50,progress:()=>({current:state.sessions.length,target:50})},
-    {id:'sess_100',name:'100 Sessions',desc:'Completed 100 training sessions',icon:'🎯',check:()=>state.sessions.length>=100,progress:()=>({current:state.sessions.length,target:100})},
-    {id:'sess_250',name:'250 Sessions',desc:'Completed 250 training sessions',icon:'🎯',check:()=>state.sessions.length>=250,progress:()=>({current:state.sessions.length,target:250})},
-    {id:'sess_500',name:'500 Sessions',desc:'Completed 500 training sessions',icon:'🎯',check:()=>state.sessions.length>=500,progress:()=>({current:state.sessions.length,target:500})},
+    {id:'sess_50',name:'50 Sessions',desc:'Completed 50 training sessions',icon:'target',check:()=>state.sessions.length>=50,progress:()=>({current:state.sessions.length,target:50})},
+    {id:'sess_100',name:'100 Sessions',desc:'Completed 100 training sessions',icon:'target',check:()=>state.sessions.length>=100,progress:()=>({current:state.sessions.length,target:100})},
+    {id:'sess_250',name:'250 Sessions',desc:'Completed 250 training sessions',icon:'target',check:()=>state.sessions.length>=250,progress:()=>({current:state.sessions.length,target:250})},
+    {id:'sess_500',name:'500 Sessions',desc:'Completed 500 training sessions',icon:'target',check:()=>state.sessions.length>=500,progress:()=>({current:state.sessions.length,target:500})},
   ];
 
   function checkAchievements(){
@@ -1212,7 +1286,7 @@ button:active{opacity:.75;transform:scale(.97);}
     return state.strengthGoal||null;
   }
 
-  function setStrengthGoal(targetTier){
+  window.setStrengthGoal=function(targetTier){
     state.strengthGoal={
       targetTier,
       targetScore:STRENGTH_TIERS.find(t=>t.name===targetTier)?.min||400,
@@ -1220,12 +1294,12 @@ button:active{opacity:.75;transform:scale(.97);}
       startScore:getStrengthScore(),
     };
     saveNow();
-  }
+  };
 
-  function clearStrengthGoal(){
+  window.clearStrengthGoal=function(){
     state.strengthGoal=null;
     saveNow();
-  }
+  };
 
   function calcGoalETA(){
     const goal=getActiveGoal();
@@ -1802,29 +1876,61 @@ button:active{opacity:.75;transform:scale(.97);}
     const stats=calcAllStats();
     const target=state.profile&&state.profile.daysPerWeek?state.profile.daysPerWeek:3;
 
+    // Inject icons (called once per render — cheap, rare op)
+    document.getElementById('stat-streak-icon').innerHTML=icon('flame',15);
+    document.getElementById('stat-week-icon').innerHTML=icon('check',15);
+    document.getElementById('stat-days-icon').innerHTML=icon('clock',15);
+    document.getElementById('stat-avgvol-icon').innerHTML=icon('barbell',15);
+
+    // Week streak — last 4 weeks as dots
     document.getElementById('stat-streak').textContent=stats.streak;
     document.getElementById('stat-streak-sub').textContent=stats.streak===1?'week':'weeks';
     document.getElementById('streak').textContent=stats.streak>0?stats.streak+'wk streak':'';
+    // Build streak dots: filled = ≥3 sessions that week, going back 4 weeks
+    const streakDots=(()=>{
+      const monNow=getMonday(new Date()).getTime();
+      const dots=[];
+      for(let i=3;i>=0;i--){
+        const weekStart=monNow-i*7*86400000;
+        const weekEnd=weekStart+7*86400000;
+        const count=state.sessions.filter(s=>s.timestamp>=weekStart&&s.timestamp<weekEnd).length;
+        dots.push(count>=STREAK_THRESHOLD?'<span class="stat-dot on"></span>':'<span class="stat-dot"></span>');
+      }
+      return'<div class="stat-dots">'+dots.join('')+'</div>';
+    })();
+    document.getElementById('stat-streak-viz').innerHTML=streakDots;
 
+    // This week — progress bar toward target
     document.getElementById('stat-week').textContent=stats.thisWeek+' / '+target;
     const weekCard=document.getElementById('stat-week').parentElement;
     weekCard.className='stat-card'+(stats.thisWeek>=target?' stat-good':(stats.thisWeek>=target-1?' stat-good':''));
     document.getElementById('stat-week-sub').textContent=stats.thisWeek>=target?'target hit':stats.thisWeek>=target-1?'almost there':(target-stats.thisWeek)+' more to go';
+    const weekPct=Math.min(100,Math.round((stats.thisWeek/target)*100));
+    const weekColor=stats.thisWeek>=target?'var(--s-fg)':'var(--accent)';
+    document.getElementById('stat-week-viz').innerHTML='<div class="stat-bar"><div class="stat-bar-fill" style="width:'+weekPct+'%;background:'+weekColor+';"></div></div>';
 
+    // Days since last
     const daysEl=document.getElementById('stat-days');
     const daysCard=document.getElementById('stat-days-card');
     if(stats.daysSince===null){daysEl.textContent='—';daysCard.className='stat-card';document.getElementById('stat-days-sub').textContent='no sessions yet';}
     else if(stats.daysSince===0){daysEl.textContent='Today';daysCard.className='stat-card stat-good';document.getElementById('stat-days-sub').textContent='nice';}
     else{daysEl.textContent=stats.daysSince;daysCard.className='stat-card'+(stats.daysSince>=3?' stat-alert':'');document.getElementById('stat-days-sub').textContent=stats.daysSince===1?'day ago':'days ago';}
 
+    // Avg vol — sparkline of last 10 sessions' volumes
     document.getElementById('stat-avgvol').textContent=stats.avgVol.toLocaleString();
     document.getElementById('stat-avgvol-sub').textContent='lb / session';
+    const recentVols=state.sessions.slice(-10).map(s=>s.totalVolume||0).filter(v=>v>0);
+    if(recentVols.length>=2){
+      document.getElementById('stat-avgvol-viz').innerHTML='<div class="stat-spark">'+miniSpark(recentVols,160,22)+'</div>';
+    }else{
+      document.getElementById('stat-avgvol-viz').innerHTML='';
+    }
 
     // Body composition
     renderBodyComp();
 
-    // Strength dashboard
-    renderStrDash();
+    // Strength overview (full version, rendered inline on dashboard)
+    showStrength();
   }
 
   function miniSpark(vals,w,h){
@@ -1832,50 +1938,6 @@ button:active{opacity:.75;transform:scale(.97);}
     const minV=Math.min(...vals)*0.9,maxV=Math.max(...vals)*1.1,range=maxV-minV||1;
     const pts=vals.map((v,i)=>{const x=(i/(vals.length-1))*w;const y=h-((v-minV)/range)*h;return x+','+y;}).join(' ');
     return'<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="var(--i-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  }
-
-  function renderStrDash(){
-    const dash=document.getElementById('strength-dash');
-    if(!state.e1rmHistory||!Object.keys(state.e1rmHistory).length){
-      dash.innerHTML='<div style="color:var(--text-3);font-size:13px;padding:4px 0 8px;">Complete a few sessions to see your strength trends here.</div>';
-      return;
-    }
-
-    const score=getStrengthScore();
-    const tier=getStrengthTier(score);
-    const next=getNextTier(tier);
-    const progressPct=next?Math.min(100,Math.round(((score-tier.min)/(next.min-tier.min))*100)):100;
-    const toNext=next?next.min-score:0;
-
-    let html='<div class="str-score-card" onclick="showStrength()">'
-      +'<div class="str-score-label">Strength Score</div>'
-      +'<div class="str-score-val">'+score+'</div>'
-      +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
-      +'<div class="str-progress-bar"><div class="str-progress-fill" style="width:'+progressPct+'%;background:'+tier.color+';"></div></div>'
-      +(next?'<div class="str-progress-meta">'+toNext+' to '+next.name+'</div>':'<div class="str-progress-meta" style="color:var(--s-fg);font-weight:700;">Maximum tier reached</div>')
-      +'</div>';
-
-    // Recent PRs preview (top 3)
-    const recentPRs=getRecentPRs(3);
-    if(recentPRs.length){
-      html+='<div class="str-pr-preview">';
-      recentPRs.forEach(pr=>{
-        const dt=new Date(pr.date);
-        const days=Math.round((Date.now()-pr.date)/86400000);
-        const dateStr=days===0?'Today':days===1?'Yesterday':days+' days ago';
-        let detail='';
-        if(pr.type==='weight')detail=pr.weight+' lb × '+pr.reps;
-        else if(pr.type==='reps')detail=pr.reps+' reps';
-        else if(pr.type==='time')detail=pr.seconds+'s';
-        html+='<div class="str-pr-item">'
-          +'<span class="str-pr-trophy">🏆</span>'
-          +'<div class="str-pr-text"><div class="str-pr-name">'+pr.exerciseName+'</div><div class="str-pr-detail">'+detail+' · '+dateStr+'</div></div>'
-          +'</div>';
-      });
-      html+='</div>';
-    }
-
-    dash.innerHTML=html;
   }
 
   function estimateTime(focusKey,time){
@@ -1970,7 +2032,7 @@ button:active{opacity:.75;transform:scale(.97);}
       const tagHtml=tags.map(t=>'<span class="tag">'+t+'</span>').join('');
       const demoQuery=encodeURIComponent('how to '+ex.name.replace(/ \(.*\)/,'')+' form');
       const demoLink='<a class="cue-demo" href="https://www.youtube.com/results?search_query='+demoQuery+'" onclick="event.preventDefault();openExt(this.href);">Watch a demo ›</a>';
-      const cueHtml=ex.cues&&ex.cues.length?'<button class="cue-toggle" onclick="toggleCues(\'cue-'+ei+'\')" id="cue-btn-'+ei+'">▶ Form cues</button><div class="cue-panel" id="cue-'+ei+'"><ol>'+ex.cues.map(c=>'<li>'+c+'</li>').join('')+'</ol>'+demoLink+'</div>':'';
+      const cueHtml=ex.cues&&ex.cues.length?'<button class="cue-toggle" onclick="toggleCues(\''+ei+'\')" id="cue-btn-'+ei+'"><i class="ti ti-chevron-right" style="font-size:14px;margin-right:4px;" id="cue-chev-'+ei+'"></i>Form cues</button><div class="cue-panel" id="cue-'+ei+'"><ol>'+ex.cues.map(c=>'<li>'+c+'</li>').join('')+'</ol>'+demoLink+'</div>':'';
       const tSecs=ex.unit==='sec'?ex.repRange[0]:null;
       const tHtml=tSecs?'<div class="ex-timer-wrap" id="ex-timer-'+ei+'"><div class="ex-timer-disp">'+Math.floor(tSecs/60)+':'+(tSecs%60<10?'0':'')+tSecs%60+'</div><div class="ex-timer-row"><button class="ex-tbtn bs ex-sbt">Start</button><button class="ex-tbtn bs ex-rbt">Reset</button></div></div>':'';
       // Dropset button — only for weighted exercises
@@ -2114,7 +2176,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const el=document.createElement('div');
     el.className='action-banner';
     el.style.background=c.bg;el.style.color=c.fg;
-    el.innerHTML='<div class="ab-msg">'+msg+subHtml+'</div><button class="ab-x" onclick="dismissBanner()">✕</button>';
+    el.innerHTML='<div class="ab-msg">'+msg+subHtml+'</div><button class="ab-x" onclick="dismissBanner()" aria-label="Dismiss"><i class="ti ti-x"></i></button>';
     document.body.appendChild(el);
     bannerEl=el;
     bannerTimer=setTimeout(()=>{
@@ -2135,7 +2197,7 @@ button:active{opacity:.75;transform:scale(.97);}
     setTimeout(()=>document.body.removeChild(a),100);
   };
 
-  window.toggleCues=function(id){const p=document.getElementById(id),b=document.getElementById('cue-btn-'+id.replace('cue-',''));if(!p)return;const o=p.classList.toggle('open');if(b)b.textContent=(o?'▼':'▶')+' Form cues';};
+  window.toggleCues=function(ei){const p=document.getElementById('cue-'+ei),chev=document.getElementById('cue-chev-'+ei);if(!p)return;const o=p.classList.toggle('open');if(chev){chev.style.transform=o?'rotate(90deg)':'rotate(0deg)';chev.style.transition='transform 0.15s';}};
   window.updSet=function(ei,si,f,v){state.currentSession.exercises[ei].sets[si][f]=parseFloat(v)||0;save();};
 
   window.setFB=function(ei,si,fb){
@@ -2485,9 +2547,9 @@ button:active{opacity:.75;transform:scale(.97);}
           if(pr.type==='weight')detail=pr.weight+' lb × '+pr.reps+' (+'+pr.improvement+' e1RM)';
           else if(pr.type==='reps')detail=pr.reps+' reps (+'+pr.improvement+')';
           else if(pr.type==='time')detail=pr.seconds+'s (+'+pr.improvement+'s)';
-          banner('🏆 New PR · '+pr.exerciseName,detail,'good');
+          banner('New PR · '+pr.exerciseName,detail,'good');
         }else{
-          banner('🏆 '+newPRs.length+' new PRs!','Tap Strength on the dashboard to see them','good');
+          banner(newPRs.length+' new PRs!','Tap Strength on the dashboard to see them','good');
         }
       },delay);
     }
@@ -2497,7 +2559,7 @@ button:active{opacity:.75;transform:scale(.97);}
       const baseDelay=(tierUp?7000:1200)+(newPRs.length>0?6000:0);
       newAchievements.forEach((ach,i)=>{
         setTimeout(()=>{
-          banner(ach.icon+' Achievement unlocked',ach.name,'easy');
+          banner('Achievement unlocked',ach.name,'easy');
         },baseDelay+i*5500);
       });
     }
@@ -2519,13 +2581,13 @@ button:active{opacity:.75;transform:scale(.97);}
     const btn=document.getElementById('cancel-btn');
     if(!cancelPending){
       cancelPending=true;
-      btn.textContent='Tap again to discard';
+      btn.innerHTML='<i class="ti ti-alert-triangle" style="font-size:14px;margin-right:4px;"></i>Tap again to discard';
       btn.style.color='var(--d-fg)';
-      setTimeout(()=>{cancelPending=false;btn.textContent='✕ Cancel';btn.style.color='';},3000);
+      setTimeout(()=>{cancelPending=false;btn.innerHTML='<i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel';btn.style.color='';},3000);
     }else{
       cancelPending=false;
       state.currentSession=null;saveNow();showTrainScreen('train-home');renderTrainHome();
-      btn.textContent='✕ Cancel';btn.style.color='';
+      btn.innerHTML='<i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel';btn.style.color='';
     }
   };
 
@@ -2753,7 +2815,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const body=document.getElementById('strength-body');
     if(!state.e1rmHistory||!Object.keys(state.e1rmHistory).length){
       body.innerHTML='<p style="color:var(--text-2);font-size:15px;padding:8px 0;">No strength data yet. Complete a few sessions to see your strength score grow.</p>';
-      showScreen('strength');return;
+      return;
     }
 
     // Score + tier headline (always at top)
@@ -2762,6 +2824,15 @@ button:active{opacity:.75;transform:scale(.97);}
     const next=getNextTier(tier);
     const progressPct=next?Math.min(100,Math.round(((score-tier.min)/(next.min-tier.min))*100)):100;
     const toNext=next?next.min-score:0;
+    const tierIdx=STRENGTH_TIERS.indexOf(tier);
+
+    // Tier dots row showing all 5 tiers
+    const tierDotsHtml='<div class="str-tier-list">'+STRENGTH_TIERS.map((t,i)=>{
+      const reached=i<=tierIdx;
+      const current=i===tierIdx;
+      const cls='str-tier-item'+(reached?' reached':'')+(current?' current':'');
+      return'<div class="'+cls+'"><div class="str-tier-dot" style="background:'+(reached?t.color:'var(--surface-2)')+';"></div><div class="str-tier-name">'+t.name+'</div><div class="str-tier-min">'+t.min+'</div></div>';
+    }).join('')+'</div>';
 
     let html='<div class="str-score-card str-score-card-detail">'
       +'<div class="str-score-label">Strength Score</div>'
@@ -2769,114 +2840,135 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
       +'<div class="str-progress-bar"><div class="str-progress-fill" style="width:'+progressPct+'%;background:'+tier.color+';"></div></div>'
       +(next?'<div class="str-progress-meta">'+toNext+' to '+next.name+'</div>':'<div class="str-progress-meta" style="color:var(--s-fg);font-weight:700;">Maximum tier reached</div>')
+      +tierDotsHtml
       +'</div>';
 
     // Cards section
     html+='<div class="str-cards-grid">';
 
-    // Card: Score History
+    // Card: Score History — sparkline if data exists
     const delta90=getScoreDelta(90);
     const deltaStr=delta90>0?'+'+delta90:delta90<0?''+delta90:'—';
     const deltaColor=delta90>0?'var(--s-fg)':delta90<0?'var(--d-fg)':'var(--text-3)';
     const histLen=state.scoreHistory?state.scoreHistory.length:0;
+    let scoreSparkHtml='';
+    if(histLen>=3){
+      const vals=state.scoreHistory.map(h=>h.score);
+      scoreSparkHtml='<div class="str-card-spark">'+miniSpark(vals,160,24).replace('var(--i-fg)',deltaColor)+'</div>';
+    }
     html+='<div class="str-overview-card" onclick="showStrengthHistory()">'
-      +'<div class="str-card-head"><span class="str-card-icon">📈</span><span class="str-card-title">Score History</span><span class="str-card-arrow">›</span></div>'
+      +cardHead('chart-line','Score')
       +(histLen>=2
-        ?'<div class="str-card-stat" style="color:'+deltaColor+';">'+deltaStr+' pts</div><div class="str-card-sub">last 90 days</div>'
-        :'<div class="str-card-sub" style="font-style:italic;">Need more sessions to chart</div>')
+        ?'<div class="str-card-stat" style="color:'+deltaColor+';">'+deltaStr+'</div><div class="str-card-sub" style="margin-top:0;">pts last 90 days</div>'+scoreSparkHtml
+        :'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">need more sessions</div>')
       +'</div>';
 
-    // Card: Goal
+    // Card: Goal — progress bar if active
     const goal=getActiveGoal();
     const eta=calcGoalETA();
     if(goal&&eta){
-      const remaining=eta.remaining;
+      const progress=goal.targetScore-score>0?(score-goal.startScore)/(goal.targetScore-goal.startScore):1;
+      const progressPct=Math.max(0,Math.min(100,Math.round(progress*100)));
       html+='<div class="str-overview-card str-card-goal" onclick="showStrengthGoal()">'
-        +'<div class="str-card-head"><span class="str-card-icon">🎯</span><span class="str-card-title">Active Goal</span><span class="str-card-arrow">›</span></div>'
+        +cardHead('target','Goal')
         +(eta.reached
-          ?'<div class="str-card-stat" style="color:var(--s-fg);">Reached!</div><div class="str-card-sub">Tap to set a new goal</div>'
-          :'<div class="str-card-stat">'+goal.targetTier+'</div><div class="str-card-sub">'+remaining+' to go'+(eta.etaWeeks!==null?' · ETA '+eta.etaWeeks+' wks':'')+'</div>')
+          ?'<div class="str-card-stat" style="color:var(--s-fg);font-size:20px;">Reached!</div><div class="str-card-sub">tap to set new</div>'
+          :'<div class="str-card-stat" style="font-size:20px;">'+goal.targetTier+'</div><div class="str-card-sub" style="margin-top:0;">'+eta.remaining+' to go'+(eta.etaWeeks!==null?' · '+eta.etaWeeks+'wk':'')+'</div><div class="str-card-progress"><div style="width:'+progressPct+'%;background:var(--accent);"></div></div>')
         +'</div>';
     }else{
       html+='<div class="str-overview-card str-card-cta" onclick="showStrengthGoal()">'
-        +'<div class="str-card-head"><span class="str-card-icon">🎯</span><span class="str-card-title">Set a Goal</span><span class="str-card-arrow">›</span></div>'
-        +'<div class="str-card-sub">Pick a tier to chase</div>'
+        +cardHead('target','Goal')
+        +'<div class="str-card-stat">Set</div><div class="str-card-sub">pick a tier to chase</div>'
         +'</div>';
     }
 
-    // Card: Recent PRs
-    const recentPRs=getRecentPRs(3);
+    // Card: PRs
+    const recentPRs=getRecentPRs(1);
     const totalPRs=state.prs?state.prs.filter(p=>p.improvement).length:0;
     html+='<div class="str-overview-card" onclick="showStrengthPRs()">'
-      +'<div class="str-card-head"><span class="str-card-icon">🏆</span><span class="str-card-title">Personal Records</span><span class="str-card-arrow">›</span></div>'
-      +(recentPRs.length
-        ?'<div class="str-card-stat">'+totalPRs+' total</div>'
-          +recentPRs.slice(0,2).map(pr=>'<div class="str-card-pr-mini"><strong>'+pr.exerciseName+'</strong> · '+(pr.type==='weight'?pr.weight+' lb × '+pr.reps:pr.type==='reps'?pr.reps+' reps':pr.seconds+'s')+'</div>').join('')
-        :'<div class="str-card-sub" style="font-style:italic;">Push hard — PRs will roll in</div>')
+      +cardHead('trophy','PRs')
+      +(totalPRs>0
+        ?'<div class="str-card-stat" style="color:var(--w-fg);">'+totalPRs+'</div><div class="str-card-sub">'+(recentPRs.length?'latest: '+recentPRs[0].exerciseName:'total earned')+'</div>'
+        :'<div class="str-card-stat" style="color:var(--text-3);">0</div><div class="str-card-sub">push hard for PRs</div>')
       +'</div>';
 
     // Card: Bodyweight
     const bwBenchmarks=getBWBenchmarks();
     if(bwBenchmarks.length){
+      const top=bwBenchmarks[0];
       html+='<div class="str-overview-card" onclick="showStrengthBW()">'
-        +'<div class="str-card-head"><span class="str-card-icon">💪</span><span class="str-card-title">Bodyweight</span><span class="str-card-arrow">›</span></div>'
-        +'<div class="str-card-bw-row">'
-        +bwBenchmarks.slice(0,3).map(b=>'<span class="str-card-bw-item"><strong>'+b.val+'</strong> '+b.unit+'<br><span class="str-card-bw-name">'+b.name+'</span></span>').join('')
-        +'</div></div>';
+        +cardHead('stretching','Bodyweight')
+        +'<div class="str-card-stat" style="color:var(--d-fg);">'+top.val+' <span style="font-size:14px;color:var(--text-3);font-weight:600;">'+top.unit+'</span></div>'
+        +'<div class="str-card-sub">'+top.name+'</div>'
+        +'</div>';
+    }else{
+      html+='<div class="str-overview-card" onclick="showStrengthBW()">'
+        +cardHead('stretching','Bodyweight')
+        +'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">log BW exercises</div>'
+        +'</div>';
     }
 
-    // Card: By muscle group
+    // Card: By muscle group — mini bar chart
     const muscleBests=[];
     MUSCLES.forEach(m=>{
       const best=getBestForMuscle(m);
-      if(best)muscleBests.push({muscle:m,...best});
+      if(best)muscleBests.push({muscle:m,e1rm:best.e1rm,...best});
     });
     if(muscleBests.length){
-      const top3=muscleBests.slice(0,3);
+      // Sort by e1rm descending for the bar viz
+      const sortedBests=muscleBests.slice().sort((a,b)=>b.e1rm-a.e1rm);
+      const maxE=sortedBests[0].e1rm||1;
+      const barCount=Math.min(7,sortedBests.length);
+      const barsHtml='<div class="str-card-bars">'+sortedBests.slice(0,barCount).map(mb=>{
+        const h=Math.max(15,Math.round((mb.e1rm/maxE)*100));
+        return'<div style="height:'+h+'%;opacity:'+(0.3+(h/100)*0.7).toFixed(2)+';"></div>';
+      }).join('')+'</div>';
       html+='<div class="str-overview-card" onclick="showStrengthMuscles()">'
-        +'<div class="str-card-head"><span class="str-card-icon">📊</span><span class="str-card-title">By Muscle Group</span><span class="str-card-arrow">›</span></div>'
-        +'<div class="str-card-muscles-row">'
-        +top3.map(mb=>{
-          const hist=state.e1rmHistory[mb.id];
-          const change=hist&&hist.length>1?hist[hist.length-1].e1rm-hist[0].e1rm:0;
-          const arrow=change>5?'↑↑':change>0?'↑':change<-5?'↓↓':change<0?'↓':'→';
-          const arrowColor=change>0?'var(--s-fg)':change<0?'var(--d-fg)':'var(--text-3)';
-          return'<span class="str-card-muscle-item">'+mb.muscle.charAt(0).toUpperCase()+mb.muscle.slice(1)+' <span style="color:'+arrowColor+';">'+arrow+'</span></span>';
-        }).join('')
-        +'</div></div>';
+        +cardHead('chart-bar','Muscles')
+        +'<div class="str-card-stat" style="color:var(--i-fg);">'+muscleBests.length+'</div>'
+        +'<div class="str-card-sub" style="margin-top:0;">tracked · top: '+muscleBests[0].muscle+'</div>'
+        +barsHtml
+        +'</div>';
+    }else{
+      html+='<div class="str-overview-card" onclick="showStrengthMuscles()">'
+        +cardHead('chart-bar','Muscles')
+        +'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">no data yet</div>'
+        +'</div>';
     }
 
-    // Card: Achievements
+    // Card: Achievements — progress bar
     const earned=getEarnedAchievements();
     const totalAch=ACHIEVEMENTS.length;
+    const achPct=Math.round((earned.length/totalAch)*100);
     html+='<div class="str-overview-card" onclick="showStrengthAchievements()">'
-      +'<div class="str-card-head"><span class="str-card-icon">🎖</span><span class="str-card-title">Achievements</span><span class="str-card-arrow">›</span></div>'
-      +'<div class="str-card-stat">'+earned.length+' / '+totalAch+'</div>'
+      +cardHead('medal','Achievements')
+      +'<div class="str-card-stat" style="color:var(--w-fg);">'+earned.length+'<span style="font-size:16px;color:var(--text-3);font-weight:700;"> / '+totalAch+'</span></div>'
       +(earned.length
-        ?'<div class="str-card-sub">Latest: '+earned.sort((a,b)=>b.earnedAt-a.earnedAt)[0].name+'</div>'
-        :'<div class="str-card-sub">Train consistently to unlock</div>')
-      +'</div>';
-
-    // Card: Career stats
-    const lt=getLifetimeStats();
-    html+='<div class="str-overview-card" onclick="showStrengthCareer()">'
-      +'<div class="str-card-head"><span class="str-card-icon">📋</span><span class="str-card-title">Career Stats</span><span class="str-card-arrow">›</span></div>'
-      +'<div class="str-card-stat">'+lt.sessionCount+' sessions</div>'
-      +'<div class="str-card-sub">'+lt.totalPRs+' PRs · '+lt.trainingAgeMonths+' mo training</div>'
+        ?'<div class="str-card-sub" style="margin-top:0;">latest unlocked</div>'
+        :'<div class="str-card-sub" style="margin-top:0;">train to unlock</div>')
+      +'<div class="str-card-progress"><div style="width:'+achPct+'%;background:var(--w-fg);"></div></div>'
       +'</div>';
 
     // Card: All tracked lifts
     const trackedLiftCount=Object.keys(state.e1rmHistory).filter(id=>ALL_COMPOUNDS.includes(id)&&state.e1rmHistory[id].length).length;
     html+='<div class="str-overview-card" onclick="showStrengthLifts()">'
-      +'<div class="str-card-head"><span class="str-card-icon">📈</span><span class="str-card-title">All Tracked Lifts</span><span class="str-card-arrow">›</span></div>'
-      +'<div class="str-card-stat">'+trackedLiftCount+' lifts</div>'
-      +'<div class="str-card-sub">With progression sparklines</div>'
+      +cardHead('trending-up','Lifts')
+      +'<div class="str-card-stat" style="color:var(--i-fg);">'+trackedLiftCount+'</div>'
+      +'<div class="str-card-sub">tracked compounds</div>'
+      +'</div>';
+
+    // Card: Career stats
+    const lt=getLifetimeStats();
+    html+='<div class="str-overview-card" onclick="showStrengthCareer()">'
+      +cardHead('calendar','Career')
+      +'<div class="str-card-stat">'+lt.sessionCount+'</div>'
+      +'<div class="str-card-sub">sessions · '+lt.trainingAgeMonths+' mo training</div>'
       +'</div>';
 
     html+='</div>'; // close str-cards-grid
 
     body.innerHTML=html;
-    showScreen('strength');
+    // rendered inline on dashboard
   };
 
   // ── DETAIL: Score History ───────────────────────────────
@@ -2982,7 +3074,7 @@ button:active{opacity:.75;transform:scale(.97);}
         +'</div>';
       html+='<button class="bs" onclick="confirmClearGoal()" style="margin-top:16px;">Clear goal</button>';
     }else if(goal&&eta&&eta.reached){
-      html+='<div class="goal-card-detail" style="border-color:var(--s-fg);"><div style="text-align:center;color:var(--s-fg);font-weight:700;font-size:18px;">🎯 Goal reached!</div><div style="text-align:center;color:var(--text-2);margin-top:6px;">You hit '+goal.targetTier+'</div></div>';
+      html+='<div class="goal-card-detail" style="border-color:var(--s-fg);"><div style="text-align:center;color:var(--s-fg);font-weight:700;font-size:18px;display:flex;align-items:center;justify-content:center;gap:8px;"><span style="display:inline-flex;">'+icon('check',20)+'</span>Goal reached!</div><div style="text-align:center;color:var(--text-2);margin-top:6px;">You hit '+goal.targetTier+'</div></div>';
       html+='<button class="bp" onclick="clearStrengthGoal();showStrengthGoal();" style="margin-top:16px;">Set a new goal</button>';
     }else{
       // No goal — show tier picker
@@ -3006,10 +3098,8 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   window.confirmClearGoal=function(){
-    if(confirm('Clear your active goal?')){
-      clearStrengthGoal();
-      showStrengthGoal();
-    }
+    clearStrengthGoal();
+    showStrengthGoal();
   };
 
   // ── DETAIL: PRs ─────────────────────────────────────────
@@ -3193,7 +3283,7 @@ button:active{opacity:.75;transform:scale(.97);}
         const days=Math.round((Date.now()-a.earnedAt)/86400000);
         const dateStr=days===0?'Today':days===1?'Yesterday':days<30?days+' days ago':Math.round(days/30)+' months ago';
         html+='<div class="achievement">'
-          +'<div class="ach-icon">'+a.icon+'</div>'
+          +'<div class="ach-icon">'+icon(a.icon,22)+'</div>'
           +'<div class="ach-text"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+' · '+dateStr+'</div></div>'
           +'</div>';
       });
@@ -3207,7 +3297,7 @@ button:active{opacity:.75;transform:scale(.97);}
         if(a.id.startsWith('vol_'))progressLabel=Math.round(a.current).toLocaleString()+' / '+a.target.toLocaleString()+' lb';
         else progressLabel=a.current+' / '+a.target;
         html+='<div class="achievement ach-pending">'
-          +'<div class="ach-icon">'+a.icon+'</div>'
+          +'<div class="ach-icon">'+icon(a.icon,22)+'</div>'
           +'<div class="ach-text"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div>'
           +'<div class="ach-progress-mini"><div class="ach-progress-fill" style="width:'+a.pct+'%;"></div></div>'
           +'<div class="ach-progress-label">'+progressLabel+'</div>'
@@ -3311,7 +3401,7 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   function showDashScreen(name){
-    ['home','key','strength','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'].forEach(s=>{
+    ['home','key','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'].forEach(s=>{
       const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('active',s===name);
     });
     if(activeTab!=='dash')switchTab('dash');
@@ -3328,7 +3418,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // Override showScreen for backward compat
   function showScreen(name){
-    const dashScreens=['home','key','strength','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'];
+    const dashScreens=['home','key','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'];
     const trainScreens=['train-home','pick','session','history'];
     if(dashScreens.includes(name))showDashScreen(name);
     else if(trainScreens.includes(name))showTrainScreen(name);
