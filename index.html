@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <!--
   The Toji Method — Adaptive home gym training PWA
   © 2025 Alexander Ortega (theotheralex)
@@ -12,7 +11,6 @@
   You may share and adapt this work for non-commercial purposes with
   attribution. Commercial use is not permitted without explicit permission.
 -->
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -137,339 +135,337 @@ button:active{opacity:.75;transform:scale(.97);}
 
 /* Action banner (tier 2 — instructions, fixed floating) */
 .action-banner{
-position:fixed;top:calc(env(safe-area-inset-top) + 8px);left:8px;right:8px;z-index:90;
-margin:0;padding:16px;border-radius:var(–rl);
-font-size:16px;font-weight:700;line-height:1.4;
-display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
-animation:banner-in 0.25s ease;
-box-shadow:0 4px 24px rgba(0,0,0,0.5);
+  position:fixed;top:calc(env(safe-area-inset-top) + 8px);left:8px;right:8px;z-index:90;
+  margin:0;padding:16px;border-radius:var(--rl);
+  font-size:16px;font-weight:700;line-height:1.4;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+  animation:banner-in 0.25s ease;
+  box-shadow:0 4px 24px rgba(0,0,0,0.5);
 }
 @keyframes banner-in{from{opacity:0;transform:translateY(-100%);}to{opacity:1;transform:translateY(0);}}
 @keyframes banner-out{to{opacity:0;transform:translateY(-100%);}}
 .action-banner .ab-msg{flex:1;}
 .action-banner .ab-sub{font-size:13px;font-weight:500;opacity:0.8;margin-top:2px;}
 .action-banner .ab-x{
-background:none;border:none;color:inherit;font-size:18px;font-weight:700;
-min-height:32px;min-width:32px;padding:0;opacity:0.6;cursor:pointer;
-display:flex;align-items:center;justify-content:center;border-radius:50%;
+  background:none;border:none;color:inherit;font-size:18px;font-weight:700;
+  min-height:32px;min-width:32px;padding:0;opacity:0.6;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;border-radius:50%;
 }
 .action-banner .ab-x:active{opacity:1;}
-.key-row{padding:14px 16px;border-radius:var(–rl);margin-bottom:8px;font-size:15px;line-height:1.5;}
-.hist-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–rl);padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.key-row{padding:14px 16px;border-radius:var(--rl);margin-bottom:8px;font-size:15px;line-height:1.5;}
+.hist-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
 .hist-name{font-size:16px;font-weight:700;margin-bottom:3px;}
-.hist-meta{font-size:13px;color:var(–text-2);}
-.hist-vol{font-size:15px;font-weight:700;color:var(–text-2);}
-.install-hint{background:var(–i-bg);color:var(–i-fg);padding:14px;border-radius:var(–rl);font-size:13px;margin-bottom:16px;display:none;align-items:center;gap:10px;font-weight:500;}
-.superset-wrap{border-left:3px solid var(–i-fg);margin-left:6px;padding-left:0;margin-bottom:14px;}
+.hist-meta{font-size:13px;color:var(--text-2);}
+.hist-vol{font-size:15px;font-weight:700;color:var(--text-2);}
+.install-hint{background:var(--i-bg);color:var(--i-fg);padding:14px;border-radius:var(--rl);font-size:13px;margin-bottom:16px;display:none;align-items:center;gap:10px;font-weight:500;}
+.superset-wrap{border-left:3px solid var(--i-fg);margin-left:6px;padding-left:0;margin-bottom:14px;}
 .superset-wrap .ex-card{margin-bottom:0;border-radius:0;border-left:none;}
-.superset-wrap .ex-card:first-child{border-radius:var(–rl) var(–rl) 0 0;}
-.superset-wrap .ex-card:last-child{border-radius:0 0 var(–rl) var(–rl);margin-bottom:0;}
-.superset-label{font-size:11px;font-weight:700;color:var(–i-fg);text-transform:uppercase;letter-spacing:1px;padding:6px 0 4px 10px;}
-.drop-btn{min-height:40px;font-size:12px;font-weight:700;border-radius:var(–r);border:1px solid var(–w-br);background:var(–w-bg);color:var(–w-fg);width:100%;margin-top:6px;}
-.str-mini{background:var(–surface);border-radius:var(–rl);padding:14px;}
-.str-mini-name{font-size:11px;font-weight:600;color:var(–text-2);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.str-mini-val{font-size:22px;font-weight:700;color:var(–i-fg);}
+.superset-wrap .ex-card:first-child{border-radius:var(--rl) var(--rl) 0 0;}
+.superset-wrap .ex-card:last-child{border-radius:0 0 var(--rl) var(--rl);margin-bottom:0;}
+.superset-label{font-size:11px;font-weight:700;color:var(--i-fg);text-transform:uppercase;letter-spacing:1px;padding:6px 0 4px 10px;}
+.drop-btn{min-height:40px;font-size:12px;font-weight:700;border-radius:var(--r);border:1px solid var(--w-br);background:var(--w-bg);color:var(--w-fg);width:100%;margin-top:6px;}
+.str-mini{background:var(--surface);border-radius:var(--rl);padding:14px;}
+.str-mini-name{font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.str-mini-val{font-size:22px;font-weight:700;color:var(--i-fg);}
 .str-mini-change{font-size:11px;font-weight:700;margin-top:2px;}
 .str-mini-spark{width:100%;height:36px;margin-top:6px;}
 .str-mini-spark svg{width:100%;height:100%;}
-.str-total{background:var(–surface);border-radius:var(–rl);padding:16px;margin-bottom:10px;cursor:pointer;}
-.str-total:active{background:var(–surface-2);}
-.str-total-label{font-size:12px;font-weight:600;color:var(–text-2);margin-bottom:2px;}
+.str-total{background:var(--surface);border-radius:var(--rl);padding:16px;margin-bottom:10px;cursor:pointer;}
+.str-total:active{background:var(--surface-2);}
+.str-total-label{font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:2px;}
 .str-total-val{font-size:32px;font-weight:700;}
-.str-total-sub{font-size:12px;color:var(–text-3);margin-top:2px;}
+.str-total-sub{font-size:12px;color:var(--text-3);margin-top:2px;}
 .str-cat{margin-bottom:6px;}
-.str-cat-toggle{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(–surface);border-radius:var(–r);cursor:pointer;border:none;width:100%;color:var(–text);font-family:inherit;font-size:14px;font-weight:600;min-height:44px;}
-.str-cat-toggle:active{background:var(–surface-2);transform:none;}
-.str-cat-count{font-size:12px;font-weight:500;color:var(–text-3);}
+.str-cat-toggle{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--surface);border-radius:var(--r);cursor:pointer;border:none;width:100%;color:var(--text);font-family:inherit;font-size:14px;font-weight:600;min-height:44px;}
+.str-cat-toggle:active{background:var(--surface-2);transform:none;}
+.str-cat-count{font-size:12px;font-weight:500;color:var(--text-3);}
 .str-cat-body{display:none;padding:6px 0 0;}
 .str-cat-body.open{display:block;}
-.str-cat-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(–surface);border-radius:var(–r);margin-bottom:4px;}
+.str-cat-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--surface);border-radius:var(--r);margin-bottom:4px;}
 .str-cat-item-name{font-size:14px;font-weight:500;}
 .str-cat-item-val{text-align:right;}
-.str-cat-item-e1rm{font-size:16px;font-weight:700;color:var(–i-fg);}
+.str-cat-item-e1rm{font-size:16px;font-weight:700;color:var(--i-fg);}
 .str-cat-item-change{font-size:11px;font-weight:600;}
 .str-cat-item-spark{width:100%;height:40px;margin-top:6px;}
 .str-cat-item-spark svg{width:100%;height:100%;}
 .str-recent-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
 
 /* Strength score card */
-.str-score-card{background:linear-gradient(135deg,var(–surface) 0%,var(–surface-2) 100%);border-radius:var(–rl);padding:20px 18px;margin-bottom:12px;cursor:pointer;border:1px solid var(–border);}
+.str-score-card{background:linear-gradient(135deg,var(--surface) 0%,var(--surface-2) 100%);border-radius:var(--rl);padding:20px 18px;margin-bottom:12px;cursor:pointer;border:1px solid var(--border);}
 .str-score-card:active{transform:scale(0.99);transition:transform 0.1s;}
 .str-score-card-detail{cursor:default;margin-bottom:20px;padding:24px 20px;}
 .str-score-card-detail:active{transform:none;}
-.str-score-label{font-size:11px;font-weight:600;color:var(–text-2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;}
+.str-score-label{font-size:11px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;}
 .str-score-val{font-size:48px;font-weight:800;line-height:1;margin-bottom:4px;letter-spacing:-1px;}
 .str-score-card-detail .str-score-val{font-size:64px;}
 .str-score-tier{font-size:16px;font-weight:700;margin-bottom:14px;}
-.str-progress-bar{height:8px;background:var(–bg);border-radius:4px;overflow:hidden;margin-bottom:6px;}
+.str-progress-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:6px;}
 .str-progress-fill{height:100%;border-radius:4px;transition:width 0.3s ease;}
-.str-progress-meta{font-size:12px;color:var(–text-3);font-weight:500;}
-.str-tier-list{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid var(–border);}
+.str-progress-meta{font-size:12px;color:var(--text-3);font-weight:500;}
+.str-tier-list{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
 .str-tier-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;opacity:0.4;}
 .str-tier-item.reached{opacity:1;}
 .str-tier-item.current{opacity:1;transform:scale(1.05);}
 .str-tier-dot{width:12px;height:12px;border-radius:50%;}
-.str-tier-name{font-size:10px;font-weight:600;color:var(–text-2);text-transform:uppercase;letter-spacing:0.5px;}
-.str-tier-min{font-size:10px;color:var(–text-3);}
+.str-tier-name{font-size:10px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;}
+.str-tier-min{font-size:10px;color:var(--text-3);}
 
 /* PR preview on dashboard */
 .str-pr-preview{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
-.str-pr-item{display:flex;align-items:center;gap:12px;background:var(–surface);border-radius:var(–rl);padding:12px 14px;}
+.str-pr-item{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:var(--rl);padding:12px 14px;}
 .str-pr-trophy{font-size:20px;flex-shrink:0;}
 .str-pr-text{flex:1;min-width:0;}
 .str-pr-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.str-pr-detail{font-size:11px;color:var(–text-3);font-weight:500;margin-top:1px;}
+.str-pr-detail{font-size:11px;color:var(--text-3);font-weight:500;margin-top:1px;}
 
 /* Detailed PR feed */
 .pr-feed{display:flex;flex-direction:column;gap:8px;}
-.pr-card{background:var(–surface);border-radius:var(–rl);padding:14px;border-left:3px solid var(–w-fg);}
+.pr-card{background:var(--surface);border-radius:var(--rl);padding:14px;border-left:3px solid var(--w-fg);}
 .pr-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:8px;}
-.pr-card-name{font-size:15px;font-weight:700;color:var(–text);}
-.pr-card-improv{font-size:12px;font-weight:700;color:var(–w-fg);background:var(–w-bg);padding:2px 8px;border-radius:999px;white-space:nowrap;}
-.pr-card-detail{font-size:13px;color:var(–text-2);font-weight:500;}
-.pr-card-date{font-size:11px;color:var(–text-3);margin-top:4px;}
+.pr-card-name{font-size:15px;font-weight:700;color:var(--text);}
+.pr-card-improv{font-size:12px;font-weight:700;color:var(--w-fg);background:var(--w-bg);padding:2px 8px;border-radius:999px;white-space:nowrap;}
+.pr-card-detail{font-size:13px;color:var(--text-2);font-weight:500;}
+.pr-card-date{font-size:11px;color:var(--text-3);margin-top:4px;}
 
 /* Muscle group bests */
 .muscle-best-list{display:flex;flex-direction:column;gap:6px;}
-.muscle-best-row{display:flex;justify-content:space-between;align-items:center;background:var(–surface);border-radius:var(–rl);padding:14px;}
+.muscle-best-row{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border-radius:var(--rl);padding:14px;}
 .muscle-best-name{font-size:14px;font-weight:700;}
-.muscle-best-via{font-size:11px;color:var(–text-3);margin-top:2px;}
+.muscle-best-via{font-size:11px;color:var(--text-3);margin-top:2px;}
 .muscle-best-vals{display:flex;align-items:center;gap:10px;}
-.muscle-best-e1rm{font-size:18px;font-weight:700;color:var(–i-fg);}
+.muscle-best-e1rm{font-size:18px;font-weight:700;color:var(--i-fg);}
 .muscle-best-arrow{font-size:18px;font-weight:700;}
 
 /* New strength overview cards */
 .str-cards-grid{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
-.str-overview-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–rl);padding:14px 16px;cursor:pointer;transition:transform 0.1s,background 0.15s;}
-.str-overview-card:active{transform:scale(0.99);background:var(–surface-2);}
+.str-overview-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;cursor:pointer;transition:transform 0.1s,background 0.15s;}
+.str-overview-card:active{transform:scale(0.99);background:var(--surface-2);}
 .str-card-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .str-card-icon{font-size:16px;}
-.str-card-title{flex:1;font-size:14px;font-weight:600;color:var(–text);}
-.str-card-arrow{font-size:18px;color:var(–text-3);font-weight:700;}
+.str-card-title{flex:1;font-size:14px;font-weight:600;color:var(--text);}
+.str-card-arrow{font-size:18px;color:var(--text-3);font-weight:700;}
 .str-card-stat{font-size:22px;font-weight:800;line-height:1.1;margin-bottom:2px;}
-.str-card-sub{font-size:11px;color:var(–text-3);font-weight:500;}
-.str-card-cta{border-color:var(–accent);background:rgba(220,38,38,0.05);}
-.str-card-cta .str-card-title{color:var(–accent);}
+.str-card-sub{font-size:11px;color:var(--text-3);font-weight:500;}
+.str-card-cta{border-color:var(--accent);background:rgba(220,38,38,0.05);}
+.str-card-cta .str-card-title{color:var(--accent);}
 .str-card-goal{border-color:rgba(220,38,38,0.4);}
 
-.str-card-pr-mini{font-size:11px;color:var(–text-2);margin-top:4px;line-height:1.4;}
-.str-card-pr-mini strong{color:var(–text);font-weight:600;}
+.str-card-pr-mini{font-size:11px;color:var(--text-2);margin-top:4px;line-height:1.4;}
+.str-card-pr-mini strong{color:var(--text);font-weight:600;}
 
 .str-card-bw-row{display:flex;justify-content:space-between;gap:8px;margin-top:4px;}
-.str-card-bw-item{flex:1;text-align:center;font-size:11px;color:var(–text-3);}
-.str-card-bw-item strong{font-size:18px;color:var(–d-fg);font-weight:800;display:block;}
+.str-card-bw-item{flex:1;text-align:center;font-size:11px;color:var(--text-3);}
+.str-card-bw-item strong{font-size:18px;color:var(--d-fg);font-weight:800;display:block;}
 .str-card-bw-name{display:block;margin-top:2px;font-size:10px;}
 
 .str-card-muscles-row{display:flex;justify-content:space-between;gap:8px;margin-top:4px;}
-.str-card-muscle-item{font-size:12px;color:var(–text-2);font-weight:600;}
+.str-card-muscle-item{font-size:12px;color:var(--text-2);font-weight:600;}
 
 /* Chart container */
-.chart-container{background:var(–surface);border-radius:var(–rl);padding:16px;}
+.chart-container{background:var(--surface);border-radius:var(--rl);padding:16px;}
 .chart-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
-.chart-title{font-size:13px;font-weight:600;color:var(–text-2);}
-.chart-period{font-size:11px;color:var(–text-3);background:var(–surface-2);padding:3px 8px;border-radius:999px;font-weight:600;}
+.chart-title{font-size:13px;font-weight:600;color:var(--text-2);}
+.chart-period{font-size:11px;color:var(--text-3);background:var(--surface-2);padding:3px 8px;border-radius:999px;font-weight:600;}
 .chart-svg{width:100%;height:160px;display:block;}
-.chart-stats{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(–border);}
+.chart-stats{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
 .chart-stat{text-align:center;flex:1;}
 .chart-stat-val{font-size:18px;font-weight:700;}
-.chart-stat-lbl{font-size:10px;color:var(–text-3);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.chart-stat-lbl{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
 
 /* Score breakdown */
-.breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(–surface);border-radius:var(–r);margin-bottom:4px;font-size:13px;}
-.breakdown-bar{flex:1;height:6px;background:var(–bg);border-radius:3px;margin:0 12px;overflow:hidden;}
-.breakdown-fill{height:100%;background:var(–i-fg);border-radius:3px;}
-.breakdown-pts{font-size:13px;font-weight:700;color:var(–text-2);min-width:40px;text-align:right;}
-.explain-card{background:var(–surface);border-radius:var(–rl);padding:14px;margin-top:8px;}
-.explain-text{font-size:12px;color:var(–text-2);line-height:1.6;}
+.breakdown-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface);border-radius:var(--r);margin-bottom:4px;font-size:13px;}
+.breakdown-bar{flex:1;height:6px;background:var(--bg);border-radius:3px;margin:0 12px;overflow:hidden;}
+.breakdown-fill{height:100%;background:var(--i-fg);border-radius:3px;}
+.breakdown-pts{font-size:13px;font-weight:700;color:var(--text-2);min-width:40px;text-align:right;}
+.explain-card{background:var(--surface);border-radius:var(--rl);padding:14px;margin-top:8px;}
+.explain-text{font-size:12px;color:var(--text-2);line-height:1.6;}
 
 /* Goal */
-.goal-card-detail{background:var(–surface);border:1.5px solid var(–accent);border-radius:var(–rl);padding:16px;}
+.goal-card-detail{background:var(--surface);border:1.5px solid var(--accent);border-radius:var(--rl);padding:16px;}
 .goal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.goal-pill{font-size:10px;font-weight:700;color:var(–accent);background:rgba(220,38,38,0.15);padding:3px 8px;border-radius:999px;letter-spacing:1px;}
+.goal-pill{font-size:10px;font-weight:700;color:var(--accent);background:rgba(220,38,38,0.15);padding:3px 8px;border-radius:999px;letter-spacing:1px;}
 .goal-target{font-size:18px;font-weight:700;margin-bottom:4px;}
-.goal-meta{font-size:12px;color:var(–text-2);margin-bottom:12px;}
-.goal-progress{height:10px;background:var(–bg);border-radius:5px;overflow:hidden;margin-bottom:6px;}
-.goal-progress-fill{height:100%;background:var(–accent);border-radius:5px;transition:width 0.3s;}
-.goal-eta{font-size:11px;color:var(–text-3);}
-.goal-pick-btn{display:block;width:100%;background:var(–surface);border:1.5px solid var(–border);border-radius:var(–rl);padding:14px 16px;text-align:left;color:var(–text);cursor:pointer;margin-bottom:8px;font-family:inherit;transition:border-color 0.15s;-webkit-appearance:none;appearance:none;}
-.goal-pick-btn:active{border-color:var(–accent);background:var(–surface-2);}
+.goal-meta{font-size:12px;color:var(--text-2);margin-bottom:12px;}
+.goal-progress{height:10px;background:var(--bg);border-radius:5px;overflow:hidden;margin-bottom:6px;}
+.goal-progress-fill{height:100%;background:var(--accent);border-radius:5px;transition:width 0.3s;}
+.goal-eta{font-size:11px;color:var(--text-3);}
+.goal-pick-btn{display:block;width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rl);padding:14px 16px;text-align:left;color:var(--text);cursor:pointer;margin-bottom:8px;font-family:inherit;transition:border-color 0.15s;-webkit-appearance:none;appearance:none;}
+.goal-pick-btn:active{border-color:var(--accent);background:var(--surface-2);}
 .goal-pick-name{font-size:16px;font-weight:700;}
-.goal-pick-meta{font-size:12px;color:var(–text-3);margin-top:2px;}
+.goal-pick-meta{font-size:12px;color:var(--text-3);margin-top:2px;}
 
 /* PRs detail */
-.pr-summary{background:var(–surface);border-radius:var(–rl);padding:14px;text-align:center;color:var(–text-2);font-size:14px;}
-.pr-summary-num{font-size:24px;font-weight:800;color:var(–w-fg);margin-right:4px;}
+.pr-summary{background:var(--surface);border-radius:var(--rl);padding:14px;text-align:center;color:var(--text-2);font-size:14px;}
+.pr-summary-num{font-size:24px;font-weight:800;color:var(--w-fg);margin-right:4px;}
 
 /* Bodyweight grid */
 .bw-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.bw-card{background:var(–surface);border-radius:var(–rl);padding:14px;text-align:center;}
-.bw-card-name{font-size:11px;color:var(–text-2);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:6px;}
-.bw-card-val{font-size:28px;font-weight:800;color:var(–d-fg);line-height:1;}
-.bw-card-unit{font-size:11px;color:var(–text-3);margin-top:4px;}
+.bw-card{background:var(--surface);border-radius:var(--rl);padding:14px;text-align:center;}
+.bw-card-name{font-size:11px;color:var(--text-2);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:6px;}
+.bw-card-val{font-size:28px;font-weight:800;color:var(--d-fg);line-height:1;}
+.bw-card-unit{font-size:11px;color:var(--text-3);margin-top:4px;}
 
 /* Muscle expanded */
-.muscle-expanded{background:var(–surface);border-radius:var(–rl);padding:14px;margin-bottom:8px;}
+.muscle-expanded{background:var(--surface);border-radius:var(--rl);padding:14px;margin-bottom:8px;}
 .muscle-exp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .muscle-exp-name{font-size:15px;font-weight:700;}
-.muscle-exp-best{font-size:14px;font-weight:700;color:var(–i-fg);}
+.muscle-exp-best{font-size:14px;font-weight:700;color:var(--i-fg);}
 .muscle-exp-list{display:flex;flex-direction:column;gap:4px;}
-.muscle-exp-item{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:6px 10px;background:var(–bg);border-radius:6px;}
-.muscle-exp-rank{color:var(–text-3);width:18px;font-weight:600;}
-.muscle-exp-ex{flex:1;color:var(–text-2);}
-.muscle-exp-val{color:var(–text);font-weight:600;}
+.muscle-exp-item{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:6px 10px;background:var(--bg);border-radius:6px;}
+.muscle-exp-rank{color:var(--text-3);width:18px;font-weight:600;}
+.muscle-exp-ex{flex:1;color:var(--text-2);}
+.muscle-exp-val{color:var(--text);font-weight:600;}
 
 /* Achievements detail */
-.ach-summary{background:var(–surface);border-radius:var(–rl);padding:14px;text-align:center;color:var(–text-2);font-size:14px;}
-.ach-summary-num{font-size:24px;font-weight:800;color:var(–w-fg);margin-right:4px;}
-.achievement{background:var(–surface);border-radius:var(–rl);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
-.ach-icon{width:42px;height:42px;background:linear-gradient(135deg,var(–w-fg),#f59e0b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ach-summary{background:var(--surface);border-radius:var(--rl);padding:14px;text-align:center;color:var(--text-2);font-size:14px;}
+.ach-summary-num{font-size:24px;font-weight:800;color:var(--w-fg);margin-right:4px;}
+.achievement{background:var(--surface);border-radius:var(--rl);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.ach-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--w-fg),#f59e0b);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .ach-text{flex:1;}
 .ach-name{font-size:14px;font-weight:700;}
-.ach-desc{font-size:11px;color:var(–text-3);margin-top:2px;line-height:1.4;}
+.ach-desc{font-size:11px;color:var(--text-3);margin-top:2px;line-height:1.4;}
 .ach-pending{opacity:0.6;}
-.ach-pending .ach-icon{background:var(–surface-2);opacity:0.5;}
-.ach-progress-mini{height:4px;background:var(–bg);border-radius:2px;margin-top:6px;overflow:hidden;}
-.ach-progress-fill{height:100%;background:var(–accent);border-radius:2px;}
-.ach-progress-label{font-size:10px;color:var(–text-3);margin-top:2px;font-weight:500;}
+.ach-pending .ach-icon{background:var(--surface-2);opacity:0.5;}
+.ach-progress-mini{height:4px;background:var(--bg);border-radius:2px;margin-top:6px;overflow:hidden;}
+.ach-progress-fill{height:100%;background:var(--accent);border-radius:2px;}
+.ach-progress-label{font-size:10px;color:var(--text-3);margin-top:2px;font-weight:500;}
 
 /* PR major styling */
-.pr-big{border-left-width:4px !important;border-left-color:var(–accent) !important;background:linear-gradient(90deg,var(–s-bg) 0%,var(–surface) 60%) !important;}
-.pr-big-label{font-size:9px;font-weight:800;color:var(–accent);letter-spacing:1.5px;margin-bottom:4px;}
+.pr-big{border-left-width:4px !important;border-left-color:var(--accent) !important;background:linear-gradient(90deg,var(--s-bg) 0%,var(--surface) 60%) !important;}
+.pr-big-label{font-size:9px;font-weight:800;color:var(--accent);letter-spacing:1.5px;margin-bottom:4px;}
 
 /* Career stats */
 .career-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.career-stat{background:var(–surface);border-radius:var(–rl);padding:16px;text-align:center;}
+.career-stat{background:var(--surface);border-radius:var(--rl);padding:16px;text-align:center;}
 .career-val{font-size:28px;font-weight:800;line-height:1;}
-.career-lbl{font-size:10px;color:var(–text-3);text-transform:uppercase;letter-spacing:1px;margin-top:6px;}
-.support-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–rl);padding:18px 16px;margin-top:20px;text-align:center;}
-.support-card p{font-size:13px;color:var(–text-2);line-height:1.6;margin-bottom:12px;}
-.support-link{display:inline-flex;align-items:center;justify-content:center;padding:10px 24px;border-radius:var(–r);background:var(–surface-2);color:var(–text);font-size:14px;font-weight:600;text-decoration:none;border:1px solid var(–border-strong);}
+.career-lbl{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;margin-top:6px;}
+.support-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 16px;margin-top:20px;text-align:center;}
+.support-card p{font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:12px;}
+.support-link{display:inline-flex;align-items:center;justify-content:center;padding:10px 24px;border-radius:var(--r);background:var(--surface-2);color:var(--text);font-size:14px;font-weight:600;text-decoration:none;border:1px solid var(--border-strong);}
 .support-link:active{opacity:0.8;}
-.support-nudge{font-size:13px;color:var(–text-3);text-align:center;margin-top:12px;}
-.support-nudge a{color:var(–text-2);text-decoration:none;font-weight:500;}
+.support-nudge{font-size:13px;color:var(--text-3);text-align:center;margin-top:12px;}
+.support-nudge a{color:var(--text-2);text-decoration:none;font-weight:500;}
 
 /* Tab bar */
-.tab-bar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(10,10,10,0.97);border-top:1px solid var(–border);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom));gap:6px;}
-.tab-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 0;background:var(–surface);border:none;border-radius:var(–r);min-height:44px;color:var(–text-3);font-size:14px;font-weight:600;letter-spacing:0.3px;}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(10,10,10,0.97);border-top:1px solid var(--border);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom));gap:6px;}
+.tab-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 0;background:var(--surface);border:none;border-radius:var(--r);min-height:44px;color:var(--text-3);font-size:14px;font-weight:600;letter-spacing:0.3px;}
 .tab-btn:active{transform:none;opacity:1;}
-.tab-btn.active{background:var(–surface-2);color:var(–text);}
+.tab-btn.active{background:var(--surface-2);color:var(--text);}
 .tab-page{display:none;}
 .tab-page.active{display:block;}
 
 /* Weight modal */
 #weight-modal{display:none;position:fixed;inset:0;z-index:90;background:rgba(10,10,10,0.95);flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:20px;}
 #weight-modal.visible{display:flex;}
-.wm-card{background:var(–surface);border-radius:var(–rl);padding:24px;width:100%;max-width:340px;}
+.wm-card{background:var(--surface);border-radius:var(--rl);padding:24px;width:100%;max-width:340px;}
 .wm-title{font-size:18px;font-weight:700;margin-bottom:4px;}
-.wm-sub{font-size:13px;color:var(–text-2);margin-bottom:20px;}
+.wm-sub{font-size:13px;color:var(--text-2);margin-bottom:20px;}
 .wm-field{margin-bottom:16px;}
-.wm-label{font-size:12px;color:var(–text-2);font-weight:600;margin-bottom:6px;}
-.wm-input{width:100%;height:52px;background:var(–bg);border:1px solid var(–border-strong);border-radius:var(–r);font-size:22px;font-weight:700;text-align:center;color:var(–text);font-family:inherit;}
+.wm-label{font-size:12px;color:var(--text-2);font-weight:600;margin-bottom:6px;}
+.wm-input{width:100%;height:52px;background:var(--bg);border:1px solid var(--border-strong);border-radius:var(--r);font-size:22px;font-weight:700;text-align:center;color:var(--text);font-family:inherit;}
 .wm-actions{display:flex;gap:10px;}
-.wm-skip{flex:1;min-height:50px;background:var(–surface-2);color:var(–text-2);border:1px solid var(–border);border-radius:var(–r);font-size:15px;font-weight:600;}
-.wm-save{flex:2;min-height:50px;background:var(–accent);color:#fff;border:none;border-radius:var(–r);font-size:15px;font-weight:700;}
-.wm-bf-prompt{margin-top:12px;padding:12px;background:var(–i-bg);border-radius:var(–r);color:var(–i-fg);font-size:13px;}
+.wm-skip{flex:1;min-height:50px;background:var(--surface-2);color:var(--text-2);border:1px solid var(--border);border-radius:var(--r);font-size:15px;font-weight:600;}
+.wm-save{flex:2;min-height:50px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;}
+.wm-bf-prompt{margin-top:12px;padding:12px;background:var(--i-bg);border-radius:var(--r);color:var(--i-fg);font-size:13px;}
 .wm-bf-row{display:flex;gap:8px;margin-top:8px;align-items:center;}
-.wm-bf-input{width:80px;height:44px;background:var(–bg);border:1px solid var(–i-br);border-radius:var(–r);font-size:18px;font-weight:700;text-align:center;color:var(–text);font-family:inherit;}
+.wm-bf-input{width:80px;height:44px;background:var(--bg);border:1px solid var(--i-br);border-radius:var(--r);font-size:18px;font-weight:700;text-align:center;color:var(--text);font-family:inherit;}
 
 /* Body comp card */
-.bc-card{background:var(–surface);border-radius:var(–rl);padding:16px;margin-bottom:10px;}
-.bc-card.bc-good{border-left:4px solid var(–s-fg);}
-.bc-card.bc-flat{border-left:4px solid var(–w-fg);}
-.bc-card.bc-up{border-left:4px solid var(–d-fg);}
+.bc-card{background:var(--surface);border-radius:var(--rl);padding:16px;margin-bottom:10px;}
+.bc-card.bc-good{border-left:4px solid var(--s-fg);}
+.bc-card.bc-flat{border-left:4px solid var(--w-fg);}
+.bc-card.bc-up{border-left:4px solid var(--d-fg);}
 .bc-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
 .bc-weight{font-size:28px;font-weight:700;}
 .bc-trend{font-size:14px;font-weight:700;}
-.bc-row{display:flex;justify-content:space-between;font-size:13px;color:var(–text-2);padding:4px 0;}
-.bc-row span:last-child{font-weight:600;color:var(–text);}
+.bc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);padding:4px 0;}
+.bc-row span:last-child{font-weight:600;color:var(--text);}
 .bc-spark{width:100%;height:40px;margin-top:8px;}
 .bc-spark svg{width:100%;height:100%;}
-.bc-empty{color:var(–text-3);font-size:13px;padding:4px 0 8px;}
+.bc-empty{color:var(--text-3);font-size:13px;padding:4px 0 8px;}
 
 /* Onboarding */
 .ob-wrap{min-height:100dvh;display:flex;flex-direction:column;padding:40px 20px 40px;max-width:430px;margin:0 auto;}
 .ob-step{display:none;flex-direction:column;flex:1;}
 .ob-step.active{display:flex;}
 .ob-title{font-size:28px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px;}
-.ob-sub{font-size:14px;color:var(–text-2);margin-bottom:28px;line-height:1.6;}
+.ob-sub{font-size:14px;color:var(--text-2);margin-bottom:28px;line-height:1.6;}
 .ob-progress{display:flex;gap:6px;margin-bottom:24px;}
-.ob-dot{flex:1;height:4px;border-radius:2px;background:var(–surface-2);}
-.ob-dot.done{background:var(–accent);}
-.ob-dot.current{background:var(–text);}
+.ob-dot{flex:1;height:4px;border-radius:2px;background:var(--surface-2);}
+.ob-dot.done{background:var(--accent);}
+.ob-dot.current{background:var(--text);}
 .ob-field{margin-bottom:16px;}
-.ob-label{font-size:13px;color:var(–text-2);font-weight:600;margin-bottom:6px;}
-.ob-input{width:100%;height:52px;background:var(–surface);border:1px solid var(–border-strong);border-radius:var(–r);font-size:18px;font-weight:600;padding:0 16px;color:var(–text);font-family:inherit;}
-.ob-input::placeholder{color:var(–text-3);}
-.ob-select{width:100%;height:52px;background:var(–surface);border:1px solid var(–border-strong);border-radius:var(–r);font-size:16px;font-weight:600;padding:0 16px;color:var(–text);font-family:inherit;-webkit-appearance:none;appearance:none;background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘8’ viewBox=‘0 0 12 8’%3E%3Cpath d=‘M1 1l5 5 5-5’ stroke=’%23888’ stroke-width=‘1.5’ fill=‘none’ stroke-linecap=‘round’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 14px center;}
+.ob-label{font-size:13px;color:var(--text-2);font-weight:600;margin-bottom:6px;}
+.ob-input{width:100%;height:52px;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);font-size:18px;font-weight:600;padding:0 16px;color:var(--text);font-family:inherit;}
+.ob-input::placeholder{color:var(--text-3);}
+.ob-select{width:100%;height:52px;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);font-size:16px;font-weight:600;padding:0 16px;color:var(--text);font-family:inherit;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
 .ob-check-grid{display:flex;flex-direction:column;gap:8px;}
-.ob-check{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:var(–surface);border:1.5px solid var(–border);border-radius:var(–r);cursor:pointer;font-size:15px;font-weight:500;position:relative;}
+.ob-check{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:15px;font-weight:500;position:relative;}
 .ob-check>div:not(.ob-check-box){width:100%;}
-.ob-check.checked{border-color:var(–accent);background:rgba(220,38,38,0.08);}
-.ob-check-box{position:absolute;top:10px;right:12px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(–border-strong);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:transparent;}
-.ob-check.checked .ob-check-box{border-color:var(–accent);background:var(–accent);color:#fff;}
+.ob-check.checked{border-color:var(--accent);background:rgba(220,38,38,0.08);}
+.ob-check-box{position:absolute;top:10px;right:12px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:transparent;}
+.ob-check.checked .ob-check-box{border-color:var(--accent);background:var(--accent);color:#fff;}
 .ob-sub-input{margin-top:8px;display:none;}
 .ob-check.checked .ob-sub-input{display:block;}
 .ob-goal-grid{display:flex;flex-direction:column;gap:8px;}
-.ob-goal{padding:16px;background:var(–surface);border:1.5px solid var(–border);border-radius:var(–r);cursor:pointer;}
-.ob-goal.selected{border-color:var(–accent);background:rgba(220,38,38,0.1);}
+.ob-goal{padding:16px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;}
+.ob-goal.selected{border-color:var(--accent);background:rgba(220,38,38,0.1);}
 .ob-goal-name{font-size:16px;font-weight:700;margin-bottom:2px;}
-.ob-goal-desc{font-size:13px;color:var(–text-2);}
+.ob-goal-desc{font-size:13px;color:var(--text-2);}
 .ob-priority{margin-top:16px;display:none;}
-.ob-pri-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(–border);}
+.ob-pri-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
 .ob-pri-label{font-size:14px;font-weight:500;text-transform:capitalize;}
 .ob-pri-btns{display:flex;gap:4px;}
-.ob-pri-btn{min-height:36px;padding:0 12px;font-size:12px;font-weight:600;background:var(–surface);border:1px solid var(–border);border-radius:var(–r);color:var(–text-2);}
-.ob-pri-btn.sel{background:var(–accent);border-color:var(–accent);color:#fff;}
+.ob-pri-btn{min-height:36px;padding:0 12px;font-size:12px;font-weight:600;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);color:var(--text-2);}
+.ob-pri-btn.sel{background:var(--accent);border-color:var(--accent);color:#fff;}
 .ob-nav{display:flex;gap:10px;margin-top:auto;padding-top:20px;}
-.ob-nav button{flex:1;min-height:52px;font-size:16px;font-weight:700;border-radius:var(–r);}
-.ob-back{background:var(–surface);color:var(–text-2);border:1px solid var(–border);}
-.ob-next{background:var(–accent);color:#fff;}
-.ob-wt-chip{display:flex;align-items:center;justify-content:center;height:44px;background:transparent;border:1.5px solid var(–border-strong);border-radius:10px;font-size:14px;font-weight:600;color:var(–text-3);cursor:pointer;transition:all 0.15s;}
-.ob-wt-chip.sel{background:var(–accent);border-color:var(–accent);color:#fff;}
+.ob-nav button{flex:1;min-height:52px;font-size:16px;font-weight:700;border-radius:var(--r);}
+.ob-back{background:var(--surface);color:var(--text-2);border:1px solid var(--border);}
+.ob-next{background:var(--accent);color:#fff;}
+.ob-wt-chip{display:flex;align-items:center;justify-content:center;height:44px;background:transparent;border:1.5px solid var(--border-strong);border-radius:10px;font-size:14px;font-weight:600;color:var(--text-3);cursor:pointer;transition:all 0.15s;}
+.ob-wt-chip.sel{background:var(--accent);border-color:var(--accent);color:#fff;}
 
 /* Settings */
 .set-section{margin-bottom:24px;}
-.set-section-title{font-size:12px;font-weight:700;color:var(–text-2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-.set-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(–surface);border-radius:var(–r);margin-bottom:6px;}
+.set-section-title{font-size:12px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.set-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--surface);border-radius:var(--r);margin-bottom:6px;}
 .set-row-label{font-size:15px;font-weight:500;}
-.set-row-value{font-size:15px;font-weight:600;color:var(–text-2);}
+.set-row-value{font-size:15px;font-weight:600;color:var(--text-2);}
 .set-row.editable{cursor:pointer;transition:background .15s;}
-.set-row.editable:active{background:var(–surface-2);}
-.set-row.editable .set-row-value::after{content:’›’;margin-left:8px;color:var(–text-3);font-weight:700;}
+.set-row.editable:active{background:var(--surface-2);}
+.set-row.editable .set-row-value::after{content:'›';margin-left:8px;color:var(--text-3);font-weight:700;}
 
 /* Edit modal */
 .edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;animation:fade-in 0.2s ease;}
 .edit-overlay.show{display:flex;}
-.edit-card{background:var(–surface);border-radius:var(–rl);padding:20px;width:100%;max-width:380px;max-height:80vh;overflow-y:auto;}
+.edit-card{background:var(--surface);border-radius:var(--rl);padding:20px;width:100%;max-width:380px;max-height:80vh;overflow-y:auto;}
 .edit-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
 .edit-title{font-size:18px;font-weight:700;}
-.edit-close{background:none;border:none;color:var(–text-2);font-size:22px;cursor:pointer;padding:4px 8px;}
+.edit-close{background:none;border:none;color:var(--text-2);font-size:22px;cursor:pointer;padding:4px 8px;}
 .edit-body{margin-bottom:20px;}
-.edit-label{font-size:12px;color:var(–text-2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;}
-.edit-input{width:100%;background:var(–bg);color:var(–text);border:1.5px solid var(–border-strong);border-radius:var(–r);padding:12px 14px;font-size:16px;font-weight:600;font-family:inherit;height:48px;}
-.edit-input:focus{outline:none;border-color:var(–accent);}
+.edit-label{font-size:12px;color:var(--text-2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;}
+.edit-input{width:100%;background:var(--bg);color:var(--text);border:1.5px solid var(--border-strong);border-radius:var(--r);padding:12px 14px;font-size:16px;font-weight:600;font-family:inherit;height:48px;}
+.edit-input:focus{outline:none;border-color:var(--accent);}
 .edit-radio{display:flex;flex-direction:column;gap:8px;}
-.edit-radio-opt{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(–surface-2);border:1.5px solid var(–border);border-radius:var(–r);cursor:pointer;font-size:15px;font-weight:500;}
-.edit-radio-opt.sel{border-color:var(–accent);background:rgba(220,38,38,0.08);}
-.edit-radio-opt-circle{width:20px;height:20px;border-radius:50%;border:1.5px solid var(–border-strong);flex-shrink:0;}
-.edit-radio-opt.sel .edit-radio-opt-circle{border-color:var(–accent);background:var(–accent);box-shadow:inset 0 0 0 4px var(–surface-2);}
+.edit-radio-opt{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:15px;font-weight:500;}
+.edit-radio-opt.sel{border-color:var(--accent);background:rgba(220,38,38,0.08);}
+.edit-radio-opt-circle{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border-strong);flex-shrink:0;}
+.edit-radio-opt.sel .edit-radio-opt-circle{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 4px var(--surface-2);}
 .edit-radio-opt-label{flex:1;}
-.edit-radio-opt-sub{font-size:12px;color:var(–text-3);margin-top:2px;font-weight:400;}
+.edit-radio-opt-sub{font-size:12px;color:var(--text-3);margin-top:2px;font-weight:400;}
 .edit-actions{display:flex;gap:10px;}
 .edit-actions button{flex:1;}
 .edit-row-double{display:flex;gap:10px;}
 .edit-row-double>*{flex:1;}
-.edit-help{font-size:12px;color:var(–text-3);line-height:1.5;margin-top:8px;}
-.edit-wt-chip{display:flex;align-items:center;justify-content:center;height:44px;background:transparent;border:1.5px solid var(–border-strong);border-radius:10px;font-size:14px;font-weight:600;color:var(–text-3);cursor:pointer;transition:all 0.15s;}
-.edit-wt-chip.sel{background:var(–accent);border-color:var(–accent);color:#fff;}
+.edit-help{font-size:12px;color:var(--text-3);line-height:1.5;margin-top:8px;}
+.edit-wt-chip{display:flex;align-items:center;justify-content:center;height:44px;background:transparent;border:1.5px solid var(--border-strong);border-radius:10px;font-size:14px;font-weight:600;color:var(--text-3);cursor:pointer;transition:all 0.15s;}
+.edit-wt-chip.sel{background:var(--accent);border-color:var(--accent);color:#fff;}
 @keyframes fade-in{from{opacity:0;}to{opacity:1;}}
 </style>
-
 </head>
 <body>
 
 <!-- Edit modal -->
-
 <div class="edit-overlay" id="edit-overlay">
   <div class="edit-card">
     <div class="edit-header">
@@ -501,106 +497,102 @@ display:flex;align-items:center;justify-content:center;border-radius:50%;
 </div>
 
 <!-- ONBOARDING -->
-
 <div id="onboarding" style="display:none;">
   <div class="ob-wrap">
 
-```
-<!-- Step 1: Basics -->
-<div class="ob-step active" id="ob-step-1">
-  <div class="ob-progress"><div class="ob-dot current"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
-  <div class="ob-title">Let's get started</div>
-  <div class="ob-sub">Basic info to personalize your training. Everything stays on your device.</div>
-  <div class="ob-field"><div class="ob-label">Name</div><input class="ob-input" id="ob-name" placeholder="Your first name"></div>
-  <div class="ob-field"><div class="ob-label">Sex</div><select class="ob-select" id="ob-sex"><option value="male">Male</option><option value="female">Female</option></select></div>
-  <div class="ob-field">
-    <div class="ob-label">Height</div>
-    <div style="display:flex;gap:8px;">
-      <input class="ob-input" id="ob-height-ft" type="number" inputmode="numeric" placeholder="ft" style="width:50%;">
-      <input class="ob-input" id="ob-height-in" type="number" inputmode="numeric" placeholder="in" style="width:50%;">
-    </div>
-  </div>
-  <div class="ob-field"><div class="ob-label">Current weight (lb)</div><input class="ob-input" id="ob-weight" type="number" inputmode="decimal" placeholder="Enter weight"></div>
-  <div class="ob-field"><div class="ob-label">Body fat % (optional — skip if unsure)</div><input class="ob-input" id="ob-bf" type="number" inputmode="decimal" placeholder="If known"></div>
-  <div class="ob-nav"><button class="ob-next" onclick="obNext(1)">Next</button></div>
-</div>
-
-<!-- Step 2: Equipment -->
-<div class="ob-step" id="ob-step-2">
-  <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot current"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
-  <div class="ob-title">Your equipment</div>
-  <div class="ob-sub">Check everything you have. We'll only program exercises you can do.</div>
-  <div class="ob-check-grid" id="ob-equip">
-    <div class="ob-check" onclick="obToggle(this,'bodyweight')"><div class="ob-check-box"></div>Bodyweight</div>
-    <div class="ob-check" onclick="obToggle(this,'db')"><div class="ob-check-box"></div><div>Dumbbells
-      <div class="ob-sub-input" onclick="event.stopPropagation()">
-        <div class="ob-label" style="margin-top:8px;margin-bottom:10px;">Tap your available weights</div>
-        <div id="ob-db-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;"></div>
+    <!-- Step 1: Basics -->
+    <div class="ob-step active" id="ob-step-1">
+      <div class="ob-progress"><div class="ob-dot current"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+      <div class="ob-title">Let's get started</div>
+      <div class="ob-sub">Basic info to personalize your training. Everything stays on your device.</div>
+      <div class="ob-field"><div class="ob-label">Name</div><input class="ob-input" id="ob-name" placeholder="Your first name"></div>
+      <div class="ob-field"><div class="ob-label">Sex</div><select class="ob-select" id="ob-sex"><option value="male">Male</option><option value="female">Female</option></select></div>
+      <div class="ob-field">
+        <div class="ob-label">Height</div>
+        <div style="display:flex;gap:8px;">
+          <input class="ob-input" id="ob-height-ft" type="number" inputmode="numeric" placeholder="ft" style="width:50%;">
+          <input class="ob-input" id="ob-height-in" type="number" inputmode="numeric" placeholder="in" style="width:50%;">
+        </div>
       </div>
-    </div></div>
-    <div class="ob-check" onclick="obToggle(this,'kb')"><div class="ob-check-box"></div><div>Kettlebell
-      <div class="ob-sub-input" onclick="event.stopPropagation()">
-        <div class="ob-label" style="margin-top:8px;margin-bottom:10px;">Tap your available weights</div>
-        <div id="ob-kb-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;"></div>
-      </div>
-    </div></div>
-    <div class="ob-check" onclick="obToggle(this,'bench')"><div class="ob-check-box"></div>Adjustable bench</div>
-    <div class="ob-check" onclick="obToggle(this,'step')"><div class="ob-check-box"></div>Step platform</div>
-    <div class="ob-check" onclick="obToggle(this,'ab_wheel')"><div class="ob-check-box"></div>Ab wheel</div>
-    <div class="ob-check" onclick="obToggle(this,'rope')"><div class="ob-check-box"></div>Jump rope</div>
-    <div class="ob-check" onclick="obToggle(this,'pullup_bar')"><div class="ob-check-box"></div>Pull-up bar</div>
-    <div class="ob-check" onclick="obToggle(this,'dip_bars')"><div class="ob-check-box"></div>Dip bars / dip station</div>
-    <div class="ob-check" onclick="obToggle(this,'bands')"><div class="ob-check-box"></div>Resistance bands</div>
-  </div>
-  <div class="ob-nav"><button class="ob-back" onclick="obBack(2)">Back</button><button class="ob-next" onclick="obNext(2)">Next</button></div>
-</div>
-
-<!-- Step 3: Schedule -->
-<div class="ob-step" id="ob-step-3">
-  <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot current"></div><div class="ob-dot"></div></div>
-  <div class="ob-title">Your schedule</div>
-  <div class="ob-sub">This sets your weekly target — the dashboard tracks your consistency against it.</div>
-  <div class="ob-field"><div class="ob-label">How many days per week can you train?</div>
-    <div class="ob-goal-grid">
-      <div class="ob-goal" onclick="obSelectDays(this,2)"><div class="ob-goal-name">2 days</div><div class="ob-goal-desc">Minimum effective dose. Full body each session.</div></div>
-      <div class="ob-goal selected" onclick="obSelectDays(this,3)"><div class="ob-goal-name">3 days</div><div class="ob-goal-desc">The sweet spot for most people.</div></div>
-      <div class="ob-goal" onclick="obSelectDays(this,4)"><div class="ob-goal-name">4 days</div><div class="ob-goal-desc">Upper/lower or push/pull split.</div></div>
-      <div class="ob-goal" onclick="obSelectDays(this,5)"><div class="ob-goal-name">5 days</div><div class="ob-goal-desc">Dedicated focus per muscle group.</div></div>
+      <div class="ob-field"><div class="ob-label">Current weight (lb)</div><input class="ob-input" id="ob-weight" type="number" inputmode="decimal" placeholder="Enter weight"></div>
+      <div class="ob-field"><div class="ob-label">Body fat % (optional — skip if unsure)</div><input class="ob-input" id="ob-bf" type="number" inputmode="decimal" placeholder="If known"></div>
+      <div class="ob-nav"><button class="ob-next" onclick="obNext(1)">Next</button></div>
     </div>
-  </div>
-  <div class="ob-nav"><button class="ob-back" onclick="obBack(3)">Back</button><button class="ob-next" onclick="obNext(3)">Next</button></div>
-</div>
 
-<!-- Step 4: Goal -->
-<div class="ob-step" id="ob-step-4">
-  <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot current"></div></div>
-  <div class="ob-title">Your goal</div>
-  <div class="ob-sub">This shapes exercise selection, volume, and how the app tracks your progress.</div>
-  <div class="ob-goal-grid" id="ob-goals">
-    <div class="ob-goal" onclick="obSelectGoal(this,'fat_loss')"><div class="ob-goal-name">Fat loss</div><div class="ob-goal-desc">Preserve muscle while cutting. Higher intensity, moderate volume.</div></div>
-    <div class="ob-goal" onclick="obSelectGoal(this,'muscle')"><div class="ob-goal-name">Build muscle</div><div class="ob-goal-desc">Maximize hypertrophy. Higher volume, progressive overload.</div></div>
-    <div class="ob-goal" onclick="obSelectGoal(this,'recomp')"><div class="ob-goal-name">Recomposition</div><div class="ob-goal-desc">Lose fat and gain muscle simultaneously. Balanced approach.</div></div>
-    <div class="ob-goal" onclick="obSelectGoal(this,'general')"><div class="ob-goal-name">General fitness</div><div class="ob-goal-desc">Stay healthy, feel good, no specific aesthetic target.</div></div>
-    <div class="ob-goal" onclick="obSelectGoal(this,'custom')"><div class="ob-goal-name">Custom physique</div><div class="ob-goal-desc">Set your own muscle group priorities.</div></div>
-  </div>
-  <div class="ob-field" style="margin-top:20px;">
-    <div class="ob-label">Body composition target</div>
-    <div style="font-size:12px;color:var(--text-3);margin-bottom:10px;">What body composition are you working toward? Pick the one that fits the lifestyle you want.</div>
-    <div class="ob-goal-grid" id="ob-bodycomp-grid"></div>
-  </div>
-  <div class="ob-priority" id="ob-priority">
-    <div class="ob-label" style="margin-bottom:10px;">Set priority for each muscle group</div>
-    <div id="ob-pri-list"></div>
-  </div>
-  <div class="ob-nav"><button class="ob-back" onclick="obBack(4)">Back</button><button class="ob-next" onclick="obFinish()">Start training</button></div>
-</div>
-```
+    <!-- Step 2: Equipment -->
+    <div class="ob-step" id="ob-step-2">
+      <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot current"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+      <div class="ob-title">Your equipment</div>
+      <div class="ob-sub">Check everything you have. We'll only program exercises you can do.</div>
+      <div class="ob-check-grid" id="ob-equip">
+        <div class="ob-check" onclick="obToggle(this,'bodyweight')"><div class="ob-check-box"></div>Bodyweight</div>
+        <div class="ob-check" onclick="obToggle(this,'db')"><div class="ob-check-box"></div><div>Dumbbells
+          <div class="ob-sub-input" onclick="event.stopPropagation()">
+            <div class="ob-label" style="margin-top:8px;margin-bottom:10px;">Tap your available weights</div>
+            <div id="ob-db-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;"></div>
+          </div>
+        </div></div>
+        <div class="ob-check" onclick="obToggle(this,'kb')"><div class="ob-check-box"></div><div>Kettlebell
+          <div class="ob-sub-input" onclick="event.stopPropagation()">
+            <div class="ob-label" style="margin-top:8px;margin-bottom:10px;">Tap your available weights</div>
+            <div id="ob-kb-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;"></div>
+          </div>
+        </div></div>
+        <div class="ob-check" onclick="obToggle(this,'bench')"><div class="ob-check-box"></div>Adjustable bench</div>
+        <div class="ob-check" onclick="obToggle(this,'step')"><div class="ob-check-box"></div>Step platform</div>
+        <div class="ob-check" onclick="obToggle(this,'ab_wheel')"><div class="ob-check-box"></div>Ab wheel</div>
+        <div class="ob-check" onclick="obToggle(this,'rope')"><div class="ob-check-box"></div>Jump rope</div>
+        <div class="ob-check" onclick="obToggle(this,'pullup_bar')"><div class="ob-check-box"></div>Pull-up bar</div>
+        <div class="ob-check" onclick="obToggle(this,'dip_bars')"><div class="ob-check-box"></div>Dip bars / dip station</div>
+        <div class="ob-check" onclick="obToggle(this,'bands')"><div class="ob-check-box"></div>Resistance bands</div>
+      </div>
+      <div class="ob-nav"><button class="ob-back" onclick="obBack(2)">Back</button><button class="ob-next" onclick="obNext(2)">Next</button></div>
+    </div>
+
+    <!-- Step 3: Schedule -->
+    <div class="ob-step" id="ob-step-3">
+      <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot current"></div><div class="ob-dot"></div></div>
+      <div class="ob-title">Your schedule</div>
+      <div class="ob-sub">This sets your weekly target — the dashboard tracks your consistency against it.</div>
+      <div class="ob-field"><div class="ob-label">How many days per week can you train?</div>
+        <div class="ob-goal-grid">
+          <div class="ob-goal" onclick="obSelectDays(this,2)"><div class="ob-goal-name">2 days</div><div class="ob-goal-desc">Minimum effective dose. Full body each session.</div></div>
+          <div class="ob-goal selected" onclick="obSelectDays(this,3)"><div class="ob-goal-name">3 days</div><div class="ob-goal-desc">The sweet spot for most people.</div></div>
+          <div class="ob-goal" onclick="obSelectDays(this,4)"><div class="ob-goal-name">4 days</div><div class="ob-goal-desc">Upper/lower or push/pull split.</div></div>
+          <div class="ob-goal" onclick="obSelectDays(this,5)"><div class="ob-goal-name">5 days</div><div class="ob-goal-desc">Dedicated focus per muscle group.</div></div>
+        </div>
+      </div>
+      <div class="ob-nav"><button class="ob-back" onclick="obBack(3)">Back</button><button class="ob-next" onclick="obNext(3)">Next</button></div>
+    </div>
+
+    <!-- Step 4: Goal -->
+    <div class="ob-step" id="ob-step-4">
+      <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot current"></div></div>
+      <div class="ob-title">Your goal</div>
+      <div class="ob-sub">This shapes exercise selection, volume, and how the app tracks your progress.</div>
+      <div class="ob-goal-grid" id="ob-goals">
+        <div class="ob-goal" onclick="obSelectGoal(this,'fat_loss')"><div class="ob-goal-name">Fat loss</div><div class="ob-goal-desc">Preserve muscle while cutting. Higher intensity, moderate volume.</div></div>
+        <div class="ob-goal" onclick="obSelectGoal(this,'muscle')"><div class="ob-goal-name">Build muscle</div><div class="ob-goal-desc">Maximize hypertrophy. Higher volume, progressive overload.</div></div>
+        <div class="ob-goal" onclick="obSelectGoal(this,'recomp')"><div class="ob-goal-name">Recomposition</div><div class="ob-goal-desc">Lose fat and gain muscle simultaneously. Balanced approach.</div></div>
+        <div class="ob-goal" onclick="obSelectGoal(this,'general')"><div class="ob-goal-name">General fitness</div><div class="ob-goal-desc">Stay healthy, feel good, no specific aesthetic target.</div></div>
+        <div class="ob-goal" onclick="obSelectGoal(this,'custom')"><div class="ob-goal-name">Custom physique</div><div class="ob-goal-desc">Set your own muscle group priorities.</div></div>
+      </div>
+      <div class="ob-field" style="margin-top:20px;">
+        <div class="ob-label">Body composition target</div>
+        <div style="font-size:12px;color:var(--text-3);margin-bottom:10px;">What body composition are you working toward? Pick the one that fits the lifestyle you want.</div>
+        <div class="ob-goal-grid" id="ob-bodycomp-grid"></div>
+      </div>
+      <div class="ob-priority" id="ob-priority">
+        <div class="ob-label" style="margin-bottom:10px;">Set priority for each muscle group</div>
+        <div id="ob-pri-list"></div>
+      </div>
+      <div class="ob-nav"><button class="ob-back" onclick="obBack(4)">Back</button><button class="ob-next" onclick="obFinish()">Start training</button></div>
+    </div>
 
   </div>
 </div>
 
 <!-- WEIGHT MODAL -->
-
 <div id="weight-modal">
   <div class="wm-card">
     <div class="wm-title">Daily check-in</div>
@@ -627,252 +619,245 @@ display:flex;align-items:center;justify-content:center;border-radius:50%;
   <div id="install-hint" class="install-hint"></div>
 
   <!-- DASHBOARD TAB -->
-
   <div id="tab-dash" class="tab-page active">
 
-```
-<div id="screen-home" class="screen active">
-  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;">
-    <h1>The Toji Method</h1>
-    <span id="streak" style="font-size:13px;color:var(--text-2);font-weight:600;"></span>
-  </div>
-  <p class="sub" id="dash-greeting">Adaptive home gym training</p>
-  <div class="stat-grid">
-    <div class="stat-card"><div class="stat-label">Week streak</div><div id="stat-streak" class="stat-value">0</div><div class="stat-sub" id="stat-streak-sub"></div></div>
-    <div class="stat-card"><div class="stat-label">This week</div><div id="stat-week" class="stat-value">0</div><div class="stat-sub" id="stat-week-sub"></div></div>
-    <div class="stat-card" id="stat-days-card"><div class="stat-label">Days since last</div><div id="stat-days" class="stat-value">—</div><div class="stat-sub" id="stat-days-sub"></div></div>
-    <div class="stat-card"><div class="stat-label">Avg vol / session</div><div id="stat-avgvol" class="stat-value">0</div><div class="stat-sub" id="stat-avgvol-sub"></div></div>
-  </div>
-  <h3>Body composition</h3>
-  <div id="body-comp"></div>
-  <h3>Strength (e1RM)</h3>
-  <div id="strength-dash"></div>
-  <div class="stack" style="margin-top:16px;">
-    <button class="bs" onclick="showFeedbackKey()">How it works</button>
-    <button class="bs" onclick="showSettings()">Settings</button>
-  </div>
-</div>
+    <div id="screen-home" class="screen active">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;">
+        <h1>The Toji Method</h1>
+        <span id="streak" style="font-size:13px;color:var(--text-2);font-weight:600;"></span>
+      </div>
+      <p class="sub" id="dash-greeting">Adaptive home gym training</p>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Week streak</div><div id="stat-streak" class="stat-value">0</div><div class="stat-sub" id="stat-streak-sub"></div></div>
+        <div class="stat-card"><div class="stat-label">This week</div><div id="stat-week" class="stat-value">0</div><div class="stat-sub" id="stat-week-sub"></div></div>
+        <div class="stat-card" id="stat-days-card"><div class="stat-label">Days since last</div><div id="stat-days" class="stat-value">—</div><div class="stat-sub" id="stat-days-sub"></div></div>
+        <div class="stat-card"><div class="stat-label">Avg vol / session</div><div id="stat-avgvol" class="stat-value">0</div><div class="stat-sub" id="stat-avgvol-sub"></div></div>
+      </div>
+      <h3>Body composition</h3>
+      <div id="body-comp"></div>
+      <h3>Strength (e1RM)</h3>
+      <div id="strength-dash"></div>
+      <div class="stack" style="margin-top:16px;">
+        <button class="bs" onclick="showFeedbackKey()">How it works</button>
+        <button class="bs" onclick="showSettings()">Settings</button>
+      </div>
+    </div>
 
-<div id="screen-key" class="screen">
-  <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:16px;">How it works</h2>
+    <div id="screen-key" class="screen">
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:16px;">How it works</h2>
 
-  <h3 style="margin-top:0;">Set feedback</h3>
-  <h3 style="margin-top:0;">Set feedback</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">After each set, rate how it felt. The app uses this to adjust your workout in real time and plan your next session. Your target zone is Hard or Failed — if everything feels Easy or Good, the weight isn't heavy enough.</p>
-  <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Easy</strong> — not hard enough. Weight jumps immediately for remaining sets, and again next session.</div>
-  <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Good</strong> — still comfortable. Reps push to top of range. If already at top, weight jumps.</div>
-  <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hard</strong> — target zone. Reps nudge up +1 each session. After 2 consecutive Hard sessions at top of range, weight jumps.</div>
-  <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Failed</strong> — ideal stimulus. Weight drops for remaining sets with no rest — go straight into the next set. Between sessions: hold weight, build reps. 3 consecutive fails = slight deload.</div>
+      <h3 style="margin-top:0;">Set feedback</h3>
+      <h3 style="margin-top:0;">Set feedback</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">After each set, rate how it felt. The app uses this to adjust your workout in real time and plan your next session. Your target zone is Hard or Failed — if everything feels Easy or Good, the weight isn't heavy enough.</p>
+      <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Easy</strong> — not hard enough. Weight jumps immediately for remaining sets, and again next session.</div>
+      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Good</strong> — still comfortable. Reps push to top of range. If already at top, weight jumps.</div>
+      <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hard</strong> — target zone. Reps nudge up +1 each session. After 2 consecutive Hard sessions at top of range, weight jumps.</div>
+      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Failed</strong> — ideal stimulus. Weight drops for remaining sets with no rest — go straight into the next set. Between sessions: hold weight, build reps. 3 consecutive fails = slight deload.</div>
 
-  <h3>Body composition target</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Instead of picking an arbitrary goal weight, you pick the body composition you're working toward. The app calculates the actual target weight from your current lean mass and the body fat % range you're aiming for. Change your target anytime in Settings — Goal → Body comp target.</p>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Athletic</strong> — Visible abs, defined musculature. Very high effort. 12–18% BF (men) / 18–22% (women).</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fitness</strong> — Lean and healthy without abs. High effort. 14–22% BF (men) / 21–26% (women).</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Healthy</strong> — Good proportions, doctor-approved. Moderate effort. Most sustainable for long term. 18–25% BF (men) / 24–30% (women).</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Average</strong> — Medically fine, soft appearance. Low effort. 22–28% BF (men) / 28–32% (women).</div>
+      <h3>Body composition target</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Instead of picking an arbitrary goal weight, you pick the body composition you're working toward. The app calculates the actual target weight from your current lean mass and the body fat % range you're aiming for. Change your target anytime in Settings — Goal → Body comp target.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Athletic</strong> — Visible abs, defined musculature. Very high effort. 12–18% BF (men) / 18–22% (women).</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fitness</strong> — Lean and healthy without abs. High effort. 14–22% BF (men) / 21–26% (women).</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Healthy</strong> — Good proportions, doctor-approved. Moderate effort. Most sustainable for long term. 18–25% BF (men) / 24–30% (women).</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Average</strong> — Medically fine, soft appearance. Low effort. 22–28% BF (men) / 28–32% (women).</div>
 
-  <h3>Body composition tracking</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The body comp card tracks your weight trend and composition over time. The app asks for your weight once per day and body fat once per month.</p>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>7-day average</strong> — your real weight. Daily weight swings 2–4 lb from water, sodium, and food. The weekly average smooths this out so you see the actual trend, not the noise.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rate (lb/week)</strong> — how fast you're losing or gaining. For fat loss, 0.5–1.0 lb/week is ideal. Faster than 1.5 lb/week means you're likely losing muscle too. Flat for 2+ weeks means the deficit isn't real or you're recomping.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fat mass vs lean mass</strong> — calculated from your monthly body fat check-in. During a cut, you want fat mass going down while lean mass stays flat or goes up. If lean mass is dropping fast, eat more protein or reduce the deficit.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>FFMI (Fat-Free Mass Index)</strong> — normalizes your lean mass to your height. It answers "how muscular am I for my frame?" Average is under 20, Athletic is 20–22, Muscular is 22–25, Elite is 25+. The natural ceiling for most people is around 25.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>ETA to target</strong> — weeks remaining at your current rate. This shifts as your rate changes. Don't chase this number — focus on consistency and the ETA takes care of itself.</div>
-  <p style="color:var(--text-2);font-size:13px;margin:10px 0;">The card border color tells you the overall trend:</p>
-  <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);border-left:4px solid var(--s-fg);"><strong>Green</strong> — weight trending down. Cut is working.</div>
-  <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);border-left:4px solid var(--w-fg);"><strong>Yellow</strong> — weight flat. Could be a stall or recomp — check body fat trend monthly.</div>
-  <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);border-left:4px solid var(--d-fg);"><strong>Red</strong> — weight trending up. Either intentional bulk or the deficit isn't real.</div>
+      <h3>Body composition tracking</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The body comp card tracks your weight trend and composition over time. The app asks for your weight once per day and body fat once per month.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>7-day average</strong> — your real weight. Daily weight swings 2–4 lb from water, sodium, and food. The weekly average smooths this out so you see the actual trend, not the noise.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rate (lb/week)</strong> — how fast you're losing or gaining. For fat loss, 0.5–1.0 lb/week is ideal. Faster than 1.5 lb/week means you're likely losing muscle too. Flat for 2+ weeks means the deficit isn't real or you're recomping.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fat mass vs lean mass</strong> — calculated from your monthly body fat check-in. During a cut, you want fat mass going down while lean mass stays flat or goes up. If lean mass is dropping fast, eat more protein or reduce the deficit.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>FFMI (Fat-Free Mass Index)</strong> — normalizes your lean mass to your height. It answers "how muscular am I for my frame?" Average is under 20, Athletic is 20–22, Muscular is 22–25, Elite is 25+. The natural ceiling for most people is around 25.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>ETA to target</strong> — weeks remaining at your current rate. This shifts as your rate changes. Don't chase this number — focus on consistency and the ETA takes care of itself.</div>
+      <p style="color:var(--text-2);font-size:13px;margin:10px 0;">The card border color tells you the overall trend:</p>
+      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);border-left:4px solid var(--s-fg);"><strong>Green</strong> — weight trending down. Cut is working.</div>
+      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);border-left:4px solid var(--w-fg);"><strong>Yellow</strong> — weight flat. Could be a stall or recomp — check body fat trend monthly.</div>
+      <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);border-left:4px solid var(--d-fg);"><strong>Red</strong> — weight trending up. Either intentional bulk or the deficit isn't real.</div>
 
-  <h3>Muscle recovery</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Each muscle group has a recovery score from 0–100%. It's calculated from what you trained, how hard you pushed (your feedback), how many sets you did, and how many hours ago the session was. Everything decays back to 100% over 48 hours. The app uses this to recommend which workout focus to pick.</p>
-  <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Fresh (75–100%)</strong> — fully recovered. Good to train this muscle hard.</div>
-  <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Recovering (40–74%)</strong> — still repairing. Can train but expect lower performance.</div>
-  <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Fatigued (0–39%)</strong> — needs rest. Training this muscle again risks junk volume and injury.</div>
+      <h3>Muscle recovery</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Each muscle group has a recovery score from 0–100%. It's calculated from what you trained, how hard you pushed (your feedback), how many sets you did, and how many hours ago the session was. Everything decays back to 100% over 48 hours. The app uses this to recommend which workout focus to pick.</p>
+      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Fresh (75–100%)</strong> — fully recovered. Good to train this muscle hard.</div>
+      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Recovering (40–74%)</strong> — still repairing. Can train but expect lower performance.</div>
+      <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Fatigued (0–39%)</strong> — needs rest. Training this muscle again risks junk volume and injury.</div>
 
-  <h3>Strength score &amp; tiers</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Your single "am I getting stronger" number. Calculated from your best e1RM across tracked compound lifts, normalized to your bodyweight, then multiplied by 100. The score updates automatically after every session. Tap the strength card on the dashboard to see your full breakdown including PRs and per-muscle bests.</p>
-  <div class="key-row" style="background:var(--surface);color:var(--text-3);"><strong>Beginner</strong> — 0–149. Just starting out. Focus on consistency and form.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--i-fg);"><strong>Novice</strong> — 150–399. Built a base. Strength gains come fast.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--w-fg);"><strong>Intermediate</strong> — 400–699. Solid lifter. Progress requires more deliberate effort.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--accent);"><strong>Advanced</strong> — 700–999. Strong by any measure. Years of consistent training.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--s-fg);"><strong>Elite</strong> — 1000+. Top tier. Most lifters never reach this.</div>
+      <h3>Strength score &amp; tiers</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Your single "am I getting stronger" number. Calculated from your best e1RM across tracked compound lifts, normalized to your bodyweight, then multiplied by 100. The score updates automatically after every session. Tap the strength card on the dashboard to see your full breakdown including PRs and per-muscle bests.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text-3);"><strong>Beginner</strong> — 0–149. Just starting out. Focus on consistency and form.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--i-fg);"><strong>Novice</strong> — 150–399. Built a base. Strength gains come fast.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--w-fg);"><strong>Intermediate</strong> — 400–699. Solid lifter. Progress requires more deliberate effort.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--accent);"><strong>Advanced</strong> — 700–999. Strong by any measure. Years of consistent training.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--s-fg);"><strong>Elite</strong> — 1000+. Top tier. Most lifters never reach this.</div>
 
-  <h3>Personal records</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">PRs are detected automatically every session. When you beat a previous best, you get a banner celebration and the PR is logged to your strength screen. Three types are tracked:</p>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight PRs</strong> — when your e1RM (estimated 1-rep max from Epley formula) on a compound lift beats your previous best.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rep PRs</strong> — when you do more reps than ever before on a bodyweight exercise (push-ups, pull-ups, etc.).</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Time PRs</strong> — when you hold a timed exercise (plank, farmer carry, etc.) longer than ever before.</div>
-  <p style="color:var(--text-2);font-size:13px;margin:10px 0;">Tap the strength card to see your recent PRs feed and best-ever lifts grouped by muscle group.</p>
+      <h3>Personal records</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">PRs are detected automatically every session. When you beat a previous best, you get a banner celebration and the PR is logged to your strength screen. Three types are tracked:</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight PRs</strong> — when your e1RM (estimated 1-rep max from Epley formula) on a compound lift beats your previous best.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rep PRs</strong> — when you do more reps than ever before on a bodyweight exercise (push-ups, pull-ups, etc.).</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Time PRs</strong> — when you hold a timed exercise (plank, farmer carry, etc.) longer than ever before.</div>
+      <p style="color:var(--text-2);font-size:13px;margin:10px 0;">Tap the strength card to see your recent PRs feed and best-ever lifts grouped by muscle group.</p>
 
-  <h3>Equipment &amp; weight pools</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app builds workouts using only the equipment you actually own. You set this once during onboarding and can change it anytime in Settings.</p>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight only</strong> — full calisthenics program with 30+ exercises. Push-ups, squats, lunges, planks, supermans. The app prioritizes harder variations as you progress.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight + weights</strong> — weighted exercises take priority for muscle building. Bodyweight rotates in for variety.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Dumbbell pool</strong> — pick exactly which weights you have (5–100 lb in 5 lb increments). The app only uses weights from your pool, never suggests something you don't own.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Kettlebell pool</strong> — same system as dumbbells, separate selection. Used for KB-specific exercises like swings, snatches, and Turkish get-ups.</div>
+      <h3>Equipment &amp; weight pools</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app builds workouts using only the equipment you actually own. You set this once during onboarding and can change it anytime in Settings.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight only</strong> — full calisthenics program with 30+ exercises. Push-ups, squats, lunges, planks, supermans. The app prioritizes harder variations as you progress.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight + weights</strong> — weighted exercises take priority for muscle building. Bodyweight rotates in for variety.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Dumbbell pool</strong> — pick exactly which weights you have (5–100 lb in 5 lb increments). The app only uses weights from your pool, never suggests something you don't own.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Kettlebell pool</strong> — same system as dumbbells, separate selection. Used for KB-specific exercises like swings, snatches, and Turkish get-ups.</div>
 
-  <h3>Supersets and dropsets</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Two techniques to increase workout density and muscle stimulus.</p>
-  <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Supersets</strong> — two exercises paired back-to-back with no rest between them (marked with a blue bracket). After each set, a banner appears telling you to go to the partner exercise. The "GO" pill on your set cards rotates between partners so you always know which set is next.</div>
-  <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Dropsets</strong> — tap the "+ Drop set" button on any weighted exercise to add an extra set at a lower weight with no rest. Use it when you want to push past failure for extra stimulus. The weight drops one step down in your dumbbell or kettlebell pool — whatever weight you actually have.</div>
+      <h3>Supersets and dropsets</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Two techniques to increase workout density and muscle stimulus.</p>
+      <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Supersets</strong> — two exercises paired back-to-back with no rest between them (marked with a blue bracket). After each set, a banner appears telling you to go to the partner exercise. The "GO" pill on your set cards rotates between partners so you always know which set is next.</div>
+      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Dropsets</strong> — tap the "+ Drop set" button on any weighted exercise to add an extra set at a lower weight with no rest. Use it when you want to push past failure for extra stimulus. The weight drops one step down in your dumbbell or kettlebell pool — whatever weight you actually have.</div>
 
-  <h3>Timed exercises</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Exercises like farmer carry, planks, and jump rope use a countdown timer instead of reps.</p>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>5-second prep</strong> — when you tap Start, the timer counts down "Get ready: 5...4...3...2...1..." before the actual exercise timer begins. Gives you time to pick up weights and get in position.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Auto-reset</strong> — after logging feedback on a timed set, the timer automatically resets to the next set's target. No need to tap Reset manually.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight tracking</strong> — farmer carry tracks both weight and time. Feedback adjusts the weight (Easy bumps up, Fail drops) just like a regular dumbbell exercise.</div>
+      <h3>Timed exercises</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Exercises like farmer carry, planks, and jump rope use a countdown timer instead of reps.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>5-second prep</strong> — when you tap Start, the timer counts down "Get ready: 5...4...3...2...1..." before the actual exercise timer begins. Gives you time to pick up weights and get in position.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Auto-reset</strong> — after logging feedback on a timed set, the timer automatically resets to the next set's target. No need to tap Reset manually.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight tracking</strong> — farmer carry tracks both weight and time. Feedback adjusts the weight (Easy bumps up, Fail drops) just like a regular dumbbell exercise.</div>
 
-  <h3>Periodization</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app automatically cycles through three training phases so your body doesn't adapt to the same stimulus. You don't need to manage this — it happens based on your session count.</p>
-  <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hypertrophy (sessions 1–12)</strong> — high volume, 8–12 reps for compounds, 12–15 for accessories. The muscle-building phase. Push hard — target Hard and Failed feedback.</div>
-  <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Strength (sessions 13–18)</strong> — heavier weight, 4–6 reps for compounds. Fewer sets. Focus on lifting heavy with good form. This phase builds the raw strength that makes the hypertrophy phase more effective.</div>
-  <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Deload (sessions 19–21)</strong> — weights drop to 60%, sets are halved. Easy and Good are expected. This isn't laziness — it's recovery. Your muscles grow during rest, not during lifting. After deload, the cycle repeats and you'll be stronger.</div>
+      <h3>Periodization</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app automatically cycles through three training phases so your body doesn't adapt to the same stimulus. You don't need to manage this — it happens based on your session count.</p>
+      <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hypertrophy (sessions 1–12)</strong> — high volume, 8–12 reps for compounds, 12–15 for accessories. The muscle-building phase. Push hard — target Hard and Failed feedback.</div>
+      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Strength (sessions 13–18)</strong> — heavier weight, 4–6 reps for compounds. Fewer sets. Focus on lifting heavy with good form. This phase builds the raw strength that makes the hypertrophy phase more effective.</div>
+      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Deload (sessions 19–21)</strong> — weights drop to 60%, sets are halved. Easy and Good are expected. This isn't laziness — it's recovery. Your muscles grow during rest, not during lifting. After deload, the cycle repeats and you'll be stronger.</div>
 
-  <h3>Dashboard stats</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The four cards at the top of the dashboard.</p>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Week streak</strong> — consecutive weeks where you completed 3+ sessions. The single best predictor of long-term results. Protect this number.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>This week</strong> — sessions completed Monday through Sunday. Target matches your schedule setting from onboarding.</div>
-  <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Green stat</strong> — on track. Trained today, or hit your weekly target.</div>
-  <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Red stat</strong> — falling behind. 3+ days since last session.</div>
+      <h3>Dashboard stats</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The four cards at the top of the dashboard.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Week streak</strong> — consecutive weeks where you completed 3+ sessions. The single best predictor of long-term results. Protect this number.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>This week</strong> — sessions completed Monday through Sunday. Target matches your schedule setting from onboarding.</div>
+      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Green stat</strong> — on track. Trained today, or hit your weekly target.</div>
+      <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Red stat</strong> — falling behind. 3+ days since last session.</div>
 
-  <h3>Your data</h3>
-  <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">All your data stays on your device. Nothing is sent to a server.</p>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Export</strong> — download a JSON backup of all your data from Settings. Do this before clearing browser data or switching phones.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Import</strong> — restore a backup file from Settings. Merges with any existing data on the device.</div>
-  <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>AI coach export</strong> — copy a structured training report to your clipboard from Training History. Paste it into Claude for personalized coaching analysis.</div>
-</div>
+      <h3>Your data</h3>
+      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">All your data stays on your device. Nothing is sent to a server.</p>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Export</strong> — download a JSON backup of all your data from Settings. Do this before clearing browser data or switching phones.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Import</strong> — restore a backup file from Settings. Merges with any existing data on the device.</div>
+      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>AI coach export</strong> — copy a structured training report to your clipboard from Training History. Paste it into Claude for personalized coaching analysis.</div>
+    </div>
 
-<div id="screen-strength" class="screen">
-  <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">Strength</h2>
-  <p class="sub" id="strength-sub">Your training progress at a glance</p>
-  <div id="strength-body"></div>
-</div>
+    <div id="screen-strength" class="screen">
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Strength</h2>
+      <p class="sub" id="strength-sub">Your training progress at a glance</p>
+      <div id="strength-body"></div>
+    </div>
 
-<div id="screen-strength-history" class="screen">
-  <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">Score History</h2>
-  <p class="sub">Watch your strength score grow over time</p>
-  <div id="strength-history-body"></div>
-</div>
+    <div id="screen-strength-history" class="screen">
+      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Score History</h2>
+      <p class="sub">Watch your strength score grow over time</p>
+      <div id="strength-history-body"></div>
+    </div>
 
-<div id="screen-strength-goal" class="screen">
-  <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">Strength Goal</h2>
-  <p class="sub">Pick a tier to chase</p>
-  <div id="strength-goal-body"></div>
-</div>
+    <div id="screen-strength-goal" class="screen">
+      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Strength Goal</h2>
+      <p class="sub">Pick a tier to chase</p>
+      <div id="strength-goal-body"></div>
+    </div>
 
-<div id="screen-strength-prs" class="screen">
-  <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">Personal Records</h2>
-  <p class="sub">Every PR you've ever earned</p>
-  <div id="strength-prs-body"></div>
-</div>
+    <div id="screen-strength-prs" class="screen">
+      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Personal Records</h2>
+      <p class="sub">Every PR you've ever earned</p>
+      <div id="strength-prs-body"></div>
+    </div>
 
-<div id="screen-strength-bw" class="screen">
-  <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">Bodyweight Benchmarks</h2>
-  <p class="sub">Your max reps and times across all bodyweight exercises</p>
-  <div id="strength-bw-body"></div>
-</div>
+    <div id="screen-strength-bw" class="screen">
+      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Bodyweight Benchmarks</h2>
+      <p class="sub">Your max reps and times across all bodyweight exercises</p>
+      <div id="strength-bw-body"></div>
+    </div>
 
-<div id="screen-strength-muscles" class="screen">
-  <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">By Muscle Group</h2>
-  <p class="sub">Top lifts targeting each muscle</p>
-  <div id="strength-muscles-body"></div>
-</div>
+    <div id="screen-strength-muscles" class="screen">
+      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">By Muscle Group</h2>
+      <p class="sub">Top lifts targeting each muscle</p>
+      <div id="strength-muscles-body"></div>
+    </div>
 
-<div id="screen-strength-lifts" class="screen">
-  <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">All Tracked Lifts</h2>
-  <p class="sub">Every compound lift with progression charts</p>
-  <div id="strength-lifts-body"></div>
-</div>
+    <div id="screen-strength-lifts" class="screen">
+      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">All Tracked Lifts</h2>
+      <p class="sub">Every compound lift with progression charts</p>
+      <div id="strength-lifts-body"></div>
+    </div>
 
-<div id="screen-strength-achievements" class="screen">
-  <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">Achievements</h2>
-  <p class="sub">Earned milestones and what's next</p>
-  <div id="strength-achievements-body"></div>
-</div>
+    <div id="screen-strength-achievements" class="screen">
+      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Achievements</h2>
+      <p class="sub">Earned milestones and what's next</p>
+      <div id="strength-achievements-body"></div>
+    </div>
 
-<div id="screen-strength-career" class="screen">
-  <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">Career Stats</h2>
-  <p class="sub">Lifetime training totals</p>
-  <div id="strength-career-body"></div>
-</div>
+    <div id="screen-strength-career" class="screen">
+      <button class="bg" onclick="showStrength()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Career Stats</h2>
+      <p class="sub">Lifetime training totals</p>
+      <div id="strength-career-body"></div>
+    </div>
 
-<div id="screen-settings" class="screen">
-  <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:16px;">Settings</h2>
-  <div id="settings-body"></div>
-  <button class="bdanger" id="reset-btn" onclick="resetConfirm()" style="margin-top:16px;">Reset all data</button>
-  <button class="bs" onclick="rerunOnboarding()" style="margin-top:10px;">Re-run setup</button>
-  <button class="bs" onclick="exportData()" style="margin-top:10px;">Export data (backup)</button>
-  <button class="bs" onclick="document.getElementById('import-file').click()" style="margin-top:10px;">Import data (restore)</button>
-  <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
-</div>
-```
+    <div id="screen-settings" class="screen">
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:16px;">Settings</h2>
+      <div id="settings-body"></div>
+      <button class="bdanger" id="reset-btn" onclick="resetConfirm()" style="margin-top:16px;">Reset all data</button>
+      <button class="bs" onclick="rerunOnboarding()" style="margin-top:10px;">Re-run setup</button>
+      <button class="bs" onclick="exportData()" style="margin-top:10px;">Export data (backup)</button>
+      <button class="bs" onclick="document.getElementById('import-file').click()" style="margin-top:10px;">Import data (restore)</button>
+      <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
+    </div>
 
   </div>
 
   <!-- TRAIN TAB -->
-
   <div id="tab-train" class="tab-page">
 
-```
-<div id="screen-train-home" class="screen active">
-  <h1 style="margin-bottom:2px;">Train</h1>
-  <p class="sub" id="train-phase-info">Pick your session length</p>
-  <div class="grid2" style="margin-bottom:16px;">
-    <button class="bp" onclick="startFlow(30)">Half session</button>
-    <button class="bp" onclick="startFlow(60)">Full session</button>
-  </div>
-  <h3>Quick recovery check</h3>
-  <div id="recovery-train"></div>
-  <div class="stack" style="margin-top:16px;">
-    <button class="bs" onclick="showHistory()">Training history</button>
-  </div>
-</div>
+    <div id="screen-train-home" class="screen active">
+      <h1 style="margin-bottom:2px;">Train</h1>
+      <p class="sub" id="train-phase-info">Pick your session length</p>
+      <div class="grid2" style="margin-bottom:16px;">
+        <button class="bp" onclick="startFlow(30)">Half session</button>
+        <button class="bp" onclick="startFlow(60)">Full session</button>
+      </div>
+      <h3>Quick recovery check</h3>
+      <div id="recovery-train"></div>
+      <div class="stack" style="margin-top:16px;">
+        <button class="bs" onclick="showHistory()">Training history</button>
+      </div>
+    </div>
 
-<div id="screen-pick" class="screen">
-  <button class="bg" onclick="goTrain()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:4px;">Pick today's focus</h2>
-  <p id="pick-time" class="sub"></p>
-  <div id="pick-options"></div>
-</div>
+    <div id="screen-pick" class="screen">
+      <button class="bg" onclick="goTrain()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Pick today's focus</h2>
+      <p id="pick-time" class="sub"></p>
+      <div id="pick-options"></div>
+    </div>
 
-<div id="screen-session" class="screen">
-  <div class="sess-hdr">
-    <button class="bg" id="cancel-btn" onclick="abandonSession()">✕ Cancel</button>
-    <span id="session-progress" class="sess-prog"></span>
-  </div>
-  <h2 id="session-title" style="margin-bottom:2px;"></h2>
-  <p id="session-subtitle" class="sub"></p>
-  <div id="action-banner-area"></div>
-  <div id="session-body"></div>
-  <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:16px;margin-bottom:8px;">Complete session ✓</button>
-  <div id="session-support-nudge"></div>
-</div>
+    <div id="screen-session" class="screen">
+      <div class="sess-hdr">
+        <button class="bg" id="cancel-btn" onclick="abandonSession()">✕ Cancel</button>
+        <span id="session-progress" class="sess-prog"></span>
+      </div>
+      <h2 id="session-title" style="margin-bottom:2px;"></h2>
+      <p id="session-subtitle" class="sub"></p>
+      <div id="action-banner-area"></div>
+      <div id="session-body"></div>
+      <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:16px;margin-bottom:8px;">Complete session ✓</button>
+      <div id="session-support-nudge"></div>
+    </div>
 
-<div id="screen-history" class="screen">
-  <button class="bg" onclick="goTrain()" style="margin-bottom:16px;">← Back</button>
-  <h2 style="margin-bottom:16px;">Training history</h2>
-  <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;">📋 Copy for AI coach</button>
-  <div id="history-body"></div>
-</div>
-```
+    <div id="screen-history" class="screen">
+      <button class="bg" onclick="goTrain()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:16px;">Training history</h2>
+      <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;">📋 Copy for AI coach</button>
+      <div id="history-body"></div>
+    </div>
 
   </div>
 
 </div>
 
 <!-- TAB BAR -->
-
 <div class="tab-bar">
   <button class="tab-btn active" id="tab-btn-dash" onclick="switchTab('dash')">Dashboard</button>
   <button class="tab-btn" id="tab-btn-train" onclick="switchTab('train')">Train</button>
@@ -4136,6 +4121,5 @@ display:flex;align-items:center;justify-content:center;border-radius:50%;
   }
 })();
 </script>
-
 </body>
 </html>
