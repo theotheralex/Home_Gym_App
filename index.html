@@ -313,14 +313,50 @@ button:active{opacity:.75;transform:scale(.97);}
 
 /* New strength overview cards */
 .str-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
-.str-overview-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;cursor:pointer;transition:transform 0.1s,background 0.15s;display:flex;flex-direction:column;}
+.str-overview-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px;cursor:pointer;transition:transform 0.1s,background 0.15s;display:flex;flex-direction:column;aspect-ratio:1;overflow:hidden;}
+.str-card-fill{margin-top:auto;}
+
+/* PR type breakdown buckets */
+.pr-types{display:flex;gap:4px;}
+.pr-type{flex:1;background:var(--surface-2);border-radius:6px;padding:6px 4px;text-align:center;}
+.pr-type-num{font-size:14px;font-weight:800;line-height:1;}
+.pr-type-lbl{font-size:9px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.4px;margin-top:3px;}
+
+/* BW empty state pills */
+.bw-empty-row{display:flex;gap:4px;}
+.bw-empty-pill{flex:1;background:var(--surface-2);border-radius:6px;padding:6px;display:flex;align-items:center;justify-content:center;gap:3px;color:var(--text-3);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;}
+.bw-empty-pill i{font-size:11px;}
+
+/* Vertical muscle bars (replaces .str-card-bars on Muscles square) */
+.muscle-bars{display:flex;gap:2px;align-items:flex-end;height:32px;}
+.muscle-bar{flex:1;background:var(--i-fg);border-radius:2px 2px 0 0;}
+
+/* Mini-list rows (BW benchmarks, top lifts) */
+.mini-list{display:flex;flex-direction:column;gap:3px;}
+.mini-row{display:flex;justify-content:space-between;align-items:center;padding:5px 7px;background:var(--surface-2);border-radius:5px;font-size:11px;}
+.mini-row-name{color:var(--text-2);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;margin-right:6px;}
+.mini-row-val{color:var(--text);font-weight:700;flex-shrink:0;}
+
+/* Achievement "next" hint */
+.ach-next{font-size:10px;color:var(--text-3);margin-top:6px;font-weight:600;display:flex;align-items:center;gap:4px;line-height:1.3;}
+.ach-next i{font-size:11px;color:var(--w-fg);flex-shrink:0;}
+
+/* Career wide rectangle (overrides square aspect for full-width) */
+.career-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;cursor:pointer;display:flex;flex-direction:column;transition:transform 0.1s,background 0.15s;}
+.career-card:active{transform:scale(0.99);background:var(--surface-2);}
+.career-stats{display:flex;gap:14px;margin-top:6px;margin-bottom:10px;}
+.career-stat{flex:1;}
+.career-stat-num{font-size:22px;font-weight:800;line-height:1;}
+.career-stat-lbl{font-size:10px;color:var(--text-3);text-transform:uppercase;font-weight:700;letter-spacing:0.5px;margin-top:3px;}
+.career-spark{height:30px;width:100%;}
+.career-spark svg{width:100%;height:100%;display:block;}
 .str-overview-card:active{transform:scale(0.99);background:var(--surface-2);}
-.str-card-head{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.str-card-head{display:flex;align-items:center;gap:5px;margin-bottom:8px;}
 .str-card-icon{display:flex;align-items:center;justify-content:center;color:var(--text-2);}
-.str-card-title{flex:1;font-size:12px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:0.8px;}
+.str-card-title{flex:1;font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:0.5px;}
 .str-card-arrow{display:flex;align-items:center;justify-content:center;color:var(--text-3);}
-.str-card-stat{font-size:32px;font-weight:800;line-height:1;margin-bottom:6px;letter-spacing:-0.5px;}
-.str-card-sub{font-size:13px;color:var(--text-2);font-weight:600;line-height:1.35;margin-top:auto;}
+.str-card-stat{font-size:28px;font-weight:800;line-height:1;margin-bottom:4px;letter-spacing:-0.5px;}
+.str-card-sub{font-size:11px;color:var(--text-2);font-weight:600;line-height:1.3;}
 .str-card-cta{border-color:var(--accent);background:rgba(220,38,38,0.05);}
 .str-card-cta .str-card-stat{color:var(--accent);font-size:22px;}
 .str-card-goal{border-color:rgba(220,38,38,0.4);}
@@ -1033,9 +1069,9 @@ button:active{opacity:.75;transform:scale(.97);}
     const path=ICONS[name];if(!path)return'';
     return'<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">'+path+'</svg>';
   }
-  // Helper: build card header (icon + title + chevron)
+  // Helper: build card header (icon + title + chevron) — sized for square cards
   function cardHead(iconName,title){
-    return'<div class="str-card-head"><span class="str-card-icon">'+icon(iconName,18)+'</span><span class="str-card-title">'+title+'</span><span class="str-card-arrow">'+icon('chevron-right',16)+'</span></div>';
+    return'<div class="str-card-head"><span class="str-card-icon">'+icon(iconName,15)+'</span><span class="str-card-title">'+title+'</span><span class="str-card-arrow">'+icon('chevron-right',13)+'</span></div>';
   }
   const MUSCLES=['back','chest','shoulders','biceps','triceps','legs','core','traps','forearms'];
   let DBW=[5,10,20,30,40,50];
@@ -1333,6 +1369,18 @@ button:active{opacity:.75;transform:scale(.97);}
       .filter(p=>p.improvement&&p.exerciseName) // Only show improvement PRs in feed
       .sort((a,b)=>b.date-a.date)
       .slice(0,limit||5);
+  }
+
+  // PR counts by type — for the dashboard card breakdown bucket viz
+  function getPRTypeCounts(){
+    const counts={weight:0,reps:0,time:0};
+    if(!state.prs)return counts;
+    state.prs.filter(p=>p.improvement).forEach(p=>{
+      if(p.type==='weight')counts.weight++;
+      else if(p.type==='reps')counts.reps++;
+      else if(p.type==='time')counts.time++;
+    });
+    return counts;
   }
 
   // ── SCORE HISTORY ────────────────────────────────────────
@@ -3151,29 +3199,50 @@ button:active{opacity:.75;transform:scale(.97);}
     html+='<h3>Records</h3>';
     html+='<div class="str-cards-grid">';
 
-    // Card: PRs
+    // Card: PRs — type breakdown bucket viz fills the bottom
     const recentPRs=getRecentPRs(1);
     const totalPRs=state.prs?state.prs.filter(p=>p.improvement).length:0;
+    const prCounts=getPRTypeCounts();
+    const prFillHtml='<div class="str-card-fill"><div class="pr-types">'
+      +'<div class="pr-type"><div class="pr-type-num" style="color:'+(prCounts.weight?'var(--w-fg)':'var(--text-3)')+';">'+prCounts.weight+'</div><div class="pr-type-lbl">Weight</div></div>'
+      +'<div class="pr-type"><div class="pr-type-num" style="color:'+(prCounts.reps?'var(--i-fg)':'var(--text-3)')+';">'+prCounts.reps+'</div><div class="pr-type-lbl">Reps</div></div>'
+      +'<div class="pr-type"><div class="pr-type-num" style="color:'+(prCounts.time?'var(--s-fg)':'var(--text-3)')+';">'+prCounts.time+'</div><div class="pr-type-lbl">Time</div></div>'
+      +'</div></div>';
     html+='<div class="str-overview-card" onclick="showStrengthPRs()">'
       +cardHead('trophy','PRs')
       +(totalPRs>0
         ?'<div class="str-card-stat" style="color:var(--w-fg);">'+totalPRs+'</div><div class="str-card-sub">'+(recentPRs.length?'latest: '+recentPRs[0].exerciseName:'total earned')+'</div>'
         :'<div class="str-card-stat" style="color:var(--text-3);">0</div><div class="str-card-sub">push hard for PRs</div>')
+      +prFillHtml
       +'</div>';
 
-    // Card: Bodyweight
+    // Card: Bodyweight — top 2-3 benchmarks fill bottom when data; type pills when empty
     const bwBenchmarks=getBWBenchmarks();
     if(bwBenchmarks.length){
       const top=bwBenchmarks[0];
+      // Mini-list of next benchmarks (skipping the headline one)
+      const restBenchmarks=bwBenchmarks.slice(1,3);
+      let bwFillHtml='';
+      if(restBenchmarks.length){
+        bwFillHtml='<div class="str-card-fill"><div class="mini-list">'+restBenchmarks.map(b=>
+          '<div class="mini-row"><span class="mini-row-name">'+b.name+'</span><span class="mini-row-val">'+b.val+' <span style="color:var(--text-3);font-weight:600;">'+b.unit+'</span></span></div>'
+        ).join('')+'</div></div>';
+      }
       html+='<div class="str-overview-card" onclick="showStrengthBW()">'
         +cardHead('stretching','Bodyweight')
         +'<div class="str-card-stat" style="color:var(--d-fg);">'+top.val+' <span style="font-size:14px;color:var(--text-3);font-weight:600;">'+top.unit+'</span></div>'
         +'<div class="str-card-sub">'+top.name+'</div>'
+        +bwFillHtml
         +'</div>';
     }else{
       html+='<div class="str-overview-card" onclick="showStrengthBW()">'
         +cardHead('stretching','Bodyweight')
         +'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">log BW exercises</div>'
+        +'<div class="str-card-fill"><div class="bw-empty-row">'
+          +'<div class="bw-empty-pill"><i class="ti ti-arrow-up"></i>Push</div>'
+          +'<div class="bw-empty-pill"><i class="ti ti-arrow-down"></i>Pull</div>'
+          +'<div class="bw-empty-pill"><i class="ti ti-clock"></i>Hold</div>'
+        +'</div></div>'
         +'</div>';
     }
 
@@ -3218,25 +3287,25 @@ button:active{opacity:.75;transform:scale(.97);}
         +'</div>';
     }
 
-    // Card: By muscle group — mini bar chart
+    // Card: By muscle group — taller vertical bar viz
     const muscleBests=[];
     MUSCLES.forEach(m=>{
       const best=getBestForMuscle(m);
       if(best)muscleBests.push({muscle:m,e1rm:best.e1rm,...best});
     });
     if(muscleBests.length){
-      // Sort by e1rm descending for the bar viz
       const sortedBests=muscleBests.slice().sort((a,b)=>b.e1rm-a.e1rm);
       const maxE=sortedBests[0].e1rm||1;
-      const barCount=Math.min(7,sortedBests.length);
-      const barsHtml='<div class="str-card-bars">'+sortedBests.slice(0,barCount).map(mb=>{
-        const h=Math.max(15,Math.round((mb.e1rm/maxE)*100));
-        return'<div style="height:'+h+'%;opacity:'+(0.3+(h/100)*0.7).toFixed(2)+';"></div>';
-      }).join('')+'</div>';
+      const barCount=Math.min(6,sortedBests.length);
+      const barsHtml='<div class="str-card-fill"><div class="muscle-bars">'+sortedBests.slice(0,barCount).map((mb,i)=>{
+        const h=Math.max(20,Math.round((mb.e1rm/maxE)*100));
+        const op=(0.4+(1-i/barCount)*0.6).toFixed(2);
+        return'<div class="muscle-bar" style="height:'+h+'%;opacity:'+op+';"></div>';
+      }).join('')+'</div></div>';
       html+='<div class="str-overview-card" onclick="showStrengthMuscles()">'
         +cardHead('chart-bar','Muscles')
         +'<div class="str-card-stat" style="color:var(--i-fg);">'+muscleBests.length+'</div>'
-        +'<div class="str-card-sub" style="margin-top:0;">tracked · top: '+muscleBests[0].muscle+'</div>'
+        +'<div class="str-card-sub">tracked · top: '+(MUSCLE_LABELS[muscleBests[0].muscle]||muscleBests[0].muscle).toLowerCase()+'</div>'
         +barsHtml
         +'</div>';
     }else{
@@ -3246,42 +3315,84 @@ button:active{opacity:.75;transform:scale(.97);}
         +'</div>';
     }
 
-    // Card: Achievements — progress bar
+    // Card: Achievements — progress bar + next achievement hint
     const earned=getEarnedAchievements();
     const totalAch=ACHIEVEMENTS.length;
     const achPct=Math.round((earned.length/totalAch)*100);
+    const nextAch=getNextAchievements(1);
+    const nextAchHtml=nextAch.length
+      ?'<div class="ach-next"><i class="ti ti-target"></i>Next: '+nextAch[0].name+'</div>'
+      :(earned.length===totalAch?'<div class="ach-next" style="color:var(--s-fg);"><i class="ti ti-check" style="color:var(--s-fg);"></i>All unlocked</div>':'');
     html+='<div class="str-overview-card" onclick="showStrengthAchievements()">'
       +cardHead('medal','Achievements')
-      +'<div class="str-card-stat" style="color:var(--w-fg);">'+earned.length+'<span style="font-size:16px;color:var(--text-3);font-weight:700;"> / '+totalAch+'</span></div>'
+      +'<div class="str-card-stat" style="color:var(--w-fg);">'+earned.length+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+totalAch+'</span></div>'
       +(earned.length
-        ?'<div class="str-card-sub" style="margin-top:0;">latest unlocked</div>'
-        :'<div class="str-card-sub" style="margin-top:0;">train to unlock</div>')
-      +'<div class="str-card-progress"><div style="width:'+achPct+'%;background:var(--w-fg);"></div></div>'
+        ?'<div class="str-card-sub">latest unlocked</div>'
+        :'<div class="str-card-sub">train to unlock</div>')
+      +'<div class="str-card-fill"><div class="ach-progress" style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;"><div class="ach-progress-fill" style="height:100%;width:'+achPct+'%;background:var(--w-fg);border-radius:3px;"></div></div>'
+      +nextAchHtml
+      +'</div>'
       +'</div>';
 
-    // Card: All tracked lifts
-    const trackedLiftCount=Object.keys(state.e1rmHistory).filter(id=>ALL_COMPOUNDS.includes(id)&&state.e1rmHistory[id].length).length;
+    // Card: All tracked lifts — top 2 e1RM fill the bottom
+    const trackedLiftCount=Object.keys(state.e1rmHistory||{}).filter(id=>ALL_COMPOUNDS.includes(id)&&state.e1rmHistory[id].length).length;
+    const topLifts=getScoreBreakdown().slice(0,2);
+    const liftsFillHtml=topLifts.length
+      ?'<div class="str-card-fill"><div class="mini-list">'+topLifts.map(l=>
+          '<div class="mini-row"><span class="mini-row-name">'+l.name+'</span><span class="mini-row-val">'+l.e1rm+' <span style="color:var(--text-3);font-weight:600;">e1RM</span></span></div>'
+        ).join('')+'</div></div>'
+      :'';
     html+='<div class="str-overview-card" onclick="showStrengthLifts()">'
       +cardHead('trending-up','Lifts')
       +'<div class="str-card-stat" style="color:var(--i-fg);">'+trackedLiftCount+'</div>'
       +'<div class="str-card-sub">tracked compounds</div>'
+      +liftsFillHtml
       +'</div>';
 
     html+='</div>'; // close Training grid
 
     // ─── Lifetime: Career ───
+    // Career uses a different shape than the squares — wide rectangle with stats grid + sparkline.
+    // Reaches outside the str-cards-grid so we can apply different layout rules.
     html+='<h3>Lifetime</h3>';
-    html+='<div class="str-cards-grid">';
-
-    // Card: Career stats — spans both columns of its own grid row
     const lt=getLifetimeStats();
-    html+='<div class="str-overview-card" onclick="showStrengthCareer()" style="grid-column:1/-1;">'
+    // Format total volume (e.g. 13.4k, 487, 1.2M)
+    const fmtVol=(v)=>{
+      if(v>=1000000)return(v/1000000).toFixed(1).replace(/\.0$/,'')+'M';
+      if(v>=1000)return(v/1000).toFixed(1).replace(/\.0$/,'')+'k';
+      return String(v);
+    };
+    // Career sparkline — sessions per week over career
+    let careerSparkSvg='';
+    if(state.sessions&&state.sessions.length>=2){
+      const firstTs=state.sessions[0].timestamp;
+      const lastTs=state.sessions[state.sessions.length-1].timestamp;
+      const span=Math.max(1,lastTs-firstTs);
+      const buckets=Math.max(6,Math.min(20,Math.round(span/(7*86400000))));
+      const bucketSize=span/buckets;
+      const counts=new Array(buckets).fill(0);
+      state.sessions.forEach(s=>{
+        const idx=Math.min(buckets-1,Math.floor((s.timestamp-firstTs)/bucketSize));
+        counts[idx]++;
+      });
+      const maxC=Math.max(...counts)||1;
+      const w=300,h=30;
+      const pts=counts.map((c,i)=>{
+        const x=(i/(counts.length-1))*w;
+        const y=h-(c/maxC)*(h-2)-1;
+        return x.toFixed(1)+','+y.toFixed(1);
+      }).join(' ');
+      careerSparkSvg='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="var(--i-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+    html+='<div class="career-card" onclick="showStrengthCareer()">'
       +cardHead('calendar','Career')
-      +'<div class="str-card-stat">'+lt.sessionCount+'</div>'
-      +'<div class="str-card-sub">sessions · '+lt.trainingAgeMonths+' mo training</div>'
+      +'<div class="career-stats">'
+        +'<div class="career-stat"><div class="career-stat-num">'+lt.sessionCount+'</div><div class="career-stat-lbl">Sessions</div></div>'
+        +'<div class="career-stat"><div class="career-stat-num">'+lt.trainingAgeMonths+'</div><div class="career-stat-lbl">Mo training</div></div>'
+        +'<div class="career-stat"><div class="career-stat-num">'+fmtVol(lt.totalVolume)+'</div><div class="career-stat-lbl">Lb lifted</div></div>'
+      +'</div>'
+      +(careerSparkSvg?'<div class="career-spark">'+careerSparkSvg+'</div>':'')
       +'</div>';
-
-    html+='</div>'; // close Lifetime grid
 
     body.innerHTML=html;
     // rendered inline on dashboard
@@ -4720,7 +4831,7 @@ button:active{opacity:.75;transform:scale(.97);}
   if('serviceWorker' in navigator){
     // Clear old caches on load
     caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v8';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v9';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
