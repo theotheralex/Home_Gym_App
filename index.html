@@ -165,7 +165,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .rest-actions{display:flex;gap:10px;width:100%;max-width:320px;}
 .rest-btn{flex:1;min-height:56px;font-size:15px;font-weight:700;border-radius:var(--rl);}
 .rest-done{background:var(--s-bg);color:var(--s-fg);border:1.5px solid var(--s-br);}
-.rest-skip{background:var(--surface);color:var(--text-2);border:1px solid var(--border-strong);}
 .rest-add{flex:0;padding:0 16px;background:var(--surface);color:var(--text-2);border:1px solid var(--border-strong);font-size:13px;min-height:50px;border-radius:var(--r);}
 .toast{position:fixed;bottom:calc(env(safe-area-inset-bottom) + 100px);left:50%;transform:translateX(-50%);z-index:200;padding:12px 20px;border-radius:var(--rl);font-size:14px;font-weight:700;white-space:nowrap;pointer-events:none;animation:tin .2s ease,tout .3s ease 2.7s forwards;}
 @keyframes tin{from{opacity:0;transform:translateX(-50%) translateY(10px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
@@ -196,11 +195,7 @@ button:active{opacity:.75;transform:scale(.97);}
 .hist-meta{font-size:13px;color:var(--text-2);}
 .hist-vol{font-size:15px;font-weight:700;color:var(--text-2);}
 .install-hint{background:var(--i-bg);color:var(--i-fg);padding:14px;border-radius:var(--rl);font-size:13px;margin-bottom:16px;display:none;align-items:center;gap:10px;font-weight:500;}
-.superset-wrap{border-left:3px solid var(--i-fg);margin-left:6px;padding-left:0;margin-bottom:14px;}
-.superset-wrap .ex-card{margin-bottom:0;border-radius:0;border-left:none;}
-.superset-wrap .ex-card:first-child{border-radius:var(--rl) var(--rl) 0 0;}
-.superset-wrap .ex-card:last-child{border-radius:0 0 var(--rl) var(--rl);margin-bottom:0;}
-.superset-label{font-size:11px;font-weight:700;color:var(--i-fg);text-transform:uppercase;letter-spacing:1px;padding:6px 0 4px 10px;}
+/* Superset rendering moved to pair-header pattern (shared with Quick Session) */
 .drop-btn{min-height:40px;font-size:12px;font-weight:700;border-radius:var(--r);border:1px solid var(--w-br);background:var(--w-bg);color:var(--w-fg);width:100%;margin-top:6px;}
 .str-mini{background:var(--surface);border-radius:var(--rl);padding:14px;}
 .str-mini-name{font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -647,7 +642,6 @@ button:active{opacity:.75;transform:scale(.97);}
     <div class="rest-time"><span id="rest-display">1:30</span><small>rest</small></div>
   </div>
   <div class="rest-actions">
-    <button class="rest-btn rest-skip" onclick="skipRest()">Skip</button>
     <button class="rest-add" onclick="addRestTime(30)">+30s</button>
     <button class="rest-btn rest-done" onclick="skipRest()">Done</button>
   </div>
@@ -2541,8 +2535,9 @@ button:active{opacity:.75;transform:scale(.97);}
       const canDrop=exIsWeighted(ex)&&!sess.quickMode;
       const dropHtml=canDrop?'<div style="padding:0 10px 12px;"><button class="drop-btn" onclick="addDropset('+ei+')">+ Drop set (lower weight, no rest)</button></div>':'';
       const setsHtml='<div class="sets-wrap">'+e.sets.map((s,si)=>rSet(ei,si,s,ex)).join('')+'</div>';
-      // Quick Session adds A/B letter prefix and an in-pair class for styling hooks
-      const cardClass=sess.quickMode&&e.group!=null?'ex-card in-pair':'ex-card';
+      // Apply in-pair class to grouped exercises in both modes — gives pair-letter
+      // proper flex alignment in the ex-name. Quick = pair flow, Full = supersets.
+      const cardClass=e.group!=null?'ex-card in-pair':'ex-card';
       return{html:'<div class="'+cardClass+'"><div class="ex-hdr"><div class="ex-name">'+e.name+'</div><div class="ex-tags">'+tagHtml+'</div>'+cueHtml+'</div>'+tHtml+setsHtml+dropHtml+'</div>',group:e.group,ei:ei};
     });
 
@@ -2572,26 +2567,22 @@ button:active{opacity:.75;transform:scale(.97);}
         let j=i;
         while(j<cards.length&&cards[j].group===gid)j++;
         if(j-i>=2){
-          if(sess.quickMode){
-            // Build pair header with auto-generated muscle tag
-            const muscles=[];
-            for(let k=i;k<j;k++){
-              const ex=EX[sess.exercises[cards[k].ei].id];
-              const m=dominantMuscle(ex);
-              if(m)muscles.push((MUSCLE_LABELS[m]||m).toUpperCase());
-            }
-            const tagText=muscles.length?'<span class="pair-tag">'+muscles.join(' · ')+'</span>':'';
-            html+='<div class="pair-header"><i class="ti ti-stack-2"></i>Pair '+(gid+1)+tagText+'</div>';
-            // Render exercises with A/B letter prefix
-            for(let k=i;k<j;k++){
-              const letter=String.fromCharCode(65+(k-i)); // A, B
-              const cardHtml=cards[k].html.replace('<div class="ex-name">','<div class="ex-name"><span class="pair-letter">'+letter+'</span>');
-              html+=cardHtml;
-            }
-          }else{
-            html+='<div class="superset-wrap"><div class="superset-label">Superset</div>';
-            for(let k=i;k<j;k++)html+=cards[k].html;
-            html+='</div>';
+          // Both modes: pair header with auto-generated muscle tag + A/B letter prefixes.
+          // Label differs: Quick Session shows "Pair N" (always 3 pairs), Full Session
+          // shows "Superset" (situational, usually 1-2 max — no number to keep it clean).
+          const muscles=[];
+          for(let k=i;k<j;k++){
+            const ex=EX[sess.exercises[cards[k].ei].id];
+            const m=dominantMuscle(ex);
+            if(m)muscles.push((MUSCLE_LABELS[m]||m).toUpperCase());
+          }
+          const tagText=muscles.length?'<span class="pair-tag">'+muscles.join(' · ')+'</span>':'';
+          const labelText=sess.quickMode?'Pair '+(gid+1):'Superset';
+          html+='<div class="pair-header"><i class="ti ti-stack-2"></i>'+labelText+tagText+'</div>';
+          for(let k=i;k<j;k++){
+            const letter=String.fromCharCode(65+(k-i)); // A, B, C…
+            const cardHtml=cards[k].html.replace('<div class="ex-name">','<div class="ex-name"><span class="pair-letter">'+letter+'</span>');
+            html+=cardHtml;
           }
         }else{
           // Orphaned single exercise — render as normal card
@@ -2672,17 +2663,35 @@ button:active{opacity:.75;transform:scale(.97);}
     const isQuick=sess&&sess.quickMode;
     const exData=sess?sess.exercises[ei]:null;
     const isLastSet=exData?si===exData.sets.length-1:false;
+    // Compute current-set status up here so Quick Session can gate buttons on it
+    const current=getCurrentSet();
+    const isCurrentSet=current.ei===ei&&current.si===si;
     let btnRowHtml;
-    if(isQuick&&!isLastSet){
-      btnRowHtml='<div class="fb-row-done"><button class="fb-done" onclick="setDone('+ei+','+si+')"><i class="ti ti-check"></i>Done</button></div>';
+    if(isQuick&&!s.done){
+      // Quick Session: only the active (current) set shows its action button.
+      // Future undone sets stay quiet until their turn — keeps the UI focused
+      // on the one thing the user can act on right now.
+      if(!isCurrentSet){
+        btnRowHtml='';
+      }else if(!isLastSet){
+        // Sets 1 and 2: green Done button, no feedback rating
+        btnRowHtml='<div class="fb-row-done"><button class="fb-done" onclick="setDone('+ei+','+si+')"><i class="ti ti-check"></i>Done</button></div>';
+      }else{
+        // Last set: rating buttons (this is where progression adaptation comes from)
+        const fbs=['easy','good','hard','fail'].map(f=>{const sel=s.feedback===f?' sel-'+f:'';const lbl={easy:'Easy',good:'Good',hard:'Hard',fail:'Fail'};return'<button class="fb-btn'+sel+'" onclick="setFB('+ei+','+si+',\''+f+'\')">'+lbl[f]+'</button>';}).join('');
+        btnRowHtml='<div class="fb-row">'+fbs+'</div>';
+      }
+    }else if(isQuick&&s.done){
+      // Already done — no buttons (badge already shows status)
+      btnRowHtml='';
     }else{
+      // Full Session: rating buttons on all undone sets (existing behavior)
       const fbs=['easy','good','hard','fail'].map(f=>{const sel=s.feedback===f?' sel-'+f:'';const lbl={easy:'Easy',good:'Good',hard:'Hard',fail:'Fail'};return'<button class="fb-btn'+sel+'" onclick="setFB('+ei+','+si+',\''+f+'\')">'+lbl[f]+'</button>';}).join('');
       btnRowHtml='<div class="fb-row">'+fbs+'</div>';
     }
 
     const lc=s.done&&s.feedback?' logged-'+s.feedback:(s.done?' logged-done':'');
-    const current=getCurrentSet();
-    const isCurrent=(current.ei===ei&&current.si===si)?' set-current':'';
+    const isCurrent=isCurrentSet?' set-current':'';
     let bdg='';if(s.done&&s.feedback){const b=bdgFor(s.feedback);bdg='<span class="set-bdg" style="background:'+b.bg+';color:'+b.fg+';">'+b.label+'</span>';}
     else if(s.done){bdg='<span class="set-bdg" style="background:var(--s-bg);color:var(--s-fg);">DONE</span>';}
     const currentPill=isCurrent?'<span class="set-next-pill">GO</span>':'';
@@ -2959,6 +2968,16 @@ button:active{opacity:.75;transform:scale(.97);}
     const isWeighted=exIsWeighted(ex);
     const hasPartner=myGroup!=null;
 
+    // AUTO-DROPSET: if toggle on and criteria met, auto-add a dropset and
+    // skip the rest of the post-set flow (banners/scrolling). The added dropset
+    // becomes the user's next focus naturally. Skip when the just-rated set was
+    // itself a dropset (prevents nested dropsets on the same exercise).
+    if(!isDropsetSet&&shouldAutoDropset(ei,fb,ex,isLastSet,sess)){
+      sess.autoDropsetCount=(sess.autoDropsetCount||0)+1;
+      addDropset(ei);
+      return;
+    }
+
     // Check if superset partner has unfinished non-dropset sets
     function partnerNeedsWork(){
       if(!hasPartner)return false;
@@ -3081,6 +3100,48 @@ button:active{opacity:.75;transform:scale(.97);}
       }
     }
   };
+
+  // AUTO-DROPSET: criteria check for whether the app should automatically add a
+  // dropset to the current exercise. All conditions must be true. Used by setFB
+  // after a set is rated. Manual addDropset button bypasses these checks entirely.
+  function shouldAutoDropset(ei,fb,ex,isLastSet,sess){
+    // Toggle must be enabled
+    if(!state.profile||!state.profile.autoDropset)return false;
+    // Must be the last set of this exercise
+    if(!isLastSet)return false;
+    // Rating must indicate near-failure: 'hard', or 'easy' when at equipment ceiling
+    if(fb!=='hard'&&fb!=='easy')return false;
+    // Must be on adjustable weight (need to be able to drop)
+    if(!exIsAdj(ex))return false;
+    const exData=sess.exercises[ei];
+    const lastSet=exData.sets[exData.sets.length-1];
+    const lastW=lastSet.actualWeight||lastSet.targetWeight;
+    // 'easy' only fires when user can't bump weight further (at ceiling)
+    if(fb==='easy'&&xW(ex,lastW)>lastW)return false;
+    // Skip if already at minimum weight (nothing to drop to)
+    if(pW(ex,lastW)>=lastW)return false;
+    // Hypertrophy phase only — strength wants freshness, deload wants recovery
+    if(getPhase().key!=='hypertrophy')return false;
+    // Skip finisher exercises (already metabolic-stimulus oriented)
+    if(ex.type!=='compound'&&ex.type!=='accessory')return false;
+    // Frequency cap: max 1 auto-dropset per session
+    if((sess.autoDropsetCount||0)>=1)return false;
+    // Skip if exercise already has a dropset (manual or auto)
+    if(exData.sets.some(s=>s.isDropset))return false;
+    // Don't fire mid-superset round — wait until partner is also done with prescribed sets
+    if(exData.group!=null){
+      const partners=sess.exercises.filter(e=>e.group===exData.group&&e!==exData);
+      if(partners.some(p=>p.sets.some(s=>!s.done&&!s.isDropset)))return false;
+    }
+    // Full Session only: skip the first compound of the session (preserve strength
+    // for the 7+ remaining exercises). Quick Session has no first-compound exemption
+    // since the cascade is much smaller (only 6 exercises in pairs).
+    if(!sess.quickMode&&ex.type==='compound'){
+      const firstCompoundIdx=sess.exercises.findIndex(e=>EX[e.id]&&EX[e.id].type==='compound');
+      if(firstCompoundIdx===ei)return false;
+    }
+    return true;
+  }
 
   // DROPSET: add a new set with weight dropped one step, no rest
   window.addDropset=function(ei){
@@ -4885,6 +4946,15 @@ button:active{opacity:.75;transform:scale(.97);}
     );
   };
 
+  // Inline toggle for auto-add dropsets (no modal — single-tap flip)
+  window.toggleAutoDropset=function(){
+    if(!state.profile)return;
+    state.profile.autoDropset=!state.profile.autoDropset;
+    save();
+    showSettings();
+    toast(state.profile.autoDropset?'Auto-dropsets on':'Auto-dropsets off',state.profile.autoDropset?'hard':'good');
+  };
+
   window.editGoal=function(){
     const cur=state.profile?.goal||'general';
     const goals=[
@@ -5095,6 +5165,12 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="set-row editable" onclick="editDaysPerWeek()"><span class="set-row-label">Training days/week</span><span class="set-row-value">'+(p.daysPerWeek||3)+'</span></div>'
       +'</div>';
 
+    // Intensity techniques — opt-in features that push the user harder on hard last sets
+    html+='<div class="set-section"><div class="set-section-title">Intensity techniques</div>'
+      +'<div class="set-row editable" onclick="toggleAutoDropset()"><span class="set-row-label">Auto-add dropsets</span><span class="set-row-value" style="color:'+(p.autoDropset?'var(--accent)':'var(--text-3)')+';font-weight:700;">'+(p.autoDropset?'On':'Off')+'</span></div>'
+      +'<div style="font-size:11px;color:var(--text-3);padding:4px 14px 12px;line-height:1.5;">When you push the last set hard on a weighted exercise, the app drops the weight and adds an extra set. Manual button stays available either way.</div>'
+      +'</div>';
+
     html+='<div class="set-section"><div class="set-section-title">Data</div>'
       +'<div class="set-row"><span class="set-row-label">Total sessions</span><span class="set-row-value">'+state.sessions.length+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">Weight entries</span><span class="set-row-value">'+(state.weightLog?state.weightLog.length:0)+'</span></div>'
@@ -5156,7 +5232,7 @@ button:active{opacity:.75;transform:scale(.97);}
   if('serviceWorker' in navigator){
     // Clear old caches on load
     caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v11';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v13';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
