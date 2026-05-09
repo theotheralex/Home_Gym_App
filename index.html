@@ -127,6 +127,32 @@ button:active{opacity:.75;transform:scale(.97);}
 .fb-btn.sel-good{background:var(--w-bg);border-color:var(--w-br);color:var(--w-fg);}
 .fb-btn.sel-hard{background:var(--i-bg);border-color:var(--i-br);color:var(--i-fg);}
 .fb-btn.sel-fail{background:var(--s-bg);border-color:var(--s-br);color:var(--s-fg);}
+/* Session CTA cards on Train tab — Quick + Full sit side by side */
+.session-cta-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.session-cta{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:transform 0.1s,background 0.15s;font-family:inherit;text-align:left;color:var(--text);-webkit-appearance:none;appearance:none;}
+.session-cta:active{transform:scale(0.99);background:var(--surface-2);}
+.session-cta.primary{background:linear-gradient(135deg,rgba(239,68,68,0.18) 0%,var(--surface) 80%);border-color:var(--accent);}
+.session-cta-icon{width:32px;height:32px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--text);}
+.session-cta-icon i{font-size:18px;}
+.session-cta.primary .session-cta-icon{background:rgba(239,68,68,0.2);color:var(--accent);}
+.session-cta-name{font-size:18px;font-weight:800;letter-spacing:-0.3px;margin-top:4px;}
+.session-cta-meta{font-size:11px;color:var(--text-3);font-weight:600;}
+/* Quick Session — Done button replaces feedback buttons on non-last sets */
+.fb-row-done{display:flex;}
+.fb-done{flex:1;min-height:50px;font-size:13px;font-weight:700;border-radius:var(--r);border:1.5px solid var(--s-fg);background:var(--s-bg);color:var(--s-fg);font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
+.fb-done:active{background:rgba(34,197,94,0.25);transform:scale(0.99);}
+.fb-done i{font-size:15px;}
+/* Quick Session — pair structure visualization */
+.pair-progress-row{display:flex;gap:6px;margin-bottom:14px;}
+.pair-prog-dot{flex:1;height:4px;background:var(--surface-2);border-radius:2px;}
+.pair-prog-dot.done{background:var(--s-fg);}
+.pair-prog-dot.active{background:var(--accent);}
+.pair-header{display:flex;align-items:center;gap:8px;margin:18px 0 8px;font-size:11px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:1px;padding:0 4px;}
+.pair-header:first-of-type{margin-top:8px;}
+.pair-header i{font-size:13px;}
+.pair-header .pair-tag{margin-left:auto;background:var(--surface-2);color:var(--text-3);padding:3px 8px;border-radius:5px;font-weight:700;letter-spacing:0.5px;font-size:9px;}
+.pair-letter{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--bg);font-size:10px;font-weight:800;color:var(--accent);text-align:center;line-height:20px;margin-right:8px;flex-shrink:0;}
+.ex-card.in-pair .ex-name{display:flex;align-items:center;}
 #rest-overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(10,10,10,0.95);flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:40px 24px;}
 #rest-overlay.visible{display:flex;}
 .rest-title{font-size:13px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:1.5px;}
@@ -973,9 +999,17 @@ button:active{opacity:.75;transform:scale(.97);}
     <div id="screen-train-home" class="screen active">
       <h1 style="margin-bottom:2px;">Train</h1>
       <p class="sub" id="train-phase-info">Pick your session length</p>
-      <div class="grid2" style="margin-bottom:16px;">
-        <button class="bp" onclick="startFlow(30)">Half session</button>
-        <button class="bp" onclick="startFlow(60)">Full session</button>
+      <div class="session-cta-pair">
+        <button class="session-cta primary" onclick="startFlow(60)">
+          <div class="session-cta-icon"><i class="ti ti-flame"></i></div>
+          <div class="session-cta-name">Full Session</div>
+          <div class="session-cta-meta">~50 min · 8 exercises</div>
+        </button>
+        <button class="session-cta" onclick="startQuickFlow()">
+          <div class="session-cta-icon"><i class="ti ti-bolt"></i></div>
+          <div class="session-cta-name">Quick Session</div>
+          <div class="session-cta-meta">~22 min · 6 exercises</div>
+        </button>
       </div>
       <h3>Quick recovery check</h3>
       <div id="recovery-train"></div>
@@ -1733,6 +1767,18 @@ button:active{opacity:.75;transform:scale(.97);}
       supersets:[[0,1]]},
   };
 
+  // ── QUICK SESSION STRUCTURES ─────────────────────────────
+  // Mike Israetel's protocol: 6 exercises in 3 non-overlapping pairs.
+  // Each pair list = [pool_for_A, pool_for_B] where A and B target different muscles.
+  // The same focus types as Full Session are supported; the structure differs.
+  const QUICK_STRUCTURES={
+    pull:{pairs:[['back_compound','bicep'],['back_accessory','trap'],['back_compound','core']]},
+    push:{pairs:[['chest_compound','tricep'],['shoulder_compound','chest_accessory'],['shoulder_accessory','tricep']]},
+    legs:{pairs:[['leg_compound','core'],['leg_compound','leg_accessory'],['leg_unilateral','core']]},
+    upper:{pairs:[['chest_compound','back_compound'],['shoulder_compound','bicep'],['tricep','back_accessory']]},
+    conditioning:{pairs:[['power','core'],['leg_compound','cardio'],['back_compound','power']]},
+  };
+
   // ── PERIODIZATION ──────────────────────────────────────
   const PHASES={
     hypertrophy:{name:'Hypertrophy',repMult:[1,1],setMult:1,deload:false,sessions:12},
@@ -1887,8 +1933,67 @@ button:active{opacity:.75;transform:scale(.97);}
     return result;
   }
 
+  // ── QUICK SESSION GENERATOR ──────────────────────────────
+  // Mike Israetel's protocol: 6 exercises in 3 non-overlapping supersetted pairs,
+  // 3 sets of 15-20 reps each. Same focus types as Full Session, different structure.
+  // Note (v1): uses the exercise's existing progression weight as a starting point.
+  // Users may want to lower the weight manually to hit the 15-20 rep target — the
+  // mid-set adjustment logic in setFB will calibrate from there.
+  function buildQuickSess(focusKey){
+    const struct=QUICK_STRUCTURES[focusKey];
+    if(!struct)return null;
+    const f=FOCUS_TYPES[focusKey];
+    const phase=getPhase();
+    const recent=getRecentExercises();
+    const used=new Set();
+
+    // Build exercise list from the 3 pair structures.
+    // Track pair index as `group` so the existing superset banner logic fires.
+    const exercises=[];
+    struct.pairs.forEach((pairPools,pairIdx)=>{
+      pairPools.forEach(poolName=>{
+        const picks=pickFromPool(poolName,1,recent,used);
+        if(picks.length>0){
+          exercises.push({id:picks[0],group:pairIdx});
+        }
+      });
+    });
+
+    const QUICK_REP_TARGET=15; // start of Mike's 15-20 range
+    const QUICK_SETS=3;
+
+    return{
+      templateKey:focusKey,templateName:f.name,
+      time:'quick',quickMode:true,
+      timestamp:Date.now(),phase:phase.key,
+      exercises:exercises.map(({id,group},i)=>{
+        const ex=EX[id],prog=gProg(id);
+        // For the high-rep protocol, prescribe at the bottom of Mike's range as a target.
+        // The user adjusts weight to hit this in practice; the in-session adaptation logic
+        // in setFB handles weight changes.
+        const targetReps=QUICK_REP_TARGET;
+        const sets=[];
+        for(let j=0;j<QUICK_SETS;j++){
+          let w=prog.weight;
+          // Optional: drop weight 30% as starting suggestion for adjustable equipment,
+          // since prog.weight is calibrated to lower-rep work.
+          if(exIsAdj(ex)&&w!=null){
+            const lighter=Math.round(w*0.7);
+            if(exIsAdj(ex)){
+              // Snap to available pool weight at or below the lighter target
+              const pool=exPool(ex);
+              w=pool.filter(p=>p<=lighter).pop()||pool[0];
+            }
+          }
+          sets.push({targetWeight:w,targetReps:targetReps,actualWeight:w,actualReps:targetReps,feedback:null,done:false});
+        }
+        return{id,name:ex.name,sets,group};
+      })
+    };
+  }
+
   let state={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},prs:[],scoreHistory:[],achievements:{},strengthGoal:null,musclePriorities:{},weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
-  let pendingTime=null,restIv=null,restTotal=0,restRem=0,pendingScroll=-1;
+  let pendingTime=null,pendingMode='full',restIv=null,restTotal=0,restRem=0,pendingScroll=-1;
 
   function load(){try{const r=localStorage.getItem(SK);if(r)state=Object.assign(state,JSON.parse(r));}catch(e){}loadDBW();loadKBW();}
   function loadKBW(){
@@ -1912,7 +2017,85 @@ button:active{opacity:.75;transform:scale(.97);}
     if(exIsKB(ex))return nKB(d[id]||25);
     return nDB(d[id]||20);
   }
-  function gProg(id){if(!state.progressions[id]){const ex=EX[id];state.progressions[id]={weight:gSW(id),reps:ex.repRange[0],consecutiveHard:0,consecutiveFailCount:0,lastResult:null};}return state.progressions[id];}
+
+  // Smart starting weight for a new exercise — uses the user's existing progressions
+  // for related exercises (same dominant muscle) instead of the hardcoded static default.
+  // Falls back to gSW (static) when user has no relevant history.
+  // Conservative bias: takes 80% of the median of similar-exercise weights, then snaps
+  // to available pool weight if adjustable. Bounded below by the static default so we
+  // don't underestimate for users who skew toward isolation work.
+  function estimateNewExerciseProg(id){
+    const ex=EX[id];
+    if(!ex)return null;
+    // Bodyweight, time-based, and fixed-weight exercises don't need estimation
+    if((ex.noWeight&&!ex.hasWeight)||(ex.unit==='sec'&&!ex.hasWeight)||ex.fixedWeight){
+      return{weight:gSW(id),reps:ex.repRange[0]};
+    }
+    const dom=dominantMuscle(ex);
+    if(!dom){return{weight:gSW(id),reps:ex.repRange[0]};}
+
+    // Collect weights from user's existing progressions where the OTHER exercise
+    // shares the same dominant muscle. Tier matches by exercise type so a compound
+    // estimate isn't pulled down by isolation work or vice versa.
+    const sameType=[],otherType=[];
+    Object.keys(state.progressions||{}).forEach(otherId=>{
+      const otherEx=EX[otherId];
+      const prog=state.progressions[otherId];
+      if(!otherEx||!prog||prog.weight==null)return;
+      if(otherId===id)return;
+      const otherDom=dominantMuscle(otherEx);
+      if(otherDom!==dom)return;
+      // Skip cross-equipment estimates (DB → KB or vice versa) — different load profiles
+      if(exIsKB(ex)!==exIsKB(otherEx))return;
+      if(otherEx.type===ex.type)sameType.push(prog.weight);
+      else otherType.push(prog.weight);
+    });
+
+    let median=null;
+    if(sameType.length>0){
+      sameType.sort((a,b)=>a-b);
+      median=sameType[Math.floor(sameType.length/2)];
+    }else if(otherType.length>0){
+      // Cross-type fallback: scale up if estimating compound from accessories,
+      // scale down if estimating accessory from compounds
+      otherType.sort((a,b)=>a-b);
+      const otherMedian=otherType[Math.floor(otherType.length/2)];
+      median=ex.type==='compound'?Math.round(otherMedian*1.4):Math.round(otherMedian*0.6);
+    }
+
+    if(median==null){return{weight:gSW(id),reps:ex.repRange[0]};}
+
+    // 80% conservative bias — leave room to grow into the prescription rather than
+    // missing reps on the first session
+    let estimated=Math.round(median*0.8);
+
+    // Don't go below the static default (avoids underestimating from sparse data)
+    const staticDefault=gSW(id);
+    if(staticDefault!=null&&estimated<staticDefault)estimated=staticDefault;
+
+    // Snap to available pool weight if adjustable
+    if(exIsAdj(ex)){
+      const pool=exPool(ex);
+      const fit=pool.filter(p=>p<=estimated).pop();
+      estimated=fit!=null?fit:pool[0];
+    }
+
+    return{weight:estimated,reps:ex.repRange[0]};
+  }
+
+  function gProg(id){
+    if(!state.progressions[id]){
+      const est=estimateNewExerciseProg(id);
+      state.progressions[id]={
+        weight:est?est.weight:gSW(id),
+        reps:est?est.reps:EX[id].repRange[0],
+        consecutiveHard:0,consecutiveFailCount:0,lastResult:null,
+        // Mark as estimated so we could surface this to the user later if needed
+        estimatedFrom:est&&est.weight!==gSW(id)?'related':null
+      };
+    }
+    return state.progressions[id];
+  }
 
   function adapt(id,fb,aReps,aWeight){
     const ex=EX[id],prog=gProg(id);
@@ -2276,8 +2459,9 @@ button:active{opacity:.75;transform:scale(.97);}
 
   window.startFlow=function(time){
     pendingTime=time;
+    pendingMode='full';
     const phase=getPhase();
-    const sessionLabel=time===60?'Full session':'Half session';
+    const sessionLabel='Full session';
     document.getElementById('pick-time').textContent=sessionLabel+' · '+phase.phase.name+' phase ('+phase.sessionInPhase+'/'+phase.totalInPhase+')';
     const opts=pickFocusTypes(time);
     // Cache estimates once — avoid recalculating per card
@@ -2293,7 +2477,30 @@ button:active{opacity:.75;transform:scale(.97);}
     showTrainScreen('pick');
   };
 
-  window.pickTemplate=function(key){state.currentSession=buildSess(key,pendingTime);saveNow();renderSess();showTrainScreen('session');requestWakeLock();};
+  // Quick Session entry — Mike Israetel's 3-pair protocol.
+  // Same focus picker as Full Session but builds a Quick Session at the end.
+  window.startQuickFlow=function(){
+    pendingTime=null;
+    pendingMode='quick';
+    const phase=getPhase();
+    document.getElementById('pick-time').textContent='Quick Session · '+phase.phase.name+' phase ('+phase.sessionInPhase+'/'+phase.totalInPhase+')';
+    // Quick Session focus options — only the focus types that have Quick structures.
+    // Use 60min estimates as a basis for "freshness" sorting (recovery), but show ~22 min duration.
+    const opts=pickFocusTypes(60).filter(o=>QUICK_STRUCTURES[o.key]);
+    document.getElementById('pick-options').innerHTML=opts.map((o,i)=>{
+      const rec=i===0?'<span class="pill">Recommended</span>':'';
+      return'<div class="pick-card" onclick="pickTemplate(\''+o.key+'\')">'
+        +'<div><div class="pick-name">'+o.focus.name+rec+'</div><div class="pick-sub">'+o.focus.subtitle+'</div></div>'
+        +'<div class="pick-meta">'+o.avgRecovery+'%<br><span style="font-size:11px;font-weight:500;">fresh</span><br><span style="font-size:11px;font-weight:500;color:var(--text-3);">~22 min</span></div></div>';
+    }).join('');
+    showTrainScreen('pick');
+  };
+
+  window.pickTemplate=function(key){
+    // Route to Quick or Full builder based on current pendingMode.
+    state.currentSession=pendingMode==='quick'?buildQuickSess(key):buildSess(key,pendingTime);
+    saveNow();renderSess();showTrainScreen('session');requestWakeLock();
+  };
 
   function updProg(){
     const sess=state.currentSession;if(!sess)return;
@@ -2302,13 +2509,22 @@ button:active{opacity:.75;transform:scale(.97);}
     document.getElementById('session-finish').style.display=done>0?'block':'none';
   }
 
+  // Returns the dominant muscle of an exercise (highest weight in muscles map)
+  function dominantMuscle(ex){
+    if(!ex||!ex.muscles)return null;
+    let max=0,best=null;
+    Object.entries(ex.muscles).forEach(([m,v])=>{if(v>max){max=v;best=m;}});
+    return best;
+  }
+
   function renderSess(){
     const sess=state.currentSession;if(!sess)return;
     document.getElementById('session-title').textContent=sess.templateName;
     const phaseLabel=sess.phase?(' · '+sess.phase.charAt(0).toUpperCase()+sess.phase.slice(1)):'';
-    const sessLabel=sess.time===60?'Full session':'Half session';
-    if(!sess.cachedEstimate)sess.cachedEstimate=estimateTime(sess.templateKey,sess.time);
-    document.getElementById('session-subtitle').textContent=sessLabel+' · '+sess.exercises.length+' exercises · ~'+sess.cachedEstimate+' min'+phaseLabel;
+    const sessLabel=sess.quickMode?'Quick Session':(sess.time===60?'Full session':'Half session');
+    if(!sess.quickMode&&!sess.cachedEstimate)sess.cachedEstimate=estimateTime(sess.templateKey,sess.time);
+    const estLabel=sess.quickMode?'~22 min':('~'+sess.cachedEstimate+' min');
+    document.getElementById('session-subtitle').textContent=sessLabel+' · '+sess.exercises.length+' exercises · '+estLabel+phaseLabel;
     updProg();
 
     // Build exercise cards with group awareness
@@ -2321,15 +2537,33 @@ button:active{opacity:.75;transform:scale(.97);}
       const cueHtml=ex.cues&&ex.cues.length?'<button class="cue-toggle" onclick="toggleCues(\''+ei+'\')" id="cue-btn-'+ei+'"><i class="ti ti-chevron-right" style="font-size:14px;margin-right:4px;" id="cue-chev-'+ei+'"></i>Form cues</button><div class="cue-panel" id="cue-'+ei+'"><ol>'+ex.cues.map(c=>'<li>'+c+'</li>').join('')+'</ol>'+demoLink+'</div>':'';
       const tSecs=ex.unit==='sec'?ex.repRange[0]:null;
       const tHtml=tSecs?'<div class="ex-timer-wrap" id="ex-timer-'+ei+'"><div class="ex-timer-disp">'+Math.floor(tSecs/60)+':'+(tSecs%60<10?'0':'')+tSecs%60+'</div><div class="ex-timer-row"><button class="ex-tbtn bs ex-sbt">Start</button><button class="ex-tbtn bs ex-rbt">Reset</button></div></div>':'';
-      // Dropset button — only for weighted exercises
-      const canDrop=exIsWeighted(ex);
+      // Dropset button — only for weighted exercises (skip in quickMode to keep flow tight)
+      const canDrop=exIsWeighted(ex)&&!sess.quickMode;
       const dropHtml=canDrop?'<div style="padding:0 10px 12px;"><button class="drop-btn" onclick="addDropset('+ei+')">+ Drop set (lower weight, no rest)</button></div>':'';
       const setsHtml='<div class="sets-wrap">'+e.sets.map((s,si)=>rSet(ei,si,s,ex)).join('')+'</div>';
-      return{html:'<div class="ex-card"><div class="ex-hdr"><div class="ex-name">'+e.name+'</div><div class="ex-tags">'+tagHtml+'</div>'+cueHtml+'</div>'+tHtml+setsHtml+dropHtml+'</div>',group:e.group,ei:ei};
+      // Quick Session adds A/B letter prefix and an in-pair class for styling hooks
+      const cardClass=sess.quickMode&&e.group!=null?'ex-card in-pair':'ex-card';
+      return{html:'<div class="'+cardClass+'"><div class="ex-hdr"><div class="ex-name">'+e.name+'</div><div class="ex-tags">'+tagHtml+'</div>'+cueHtml+'</div>'+tHtml+setsHtml+dropHtml+'</div>',group:e.group,ei:ei};
     });
 
-    // Wrap superset groups — only if group has 2+ exercises
+    // Wrap groups — for Quick Session show pair headers; for Full Session show "Superset" label
     let html='';
+
+    // Quick Session: prepend pair-progress dots at the top (one per pair)
+    if(sess.quickMode){
+      const pairCount=Math.max.apply(null,sess.exercises.map(e=>e.group!=null?e.group:-1))+1;
+      const progDotsHtml=[];
+      for(let p=0;p<pairCount;p++){
+        // A pair is "done" if all sets in both partner exercises are done.
+        const inPair=sess.exercises.filter(e=>e.group===p);
+        const allDone=inPair.length>0&&inPair.every(ex=>ex.sets.every(s=>s.done));
+        const anyDone=inPair.some(ex=>ex.sets.some(s=>s.done));
+        const cls=allDone?'pair-prog-dot done':(anyDone?'pair-prog-dot active':'pair-prog-dot');
+        progDotsHtml.push('<div class="'+cls+'"></div>');
+      }
+      html+='<div class="pair-progress-row">'+progDotsHtml.join('')+'</div>';
+    }
+
     let i=0;
     while(i<cards.length){
       const c=cards[i];
@@ -2338,9 +2572,27 @@ button:active{opacity:.75;transform:scale(.97);}
         let j=i;
         while(j<cards.length&&cards[j].group===gid)j++;
         if(j-i>=2){
-          html+='<div class="superset-wrap"><div class="superset-label">Superset</div>';
-          for(let k=i;k<j;k++)html+=cards[k].html;
-          html+='</div>';
+          if(sess.quickMode){
+            // Build pair header with auto-generated muscle tag
+            const muscles=[];
+            for(let k=i;k<j;k++){
+              const ex=EX[sess.exercises[cards[k].ei].id];
+              const m=dominantMuscle(ex);
+              if(m)muscles.push((MUSCLE_LABELS[m]||m).toUpperCase());
+            }
+            const tagText=muscles.length?'<span class="pair-tag">'+muscles.join(' · ')+'</span>':'';
+            html+='<div class="pair-header"><i class="ti ti-stack-2"></i>Pair '+(gid+1)+tagText+'</div>';
+            // Render exercises with A/B letter prefix
+            for(let k=i;k<j;k++){
+              const letter=String.fromCharCode(65+(k-i)); // A, B
+              const cardHtml=cards[k].html.replace('<div class="ex-name">','<div class="ex-name"><span class="pair-letter">'+letter+'</span>');
+              html+=cardHtml;
+            }
+          }else{
+            html+='<div class="superset-wrap"><div class="superset-label">Superset</div>';
+            for(let k=i;k<j;k++)html+=cards[k].html;
+            html+='</div>';
+          }
         }else{
           // Orphaned single exercise — render as normal card
           html+=cards[i].html;
@@ -2413,15 +2665,61 @@ button:active{opacity:.75;transform:scale(.97);}
     }
     const rLbl=ex.unit==='sec'?'s':'reps';
     const rIn='<input class="rinput" type="number" inputmode="numeric" value="'+s.actualReps+'" onchange="updSet('+ei+','+si+',\'actualReps\',this.value)"><span class="iunit">'+rLbl+'</span>';
-    const fbs=['easy','good','hard','fail'].map(f=>{const sel=s.feedback===f?' sel-'+f:'';const lbl={easy:'Easy',good:'Good',hard:'Hard',fail:'Fail'};return'<button class="fb-btn'+sel+'" onclick="setFB('+ei+','+si+',\''+f+'\')">'+lbl[f]+'</button>';}).join('');
-    const lc=s.done&&s.feedback?' logged-'+s.feedback:'';
+
+    // Quick Session: sets 1 and 2 show a single Done button. Last set shows the rating buttons.
+    // This keeps the superset rhythm tight while preserving progression input on the last set.
+    const sess=state.currentSession;
+    const isQuick=sess&&sess.quickMode;
+    const exData=sess?sess.exercises[ei]:null;
+    const isLastSet=exData?si===exData.sets.length-1:false;
+    let btnRowHtml;
+    if(isQuick&&!isLastSet){
+      btnRowHtml='<div class="fb-row-done"><button class="fb-done" onclick="setDone('+ei+','+si+')"><i class="ti ti-check"></i>Done</button></div>';
+    }else{
+      const fbs=['easy','good','hard','fail'].map(f=>{const sel=s.feedback===f?' sel-'+f:'';const lbl={easy:'Easy',good:'Good',hard:'Hard',fail:'Fail'};return'<button class="fb-btn'+sel+'" onclick="setFB('+ei+','+si+',\''+f+'\')">'+lbl[f]+'</button>';}).join('');
+      btnRowHtml='<div class="fb-row">'+fbs+'</div>';
+    }
+
+    const lc=s.done&&s.feedback?' logged-'+s.feedback:(s.done?' logged-done':'');
     const current=getCurrentSet();
     const isCurrent=(current.ei===ei&&current.si===si)?' set-current':'';
     let bdg='';if(s.done&&s.feedback){const b=bdgFor(s.feedback);bdg='<span class="set-bdg" style="background:'+b.bg+';color:'+b.fg+';">'+b.label+'</span>';}
+    else if(s.done){bdg='<span class="set-bdg" style="background:var(--s-bg);color:var(--s-fg);">DONE</span>';}
     const currentPill=isCurrent?'<span class="set-next-pill">GO</span>':'';
     const dropTag=s.isDropset?'<span class="tag" style="background:var(--w-bg);color:var(--w-fg);">Dropset</span>':'';
-    return'<div class="set-card'+lc+isCurrent+'" id="set-'+ei+'-'+si+'"><div class="set-row1"><span class="set-lbl">Set '+(si+1)+currentPill+dropTag+bdg+'</span><div class="set-inputs">'+wIn+(wIn?'<span class="set-sep">·</span>':'')+rIn+'</div></div><div class="fb-row">'+fbs+'</div></div>';
+    return'<div class="set-card'+lc+isCurrent+'" id="set-'+ei+'-'+si+'"><div class="set-row1"><span class="set-lbl">Set '+(si+1)+currentPill+dropTag+bdg+'</span><div class="set-inputs">'+wIn+(wIn?'<span class="set-sep">·</span>':'')+rIn+'</div></div>'+btnRowHtml+'</div>';
   }
+
+  // Quick Session — mark a non-last set as done without recording feedback.
+  // Triggers the same partner-switch banner as the rated path so the user
+  // alternates exercises in the pair without interrupting the rhythm.
+  window.setDone=function(ei,si){
+    const sess=state.currentSession;
+    if(!sess||!sess.exercises[ei])return;
+    const exData=sess.exercises[ei],set=exData.sets[si];
+    if(!set)return;
+    set.done=true; // intentionally no feedback — last set will carry the rating
+    save();reRSet(ei,si);updProg();
+    updatePairProgressDots();
+
+    // Switch to partner if this pair has unfinished sets there
+    const myGroup=exData.group;
+    if(myGroup!=null){
+      const partners=sess.exercises.filter(e=>e.group===myGroup&&e!==exData);
+      const partnerNeedsWork=partners.some(p=>p.sets.some(s=>!s.done));
+      if(partnerNeedsWork){
+        const nextIdx=sess.exercises.findIndex((e,i)=>i!==ei&&e.group===myGroup&&e.sets.some(s=>!s.done));
+        if(nextIdx>=0){
+          const partnerName=EX[sess.exercises[nextIdx].id].name;
+          banner('Switch to '+partnerName,'Quick rest, then go','hard');
+          setTimeout(()=>{
+            const cards=document.querySelectorAll('.ex-card');
+            if(cards[nextIdx])cards[nextIdx].scrollIntoView({behavior:'smooth',block:'start'});
+          },400);
+        }
+      }
+    }
+  };
 
   function reRSet(ei,si){
     const sess=state.currentSession;if(!sess)return;
@@ -2513,6 +2811,24 @@ button:active{opacity:.75;transform:scale(.97);}
     }
     save();
   };
+
+  // Refresh the pair progress dots at the top of Quick Session screen without full re-render.
+  // Called after every set completion (rated or done) so dots stay in sync.
+  function updatePairProgressDots(){
+    const sess=state.currentSession;
+    if(!sess||!sess.quickMode)return;
+    const dotsRow=document.querySelector('.pair-progress-row');
+    if(!dotsRow)return;
+    const pairCount=Math.max.apply(null,sess.exercises.map(e=>e.group!=null?e.group:-1))+1;
+    const dots=[];
+    for(let p=0;p<pairCount;p++){
+      const inPair=sess.exercises.filter(e=>e.group===p);
+      const allDone=inPair.length>0&&inPair.every(ex=>ex.sets.every(s=>s.done));
+      const anyDone=inPair.some(ex=>ex.sets.some(s=>s.done));
+      dots.push('<div class="'+(allDone?'pair-prog-dot done':(anyDone?'pair-prog-dot active':'pair-prog-dot'))+'"></div>');
+    }
+    dotsRow.innerHTML=dots.join('');
+  }
 
   window.setFB=function(ei,si,fb){
     const sess=state.currentSession;
@@ -2635,7 +2951,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Check if bodyweight exercise is past its ceiling
     const bwCeiling=noL&&set.actualReps>ex.repRange[1]+4;
 
-    save();reRSet(ei,si);updProg();
+    save();reRSet(ei,si);updProg();updatePairProgressDots();
 
     const myGroup=exData.group;
     const isDropsetSet=set.isDropset||false;
@@ -2792,8 +3108,17 @@ button:active{opacity:.75;transform:scale(.97);}
     const sess=state.currentSession;let vol=0;
     sess.exercises.forEach(e=>{
       const completed=e.sets.filter(s=>s.done);if(!completed.length)return;
-      const c={easy:0,good:0,hard:0,fail:0};completed.forEach(s=>c[s.feedback]++);
-      let agg='good';if(c.fail>0)agg='fail';else if(c.hard>c.easy)agg='hard';else if(c.easy>c.hard&&c.easy>=completed.length/2)agg='easy';
+      let agg;
+      if(sess.quickMode){
+        // Quick Session: only the last set carries a rating (sets 1-2 are just "done").
+        // Use the last set with feedback; if none rated, default to 'good'.
+        const ratedSets=completed.filter(s=>s.feedback);
+        agg=ratedSets.length?ratedSets[ratedSets.length-1].feedback:'good';
+      }else{
+        // Full Session: aggregate ratings across all completed sets.
+        const c={easy:0,good:0,hard:0,fail:0};completed.forEach(s=>{if(s.feedback)c[s.feedback]++;});
+        agg='good';if(c.fail>0)agg='fail';else if(c.hard>c.easy)agg='hard';else if(c.easy>c.hard&&c.easy>=completed.length/2)agg='easy';
+      }
       const last=completed[completed.length-1];adapt(e.id,agg,last.actualReps,last.actualWeight);
       const ex=EX[e.id];
       // Volume
@@ -4831,7 +5156,7 @@ button:active{opacity:.75;transform:scale(.97);}
   if('serviceWorker' in navigator){
     // Clear old caches on load
     caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v9';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v11';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
