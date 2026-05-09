@@ -39,7 +39,8 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
 html{font-size:16px;}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;overflow-x:hidden;}
+html{overflow-x:hidden;}
 #app{max-width:430px;margin:0 auto;padding:20px 16px 160px;}
 .screen{display:none;}.screen.active{display:block;}
 h1{font-size:28px;font-weight:700;letter-spacing:-.5px;}
@@ -237,7 +238,7 @@ button:active{opacity:.75;transform:scale(.97);}
 .vol-count.over{color:var(--w-fg);}
 .vol-bar-wrap{position:relative;height:8px;background:var(--surface-2);border-radius:4px;}
 .vol-bar-fill{height:100%;border-radius:4px;}
-.vol-bar-mark{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--text-3);opacity:0.5;}
+.vol-bar-mark{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--text-3);opacity:0.5;transform:translateX(-50%);}
 .vol-bar-marks{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--text-3);font-weight:600;}
 .vol-frequency{font-size:11px;color:var(--text-3);margin-top:4px;font-weight:600;}
 .vol-frequency.warn{color:var(--w-fg);}
@@ -273,7 +274,7 @@ button:active{opacity:.75;transform:scale(.97);}
 .gain-bar-wrap{margin:14px 0 8px;}
 .gain-bar{position:relative;height:10px;background:var(--surface-2);border-radius:5px;}
 .gain-bar-zone{position:absolute;top:0;bottom:0;background:var(--s-bg);border-left:2px solid var(--s-fg);border-right:2px solid var(--s-fg);}
-.gain-bar-marker{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--text);border-radius:2px;box-shadow:0 0 8px rgba(255,255,255,0.4);}
+.gain-bar-marker{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--text);border-radius:2px;box-shadow:0 0 8px rgba(255,255,255,0.4);transform:translateX(-50%);}
 .gain-bar-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);font-weight:600;margin-top:6px;}
 .gain-message{font-size:13px;color:var(--text-2);line-height:1.5;margin-top:12px;padding:10px 12px;background:var(--surface-2);border-radius:8px;}
 .str-tier-list{display:flex;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);}
@@ -373,6 +374,19 @@ button:active{opacity:.75;transform:scale(.97);}
 .goal-pick-btn:active{border-color:var(--accent);background:var(--surface-2);}
 .goal-pick-name{font-size:16px;font-weight:700;}
 .goal-pick-meta{font-size:12px;color:var(--text-3);margin-top:2px;}
+
+/* Active goal card on unified score screen */
+.goal-active{background:linear-gradient(180deg,rgba(239,68,68,0.08) 0%,var(--surface) 100%);border:1px solid var(--accent);border-radius:var(--rl);padding:18px;}
+.goal-active .goal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.goal-tier-name{font-size:24px;font-weight:800;letter-spacing:-0.5px;line-height:1.1;}
+.goal-target-pill{font-size:11px;font-weight:700;background:rgba(239,68,68,0.15);color:var(--accent);padding:5px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0;}
+.goal-target-pill i{font-size:12px;}
+.goal-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-top:8px;}
+.goal-bar-fill{height:100%;background:var(--accent);border-radius:4px;}
+.goal-active .goal-eta{font-size:12px;color:var(--text-2);margin-top:8px;font-weight:600;}
+.goal-actions{display:flex;gap:8px;margin-top:14px;}
+.goal-btn{flex:1;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:700;padding:10px;border-radius:8px;cursor:pointer;-webkit-appearance:none;appearance:none;min-height:40px;}
+.goal-btn:active{background:var(--bg);}
 
 /* PRs detail */
 .pr-summary{background:var(--surface);border-radius:var(--rl);padding:14px;text-align:center;color:var(--text-2);font-size:14px;}
@@ -840,11 +854,11 @@ button:active{opacity:.75;transform:scale(.97);}
       <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>AI coach export</strong> — copy a structured training report to your clipboard from Training History. Paste it into Claude for personalized coaching analysis.</div>
     </div>
 
-    <div id="screen-strength-history" class="screen">
+    <div id="screen-strength-score" class="screen">
       <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
-      <h2 style="margin-bottom:4px;">Score History</h2>
-      <p class="sub">Watch your strength score grow over time</p>
-      <div id="strength-history-body"></div>
+      <h2 style="margin-bottom:4px;">Strength Score</h2>
+      <p class="sub">Track your strength journey</p>
+      <div id="strength-score-body"></div>
     </div>
 
     <div id="screen-volume" class="screen">
@@ -860,13 +874,6 @@ button:active{opacity:.75;transform:scale(.97);}
       <h2 style="margin-bottom:4px;">Priority muscles</h2>
       <p class="sub">Bias volume toward up to 2 priority muscles. Mark others as Reduced if they're already developed.</p>
       <div id="muscle-priorities-body"></div>
-    </div>
-
-    <div id="screen-strength-goal" class="screen">
-      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
-      <h2 style="margin-bottom:4px;">Strength Goal</h2>
-      <p class="sub">Pick a tier to chase</p>
-      <div id="strength-goal-body"></div>
     </div>
 
     <div id="screen-strength-prs" class="screen">
@@ -3126,7 +3133,8 @@ button:active{opacity:.75;transform:scale(.97);}
       return'<div class="'+cls+'"><div class="str-tier-dot" style="background:'+(reached?t.color:'var(--surface-2)')+';"></div><div class="str-tier-name">'+t.name+'</div><div class="str-tier-min">'+t.min+'</div></div>';
     }).join('')+'</div>';
 
-    let html='<div class="str-score-card str-score-card-detail">'
+    let html='<div class="str-score-card str-score-card-detail" onclick="showStrengthScore()" style="cursor:pointer;position:relative;">'
+      +'<div style="position:absolute;top:18px;right:18px;color:var(--text-3);font-size:16px;display:flex;align-items:center;"><i class="ti ti-chevron-right"></i></div>'
       +'<div class="str-score-label">Strength Score</div>'
       +'<div class="str-score-val">'+score+'</div>'
       +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
@@ -3135,44 +3143,13 @@ button:active{opacity:.75;transform:scale(.97);}
       +tierDotsHtml
       +'</div>';
 
-    // Cards section
+    // Cards section — categorized into 3 groups:
+    //   Records (best ever), Training (current effort), Lifetime (cumulative)
+    // Score + Goal moved into the headline Score Card's tappable detail screen.
+
+    // ─── Records: PRs + Bodyweight ───
+    html+='<h3>Records</h3>';
     html+='<div class="str-cards-grid">';
-
-    // Card: Score History — sparkline if data exists
-    const delta90=getScoreDelta(90);
-    const deltaStr=delta90>0?'+'+delta90:delta90<0?''+delta90:'—';
-    const deltaColor=delta90>0?'var(--s-fg)':delta90<0?'var(--d-fg)':'var(--text-3)';
-    const histLen=state.scoreHistory?state.scoreHistory.length:0;
-    let scoreSparkHtml='';
-    if(histLen>=3){
-      const vals=state.scoreHistory.map(h=>h.score);
-      scoreSparkHtml='<div class="str-card-spark">'+miniSpark(vals,160,24).replace('var(--i-fg)',deltaColor)+'</div>';
-    }
-    html+='<div class="str-overview-card" onclick="showStrengthHistory()">'
-      +cardHead('chart-line','Score')
-      +(histLen>=2
-        ?'<div class="str-card-stat" style="color:'+deltaColor+';">'+deltaStr+'</div><div class="str-card-sub" style="margin-top:0;">pts last 90 days</div>'+scoreSparkHtml
-        :'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">need more sessions</div>')
-      +'</div>';
-
-    // Card: Goal — progress bar if active
-    const goal=getActiveGoal();
-    const eta=calcGoalETA();
-    if(goal&&eta){
-      const progress=goal.targetScore-score>0?(score-goal.startScore)/(goal.targetScore-goal.startScore):1;
-      const progressPct=Math.max(0,Math.min(100,Math.round(progress*100)));
-      html+='<div class="str-overview-card str-card-goal" onclick="showStrengthGoal()">'
-        +cardHead('target','Goal')
-        +(eta.reached
-          ?'<div class="str-card-stat" style="color:var(--s-fg);font-size:20px;">Reached!</div><div class="str-card-sub">tap to set new</div>'
-          :'<div class="str-card-stat" style="font-size:20px;">'+goal.targetTier+'</div><div class="str-card-sub" style="margin-top:0;">'+eta.remaining+' to go'+(eta.etaWeeks!==null?' · '+eta.etaWeeks+'wk':'')+'</div><div class="str-card-progress"><div style="width:'+progressPct+'%;background:var(--accent);"></div></div>')
-        +'</div>';
-    }else{
-      html+='<div class="str-overview-card str-card-cta" onclick="showStrengthGoal()">'
-        +cardHead('target','Goal')
-        +'<div class="str-card-stat">Set</div><div class="str-card-sub">pick a tier to chase</div>'
-        +'</div>';
-    }
 
     // Card: PRs
     const recentPRs=getRecentPRs(1);
@@ -3199,6 +3176,12 @@ button:active{opacity:.75;transform:scale(.97);}
         +'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">log BW exercises</div>'
         +'</div>';
     }
+
+    html+='</div>'; // close Records grid
+
+    // ─── Training: Volume + Muscles + Lifts + Achievements ───
+    html+='<h3>Training</h3>';
+    html+='<div class="str-cards-grid">';
 
     // Card: Volume — weekly sets per muscle with mini-viz
     const wkVol=getWeeklyVolume();
@@ -3284,7 +3267,13 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="str-card-sub">tracked compounds</div>'
       +'</div>';
 
-    // Card: Career stats — spans both columns to fill the row (9 cards = 4 rows of 2 + 1)
+    html+='</div>'; // close Training grid
+
+    // ─── Lifetime: Career ───
+    html+='<h3>Lifetime</h3>';
+    html+='<div class="str-cards-grid">';
+
+    // Card: Career stats — spans both columns of its own grid row
     const lt=getLifetimeStats();
     html+='<div class="str-overview-card" onclick="showStrengthCareer()" style="grid-column:1/-1;">'
       +cardHead('calendar','Career')
@@ -3292,7 +3281,7 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="str-card-sub">sessions · '+lt.trainingAgeMonths+' mo training</div>'
       +'</div>';
 
-    html+='</div>'; // close str-cards-grid
+    html+='</div>'; // close Lifetime grid
 
     body.innerHTML=html;
     // rendered inline on dashboard
@@ -3396,18 +3385,125 @@ button:active{opacity:.75;transform:scale(.97);}
     showScreen('muscle-priorities');
   };
 
-  window.showStrengthHistory=function(){
-    const body=document.getElementById('strength-history-body');
+  // ── UNIFIED SCORE DETAIL SCREEN ─────────────────────
+  // Shows everything score-related in one scroll: current score with tier dots,
+  // goal management with inline tier picker, history chart, per-lift breakdown.
+  // Replaces the separate showStrengthHistory and showStrengthGoal screens.
+  let _goalPickerOpen=false;
+
+  function renderScoreScreenContent(){
+    const body=document.getElementById('strength-score-body');
+    if(!body)return;
     const score=getStrengthScore();
-    const hist=state.scoreHistory||[];
+    const tier=getStrengthTier(score);
+    const next=getNextTier(tier);
+    const tierIdx=STRENGTH_TIERS.indexOf(tier);
+    const goal=getActiveGoal();
+    const eta=calcGoalETA();
+
+    // ─── Score headline card (with tier dots, mirrors dashboard headline) ───
+    let goalTier=null;
+    let dotTiers=STRENGTH_TIERS;
+    if(goal){
+      goalTier=STRENGTH_TIERS.find(t=>t.name===goal.targetTier);
+      if(goalTier){
+        const gIdx=STRENGTH_TIERS.indexOf(goalTier);
+        dotTiers=STRENGTH_TIERS.slice(0,gIdx+1);
+      }
+    }
+    const dotTierIdx=Math.min(tierIdx,dotTiers.length-1);
+    let progressPct,progressLabel,progressReached=false;
+    if(goalTier){
+      progressPct=Math.min(100,Math.round((score/goalTier.min)*100));
+      const toGoal=Math.max(0,goalTier.min-score);
+      if(toGoal>0)progressLabel=toGoal+' to '+goalTier.name;
+      else{progressLabel=goalTier.name+' reached!';progressReached=true;}
+    }else{
+      progressPct=next?Math.min(100,Math.round(((score-tier.min)/(next.min-tier.min))*100)):100;
+      progressLabel=next?(next.min-score)+' to '+next.name:'Maximum tier reached';
+      if(!next)progressReached=true;
+    }
+    const tierDotsHtml='<div class="str-tier-list">'+dotTiers.map((t,i)=>{
+      const reached=i<=dotTierIdx,current=i===dotTierIdx;
+      const cls='str-tier-item'+(reached?' reached':'')+(current?' current':'');
+      return'<div class="'+cls+'"><div class="str-tier-dot" style="background:'+(reached?t.color:'var(--surface-2)')+';"></div><div class="str-tier-name">'+t.name+'</div><div class="str-tier-min">'+t.min+'</div></div>';
+    }).join('')+'</div>';
 
     let html='<div class="str-score-card str-score-card-detail">'
       +'<div class="str-score-label">Current Score</div>'
       +'<div class="str-score-val">'+score+'</div>'
+      +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
+      +'<div class="str-progress-bar"><div class="str-progress-fill" style="width:'+progressPct+'%;background:'+tier.color+';"></div></div>'
+      +'<div class="str-progress-meta"'+(progressReached?' style="color:var(--s-fg);font-weight:700;"':'')+'>'+progressLabel+'</div>'
+      +tierDotsHtml
       +'</div>';
 
+    // ─── Goal section ───
+    html+='<h3 style="margin-top:24px;margin-bottom:10px;">Goal</h3>';
+    const currentTierIdx=STRENGTH_TIERS.indexOf(tier);
+    const canSetGoal=currentTierIdx<STRENGTH_TIERS.length-1;
+
+    if(_goalPickerOpen||(!goal&&canSetGoal)){
+      // Tier picker — either user tapped "Change goal" or has no active goal
+      const headerLabel=goal?'Change target tier':'Pick a target tier';
+      html+='<div class="goal-active" style="background:var(--surface);border-color:var(--border);">'
+        +'<div style="font-size:14px;font-weight:700;margin-bottom:6px;">'+headerLabel+'</div>'
+        +'<div style="font-size:12px;color:var(--text-2);margin-bottom:14px;">Pick a tier higher than your current. The app will calculate your ETA based on your training rate.</div>';
+      STRENGTH_TIERS.forEach((t,i)=>{
+        if(i<=currentTierIdx)return;
+        const isCurrentGoal=goal&&goal.targetTier===t.name;
+        html+='<button class="goal-pick-btn" onclick="setStrengthGoal(\''+t.name+'\');closeGoalPicker();" style="'+(isCurrentGoal?'border-color:var(--accent);':'')+'">'
+          +'<div class="goal-pick-name" style="color:'+t.color+';">'+t.name+(isCurrentGoal?' · current target':'')+'</div>'
+          +'<div class="goal-pick-meta">'+t.min+'+ score · '+(t.min-score)+' to go</div>'
+          +'</button>';
+      });
+      if(_goalPickerOpen){
+        html+='<button class="goal-btn" onclick="closeGoalPicker()" style="width:100%;margin-top:8px;background:transparent;">Cancel</button>';
+      }
+      html+='</div>';
+    }else if(goal&&eta&&!eta.reached){
+      // Active goal — show progress + manage buttons
+      const remaining=eta.remaining;
+      const progress=goal.targetScore-goal.startScore>0?(score-goal.startScore)/(goal.targetScore-goal.startScore):1;
+      const goalProgressPct=Math.max(0,Math.min(100,Math.round(progress*100)));
+      const daysSinceStart=Math.round((Date.now()-goal.startedAt)/86400000);
+
+      html+='<div class="goal-active">'
+        +'<div class="goal-header">'
+          +'<div>'
+            +'<div class="goal-tier-name">'+goal.targetTier+'</div>'
+            +'<div class="goal-meta">'+goal.targetScore+' strength score · started '+daysSinceStart+' day'+(daysSinceStart===1?'':'s')+' ago</div>'
+          +'</div>'
+          +'<div class="goal-target-pill"><i class="ti ti-target"></i> Target</div>'
+        +'</div>'
+        +'<div class="goal-bar"><div class="goal-bar-fill" style="width:'+goalProgressPct+'%;"></div></div>'
+        +'<div class="goal-eta">'+(eta.etaWeeks!==null
+          ?remaining+' points to go · ~'+eta.etaWeeks+' weeks at current rate'
+          :remaining+' points to go · need a week of data for ETA')+'</div>'
+        +'<div class="goal-actions">'
+          +'<button class="goal-btn" onclick="openGoalPicker()">Change goal</button>'
+          +'<button class="goal-btn" onclick="confirmClearGoal()">Clear goal</button>'
+        +'</div>'
+        +'</div>';
+    }else if(goal&&eta&&eta.reached){
+      // Goal reached — celebrate
+      html+='<div class="goal-active" style="border-color:var(--s-fg);background:linear-gradient(180deg,var(--s-bg) 0%,var(--surface) 100%);">'
+        +'<div style="text-align:center;color:var(--s-fg);font-weight:700;font-size:18px;display:flex;align-items:center;justify-content:center;gap:8px;"><span style="display:inline-flex;">'+icon('check',20)+'</span>Goal reached!</div>'
+        +'<div style="text-align:center;color:var(--text-2);margin-top:6px;font-size:13px;">You hit '+goal.targetTier+'</div>'
+        +'<div class="goal-actions">'
+          +'<button class="goal-btn" onclick="openGoalPicker()">Set a new goal</button>'
+          +'<button class="goal-btn" onclick="confirmClearGoal()">Clear</button>'
+        +'</div>'
+        +'</div>';
+    }else if(!canSetGoal){
+      // At top tier — no higher target
+      html+='<div class="goal-active" style="border-color:var(--s-fg);"><div style="text-align:center;color:var(--s-fg);font-weight:700;">Top tier reached</div><div style="text-align:center;color:var(--text-2);margin-top:6px;font-size:13px;">No higher target available — keep building.</div></div>';
+    }
+
+    // ─── Score history chart ───
+    const hist=state.scoreHistory||[];
+    html+='<h3 style="margin-top:24px;margin-bottom:10px;">Score History</h3>';
     if(hist.length>=2){
-      // Build chart
       const vals=hist.map(h=>h.score);
       const minV=Math.min(...vals);
       const maxV=Math.max(...vals);
@@ -3415,24 +3511,19 @@ button:active{opacity:.75;transform:scale(.97);}
       const w=320,h=160;
       const padTop=20,padBottom=10;
       const innerH=h-padTop-padBottom;
-
       const points=hist.map((p,i)=>{
         const x=(i/(hist.length-1))*w;
         const y=padTop+innerH-((p.score-minV)/range)*innerH;
         return x.toFixed(1)+','+y.toFixed(1);
       }).join(' L');
-
-      // Tier reference lines
       const tierLines=STRENGTH_TIERS.filter(t=>t.min>=minV&&t.min<=maxV).map(t=>{
         const y=padTop+innerH-((t.min-minV)/range)*innerH;
         return'<line x1="0" y1="'+y+'" x2="'+w+'" y2="'+y+'" stroke="#2a2a2a" stroke-dasharray="2,4"/><text x="4" y="'+(y-4)+'" fill="#666" font-size="9">'+t.name+' ('+t.min+')</text>';
       }).join('');
-
       const delta30=getScoreDelta(30);
       const delta90=getScoreDelta(90);
       const oldestScore=hist[0].score;
       const daysSpan=Math.round((Date.now()-hist[0].timestamp)/86400000);
-
       html+='<div class="chart-container">'
         +'<div class="chart-header"><span class="chart-title">Last '+daysSpan+' days</span><span class="chart-period">'+(delta90>=0?'+':'')+delta90+' pts</span></div>'
         +'<svg class="chart-svg" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none">'
@@ -3451,7 +3542,7 @@ button:active{opacity:.75;transform:scale(.97);}
       html+='<div style="text-align:center;color:var(--text-3);font-size:14px;padding:40px 20px;background:var(--surface);border-radius:var(--rl);">Need at least 2 sessions on different days to chart your score over time.</div>';
     }
 
-    // Score breakdown
+    // ─── Per-lift breakdown ───
     const breakdown=getScoreBreakdown();
     if(breakdown.length){
       const maxContrib=breakdown[0].contribution;
@@ -3464,67 +3555,21 @@ button:active{opacity:.75;transform:scale(.97);}
     }
 
     body.innerHTML=html;
-    showScreen('strength-history');
+  }
+
+  window.showStrengthScore=function(){
+    _goalPickerOpen=false;
+    renderScoreScreenContent();
+    showScreen('strength-score');
   };
+  window.openGoalPicker=function(){_goalPickerOpen=true;renderScoreScreenContent();};
+  window.closeGoalPicker=function(){_goalPickerOpen=false;renderScoreScreenContent();};
+  window.confirmClearGoal=function(){clearStrengthGoal();renderScoreScreenContent();};
 
-  // ── DETAIL: Goal ────────────────────────────────────────
-  window.showStrengthGoal=function(){
-    const body=document.getElementById('strength-goal-body');
-    const score=getStrengthScore();
-    const tier=getStrengthTier(score);
-    const goal=getActiveGoal();
-    const eta=calcGoalETA();
-
-    let html='<div class="str-score-card str-score-card-detail">'
-      +'<div class="str-score-label">Current Score</div>'
-      +'<div class="str-score-val">'+score+'</div>'
-      +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
-      +'</div>';
-
-    if(goal&&eta&&!eta.reached){
-      const remaining=eta.remaining;
-      const progress=goal.targetScore-score>0?(score-goal.startScore)/(goal.targetScore-goal.startScore):1;
-      const progressPct=Math.max(0,Math.min(100,Math.round(progress*100)));
-      const daysSinceStart=Math.round((Date.now()-goal.startedAt)/86400000);
-
-      html+='<div class="goal-card-detail">'
-        +'<div class="goal-header"><span style="font-size:13px;color:var(--text-2);">Reach '+goal.targetTier+'</span><span class="goal-pill">★ TARGET</span></div>'
-        +'<div class="goal-target">'+goal.targetScore+' strength score</div>'
-        +'<div class="goal-meta">'+remaining+' points to go · started '+daysSinceStart+' days ago</div>'
-        +'<div class="goal-progress"><div class="goal-progress-fill" style="width:'+progressPct+'%;"></div></div>'
-        +(eta.etaWeeks!==null
-          ?'<div class="goal-eta">ETA: '+eta.etaWeeks+' weeks at current rate (+'+eta.rate+' pts/day)</div>'
-          :'<div class="goal-eta">Need at least a week of progress data for ETA</div>')
-        +'</div>';
-      html+='<button class="bs" onclick="confirmClearGoal()" style="margin-top:16px;">Clear goal</button>';
-    }else if(goal&&eta&&eta.reached){
-      html+='<div class="goal-card-detail" style="border-color:var(--s-fg);"><div style="text-align:center;color:var(--s-fg);font-weight:700;font-size:18px;display:flex;align-items:center;justify-content:center;gap:8px;"><span style="display:inline-flex;">'+icon('check',20)+'</span>Goal reached!</div><div style="text-align:center;color:var(--text-2);margin-top:6px;">You hit '+goal.targetTier+'</div></div>';
-      html+='<button class="bp" onclick="clearStrengthGoal();showStrengthGoal();" style="margin-top:16px;">Set a new goal</button>';
-    }else{
-      // No goal — show tier picker
-      html+='<h3 style="margin-top:8px;">Pick a target tier</h3>';
-      html+='<p style="font-size:13px;color:var(--text-2);margin-bottom:16px;">Pick a tier higher than your current. The app will calculate your ETA based on your training rate.</p>';
-      const currentTierIdx=STRENGTH_TIERS.indexOf(tier);
-      STRENGTH_TIERS.forEach((t,i)=>{
-        if(i<=currentTierIdx)return;
-        html+='<button class="goal-pick-btn" onclick="setStrengthGoal(\''+t.name+'\');showStrengthGoal();">'
-          +'<div class="goal-pick-name" style="color:'+t.color+';">'+t.name+'</div>'
-          +'<div class="goal-pick-meta">'+t.min+'+ score · '+(t.min-score)+' to go</div>'
-          +'</button>';
-      });
-      if(currentTierIdx>=STRENGTH_TIERS.length-1){
-        html+='<div style="text-align:center;color:var(--s-fg);padding:20px;background:var(--surface);border-radius:var(--rl);">You\'ve reached the highest tier. No higher target available.</div>';
-      }
-    }
-
-    body.innerHTML=html;
-    showScreen('strength-goal');
-  };
-
-  window.confirmClearGoal=function(){
-    clearStrengthGoal();
-    showStrengthGoal();
-  };
+  // Back-compat aliases — anything in the codebase still calling the old names
+  // routes to the unified screen.
+  window.showStrengthHistory=window.showStrengthScore;
+  window.showStrengthGoal=window.showStrengthScore;
 
   // ── DETAIL: PRs ─────────────────────────────────────────
   window.showStrengthPRs=function(){
@@ -3825,7 +3870,7 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   function showDashScreen(name){
-    ['home','key','volume','muscle-priorities','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'].forEach(s=>{
+    ['home','key','volume','muscle-priorities','strength-score','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'].forEach(s=>{
       const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('active',s===name);
     });
     if(activeTab!=='dash')switchTab('dash');
@@ -3842,7 +3887,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // Override showScreen for backward compat
   function showScreen(name){
-    const dashScreens=['home','key','volume','muscle-priorities','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'];
+    const dashScreens=['home','key','volume','muscle-priorities','strength-score','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'];
     const trainScreens=['train-home','pick','session','history'];
     if(dashScreens.includes(name))showDashScreen(name);
     else if(trainScreens.includes(name))showTrainScreen(name);
@@ -4675,7 +4720,7 @@ button:active{opacity:.75;transform:scale(.97);}
   if('serviceWorker' in navigator){
     // Clear old caches on load
     caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v7';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v8';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
