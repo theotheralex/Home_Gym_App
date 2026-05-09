@@ -214,6 +214,68 @@ button:active{opacity:.75;transform:scale(.97);}
 .str-progress-bar{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;margin-bottom:6px;}
 .str-progress-fill{height:100%;border-radius:3px;transition:width 0.3s ease;}
 .str-progress-meta{font-size:12px;color:var(--text-3);font-weight:600;}
+
+/* Volume mini-viz (on dashboard card) */
+.vol-mini{display:flex;gap:3px;margin-top:8px;}
+.vol-mini-bar{flex:1;height:5px;background:var(--surface-2);border-radius:2px;overflow:hidden;}
+.vol-mini-bar div{height:100%;border-radius:2px;}
+
+/* Volume detail screen */
+.vol-summary{display:flex;justify-content:space-between;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:12px;}
+.vol-summary-item{text-align:center;flex:1;}
+.vol-summary-num{font-size:22px;font-weight:800;line-height:1;}
+.vol-summary-lbl{font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:0.6px;font-weight:700;margin-top:4px;}
+.vol-row{padding:14px 0;border-bottom:1px solid var(--border);}
+.vol-row:last-child{border-bottom:none;}
+.vol-row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.vol-name{font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px;}
+.vol-name i.priority{color:var(--accent);}
+.vol-name i.reduced{color:var(--text-3);}
+.vol-count{font-size:14px;font-weight:700;}
+.vol-count.under{color:var(--d-fg);}
+.vol-count.zone{color:var(--s-fg);}
+.vol-count.over{color:var(--w-fg);}
+.vol-bar-wrap{position:relative;height:8px;background:var(--surface-2);border-radius:4px;}
+.vol-bar-fill{height:100%;border-radius:4px;}
+.vol-bar-mark{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--text-3);opacity:0.5;}
+.vol-bar-marks{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--text-3);font-weight:600;}
+.vol-frequency{font-size:11px;color:var(--text-3);margin-top:4px;font-weight:600;}
+.vol-frequency.warn{color:var(--w-fg);}
+
+/* Priority muscle setting */
+.pri-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);}
+.pri-header-text{font-size:13px;color:var(--text-2);}
+.pri-counter{font-size:13px;font-weight:700;color:var(--accent);}
+.pri-row{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:6px;}
+.pri-row.priority{border-color:var(--accent);background:linear-gradient(180deg,var(--d-bg) 0%,var(--surface) 100%);}
+.pri-row.reduced{opacity:0.65;}
+.pri-row-name{font-size:15px;font-weight:700;}
+.pri-toggle{display:flex;gap:3px;background:var(--bg);border-radius:8px;padding:3px;}
+.pri-btn{padding:6px 9px;font-size:11px;font-weight:700;background:transparent;border:none;color:var(--text-3);border-radius:6px;cursor:pointer;text-transform:uppercase;letter-spacing:0.4px;-webkit-appearance:none;appearance:none;min-height:28px;}
+.pri-btn.active{background:var(--surface-2);color:var(--text);}
+.pri-btn.active.priority{background:var(--accent);color:white;}
+.pri-btn.active.reduced{background:var(--text-3);color:white;}
+
+/* Gain expectations card */
+.gain-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-top:8px;}
+.gain-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.gain-label{font-size:12px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:1px;}
+.gain-value{font-size:24px;font-weight:800;letter-spacing:-0.5px;margin-top:4px;}
+.gain-value-unit{font-size:14px;color:var(--text-2);font-weight:600;margin-left:4px;}
+.gain-status{font-size:11px;font-weight:700;padding:4px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;flex-shrink:0;}
+.gain-status.on{background:var(--s-bg);color:var(--s-fg);}
+.gain-status.under{background:var(--w-bg);color:var(--w-fg);}
+.gain-status.over{background:var(--accent-bg,rgba(239,68,68,0.1));color:var(--accent);}
+.gain-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;font-size:13px;}
+.gain-row-lbl{color:var(--text-2);}
+.gain-row-val{font-weight:700;}
+.gain-row-val.highlight{color:var(--s-fg);}
+.gain-bar-wrap{margin:14px 0 8px;}
+.gain-bar{position:relative;height:10px;background:var(--surface-2);border-radius:5px;}
+.gain-bar-zone{position:absolute;top:0;bottom:0;background:var(--s-bg);border-left:2px solid var(--s-fg);border-right:2px solid var(--s-fg);}
+.gain-bar-marker{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--text);border-radius:2px;box-shadow:0 0 8px rgba(255,255,255,0.4);}
+.gain-bar-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);font-weight:600;margin-top:6px;}
+.gain-message{font-size:13px;color:var(--text-2);line-height:1.5;margin-top:12px;padding:10px 12px;background:var(--surface-2);border-radius:8px;}
 .str-tier-list{display:flex;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);}
 .str-tier-item{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;}
 .str-tier-dot{width:8px;height:8px;border-radius:50%;background:transparent;border:1px solid var(--border-strong);}
@@ -654,6 +716,7 @@ button:active{opacity:.75;transform:scale(.97);}
       </div>
       <h3>Body composition</h3>
       <div id="body-comp"></div>
+      <div id="gain-expectations"></div>
       <h3>Strength</h3>
       <div id="strength-body"></div>
       <div class="stack" style="margin-top:16px;">
@@ -782,6 +845,21 @@ button:active{opacity:.75;transform:scale(.97);}
       <h2 style="margin-bottom:4px;">Score History</h2>
       <p class="sub">Watch your strength score grow over time</p>
       <div id="strength-history-body"></div>
+    </div>
+
+    <div id="screen-volume" class="screen">
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Volume</h2>
+      <p class="sub">Sets per muscle this week</p>
+      <div id="volume-body"></div>
+      <button class="bs" onclick="showMusclePriorities()" style="margin-top:16px;width:100%;"><i class="ti ti-star"></i> Set priority muscles</button>
+    </div>
+
+    <div id="screen-muscle-priorities" class="screen">
+      <button class="bg" onclick="showVolume()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Priority muscles</h2>
+      <p class="sub">Bias volume toward up to 2 priority muscles. Mark others as Reduced if they're already developed.</p>
+      <div id="muscle-priorities-body"></div>
     </div>
 
     <div id="screen-strength-goal" class="screen">
@@ -940,6 +1018,8 @@ button:active{opacity:.75;transform:scale(.97);}
     'activity':'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
     'clock':'<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>',
     'barbell':'<line x1="2" y1="12" x2="22" y2="12"/><rect x="3" y="9" width="3" height="6" rx="0.5"/><rect x="18" y="9" width="3" height="6" rx="0.5"/><rect x="6" y="10" width="2" height="4" rx="0.5"/><rect x="16" y="10" width="2" height="4" rx="0.5"/>',
+    'stack-2':'<polyline points="12 2 22 8 12 14 2 8 12 2"/><polyline points="2 12 12 18 22 12"/><polyline points="2 16 12 22 22 16"/>',
+    'star-filled':'<polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" fill="currentColor"/>',
   };
   function icon(name,size){
     const sz=size||16;
@@ -982,18 +1062,136 @@ button:active{opacity:.75;transform:scale(.97);}
     {name:'Elite',min:1000,color:'var(--s-fg)'},
   ];
 
-  function getStrengthScore(){
-    // Score = sum of best e1RM across tracked compounds, normalized to bodyweight
-    if(!state.e1rmHistory||!Object.keys(state.e1rmHistory).length)return 0;
-    const bw=getCurrentWeight()||state.profile?.startWeight||180;
-    let total=0;
-    ALL_COMPOUNDS.forEach(id=>{
-      const hist=state.e1rmHistory[id];
-      if(!hist||!hist.length)return;
-      const best=Math.max(...hist.map(h=>h.e1rm));
-      total+=best;
+  // ── VOLUME TRACKING ────────────────────────────────────
+  // Per-muscle weekly set count, with priority-aware targets.
+  // Targets are sets/muscle/week ranges informed by hypertrophy literature
+  // (Schoenfeld et al. dose-response, ~10-20 sets is the usual sweet spot).
+  const VOLUME_TARGETS={
+    reduced :{min: 6,max:12,label:'Reduced'},
+    normal  :{min:10,max:20,label:'Normal'},
+    priority:{min:15,max:22,label:'Priority'},
+  };
+  // Display labels for the 9 muscle groups
+  const MUSCLE_LABELS={
+    back:'Back',chest:'Chest',shoulders:'Shoulders',biceps:'Biceps',
+    triceps:'Triceps',legs:'Legs',core:'Core',traps:'Traps',forearms:'Forearms',
+  };
+  // Threshold for counting a set toward a muscle: only exercises where
+  // the muscle's contribution >= 0.4 count as a real working set.
+  // Keeps the volume tally honest (e.g., bicep curls don't double-count as forearm work).
+  const VOLUME_MIN_CONTRIBUTION=0.4;
+
+  function getMusclePriority(muscle){
+    return state.musclePriorities&&state.musclePriorities[muscle]||'normal';
+  }
+  function getMuscleTarget(muscle){
+    return VOLUME_TARGETS[getMusclePriority(muscle)];
+  }
+  function priorityCount(){
+    if(!state.musclePriorities)return 0;
+    return Object.values(state.musclePriorities).filter(p=>p==='priority').length;
+  }
+  window.setMusclePriority=function(muscle,priority){
+    if(!state.musclePriorities)state.musclePriorities={};
+    if(priority==='priority'&&priorityCount()>=2&&getMusclePriority(muscle)!=='priority'){
+      toast('Max 2 priority muscles — clear another first','easy');
+      return;
+    }
+    if(priority==='normal')delete state.musclePriorities[muscle];
+    else state.musclePriorities[muscle]=priority;
+    saveNow();
+    if(typeof renderMusclePriorities==='function')renderMusclePriorities();
+  };
+
+  // Compute weekly set counts per muscle for the current week (Mon-Sun).
+  // Returns {muscle: {sets, sessions}} where sessions = number of distinct
+  // sessions that trained that muscle (for frequency advisor).
+  function getWeeklyVolume(){
+    return memo('weeklyVol',()=>{
+      const monTs=getMonday(new Date()).getTime();
+      const out={};
+      MUSCLES.forEach(m=>out[m]={sets:0,sessions:0});
+      state.sessions.forEach(s=>{
+        if(s.timestamp<monTs)return;
+        const trained=new Set();
+        (s.exercises||[]).forEach(e=>{
+          const ex=EX[e.id];if(!ex||!ex.muscles)return;
+          const completedSets=(e.sets||[]).filter(set=>set.done&&set.feedback!=='fail').length;
+          if(!completedSets)return;
+          Object.keys(ex.muscles).forEach(m=>{
+            if(!out[m])return;
+            if(ex.muscles[m]>=VOLUME_MIN_CONTRIBUTION){
+              out[m].sets+=completedSets;
+              trained.add(m);
+            }
+          });
+        });
+        trained.forEach(m=>{if(out[m])out[m].sessions++;});
+      });
+      return out;
     });
-    return Math.round((total/bw)*100);
+  }
+
+  function getVolumeStatus(sets,target){
+    if(sets<target.min)return'under';
+    if(sets>target.max)return'over';
+    return'zone';
+  }
+
+  // ── TRAINING AGE & GAIN RATE ──────────────────────────
+  // Training age = years since the user's first session.
+  function getTrainingAge(){
+    if(!state.sessions||!state.sessions.length)return 0;
+    const first=state.sessions[0].timestamp;
+    return(Date.now()-first)/(365.25*86400000);
+  }
+
+  // Expected lean mass gain rate based on training age (lb/year).
+  // Year 1: 15-20 lb. Year 2-3: 5-10. Year 4+: 1-3.
+  function getExpectedGainRange(years){
+    if(years<1)return{min:10,max:20,label:'Year 1 (newbie gains)'};
+    if(years<3)return{min:5,max:10,label:'Year 2–3'};
+    if(years<5)return{min:1,max:3,label:'Year 4+'};
+    return{min:0.5,max:2,label:'Year 5+'};
+  }
+
+  // Calculate 12-month lean mass change. Needs both weightLog and bfLog with entries
+  // spanning at least 6+ months. Returns {rate, monthsCovered} or null if insufficient data.
+  function getLeanMassRate(){
+    if(!state.weightLog||state.weightLog.length<2)return null;
+    if(!state.bfLog||state.bfLog.length<1)return null;
+    const now=Date.now();
+    const yearAgo=now-365*86400000;
+    // Get current lean mass
+    const currentWeight=getCurrentWeight();
+    const currentBf=state.bfLog[state.bfLog.length-1].bf/100;
+    if(!currentWeight)return null;
+    const currentLean=currentWeight*(1-currentBf);
+    // Find earliest lean mass within the last year
+    const oldWeightEntry=state.weightLog.find(e=>e.timestamp>=yearAgo);
+    if(!oldWeightEntry)return null;
+    const oldBfEntry=state.bfLog.find(e=>e.timestamp>=yearAgo)||state.bfLog[0];
+    const oldLean=oldWeightEntry.weight*(1-oldBfEntry.bf/100);
+    const monthsCovered=(now-oldWeightEntry.timestamp)/(30*86400000);
+    if(monthsCovered<2)return null;
+    const annualizedRate=(currentLean-oldLean)*(12/monthsCovered);
+    return{rate:annualizedRate,monthsCovered};
+  }
+
+  function getStrengthScore(){
+    return memo('strScore',()=>{
+      // Score = sum of best e1RM across tracked compounds, normalized to bodyweight
+      if(!state.e1rmHistory||!Object.keys(state.e1rmHistory).length)return 0;
+      const bw=getCurrentWeight()||state.profile?.startWeight||180;
+      let total=0;
+      ALL_COMPOUNDS.forEach(id=>{
+        const hist=state.e1rmHistory[id];
+        if(!hist||!hist.length)return;
+        const best=Math.max(...hist.map(h=>h.e1rm));
+        total+=best;
+      });
+      return Math.round((total/bw)*100);
+    });
   }
 
   function getStrengthTier(score){
@@ -1337,13 +1535,29 @@ button:active{opacity:.75;transform:scale(.97);}
   function xW(ex,w){if(exIsDB(ex))return xDB(w);if(exIsKB(ex))return xKB(w);return w;}
   function pW(ex,w){if(exIsDB(ex))return pDB(w);if(exIsKB(ex))return pKB(w);return w;}
 
-  // ── DEBOUNCED SAVE ──────────────────────────────────────
+  // ── DEBOUNCED SAVE + MEMO INVALIDATION ──────────────────
+  // Cache version bumps on every save. Memoized helpers check this version
+  // and recompute when it changes — avoids redundant work in a single render
+  // pass while staying correct across user actions.
   let saveTimer=null;
+  let _stateVersion=0;
+  function bumpCache(){_stateVersion++;}
   function save(){
     if(saveTimer)clearTimeout(saveTimer);
     saveTimer=setTimeout(()=>{try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){}saveTimer=null;},150);
+    bumpCache();
   }
-  function saveNow(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;}try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){}}
+  function saveNow(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;}try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){}bumpCache();}
+
+  // Memo helper. fn() runs only when version differs from cached version.
+  const _memo={};
+  function memo(key,fn){
+    const cached=_memo[key];
+    if(cached&&cached.v===_stateVersion)return cached.value;
+    const value=fn();
+    _memo[key]={value,v:_stateVersion};
+    return value;
+  }
 
   const EX={
     db_row:{name:'DB chest-supported row',muscles:{back:1,biceps:.3},type:'compound',equip:['db','bench'],repRange:[8,12],cues:['Set bench to 30–45°, lie chest-down with arms hanging','Drive elbows straight back and up — not out to the sides','Squeeze shoulder blades together at the top, hold 1 sec','Lower slowly — full stretch at the bottom is where the gains are','Keep your chest on the pad the whole set — no momentum']},
@@ -1618,7 +1832,7 @@ button:active{opacity:.75;transform:scale(.97);}
     return result;
   }
 
-  let state={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},prs:[],scoreHistory:[],achievements:{},strengthGoal:null,weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
+  let state={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},prs:[],scoreHistory:[],achievements:{},strengthGoal:null,musclePriorities:{},weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
   let pendingTime=null,restIv=null,restTotal=0,restRem=0,pendingScroll=-1;
 
   function load(){try{const r=localStorage.getItem(SK);if(r)state=Object.assign(state,JSON.parse(r));}catch(e){}loadDBW();loadKBW();}
@@ -2986,6 +3200,41 @@ button:active{opacity:.75;transform:scale(.97);}
         +'</div>';
     }
 
+    // Card: Volume — weekly sets per muscle with mini-viz
+    const wkVol=getWeeklyVolume();
+    const volStats=MUSCLES.map(m=>{
+      const sets=wkVol[m].sets;
+      const target=getMuscleTarget(m);
+      return{muscle:m,sets,target,status:getVolumeStatus(sets,target),priority:getMusclePriority(m)};
+    });
+    const inZone=volStats.filter(v=>v.status==='zone').length;
+    const totalTracked=volStats.filter(v=>v.sets>0||v.priority!=='normal').length||MUSCLES.length;
+    // Find priority muscles that are under target — drives alert state
+    const priorityUnder=volStats.find(v=>v.priority==='priority'&&v.status==='under'&&v.sets<v.target.min);
+    // Mini-viz: 5 highest-volume muscles' bars relative to top of zone
+    const topFive=volStats.slice().sort((a,b)=>b.sets-a.sets).slice(0,5);
+    const miniBars=topFive.map(v=>{
+      const pct=Math.min(120,Math.round((v.sets/v.target.max)*100));
+      const color=v.status==='zone'?'var(--s-fg)':v.status==='over'?'var(--w-fg)':'var(--d-fg)';
+      return'<div class="vol-mini-bar"><div style="width:'+pct+'%;background:'+color+';"></div></div>';
+    }).join('');
+    if(priorityUnder){
+      // Alert state: red border, calls attention to priority gap
+      html+='<div class="str-overview-card" onclick="showVolume()" style="border-color:var(--accent);background:linear-gradient(180deg,var(--d-bg) 0%,var(--surface) 100%);">'
+        +'<div class="str-card-head"><span style="color:var(--accent);display:flex;align-items:center;">'+icon('stack-2',15)+'</span><span style="flex:1;color:var(--accent);">Volume</span><span style="color:var(--text-3);">'+icon('chevron-right',13)+'</span></div>'
+        +'<div class="str-card-stat" style="font-size:18px;color:var(--accent);">'+(MUSCLE_LABELS[priorityUnder.muscle]||priorityUnder.muscle)+' low</div>'
+        +'<div class="str-card-sub" style="margin-top:0;">'+priorityUnder.sets+' / '+priorityUnder.target.min+' priority sets</div>'
+        +'<div class="vol-mini">'+miniBars+'</div>'
+        +'</div>';
+    }else{
+      html+='<div class="str-overview-card" onclick="showVolume()">'
+        +cardHead('stack-2','Volume')
+        +'<div class="str-card-stat" style="font-size:24px;">'+inZone+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+MUSCLES.length+'</span></div>'
+        +'<div class="str-card-sub" style="margin-top:0;">in zone · this week</div>'
+        +'<div class="vol-mini">'+miniBars+'</div>'
+        +'</div>';
+    }
+
     // Card: By muscle group — mini bar chart
     const muscleBests=[];
     MUSCLES.forEach(m=>{
@@ -3035,9 +3284,9 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="str-card-sub">tracked compounds</div>'
       +'</div>';
 
-    // Card: Career stats
+    // Card: Career stats — spans both columns to fill the row (9 cards = 4 rows of 2 + 1)
     const lt=getLifetimeStats();
-    html+='<div class="str-overview-card" onclick="showStrengthCareer()">'
+    html+='<div class="str-overview-card" onclick="showStrengthCareer()" style="grid-column:1/-1;">'
       +cardHead('calendar','Career')
       +'<div class="str-card-stat">'+lt.sessionCount+'</div>'
       +'<div class="str-card-sub">sessions · '+lt.trainingAgeMonths+' mo training</div>'
@@ -3050,6 +3299,103 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   // ── DETAIL: Score History ───────────────────────────────
+  // ── VOLUME DETAIL SCREEN ────────────────────────────
+  window.showVolume=function(){
+    const body=document.getElementById('volume-body');
+    const wkVol=getWeeklyVolume();
+    const stats=MUSCLES.map(m=>{
+      const sets=wkVol[m].sets;
+      const sessions=wkVol[m].sessions;
+      const target=getMuscleTarget(m);
+      return{muscle:m,sets,sessions,target,status:getVolumeStatus(sets,target),priority:getMusclePriority(m)};
+    });
+    // Sort: priority first (regardless of status), then under, then over, then zone
+    const order={priority:0,under:1,over:2,zone:3};
+    stats.sort((a,b)=>{
+      const aRank=a.priority==='priority'?-1:order[a.status];
+      const bRank=b.priority==='priority'?-1:order[b.status];
+      if(aRank!==bRank)return aRank-bRank;
+      return b.sets-a.sets;
+    });
+    const summary={
+      zone:stats.filter(v=>v.status==='zone').length,
+      under:stats.filter(v=>v.status==='under').length,
+      over:stats.filter(v=>v.status==='over').length,
+      total:stats.reduce((a,v)=>a+v.sets,0),
+    };
+
+    let html='<div class="vol-summary">'
+      +'<div class="vol-summary-item"><div class="vol-summary-num" style="color:var(--s-fg);">'+summary.zone+'</div><div class="vol-summary-lbl">In zone</div></div>'
+      +'<div class="vol-summary-item"><div class="vol-summary-num" style="color:var(--d-fg);">'+summary.under+'</div><div class="vol-summary-lbl">Under</div></div>'
+      +'<div class="vol-summary-item"><div class="vol-summary-num" style="color:var(--w-fg);">'+summary.over+'</div><div class="vol-summary-lbl">Over</div></div>'
+      +'<div class="vol-summary-item"><div class="vol-summary-num">'+summary.total+'</div><div class="vol-summary-lbl">Total sets</div></div>'
+      +'</div>';
+
+    html+='<h3>Muscles</h3>';
+    stats.forEach(v=>{
+      const fillPct=Math.min(120,Math.round((v.sets/v.target.max)*100));
+      const fillColor=v.status==='zone'?'var(--s-fg)':v.status==='over'?'var(--w-fg)':'var(--d-fg)';
+      // Tick mark at min and max of target zone, scaled to bar width (max=100% bar, min=min/max%)
+      const minTick=Math.round((v.target.min/v.target.max)*100);
+      const maxTick=100;
+      // Frequency line — surface 1x→2x as a high-value upgrade
+      let freqLine='';
+      if(v.sessions===0)freqLine='Not trained yet';
+      else if(v.sessions===1&&v.priority!=='reduced')freqLine='Trained 1x · 2x/week is associated with ~30% better gains';
+      else if(v.sessions>=2)freqLine='Trained '+v.sessions+'x · good frequency';
+      const freqClass=(v.sessions===1&&v.priority!=='reduced')?' warn':'';
+      // Priority indicator
+      let priIcon='';
+      if(v.priority==='priority')priIcon='<i class="ti ti-star-filled priority"></i>';
+      else if(v.priority==='reduced')priIcon='<i class="ti ti-arrow-down reduced"></i>';
+
+      html+='<div class="vol-row">'
+        +'<div class="vol-row-top">'
+          +'<div class="vol-name">'+priIcon+(MUSCLE_LABELS[v.muscle]||v.muscle)+'</div>'
+          +'<div class="vol-count '+v.status+'">'+v.sets+' / '+v.target.min+'–'+v.target.max+'</div>'
+        +'</div>'
+        +'<div class="vol-bar-wrap">'
+          +'<div class="vol-bar-fill" style="width:'+Math.min(100,fillPct)+'%;background:'+fillColor+';"></div>'
+          +'<div class="vol-bar-mark" style="left:'+minTick+'%;"></div>'
+          +'<div class="vol-bar-mark" style="left:'+maxTick+'%;"></div>'
+        +'</div>'
+        +'<div class="vol-bar-marks"><span>0</span><span>'+v.target.min+'</span><span>'+v.target.max+'+</span></div>'
+        +(freqLine?'<div class="vol-frequency'+freqClass+'">'+freqLine+'</div>':'')
+        +'</div>';
+    });
+
+    body.innerHTML=html;
+    showScreen('volume');
+  };
+
+  // ── PRIORITY MUSCLES SCREEN ────────────────────────
+  function renderMusclePriorities(){
+    const body=document.getElementById('muscle-priorities-body');
+    if(!body)return;
+    const used=priorityCount();
+    let html='<div class="pri-header">'
+      +'<span class="pri-header-text">Priority slots used</span>'
+      +'<span class="pri-counter">'+used+' / 2</span>'
+      +'</div>';
+    MUSCLES.forEach(m=>{
+      const cur=getMusclePriority(m);
+      const rowClass=cur==='priority'?' priority':cur==='reduced'?' reduced':'';
+      html+='<div class="pri-row'+rowClass+'">'
+        +'<div class="pri-row-name">'+(MUSCLE_LABELS[m]||m)+'</div>'
+        +'<div class="pri-toggle">'
+          +'<button class="pri-btn'+(cur==='reduced'?' active reduced':'')+'" onclick="setMusclePriority(\''+m+'\',\'reduced\')">Reduced</button>'
+          +'<button class="pri-btn'+(cur==='normal'?' active':'')+'" onclick="setMusclePriority(\''+m+'\',\'normal\')">Normal</button>'
+          +'<button class="pri-btn'+(cur==='priority'?' active priority':'')+'" onclick="setMusclePriority(\''+m+'\',\'priority\')">Priority</button>'
+        +'</div>'
+        +'</div>';
+    });
+    body.innerHTML=html;
+  }
+  window.showMusclePriorities=function(){
+    renderMusclePriorities();
+    showScreen('muscle-priorities');
+  };
+
   window.showStrengthHistory=function(){
     const body=document.getElementById('strength-history-body');
     const score=getStrengthScore();
@@ -3479,7 +3825,7 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   function showDashScreen(name){
-    ['home','key','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'].forEach(s=>{
+    ['home','key','volume','muscle-priorities','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'].forEach(s=>{
       const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('active',s===name);
     });
     if(activeTab!=='dash')switchTab('dash');
@@ -3496,7 +3842,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // Override showScreen for backward compat
   function showScreen(name){
-    const dashScreens=['home','key','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'];
+    const dashScreens=['home','key','volume','muscle-priorities','strength-history','strength-goal','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'];
     const trainScreens=['train-home','pick','session','history'];
     if(dashScreens.includes(name))showDashScreen(name);
     else if(trainScreens.includes(name))showTrainScreen(name);
@@ -3650,6 +3996,64 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="bc-row"><span>Latest weigh-in</span><span>'+latest.weight+' lb ('+latest.date+')</span></div>'
       +'<div class="bc-row"><span>Entries (7d)</span><span>'+recent.length+'</span></div>'
       +bfHtml+goalHtml+sparkHtml
+      +'</div>';
+
+    renderGainExpectations();
+  }
+
+  // Gain expectations card — training-age-adjusted lean mass rate vs expected.
+  // Reframes "I'm stuck" as "you're right on pace for your training age."
+  function renderGainExpectations(){
+    const el=document.getElementById('gain-expectations');
+    if(!el)return;
+    const years=getTrainingAge();
+    if(years<0.5){el.innerHTML='';return;} // need at least 6mo of training history
+    const expected=getExpectedGainRange(years);
+    const rate=getLeanMassRate();
+    if(!rate){el.innerHTML='';return;} // need lean mass data span
+
+    // Status: are we tracking in the expected range?
+    let status='on',statusLbl='On pace';
+    if(rate.rate<expected.min*0.5){status='under';statusLbl='Below pace';}
+    else if(rate.rate>expected.max*1.5){status='over';statusLbl='Above pace';}
+
+    // Bar: 0 to expected.max*2.5 covers the visual range with headroom
+    const barMax=Math.max(expected.max*2.5,7);
+    const zoneStart=(expected.min/barMax)*100;
+    const zoneEnd=(expected.max/barMax)*100;
+    const markerPos=Math.max(0,Math.min(100,(rate.rate/barMax)*100));
+
+    // Friendly message
+    let message;
+    const formattedRate=rate.rate>=0?'+'+rate.rate.toFixed(1):rate.rate.toFixed(1);
+    if(status==='on'){
+      message=expected.label+' natural lifters typically gain '+expected.min+'–'+expected.max+' lb of lean mass per year. You\'re tracking right in the expected range — this is what real progress looks like at your training age.';
+    }else if(status==='under'){
+      message='Expected range for your training age is '+expected.min+'–'+expected.max+' lb/yr. You\'re below that — common causes: insufficient protein, calorie deficit during a "bulk", or under-recovering. Worth checking.';
+    }else{
+      message='You\'re gaining faster than typical for your training age. Either you have headroom from a long break, or the gain is partly fat — check body fat trend.';
+    }
+
+    const monthLbl=Math.round(rate.monthsCovered);
+    el.innerHTML='<div class="gain-card">'
+      +'<div class="gain-card-top">'
+        +'<div>'
+          +'<div class="gain-label">Lean mass · '+expected.label.toLowerCase()+'</div>'
+          +'<div class="gain-value">'+formattedRate+' <span class="gain-value-unit">lb/yr</span></div>'
+        +'</div>'
+        +'<div class="gain-status '+status+'">'+statusLbl+'</div>'
+      +'</div>'
+      +'<div class="gain-bar-wrap">'
+        +'<div class="gain-bar">'
+          +'<div class="gain-bar-zone" style="left:'+zoneStart+'%;width:'+(zoneEnd-zoneStart)+'%;"></div>'
+          +'<div class="gain-bar-marker" style="left:'+markerPos+'%;"></div>'
+        +'</div>'
+        +'<div class="gain-bar-labels"><span>0</span><span>'+expected.min+' lb</span><span>'+expected.max+' lb</span><span>'+Math.round(barMax)+'+</span></div>'
+      +'</div>'
+      +'<div class="gain-row"><span class="gain-row-lbl">Training age</span><span class="gain-row-val">~'+years.toFixed(1)+' yrs</span></div>'
+      +'<div class="gain-row"><span class="gain-row-lbl">Expected range</span><span class="gain-row-val">'+expected.min+'–'+expected.max+' lb/yr</span></div>'
+      +'<div class="gain-row"><span class="gain-row-lbl">Your pace ('+monthLbl+'mo)</span><span class="gain-row-val highlight">'+formattedRate+' lb</span></div>'
+      +'<div class="gain-message">'+message+'</div>'
       +'</div>';
   }
 
@@ -4271,7 +4675,7 @@ button:active{opacity:.75;transform:scale(.97);}
   if('serviceWorker' in navigator){
     // Clear old caches on load
     caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v6';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v7';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
