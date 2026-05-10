@@ -1035,7 +1035,7 @@ button:active{opacity:.75;transform:scale(.97);}
         <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">All your data stays on your device. Nothing is sent to a server.</p>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Export</strong> — download a JSON backup of all your data from Settings. Do this before clearing browser data or switching phones.</div>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Import</strong> — restore a backup file from Settings. Merges with any existing data on the device.</div>
-        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>AI coach export</strong> — copy a structured training report to your clipboard from Training History. Paste it into Claude for personalized coaching analysis.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>AI coach export</strong> — copy a structured training report to your clipboard from Training History. Paste it into the AI assistant of your choice for personalized coaching analysis.</div>
       </div>
     </div>
 
@@ -3479,6 +3479,7 @@ button:active{opacity:.75;transform:scale(.97);}
     out+='Goal: '+(goalLabels[p.goal]||'General fitness')+(target?' (target ~'+target.weight+' lb · '+target.categoryName+' · '+target.targetBF+'% BF)':p.goalWeight?' (target ~'+p.goalWeight+' lb)':'')+'\n';
     out+='Equipment: DB weights ['+(p.dbWeights?p.dbWeights.join(', '):'')+'] lb'+(p.kbWeights&&p.kbWeights.length?', KB ['+p.kbWeights.join(', ')+'] lb':(p.kbWeight?', KB '+p.kbWeight+' lb':''))+(p.equipment?', '+p.equipment.join(', '):'')+'\n';
     out+='Training frequency target: '+(p.daysPerWeek||3)+' days/week\n';
+    if(p.autoDropset)out+='Auto-dropsets: enabled (intensity technique fires on Hard last sets)\n';
     if(p.goal==='custom'&&p.priorities){
       const high=Object.keys(p.priorities).filter(m=>p.priorities[m]==='high');
       const low=Object.keys(p.priorities).filter(m=>p.priorities[m]==='low');
@@ -3502,7 +3503,9 @@ button:active{opacity:.75;transform:scale(.97);}
       sessions.forEach(s=>{
         const d=new Date(s.timestamp);
         const dayName=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
-        out+='  '+dayName+' — '+s.templateName+' ('+s.time+'min, '+Math.round(s.totalVolume||0).toLocaleString()+' lb vol)\n';
+        const mode=s.quickMode?'Quick':'Full';
+        const phaseLabel=s.phase?', '+s.phase:'';
+        out+='  '+dayName+' — '+s.templateName+' ('+mode+phaseLabel+', '+s.time+'min, '+Math.round(s.totalVolume||0).toLocaleString()+' lb vol)\n';
       });
       out+='\n';
     });
@@ -3535,7 +3538,8 @@ button:active{opacity:.75;transform:scale(.97);}
           const setStrs=completed.map(x=>{
             let str=x.actualReps+(ex.unit==='sec'?'s':'');
             if(x.actualWeight!=null&&!ex.noWeight&&ex.unit!=='sec')str=x.actualWeight+'lb×'+str;
-            return str+'('+x.feedback+')';
+            const tag=x.isDropset?',DROPSET':'';
+            return str+'('+x.feedback+tag+')';
           });
           hist.push('  '+d+': '+setStrs.join(', '));
         });
@@ -3562,6 +3566,45 @@ button:active{opacity:.75;transform:scale(.97);}
       const label=score>=75?'Fresh':score>=40?'Recovering':'Fatigued';
       out+=m+': '+score+'% ('+label+')\n';
     });
+    out+='\n';
+
+    // Strength score & 90-day trajectory
+    out+='## STRENGTH SCORE\n';
+    const curScore=getStrengthScore();
+    const curTier=getStrengthTier(curScore);
+    out+='Current: '+curScore+' ('+curTier.name+' tier)\n';
+    if(state.scoreHistory&&state.scoreHistory.length>1){
+      const ninetyAgo=Date.now()-(90*86400000);
+      const oldEntry=state.scoreHistory.filter(h=>h.timestamp>=ninetyAgo)[0]||state.scoreHistory[0];
+      if(oldEntry){
+        const change=curScore-oldEntry.score;
+        const days=Math.round((Date.now()-oldEntry.timestamp)/86400000);
+        out+='90-day trajectory: '+(change>=0?'+':'')+change+' points over '+days+' days (started '+oldEntry.score+')\n';
+      }
+    }
+    if(state.strengthGoal){
+      const remaining=state.strengthGoal.targetScore-curScore;
+      out+='Active goal: reach '+state.strengthGoal.targetTier+' tier ('+state.strengthGoal.targetScore+')'+(remaining>0?' — '+remaining+' points to go':' — REACHED')+'\n';
+    }
+    out+='\n';
+
+    // Recent PRs (last 4 weeks)
+    out+='## RECENT PRs (last 4 weeks)\n';
+    if(state.prs&&state.prs.length){
+      const recentPRs=state.prs.filter(pr=>pr.date>=fourWeeksAgo).sort((a,b)=>b.date-a.date);
+      if(recentPRs.length){
+        recentPRs.forEach(pr=>{
+          const ex=EX[pr.exerciseId];
+          if(!ex)return;
+          const date=new Date(pr.date).toLocaleDateString();
+          let detail='';
+          if(pr.type==='weight')detail=pr.weight+' lb × '+pr.reps+' (e1RM '+pr.e1rm+', +'+pr.improvement+')';
+          else if(pr.type==='rep')detail=pr.reps+' reps (+'+pr.improvement+')';
+          else if(pr.type==='time')detail=pr.seconds+'s (+'+pr.improvement+'s)';
+          out+=date+' — '+ex.name+' — '+pr.type+' PR — '+detail+'\n';
+        });
+      }else{out+='No PRs in the last 4 weeks.\n';}
+    }else{out+='No PRs logged yet.\n';}
     out+='\n';
 
     // Feedback distribution
@@ -3638,15 +3681,16 @@ button:active{opacity:.75;transform:scale(.97);}
     out+='## COACHING REQUEST\n';
     const goalLabel=goalLabels[p.goal]||'general fitness';
     out+='Please analyze the above training data. Tell me:\n';
-    out+='1. What exercises are progressing well vs stalling\n';
-    out+='2. Whether my session frequency is on track for my '+goalLabel+' goal\n';
+    out+='1. What exercises are progressing well vs stalling (use the per-exercise history and recent PRs)\n';
+    out+='2. Whether my session frequency and Full/Quick mix is on track for my '+goalLabel+' goal\n';
     out+='3. If my feedback distribution suggests I\'m training hard enough\n';
-    out+='4. Any volume or balance issues (push vs pull, upper vs lower)\n';
-    out+='5. Specific adjustments to make for the next 2-4 weeks\n';
+    out+='4. Any volume or balance issues (push vs pull, upper vs lower, priority muscle coverage)\n';
+    out+='5. Whether the strength score trajectory matches what I should expect for my training age\n';
+    out+='6. Specific adjustments to make for the next 2-4 weeks\n';
 
     // Copy to clipboard
     if(navigator.clipboard&&navigator.clipboard.writeText){
-      navigator.clipboard.writeText(out).then(()=>{toast('Copied — paste into Claude','hard');}).catch(()=>{fallbackCopy(out);});
+      navigator.clipboard.writeText(out).then(()=>{toast('Copied — paste into your AI coach','hard');}).catch(()=>{fallbackCopy(out);});
     }else{fallbackCopy(out);}
   };
 
@@ -3654,7 +3698,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const ta=document.createElement('textarea');
     ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
     document.body.appendChild(ta);ta.select();
-    try{document.execCommand('copy');toast('Copied — paste into Claude','hard');}
+    try{document.execCommand('copy');toast('Copied — paste into your AI coach','hard');}
     catch(e){toast('Copy failed — try again','easy');}
     document.body.removeChild(ta);
   }
@@ -5416,7 +5460,7 @@ button:active{opacity:.75;transform:scale(.97);}
   if('serviceWorker' in navigator){
     // Clear old caches on load
     caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v19';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v20';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
