@@ -62,6 +62,14 @@ button:active{opacity:.75;transform:scale(.97);}
 .stat-label{font-size:12px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
 .stat-value{font-size:32px;font-weight:800;line-height:1;letter-spacing:-0.5px;margin-bottom:6px;text-align:center;}
 .stat-sub{font-size:12px;color:var(--text-2);font-weight:600;line-height:1.35;margin-top:auto;text-align:center;}
+/* Stat-card identity icon colors (only on cards that don't get stoplight state). State rules below override these for cards that have both. */
+#stat-avgvol-icon{color:var(--i-fg);}
+.c-prs .str-card-icon{color:var(--w-fg);}
+.c-bw .str-card-icon{color:var(--d-fg);}
+.c-muscles .str-card-icon{color:var(--i-fg);}
+.c-ach .str-card-icon{color:var(--w-fg);}
+.c-lifts .str-card-icon{color:var(--i-fg);}
+.c-career .str-card-icon{color:var(--s-fg);}
 .stat-good .stat-icon,.stat-good .stat-value,.stat-good .str-card-icon,.stat-good .str-card-stat{color:var(--s-fg);}
 .stat-amber .stat-icon,.stat-amber .stat-value,.stat-amber .str-card-icon,.stat-amber .str-card-stat{color:var(--w-fg);}
 .stat-alert .stat-icon,.stat-alert .stat-value,.stat-alert .str-card-icon,.stat-alert .str-card-stat{color:var(--d-fg);}
@@ -3826,7 +3834,7 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="pr-type"><div class="pr-type-num"'+(prCounts.reps?'':' style="color:var(--text-3);"')+'>'+prCounts.reps+'</div><div class="pr-type-lbl">Reps</div></div>'
       +'<div class="pr-type"><div class="pr-type-num"'+(prCounts.time?'':' style="color:var(--text-3);"')+'>'+prCounts.time+'</div><div class="pr-type-lbl">Time</div></div>'
       +'</div></div>';
-    html+='<div class="str-overview-card" onclick="showStrengthPRs()">'
+    html+='<div class="str-overview-card c-prs" onclick="showStrengthPRs()">'
       +cardHead('trophy','PRs')
       +(totalPRs>0
         ?'<div class="str-card-stat">'+totalPRs+'</div><div class="str-card-sub">'+(recentPRs.length?'latest: '+recentPRs[0].exerciseName:'total earned')+'</div>'
@@ -3846,14 +3854,14 @@ button:active{opacity:.75;transform:scale(.97);}
           '<div class="mini-row"><span class="mini-row-name">'+b.name+'</span><span class="mini-row-val">'+b.val+' <span style="color:var(--text-3);font-weight:600;">'+b.unit+'</span></span></div>'
         ).join('')+'</div></div>';
       }
-      html+='<div class="str-overview-card" onclick="showStrengthBW()">'
+      html+='<div class="str-overview-card c-bw" onclick="showStrengthBW()">'
         +cardHead('stretching','Bodyweight')
         +'<div class="str-card-stat">'+top.val+' <span style="font-size:14px;color:var(--text-3);font-weight:600;">'+top.unit+'</span></div>'
         +'<div class="str-card-sub">'+top.name+'</div>'
         +bwFillHtml
         +'</div>';
     }else{
-      html+='<div class="str-overview-card" onclick="showStrengthBW()">'
+      html+='<div class="str-overview-card c-bw" onclick="showStrengthBW()">'
         +cardHead('stretching','Bodyweight')
         +'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">log BW exercises</div>'
         +'<div class="str-card-fill"><div class="bw-empty-row">'
@@ -3921,14 +3929,14 @@ button:active{opacity:.75;transform:scale(.97);}
         const op=(0.4+(1-i/barCount)*0.6).toFixed(2);
         return'<div class="muscle-bar" style="height:'+h+'%;opacity:'+op+';"></div>';
       }).join('')+'</div></div>';
-      html+='<div class="str-overview-card" onclick="showStrengthMuscles()">'
+      html+='<div class="str-overview-card c-muscles" onclick="showStrengthMuscles()">'
         +cardHead('chart-bar','Muscles')
         +'<div class="str-card-stat">'+muscleBests.length+'</div>'
         +'<div class="str-card-sub">tracked · top: '+(MUSCLE_LABELS[muscleBests[0].muscle]||muscleBests[0].muscle).toLowerCase()+'</div>'
         +barsHtml
         +'</div>';
     }else{
-      html+='<div class="str-overview-card" onclick="showStrengthMuscles()">'
+      html+='<div class="str-overview-card c-muscles" onclick="showStrengthMuscles()">'
         +cardHead('chart-bar','Muscles')
         +'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">no data yet</div>'
         +'</div>';
@@ -3942,7 +3950,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const nextAchHtml=nextAch.length
       ?'<div class="ach-next">'+icon('target',11,'style="flex-shrink:0;"')+'Next: '+nextAch[0].name+'</div>'
       :(earned.length===totalAch?'<div class="ach-next" style="color:var(--s-fg);">'+icon('check',11,'style="flex-shrink:0;"')+'All unlocked</div>':'');
-    html+='<div class="str-overview-card" onclick="showStrengthAchievements()">'
+    html+='<div class="str-overview-card c-ach" onclick="showStrengthAchievements()">'
       +cardHead('medal','Achievements')
       +'<div class="str-card-stat">'+earned.length+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+totalAch+'</span></div>'
       +(earned.length
@@ -3961,7 +3969,7 @@ button:active{opacity:.75;transform:scale(.97);}
           '<div class="mini-row"><span class="mini-row-name">'+l.name+'</span><span class="mini-row-val">'+l.e1rm+' <span style="color:var(--text-3);font-weight:600;">e1RM</span></span></div>'
         ).join('')+'</div></div>'
       :'';
-    html+='<div class="str-overview-card" onclick="showStrengthLifts()">'
+    html+='<div class="str-overview-card c-lifts" onclick="showStrengthLifts()">'
       +cardHead('trending-up','Lifts')
       +'<div class="str-card-stat">'+trackedLiftCount+'</div>'
       +'<div class="str-card-sub">tracked compounds</div>'
@@ -4003,7 +4011,7 @@ button:active{opacity:.75;transform:scale(.97);}
       }).join(' ');
       careerSparkSvg='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="var(--i-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     }
-    html+='<div class="career-card" onclick="showStrengthCareer()">'
+    html+='<div class="career-card c-career" onclick="showStrengthCareer()">'
       +cardHead('calendar','Career')
       +'<div class="career-stats">'
         +'<div class="career-stat"><div class="career-stat-num">'+lt.sessionCount+'</div><div class="career-stat-lbl">Sessions</div></div>'
