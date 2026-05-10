@@ -85,7 +85,7 @@ button:active{opacity:.75;transform:scale(.97);}
 .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;margin-left:8px;background:var(--i-bg);color:var(--i-fg);vertical-align:middle;}
 .sess-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
 .sess-prog{font-size:13px;color:var(--text-2);font-weight:600;}
-.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px;overflow:hidden;}
+.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px;overflow:hidden;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 24px);}
 .ex-hdr{padding:16px 16px 10px;}
 .ex-name{font-size:17px;font-weight:700;margin-bottom:6px;}
 .ex-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
@@ -137,6 +137,18 @@ button:active{opacity:.75;transform:scale(.97);}
 .session-cta.primary .session-cta-icon{background:rgba(239,68,68,0.2);color:var(--accent);}
 .session-cta-name{font-size:18px;font-weight:800;letter-spacing:-0.3px;margin-top:4px;}
 .session-cta-meta{font-size:11px;color:var(--text-3);font-weight:600;}
+/* How it works — category cards (drill-down navigation) */
+.hiw-cat-list{display:flex;flex-direction:column;gap:10px;}
+.hiw-cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background 0.15s,transform 0.1s;text-align:left;font-family:inherit;color:var(--text);width:100%;-webkit-appearance:none;appearance:none;}
+.hiw-cat-card:active{background:var(--surface-2);transform:scale(0.99);}
+.hiw-cat-icon{width:40px;height:40px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hiw-cat-icon i{font-size:20px;color:var(--accent);}
+.hiw-cat-info{flex:1;min-width:0;}
+.hiw-cat-name{font-size:15px;font-weight:800;letter-spacing:-0.2px;margin-bottom:2px;}
+.hiw-cat-desc{font-size:12px;color:var(--text-3);font-weight:500;line-height:1.4;}
+.hiw-cat-chev{color:var(--text-3);flex-shrink:0;}
+.hiw-cat-chev i{font-size:18px;}
+.hiw-topic h3:first-child{margin-top:0;}
 /* Quick Session — Done button replaces feedback buttons on non-last sets */
 .fb-row-done{display:flex;}
 .fb-done{flex:1;min-height:50px;font-size:13px;font-weight:700;border-radius:var(--r);border:1.5px solid var(--s-fg);background:var(--s-bg);color:var(--s-fg);font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
@@ -796,118 +808,235 @@ button:active{opacity:.75;transform:scale(.97);}
     </div>
 
     <div id="screen-key" class="screen">
-      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
-      <h2 style="margin-bottom:16px;">How it works</h2>
+      <button class="bg" id="hiw-back-btn" onclick="hiwBack()" style="margin-bottom:16px;">← Back</button>
+      <h2 id="hiw-title" style="margin-bottom:16px;">How it works</h2>
 
-      <h3 style="margin-top:0;">Set feedback</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">After each set, rate how it felt. The app uses this to adjust your workout in real time and plan your next session. Your target zone is Hard or Failed — if everything feels Easy or Good, the weight isn't heavy enough.</p>
-      <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Easy</strong> — not hard enough. Weight jumps immediately for remaining sets, and again next session.</div>
-      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Good</strong> — still comfortable. Reps push to top of range. If already at top, weight jumps.</div>
-      <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hard</strong> — target zone. Reps nudge up +1 each session. After 2 consecutive Hard sessions at top of range, weight jumps.</div>
-      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Failed</strong> — ideal stimulus. Weight drops for remaining sets with no rest — go straight into the next set. Between sessions: hold weight, build reps. 3 consecutive fails = slight deload.</div>
+      <!-- Category cards — visible by default, hidden when a topic group is open -->
+      <div id="hiw-cat-list">
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:16px;">Tap a topic to learn more.</p>
+        <div class="hiw-cat-list">
+          <button class="hiw-cat-card" onclick="showHowItWorksCategory('training')">
+            <div class="hiw-cat-icon"><i class="ti ti-barbell"></i></div>
+            <div class="hiw-cat-info">
+              <div class="hiw-cat-name">Training</div>
+              <div class="hiw-cat-desc">Sessions, ratings, supersets, dropsets, periodization</div>
+            </div>
+            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+          </button>
+          <button class="hiw-cat-card" onclick="showHowItWorksCategory('body')">
+            <div class="hiw-cat-icon"><i class="ti ti-scale"></i></div>
+            <div class="hiw-cat-info">
+              <div class="hiw-cat-name">Body composition</div>
+              <div class="hiw-cat-desc">Targets, tracking weight &amp; body fat, FFMI</div>
+            </div>
+            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+          </button>
+          <button class="hiw-cat-card" onclick="showHowItWorksCategory('strength')">
+            <div class="hiw-cat-icon"><i class="ti ti-trophy"></i></div>
+            <div class="hiw-cat-info">
+              <div class="hiw-cat-name">Strength dashboard</div>
+              <div class="hiw-cat-desc">Score, tiers, goals, PRs, achievements</div>
+            </div>
+            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+          </button>
+          <button class="hiw-cat-card" onclick="showHowItWorksCategory('recovery')">
+            <div class="hiw-cat-icon"><i class="ti ti-heartbeat"></i></div>
+            <div class="hiw-cat-info">
+              <div class="hiw-cat-name">Recovery &amp; dashboard</div>
+              <div class="hiw-cat-desc">Muscle recovery, weekly stats</div>
+            </div>
+            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+          </button>
+          <button class="hiw-cat-card" onclick="showHowItWorksCategory('equipment')">
+            <div class="hiw-cat-icon"><i class="ti ti-tool"></i></div>
+            <div class="hiw-cat-info">
+              <div class="hiw-cat-name">Equipment &amp; data</div>
+              <div class="hiw-cat-desc">Available exercises, backup, export</div>
+            </div>
+            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+          </button>
+        </div>
+      </div>
 
-      <h3>Body composition target</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Instead of picking an arbitrary goal weight, you pick the body composition you're working toward. The app calculates the actual target weight from your current lean mass and the body fat % range you're aiming for. Change your target anytime in Settings → Goal → Body comp target.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Athletic</strong> — Visible abs, defined musculature. Very high effort. 12–18% BF (men) / 18–22% (women).</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fitness</strong> — Lean and healthy without abs. High effort. 14–22% BF (men) / 21–26% (women).</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Healthy</strong> — Good proportions, doctor-approved. Moderate effort. Most sustainable for long term. 18–25% BF (men) / 24–30% (women).</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Average</strong> — Medically fine, soft appearance. Low effort. 22–28% BF (men) / 28–32% (women).</div>
+      <!-- TRAINING — 8 topics -->
+      <div class="hiw-topic" data-cat="training" hidden>
+        <h3>Set feedback</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">After each set, rate how it felt. The app uses this to adjust your workout in real time and plan your next session. Your target zone is Hard or Failed — if everything feels Easy or Good, the weight isn't heavy enough.</p>
+        <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Easy</strong> — not hard enough. Weight jumps immediately for remaining sets, and again next session.</div>
+        <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Good</strong> — still comfortable. Reps push to top of range. If already at top, weight jumps.</div>
+        <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hard</strong> — target zone. Reps nudge up +1 each session. After 2 consecutive Hard sessions at top of range, weight jumps.</div>
+        <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Failed</strong> — ideal stimulus. Weight drops for remaining sets with no rest — go straight into the next set. Between sessions: hold weight, build reps. 3 consecutive fails = slight deload.</div>
+      </div>
 
-      <h3>Body composition tracking</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The body comp card tracks your weight trend and composition over time. The app asks for your weight once per day and body fat once per month.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>7-day average</strong> — your real weight. Daily weight swings 2–4 lb from water, sodium, and food. The weekly average smooths this out so you see the actual trend, not the noise.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rate (lb/week)</strong> — how fast you're losing or gaining. For fat loss, 0.5–1.0 lb/week is ideal. Faster than 1.5 lb/week means you're likely losing muscle too. Flat for 2+ weeks means the deficit isn't real or you're recomping.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fat mass vs lean mass</strong> — calculated from your monthly body fat check-in. During a cut, you want fat mass going down while lean mass stays flat or goes up. If lean mass is dropping fast, eat more protein or reduce the deficit.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>FFMI (Fat-Free Mass Index)</strong> — normalizes your lean mass to your height. It answers "how muscular am I for my frame?" Average is under 20, Athletic is 20–22, Muscular is 22–25, Elite is 25+. The natural ceiling for most people is around 25.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>ETA to target</strong> — weeks remaining at your current rate. This shifts as your rate changes. Don't chase this number — focus on consistency and the ETA takes care of itself.</div>
-      <p style="color:var(--text-2);font-size:13px;margin:10px 0;">The card border color tells you the overall trend:</p>
-      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);border-left:4px solid var(--s-fg);"><strong>Green</strong> — weight trending down. Cut is working.</div>
-      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);border-left:4px solid var(--w-fg);"><strong>Yellow</strong> — weight flat. Could be a stall or recomp — check body fat trend monthly.</div>
-      <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);border-left:4px solid var(--d-fg);"><strong>Red</strong> — weight trending up. Either intentional bulk or the deficit isn't real.</div>
+      <div class="hiw-topic" data-cat="training" hidden>
+        <h3>Session types</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Two ways to start a workout. The Train tab shows both as side-by-side cards. Pick based on the time and energy you have.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Full Session</strong> — 8 exercises, ~50 minutes. Compounds, accessories, finishers, and core. Standard 8-12 rep range for compounds and 12-15 for accessories. The default for a normal training day.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Quick Session</strong> — 6 exercises in 3 supersetted pairs, ~22 minutes. Targets 15-20 reps per set in a high-density, minimum-effective-volume protocol. Built for days when you have 20 minutes instead of an hour. Different stimulus, both productive.</div>
+      </div>
 
-      <h3>Muscle recovery</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Each muscle group has a recovery score from 0–100%. It's calculated from what you trained, how hard you pushed (your feedback), how many sets you did, and how many hours ago the session was. Everything decays back to 100% over 48 hours. The app uses this to recommend which workout focus to pick.</p>
-      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Fresh (75–100%)</strong> — fully recovered. Good to train this muscle hard.</div>
-      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Recovering (40–74%)</strong> — still repairing. Can train but expect lower performance.</div>
-      <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Fatigued (0–39%)</strong> — needs rest. Training this muscle again risks junk volume and injury.</div>
+      <div class="hiw-topic" data-cat="training" hidden>
+        <h3>Quick Session</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">A high-density, time-efficient workout structured as three supersetted pairs. Each pair targets a different muscle area within the focus you picked.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Three pairs of two</strong> — exercises A and B in each pair, done back-to-back with minimal rest. The progress dots at the top show your position across the three pairs (gray = pending, red = active, green = done).</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>3 sets at 15 reps</strong> — fewer sets than Full Session but higher reps for a different stimulus. You'll feel the metabolic burn quickly.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Lower starting weight</strong> — Quick Session starts you at ~70% of your usual weight to fit the higher rep target. The app auto-suggests this; adjust as needed on the first set.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Done button on sets 1-2, rating on set 3</strong> — first two sets are just "Done" with no feedback rating. Only the last set's rating updates your progression — that's the one that matters for adapting next session. The button only appears on the active set so you always know what's next.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Shared progression with Full Session</strong> — the app uses the same weight-tracking across both modes. If you've been doing DB bench at 50 lb in Full Session, Quick Session knows that too.</div>
+      </div>
 
-      <h3>Strength section</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The Strength section on the dashboard is your training overview. The big card at the top shows your current score and tier with a row of dots showing your position across all 5 tiers. Below it is a grid of 8 cards — each is a tappable shortcut to a deeper view.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Score</strong> — your strength score change over the last 90 days, with a sparkline. Tap for the full history chart and per-lift breakdown.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Goal</strong> — your active strength goal (or a CTA to set one). Shows points remaining and ETA. Tap to manage.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>PRs</strong> — total personal records earned, plus the most recent one. Tap for the full PR feed.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight</strong> — your top bodyweight benchmark (max push-ups, pull-ups, plank, etc.). Tap for the full grid.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Muscles</strong> — number of muscle groups with tracked lifts, plus a mini bar chart of relative strength. Tap for top 3 lifts per muscle.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Achievements</strong> — earned vs total, with a progress bar. Tap to see what you've unlocked and what's next.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Lifts</strong> — number of compound lifts you're tracking. Tap for category-grouped progression sparklines.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Career</strong> — total sessions and training age. Tap for lifetime stats (volume, PR streak, etc.).</div>
+      <div class="hiw-topic" data-cat="training" hidden>
+        <h3>Supersets &amp; pairs</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Two exercises paired back-to-back with no rest between them. Quick Session uses pairs as its core structure (3 pairs always); Full Session adds 1-2 supersets among standalone exercises.</p>
+        <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Pair UI</strong> — each pair gets a header showing its number (Quick Session) or "Superset" (Full Session) plus muscle tags showing what's being trained. Each exercise within a pair gets a letter prefix (A, B) for clarity.</div>
+        <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>GO pill</strong> — rotates between partners as you complete sets. After finishing set 1 of A, the GO pill jumps to set 1 of B. Always tells you which set is next.</div>
+        <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Partner switch banner</strong> — appears for ~3.5 seconds after each completed set, telling you which partner to do next. Read it and start the next set.</div>
+      </div>
 
-      <h3>Strength score &amp; tiers</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Your single "am I getting stronger" number. Calculated from your best e1RM across tracked compound lifts, normalized to your bodyweight, then multiplied by 100. The score updates automatically after every session and is saved daily so you can see how it's grown over weeks and months.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text-3);"><strong>Beginner</strong> — 0–149. Just starting out. Focus on consistency and form.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--i-fg);"><strong>Novice</strong> — 150–399. Built a base. Strength gains come fast.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--w-fg);"><strong>Intermediate</strong> — 400–699. Solid lifter. Progress requires more deliberate effort.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--accent);"><strong>Advanced</strong> — 700–999. Strong by any measure. Years of consistent training.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--s-fg);"><strong>Elite</strong> — 1000+. Top tier. Most lifters never reach this.</div>
+      <div class="hiw-topic" data-cat="training" hidden>
+        <h3>Dropsets</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Lower the weight and grind out more reps with no rest. Adds total volume and metabolic stress past failure — strong hypertrophy stimulus when used judiciously.</p>
+        <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Manual</strong> — tap "+ Drop set" on any weighted exercise's card to add an extra set at one weight step lower. Available anytime in Full Session. (Hidden in Quick Session to keep the flow tight.)</div>
+        <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Auto-add (opt-in)</strong> — toggle on via Settings → Intensity techniques. The app automatically adds a dropset to your last set when you push it Hard (or Easy at the equipment ceiling). Caps at 1 auto-dropset per session, fires only in hypertrophy phase, skips your first compound in Full Session to preserve strength for the rest of the session.</div>
+        <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>When to use</strong> — best for hypertrophy. Push your last set to genuine failure first, then drop and rep out. Don't dropset every exercise every session — recovery cost is real.</div>
+      </div>
 
-      <h3>Strength goals</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Pick a tier to chase from the Goal card. The app records your starting score and tracks your rate of progress to estimate how many weeks until you hit the target.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Picking a tier</strong> — tap Goal → see your current score and a list of tiers higher than your current. Tap a tier to set it as your target.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>ETA calculation</strong> — based on your average pts/day since you set the goal. Needs at least a week of data before showing an estimate. Goes up if you're making progress, fades to "—" if you stall.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Reaching it</strong> — when your score crosses the target, the Goal card celebrates and prompts you to set a new one. You can clear and re-pick a goal anytime.</div>
+      <div class="hiw-topic" data-cat="training" hidden>
+        <h3>Smart starting weights</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">When the generator picks an exercise you've never trained before, the app estimates a sensible starting weight from your existing training history instead of starting at the static minimum.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>How it works</strong> — looks at your progressions for exercises that hit the same dominant muscle, takes the median weight of similar-type exercises (compound vs accessory), applies an 80% conservative bias, and snaps to a weight you actually own.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Why it matters</strong> — if your DB Bench is 50 lb and you encounter DB Incline Press for the first time, you start at ~40 lb instead of the static default of 20 lb. Avoids the "every new exercise starts laughably light" frustration.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Manual override</strong> — the estimate is just a starting point. Adjust the weight on the first set if it's off, and the normal progression takes over from there.</div>
+      </div>
 
-      <h3>Personal records</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">PRs are detected automatically every session. When you beat a previous best, you get a banner celebration and the PR is logged. Three types are tracked:</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight PRs</strong> — when your e1RM (estimated 1-rep max from Epley formula) on a compound lift beats your previous best.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rep PRs</strong> — when you do more reps than ever before on a bodyweight exercise (push-ups, pull-ups, etc.).</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Time PRs</strong> — when you hold a timed exercise (plank, farmer carry, etc.) longer than ever before.</div>
-      <p style="color:var(--text-2);font-size:13px;margin:10px 0;">Major PRs (e1RM jumps of 8+ lb, 3+ extra reps, or 15+ extra seconds) get a red accent and "MAJOR PR" tag in the PR feed.</p>
+      <div class="hiw-topic" data-cat="training" hidden>
+        <h3>Timed exercises</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Exercises like farmer carry, planks, and jump rope use a countdown timer instead of reps.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>5-second prep</strong> — when you tap Start, the timer counts down "Get ready: 5...4...3...2...1..." before the actual exercise timer begins. Gives you time to pick up weights and get in position.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Auto-reset</strong> — after logging feedback on a timed set, the timer automatically resets to the next set's target. No need to tap Reset manually.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight tracking</strong> — farmer carry tracks both weight and time. Feedback adjusts the weight (Easy bumps up, Fail drops) just like a regular dumbbell exercise.</div>
+      </div>
 
-      <h3>Achievements</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">20 milestones spread across 5 categories. They unlock automatically as you train — no manual claiming. Each comes with its own banner celebration.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Tier crossings</strong> — Reach Novice, Intermediate, Advanced, and Elite scores.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight milestones</strong> — First pull-up, 10 pull-ups, 25 push-ups, 50 push-ups, 1-min plank, 2-min plank.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>PR streaks</strong> — 4, 12, and 26 consecutive weeks with at least one PR. Consistency rewards.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Volume milestones</strong> — 100k, 500k, and 1M lb of lifetime volume lifted.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Session count</strong> — 50, 100, 250, and 500 sessions completed.</div>
-      <p style="color:var(--text-2);font-size:13px;margin:10px 0;">The Achievements detail screen shows everything you've earned plus the closest unearned ones with progress bars — so you can see what's coming.</p>
+      <div class="hiw-topic" data-cat="training" hidden>
+        <h3>Periodization</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app automatically cycles through three training phases so your body doesn't adapt to the same stimulus. You don't need to manage this — it happens based on your session count.</p>
+        <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hypertrophy (sessions 1–12)</strong> — high volume, 8–12 reps for compounds, 12–15 for accessories. The muscle-building phase. Push hard — target Hard and Failed feedback.</div>
+        <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Strength (sessions 13–18)</strong> — heavier weight, 4–6 reps for compounds. Fewer sets. Focus on lifting heavy with good form. This phase builds the raw strength that makes the hypertrophy phase more effective.</div>
+        <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Deload (sessions 19–21)</strong> — weights drop to 60%, sets are halved. Easy and Good are expected. This isn't laziness — it's recovery. Your muscles grow during rest, not during lifting. After deload, the cycle repeats and you'll be stronger.</div>
+      </div>
 
-      <h3>Equipment &amp; weight pools</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app builds workouts using only the equipment you actually own. You set this once during onboarding and can change it anytime in Settings.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight only</strong> — full calisthenics program with 30+ exercises. Push-ups, squats, lunges, planks, supermans. The app prioritizes harder variations as you progress.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight + weights</strong> — weighted exercises take priority for muscle building. Bodyweight rotates in for variety.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Dumbbell pool</strong> — pick exactly which weights you have (5–100 lb in 5 lb increments). The app only uses weights from your pool, never suggests something you don't own.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Kettlebell pool</strong> — same system as dumbbells, separate selection. Used for KB-specific exercises like swings, snatches, and Turkish get-ups.</div>
+      <!-- BODY COMPOSITION — 2 topics -->
+      <div class="hiw-topic" data-cat="body" hidden>
+        <h3>Body composition target</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Instead of picking an arbitrary goal weight, you pick the body composition you're working toward. The app calculates the actual target weight from your current lean mass and the body fat % range you're aiming for. Change your target anytime in Settings → Goal → Body comp target.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Athletic</strong> — Visible abs, defined musculature. Very high effort. 12–18% BF (men) / 18–22% (women).</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fitness</strong> — Lean and healthy without abs. High effort. 14–22% BF (men) / 21–26% (women).</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Healthy</strong> — Good proportions, doctor-approved. Moderate effort. Most sustainable for long term. 18–25% BF (men) / 24–30% (women).</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Average</strong> — Medically fine, soft appearance. Low effort. 22–28% BF (men) / 28–32% (women).</div>
+      </div>
 
-      <h3>Supersets and dropsets</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Two techniques to increase workout density and muscle stimulus.</p>
-      <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Supersets</strong> — two exercises paired back-to-back with no rest between them (marked with a blue bracket). After each set, a banner appears telling you to go to the partner exercise. The "GO" pill on your set cards rotates between partners so you always know which set is next.</div>
-      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Dropsets</strong> — tap the "+ Drop set" button on any weighted exercise to add an extra set at a lower weight with no rest. Use it when you want to push past failure for extra stimulus. The weight drops one step down in your dumbbell or kettlebell pool — whatever weight you actually have.</div>
+      <div class="hiw-topic" data-cat="body" hidden>
+        <h3>Body composition tracking</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The body comp card tracks your weight trend and composition over time. The app asks for your weight once per day and body fat once per month.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>7-day average</strong> — your real weight. Daily weight swings 2–4 lb from water, sodium, and food. The weekly average smooths this out so you see the actual trend, not the noise.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rate (lb/week)</strong> — how fast you're losing or gaining. For fat loss, 0.5–1.0 lb/week is ideal. Faster than 1.5 lb/week means you're likely losing muscle too. Flat for 2+ weeks means the deficit isn't real or you're recomping.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Fat mass vs lean mass</strong> — calculated from your monthly body fat check-in. During a cut, you want fat mass going down while lean mass stays flat or goes up. If lean mass is dropping fast, eat more protein or reduce the deficit.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>FFMI (Fat-Free Mass Index)</strong> — normalizes your lean mass to your height. It answers "how muscular am I for my frame?" Average is under 20, Athletic is 20–22, Muscular is 22–25, Elite is 25+. The natural ceiling for most people is around 25.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>ETA to target</strong> — weeks remaining at your current rate. This shifts as your rate changes. Don't chase this number — focus on consistency and the ETA takes care of itself.</div>
+        <p style="color:var(--text-2);font-size:13px;margin:10px 0;">The card border color tells you the overall trend:</p>
+        <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);border-left:4px solid var(--s-fg);"><strong>Green</strong> — weight trending down. Cut is working.</div>
+        <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);border-left:4px solid var(--w-fg);"><strong>Yellow</strong> — weight flat. Could be a stall or recomp — check body fat trend monthly.</div>
+        <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);border-left:4px solid var(--d-fg);"><strong>Red</strong> — weight trending up. Either intentional bulk or the deficit isn't real.</div>
+      </div>
 
-      <h3>Timed exercises</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Exercises like farmer carry, planks, and jump rope use a countdown timer instead of reps.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>5-second prep</strong> — when you tap Start, the timer counts down "Get ready: 5...4...3...2...1..." before the actual exercise timer begins. Gives you time to pick up weights and get in position.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Auto-reset</strong> — after logging feedback on a timed set, the timer automatically resets to the next set's target. No need to tap Reset manually.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight tracking</strong> — farmer carry tracks both weight and time. Feedback adjusts the weight (Easy bumps up, Fail drops) just like a regular dumbbell exercise.</div>
+      <!-- STRENGTH DASHBOARD — 5 topics -->
+      <div class="hiw-topic" data-cat="strength" hidden>
+        <h3>Strength section</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The Strength section on the dashboard is your training overview. The big card at the top shows your current score and tier with a row of dots showing your position across all 5 tiers. Below it is a grid of 8 cards — each is a tappable shortcut to a deeper view.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Score</strong> — your strength score change over the last 90 days, with a sparkline. Tap for the full history chart and per-lift breakdown.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Goal</strong> — your active strength goal (or a CTA to set one). Shows points remaining and ETA. Tap to manage.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>PRs</strong> — total personal records earned, plus the most recent one. Tap for the full PR feed.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight</strong> — your top bodyweight benchmark (max push-ups, pull-ups, plank, etc.). Tap for the full grid.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Muscles</strong> — number of muscle groups with tracked lifts, plus a mini bar chart of relative strength. Tap for top 3 lifts per muscle.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Achievements</strong> — earned vs total, with a progress bar. Tap to see what you've unlocked and what's next.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Lifts</strong> — number of compound lifts you're tracking. Tap for category-grouped progression sparklines.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Career</strong> — total sessions and training age. Tap for lifetime stats (volume, PR streak, etc.).</div>
+      </div>
 
-      <h3>Periodization</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app automatically cycles through three training phases so your body doesn't adapt to the same stimulus. You don't need to manage this — it happens based on your session count.</p>
-      <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hypertrophy (sessions 1–12)</strong> — high volume, 8–12 reps for compounds, 12–15 for accessories. The muscle-building phase. Push hard — target Hard and Failed feedback.</div>
-      <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Strength (sessions 13–18)</strong> — heavier weight, 4–6 reps for compounds. Fewer sets. Focus on lifting heavy with good form. This phase builds the raw strength that makes the hypertrophy phase more effective.</div>
-      <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Deload (sessions 19–21)</strong> — weights drop to 60%, sets are halved. Easy and Good are expected. This isn't laziness — it's recovery. Your muscles grow during rest, not during lifting. After deload, the cycle repeats and you'll be stronger.</div>
+      <div class="hiw-topic" data-cat="strength" hidden>
+        <h3>Strength score &amp; tiers</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Your single "am I getting stronger" number. Calculated from your best e1RM across tracked compound lifts, normalized to your bodyweight, then multiplied by 100. The score updates automatically after every session and is saved daily so you can see how it's grown over weeks and months.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text-3);"><strong>Beginner</strong> — 0–149. Just starting out. Focus on consistency and form.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--i-fg);"><strong>Novice</strong> — 150–399. Built a base. Strength gains come fast.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--w-fg);"><strong>Intermediate</strong> — 400–699. Solid lifter. Progress requires more deliberate effort.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--accent);"><strong>Advanced</strong> — 700–999. Strong by any measure. Years of consistent training.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--s-fg);"><strong>Elite</strong> — 1000+. Top tier. Most lifters never reach this.</div>
+      </div>
 
-      <h3>Dashboard stats</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The four cards at the top of the dashboard. Each shows a number, label, and a small visual hint about what it means.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Week streak</strong> — consecutive weeks where you completed 3+ sessions. The single best predictor of long-term results. Below the number, a row of 4 dots shows the last 4 weeks — filled red means you hit 3+ sessions that week.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>This week</strong> — sessions completed Monday through Sunday. Target matches your schedule setting from onboarding. The bar fills red while you're under target, green when you hit it.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Days since last</strong> — how recent your last session was. Turns red after 3+ days to nudge you back in.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Avg vol / session</strong> — average pounds lifted per session across your full history. The sparkline shows your last 10 sessions so you can see if volume is trending up or down.</div>
+      <div class="hiw-topic" data-cat="strength" hidden>
+        <h3>Strength goals</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Pick a tier to chase from the Goal card. The app records your starting score and tracks your rate of progress to estimate how many weeks until you hit the target.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Picking a tier</strong> — tap Goal → see your current score and a list of tiers higher than your current. Tap a tier to set it as your target.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>ETA calculation</strong> — based on your average pts/day since you set the goal. Needs at least a week of data before showing an estimate. Goes up if you're making progress, fades to "—" if you stall.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Reaching it</strong> — when your score crosses the target, the Goal card celebrates and prompts you to set a new one. You can clear and re-pick a goal anytime.</div>
+      </div>
 
-      <h3>Your data</h3>
-      <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">All your data stays on your device. Nothing is sent to a server.</p>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Export</strong> — download a JSON backup of all your data from Settings. Do this before clearing browser data or switching phones.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Import</strong> — restore a backup file from Settings. Merges with any existing data on the device.</div>
-      <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>AI coach export</strong> — copy a structured training report to your clipboard from Training History. Paste it into Claude for personalized coaching analysis.</div>
+      <div class="hiw-topic" data-cat="strength" hidden>
+        <h3>Personal records</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">PRs are detected automatically every session. When you beat a previous best, you get a banner celebration and the PR is logged. Three types are tracked:</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Weight PRs</strong> — when your e1RM (estimated 1-rep max from Epley formula) on any weighted exercise beats your previous best. Catches both heavier weight at the same reps and more reps at the same weight. Applies to compounds (DB bench, OHP, row) and accessories (curls, lateral raises, flys) alike.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rep PRs</strong> — when you do more reps than ever before on a bodyweight exercise (push-ups, pull-ups, etc.).</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Time PRs</strong> — when you hold a timed exercise (plank, farmer carry, etc.) longer than ever before.</div>
+        <p style="color:var(--text-2);font-size:13px;margin:10px 0;">Major PRs (e1RM jumps of 8+ lb, 3+ extra reps, or 15+ extra seconds) get a red accent and "MAJOR PR" tag in the PR feed.</p>
+      </div>
+
+      <div class="hiw-topic" data-cat="strength" hidden>
+        <h3>Achievements</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">20 milestones spread across 5 categories. They unlock automatically as you train — no manual claiming. Each comes with its own banner celebration.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Tier crossings</strong> — Reach Novice, Intermediate, Advanced, and Elite scores.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight milestones</strong> — First pull-up, 10 pull-ups, 25 push-ups, 50 push-ups, 1-min plank, 2-min plank.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>PR streaks</strong> — 4, 12, and 26 consecutive weeks with at least one PR. Consistency rewards.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Volume milestones</strong> — 100k, 500k, and 1M lb of lifetime volume lifted.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Session count</strong> — 50, 100, 250, and 500 sessions completed.</div>
+        <p style="color:var(--text-2);font-size:13px;margin:10px 0;">The Achievements detail screen shows everything you've earned plus the closest unearned ones with progress bars — so you can see what's coming.</p>
+      </div>
+
+      <!-- RECOVERY & DASHBOARD — 2 topics -->
+      <div class="hiw-topic" data-cat="recovery" hidden>
+        <h3>Muscle recovery</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">Each muscle group has a recovery score from 0–100%. It's calculated from what you trained, how hard you pushed (your feedback), how many sets you did, and how many hours ago the session was. Everything decays back to 100% over 48 hours. The app uses this to recommend which workout focus to pick.</p>
+        <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Fresh (75–100%)</strong> — fully recovered. Good to train this muscle hard.</div>
+        <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Recovering (40–74%)</strong> — still repairing. Can train but expect lower performance.</div>
+        <div class="key-row" style="background:var(--d-bg);color:var(--d-fg);"><strong>Fatigued (0–39%)</strong> — needs rest. Training this muscle again risks junk volume and injury.</div>
+      </div>
+
+      <div class="hiw-topic" data-cat="recovery" hidden>
+        <h3>Dashboard stats</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The four cards at the top of the dashboard. Each shows a number, label, and a small visual hint about what it means.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Week streak</strong> — consecutive weeks where you completed 3+ sessions. The single best predictor of long-term results. Below the number, a row of 4 dots shows the last 4 weeks — filled red means you hit 3+ sessions that week. Weeks run Monday through Sunday.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>This week</strong> — sessions completed Monday through Sunday. Target matches your schedule setting from onboarding. The bar fills red while you're under target, green when you hit it.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Days since last</strong> — how recent your last session was. Turns red after 3+ days to nudge you back in.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Avg vol / session</strong> — average pounds lifted per session across your full history. The sparkline shows your last 10 sessions so you can see if volume is trending up or down.</div>
+      </div>
+
+      <!-- EQUIPMENT & DATA — 2 topics -->
+      <div class="hiw-topic" data-cat="equipment" hidden>
+        <h3>Equipment &amp; weight pools</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app builds workouts using only the equipment you actually own. You set this once during onboarding and can change it anytime in Settings. With 82 exercises across 15 muscle pools, the generator finds workable combinations for any equipment configuration.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight only</strong> — 34 pure-bodyweight exercises across all 5 focus types. Push-ups, squats, lunges, planks, and supermans alongside improvisations like inverted rows (under a table or low surface), door towel rows, and prone T-raises that need no equipment. Every focus type generates a complete 6-exercise Quick Session for bodyweight-only users.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight + weights</strong> — weighted exercises take priority for muscle building. Bodyweight rotates in for variety and to fill gaps where weighted options aren't appropriate.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Dumbbell pool</strong> — pick exactly which weights you have (5–100 lb in 5 lb increments). The app only uses weights from your pool, never suggests something you don't own.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Kettlebell pool</strong> — same system as dumbbells, separate selection. Used for KB-specific exercises like swings, snatches, and Turkish get-ups.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Accessories</strong> — toggle pullup bar, dip bars, bench, step, bands, or ab wheel if you have them. Each unlocks the relevant exercises in the generator.</div>
+      </div>
+
+      <div class="hiw-topic" data-cat="equipment" hidden>
+        <h3>Your data</h3>
+        <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">All your data stays on your device. Nothing is sent to a server.</p>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Export</strong> — download a JSON backup of all your data from Settings. Do this before clearing browser data or switching phones.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Import</strong> — restore a backup file from Settings. Merges with any existing data on the device.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>AI coach export</strong> — copy a structured training report to your clipboard from Training History. Paste it into Claude for personalized coaching analysis.</div>
+      </div>
     </div>
 
     <div id="screen-strength-score" class="screen">
@@ -1319,8 +1448,11 @@ button:active{opacity:.75;transform:scale(.97);}
       const completed=e.sets.filter(s=>s.done&&s.feedback!=='fail');
       if(!completed.length)return;
 
-      if(exIsWeighted(ex)&&ex.type==='compound'){
-        // Weight-based PR — best e1RM beat previous best
+      if(exIsWeighted(ex)){
+        // Weight-based PR — best e1RM beat previous best.
+        // Applies to both compounds and accessories — Epley scaling captures both
+        // "added weight" and "added reps at same weight" cleanly. The strength score
+        // still only uses compounds (filtered separately by ALL_COMPOUNDS).
         let sessBest=0,bestSet=null;
         completed.forEach(s=>{
           const w=s.actualWeight||0,r=s.actualReps||0;
@@ -1476,7 +1608,8 @@ button:active{opacity:.75;transform:scale(.97);}
     if(!state.prs||!state.prs.length)return 0;
     const prsWithImprov=state.prs.filter(p=>p.improvement);
     if(!prsWithImprov.length)return 0;
-    const weekKey=(ts)=>{const d=new Date(ts);const onejan=new Date(d.getFullYear(),0,1);const week=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);return d.getFullYear()+'-w'+week;};
+    // Monday-anchored week key: every date in the same Mon–Sun span gets the same key
+    const weekKey=(ts)=>{const m=getMonday(new Date(ts));return m.getFullYear()+'-'+m.getMonth()+'-'+m.getDate();};
     const weeksWithPRs=new Set(prsWithImprov.map(p=>weekKey(p.date)));
     let streak=0;
     let cursor=new Date();
@@ -1766,7 +1899,7 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   // ── QUICK SESSION STRUCTURES ─────────────────────────────
-  // Mike Israetel's protocol: 6 exercises in 3 non-overlapping pairs.
+  // High-density protocol: 6 exercises in 3 non-overlapping pairs.
   // Each pair list = [pool_for_A, pool_for_B] where A and B target different muscles.
   // The same focus types as Full Session are supported; the structure differs.
   const QUICK_STRUCTURES={
@@ -1932,7 +2065,7 @@ button:active{opacity:.75;transform:scale(.97);}
   }
 
   // ── QUICK SESSION GENERATOR ──────────────────────────────
-  // Mike Israetel's protocol: 6 exercises in 3 non-overlapping supersetted pairs,
+  // High-density protocol: 6 exercises in 3 non-overlapping supersetted pairs,
   // 3 sets of 15-20 reps each. Same focus types as Full Session, different structure.
   // Note (v1): uses the exercise's existing progression weight as a starting point.
   // Users may want to lower the weight manually to hit the 15-20 rep target — the
@@ -1957,7 +2090,7 @@ button:active{opacity:.75;transform:scale(.97);}
       });
     });
 
-    const QUICK_REP_TARGET=15; // start of Mike's 15-20 range
+    const QUICK_REP_TARGET=15; // bottom of the 15-20 rep target range
     const QUICK_SETS=3;
 
     return{
@@ -1966,7 +2099,7 @@ button:active{opacity:.75;transform:scale(.97);}
       timestamp:Date.now(),phase:phase.key,
       exercises:exercises.map(({id,group},i)=>{
         const ex=EX[id],prog=gProg(id);
-        // For the high-rep protocol, prescribe at the bottom of Mike's range as a target.
+        // For the high-rep protocol, prescribe at the bottom of the rep range as a target.
         // The user adjusts weight to hit this in practice; the in-session adaptation logic
         // in setFB handles weight changes.
         const targetReps=QUICK_REP_TARGET;
@@ -2222,14 +2355,31 @@ button:active{opacity:.75;transform:scale(.97);}
     restIv=setInterval(()=>{restRem--;updRest();if(restRem<=0){clearInterval(restIv);restIv=null;beep(true);finRest();}else if(restRem<=3)beep(false);},1000);
   }
   function updRest(){const m=Math.floor(restRem/60),s=restRem%60;document.getElementById('rest-display').textContent=m+':'+(s<10?'0':'')+s;document.getElementById('rest-ring').style.strokeDashoffset=CIRC*(1-(restRem/restTotal));}
+
+  // Scroll the user's eye to the first unfinished set of an exercise. Uses block:'center'
+  // so the set is centered in the viewport and the exercise name (just above the sets)
+  // stays visible. Falls back to scrolling the card itself if every set is done.
+  function scrollToActiveSet(ei,delayMs){
+    if(ei<0)return;
+    const delay=delayMs!=null?delayMs:400;
+    setTimeout(()=>{
+      const sess=state.currentSession;
+      if(!sess||!sess.exercises[ei])return;
+      const sets=sess.exercises[ei].sets;
+      let activeSi=-1;
+      for(let si=0;si<sets.length;si++){if(!sets[si].done){activeSi=si;break;}}
+      let target=null;
+      if(activeSi>=0)target=document.getElementById('set-'+ei+'-'+activeSi);
+      if(!target){const cards=document.querySelectorAll('.ex-card');target=cards[ei];}
+      if(target)target.scrollIntoView({behavior:'smooth',block:'center'});
+    },delay);
+  }
+
   function finRest(){
     document.getElementById('rest-overlay').classList.remove('visible');
     if(pendingScroll>=0){
-      setTimeout(()=>{
-        const cards=document.querySelectorAll('.ex-card');
-        if(cards[pendingScroll])cards[pendingScroll].scrollIntoView({behavior:'smooth',block:'start'});
-        pendingScroll=-1;
-      },300);
+      scrollToActiveSet(pendingScroll,300);
+      pendingScroll=-1;
     }
   }
   window.skipRest=function(){if(restIv){clearInterval(restIv);restIv=null;}finRest();};
@@ -2475,7 +2625,7 @@ button:active{opacity:.75;transform:scale(.97);}
     showTrainScreen('pick');
   };
 
-  // Quick Session entry — Mike Israetel's 3-pair protocol.
+  // Quick Session entry — high-density 3-pair protocol.
   // Same focus picker as Full Session but builds a Quick Session at the end.
   window.startQuickFlow=function(){
     pendingTime=null;
@@ -2725,10 +2875,7 @@ button:active{opacity:.75;transform:scale(.97);}
         if(nextIdx>=0){
           const partnerName=EX[sess.exercises[nextIdx].id].name;
           banner('Switch to '+partnerName,'Quick rest, then go','hard');
-          setTimeout(()=>{
-            const cards=document.querySelectorAll('.ex-card');
-            if(cards[nextIdx])cards[nextIdx].scrollIntoView({behavior:'smooth',block:'start'});
-          },400);
+          scrollToActiveSet(nextIdx);
         }
       }
     }
@@ -3015,13 +3162,7 @@ button:active{opacity:.75;transform:scale(.97);}
       return -1;
     }
 
-    function scrollToExercise(idx){
-      if(idx<0)return;
-      setTimeout(()=>{
-        const cards=document.querySelectorAll('.ex-card');
-        if(cards[idx])cards[idx].scrollIntoView({behavior:'smooth',block:'start'});
-      },400);
-    }
+    function scrollToExercise(idx){scrollToActiveSet(idx);}
 
     if(fb==='fail'){
       // Generate fail description from actual remaining set values
@@ -3191,8 +3332,10 @@ button:active{opacity:.75;transform:scale(.97);}
         const isW=exIsWeighted(ex);
         if(isW)vol+=(s.actualWeight||0)*(s.actualReps||0)*(ex.perSide?2:1);
       });
-      // e1RM tracking — compounds only, weighted exercises
-      if(ex.type==='compound'&&exIsWeighted(ex)){
+      // e1RM tracking — all weighted exercises (compounds and accessories).
+      // Strength score still uses only compounds via ALL_COMPOUNDS; this history
+      // exists to support PR detection across all weighted exercises.
+      if(exIsWeighted(ex)){
         let bestE1rm=0;
         completed.forEach(s=>{
           const w=s.actualWeight||0,r=s.actualReps||0;
@@ -3516,7 +3659,44 @@ button:active{opacity:.75;transform:scale(.97);}
     document.body.removeChild(ta);
   }
 
-  window.showFeedbackKey=function(){showScreen('key');};
+  window.showFeedbackKey=function(){showHowItWorksHome();showScreen('key');};
+
+  // How It Works — drill-down navigation between category cards and topic detail
+  const HIW_CAT_NAMES={
+    training:'Training',
+    body:'Body composition',
+    strength:'Strength dashboard',
+    recovery:'Recovery & dashboard',
+    equipment:'Equipment & data',
+  };
+  window.showHowItWorksCategory=function(catKey){
+    const list=document.getElementById('hiw-cat-list');
+    const title=document.getElementById('hiw-title');
+    if(list)list.hidden=true;
+    if(title)title.textContent=HIW_CAT_NAMES[catKey]||'How it works';
+    document.querySelectorAll('.hiw-topic').forEach(el=>{
+      el.hidden=el.dataset.cat!==catKey;
+    });
+    window.scrollTo(0,0);
+    const screen=document.getElementById('screen-key');
+    if(screen)screen.scrollTop=0;
+  };
+  window.showHowItWorksHome=function(){
+    const list=document.getElementById('hiw-cat-list');
+    const title=document.getElementById('hiw-title');
+    if(list)list.hidden=false;
+    if(title)title.textContent='How it works';
+    document.querySelectorAll('.hiw-topic').forEach(el=>el.hidden=true);
+    window.scrollTo(0,0);
+    const screen=document.getElementById('screen-key');
+    if(screen)screen.scrollTop=0;
+  };
+  window.hiwBack=function(){
+    // If a category detail is showing, back goes to the card list. Otherwise go home.
+    const list=document.getElementById('hiw-cat-list');
+    if(list&&list.hidden){showHowItWorksHome();}
+    else{goHome();}
+  };
 
   // ── STRENGTH OVERVIEW (card-based dashboard) ────────────
   window.showStrength=function(){
@@ -5236,7 +5416,7 @@ button:active{opacity:.75;transform:scale(.97);}
   if('serviceWorker' in navigator){
     // Clear old caches on load
     caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v14';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v19';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
