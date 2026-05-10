@@ -712,7 +712,7 @@ button:active{opacity:.75;transform:scale(.97);}
         <div class="wel-pillar"><div class="wel-pillar-icon free"><i class="ti ti-discount-check"></i></div><div class="wel-pillar-text"><strong>Free. No ads. No paywall.</strong><span>Every feature, forever. Optional Ko-fi if it helps you.</span></div></div>
       </div>
       <div class="ob-nav" style="padding-top:0;"><button class="ob-next" onclick="obNext(0)">Set up — 60 sec</button></div>
-      <div class="wel-meta">Built by a security engineer.<br>No fitness influencer brand attached.</div>
+      <div class="wel-meta">Not a startup. Not a brand. Just an app.</div>
     </div>
 
     <!-- Step 1: Basics -->
@@ -5604,7 +5604,7 @@ button:active{opacity:.75;transform:scale(.97);}
   if('serviceWorker' in navigator){
     // Clear old caches on load
     caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v21';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v22';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
