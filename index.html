@@ -21,7 +21,6 @@
 <meta name="apple-mobile-web-app-title" content="The Toji Method">
 <meta name="mobile-web-app-capable" content="yes">
 <title>The Toji Method</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.34.0/dist/tabler-icons.min.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ETM%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ETM%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22The%20Toji%20Method%22%2C%22short_name%22%3A%22The%20Toji%20Method%22%2C%22description%22%3A%22Adaptive%20home%20gym%20training%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527102%2527%2520fill%253D%2527%2523dc2626%2527%252F%253E%253Ctext%2520x%253D%2527256%2527%2520y%253D%2527338%2527%2520font-size%253D%2527266%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%2520font-family%253D%2527system-ui%2527%2520font-weight%253D%2527700%2527%253ETM%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
@@ -133,7 +132,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .session-cta:active{transform:scale(0.99);background:var(--surface-2);}
 .session-cta.primary{background:linear-gradient(135deg,rgba(239,68,68,0.18) 0%,var(--surface) 80%);border-color:var(--accent);}
 .session-cta-icon{width:32px;height:32px;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--text);}
-.session-cta-icon i{font-size:18px;}
 .session-cta.primary .session-cta-icon{background:rgba(239,68,68,0.2);color:var(--accent);}
 .session-cta-name{font-size:18px;font-weight:800;letter-spacing:-0.3px;margin-top:4px;}
 .session-cta-meta{font-size:11px;color:var(--text-3);font-weight:600;}
@@ -141,19 +139,16 @@ button:active{opacity:.75;transform:scale(.97);}
 .hiw-cat-list{display:flex;flex-direction:column;gap:10px;}
 .hiw-cat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background 0.15s,transform 0.1s;text-align:left;font-family:inherit;color:var(--text);width:100%;-webkit-appearance:none;appearance:none;}
 .hiw-cat-card:active{background:var(--surface-2);transform:scale(0.99);}
-.hiw-cat-icon{width:40px;height:40px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.hiw-cat-icon i{font-size:20px;color:var(--accent);}
+.hiw-cat-icon{width:40px;height:40px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--accent);}
 .hiw-cat-info{flex:1;min-width:0;}
 .hiw-cat-name{font-size:15px;font-weight:800;letter-spacing:-0.2px;margin-bottom:2px;}
 .hiw-cat-desc{font-size:12px;color:var(--text-3);font-weight:500;line-height:1.4;}
 .hiw-cat-chev{color:var(--text-3);flex-shrink:0;}
-.hiw-cat-chev i{font-size:18px;}
 .hiw-topic h3:first-child{margin-top:0;}
 /* Quick Session — Done button replaces feedback buttons on non-last sets */
 .fb-row-done{display:flex;}
 .fb-done{flex:1;min-height:50px;font-size:13px;font-weight:700;border-radius:var(--r);border:1.5px solid var(--s-fg);background:var(--s-bg);color:var(--s-fg);font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
 .fb-done:active{background:rgba(34,197,94,0.25);transform:scale(0.99);}
-.fb-done i{font-size:15px;}
 /* Quick Session — pair structure visualization */
 .pair-progress-row{display:flex;gap:6px;margin-bottom:14px;}
 .pair-prog-dot{flex:1;height:4px;background:var(--surface-2);border-radius:2px;}
@@ -161,7 +156,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .pair-prog-dot.active{background:var(--accent);}
 .pair-header{display:flex;align-items:center;gap:8px;margin:18px 0 8px;font-size:11px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:1px;padding:0 4px;}
 .pair-header:first-of-type{margin-top:8px;}
-.pair-header i{font-size:13px;}
 .pair-header .pair-tag{margin-left:auto;background:var(--surface-2);color:var(--text-3);padding:3px 8px;border-radius:5px;font-weight:700;letter-spacing:0.5px;font-size:9px;}
 .pair-letter{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--bg);font-size:10px;font-weight:800;color:var(--accent);text-align:center;line-height:20px;margin-right:8px;flex-shrink:0;}
 .ex-card.in-pair .ex-name{display:flex;align-items:center;}
@@ -263,8 +257,8 @@ button:active{opacity:.75;transform:scale(.97);}
 .vol-row:last-child{border-bottom:none;}
 .vol-row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
 .vol-name{font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px;}
-.vol-name i.priority{color:var(--accent);}
-.vol-name i.reduced{color:var(--text-3);}
+.vol-name .priority{color:var(--accent);}
+.vol-name .reduced{color:var(--text-3);}
 .vol-count{font-size:14px;font-weight:700;}
 .vol-count.under{color:var(--d-fg);}
 .vol-count.zone{color:var(--s-fg);}
@@ -358,7 +352,6 @@ button:active{opacity:.75;transform:scale(.97);}
 /* BW empty state pills */
 .bw-empty-row{display:flex;gap:4px;}
 .bw-empty-pill{flex:1;background:var(--surface-2);border-radius:6px;padding:6px;display:flex;align-items:center;justify-content:center;gap:3px;color:var(--text-3);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;}
-.bw-empty-pill i{font-size:11px;}
 
 /* Vertical muscle bars (replaces .str-card-bars on Muscles square) */
 .muscle-bars{display:flex;gap:2px;align-items:flex-end;height:32px;}
@@ -372,7 +365,6 @@ button:active{opacity:.75;transform:scale(.97);}
 
 /* Achievement "next" hint */
 .ach-next{font-size:10px;color:var(--text-3);margin-top:6px;font-weight:600;display:flex;align-items:center;gap:4px;line-height:1.3;}
-.ach-next i{font-size:11px;color:var(--w-fg);flex-shrink:0;}
 
 /* Career wide rectangle (overrides square aspect for full-width) */
 .career-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;cursor:pointer;display:flex;flex-direction:column;transition:transform 0.1s,background 0.15s;}
@@ -449,7 +441,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .goal-active .goal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 .goal-tier-name{font-size:24px;font-weight:800;letter-spacing:-0.5px;line-height:1.1;}
 .goal-target-pill{font-size:11px;font-weight:700;background:rgba(239,68,68,0.15);color:var(--accent);padding:5px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0;}
-.goal-target-pill i{font-size:12px;}
 .goal-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-top:8px;}
 .goal-bar-fill{height:100%;background:var(--accent);border-radius:4px;}
 .goal-active .goal-eta{font-size:12px;color:var(--text-2);margin-top:8px;font-weight:600;}
@@ -514,7 +505,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 0;background:var(--surface);border:none;border-radius:var(--r);min-height:48px;color:var(--text-3);font-size:12px;font-weight:600;letter-spacing:0.3px;}
 .tab-btn:active{transform:none;opacity:1;}
 .tab-btn.active{background:var(--surface-2);color:var(--text);}
-.tab-btn-icon{font-size:18px;}
 .tab-page{display:none;}
 .tab-page.active{display:block;}
 
@@ -634,7 +624,7 @@ button:active{opacity:.75;transform:scale(.97);}
   <div class="edit-card">
     <div class="edit-header">
       <span class="edit-title" id="edit-title">Edit</span>
-      <button class="edit-close" onclick="closeEditModal()" aria-label="Close"><i class="ti ti-x"></i></button>
+      <button class="edit-close" onclick="closeEditModal()" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="edit-body" id="edit-body"></div>
     <div class="edit-actions">
@@ -816,44 +806,44 @@ button:active{opacity:.75;transform:scale(.97);}
         <p style="color:var(--text-2);font-size:13px;margin-bottom:16px;">Tap a topic to learn more.</p>
         <div class="hiw-cat-list">
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('training')">
-            <div class="hiw-cat-icon"><i class="ti ti-barbell"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><rect x="3" y="9" width="3" height="6" rx="0.5"/><rect x="18" y="9" width="3" height="6" rx="0.5"/><rect x="6" y="10" width="2" height="4" rx="0.5"/><rect x="16" y="10" width="2" height="4" rx="0.5"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Training</div>
               <div class="hiw-cat-desc">Sessions, ratings, supersets, dropsets, periodization</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('body')">
-            <div class="hiw-cat-icon"><i class="ti ti-scale"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20l10 0"/><path d="M6 6l6 -1l6 1"/><path d="M12 3l0 17"/><path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0"/><path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Body composition</div>
               <div class="hiw-cat-desc">Targets, tracking weight &amp; body fat, FFMI</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('strength')">
-            <div class="hiw-cat-icon"><i class="ti ti-trophy"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1 -10 0z"/><path d="M17 5h2a2 2 0 0 1 2 2v0a4 4 0 0 1 -4 4M7 5h-2a2 2 0 0 0 -2 2v0a4 4 0 0 0 4 4"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Strength dashboard</div>
               <div class="hiw-cat-desc">Score, tiers, goals, PRs, achievements</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('recovery')">
-            <div class="hiw-cat-icon"><i class="ti ti-heartbeat"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/><path d="M3 13h2l2 -3l2 6l1 -2l1 1h3"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Recovery &amp; dashboard</div>
               <div class="hiw-cat-desc">Muscle recovery, weekly stats</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('equipment')">
-            <div class="hiw-cat-icon"><i class="ti ti-tool"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Equipment &amp; data</div>
               <div class="hiw-cat-desc">Available exercises, backup, export</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
         </div>
       </div>
@@ -1051,7 +1041,7 @@ button:active{opacity:.75;transform:scale(.97);}
       <h2 style="margin-bottom:4px;">Volume</h2>
       <p class="sub">Sets per muscle this week</p>
       <div id="volume-body"></div>
-      <button class="bs" onclick="showMusclePriorities()" style="margin-top:16px;width:100%;"><i class="ti ti-star"></i> Set priority muscles</button>
+      <button class="bs" onclick="showMusclePriorities()" style="margin-top:16px;width:100%;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Set priority muscles</button>
     </div>
 
     <div id="screen-muscle-priorities" class="screen">
@@ -1124,12 +1114,12 @@ button:active{opacity:.75;transform:scale(.97);}
       <p class="sub" id="train-phase-info">Pick your session length</p>
       <div class="session-cta-pair">
         <button class="session-cta primary" onclick="startFlow(60)">
-          <div class="session-cta-icon"><i class="ti ti-flame"></i></div>
+          <div class="session-cta-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2 -2.96 0 -7 -1 -8c0 3.038 -1.773 4.741 -3 6c-1.226 1.26 -2 3.24 -2 5a6 6 0 1 0 12 0c0 -1.532 -1.056 -3.94 -2 -5c-1.786 3 -2.791 3 -4 2z"/></svg></div>
           <div class="session-cta-name">Full Session</div>
           <div class="session-cta-meta">~50 min · 8 exercises</div>
         </button>
         <button class="session-cta" onclick="startQuickFlow()">
-          <div class="session-cta-icon"><i class="ti ti-bolt"></i></div>
+          <div class="session-cta-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3l-9 12h7l-1 6l9 -12h-7l1 -6z"/></svg></div>
           <div class="session-cta-name">Quick Session</div>
           <div class="session-cta-meta">~22 min · 6 exercises</div>
         </button>
@@ -1150,21 +1140,21 @@ button:active{opacity:.75;transform:scale(.97);}
 
     <div id="screen-session" class="screen">
       <div class="sess-hdr">
-        <button class="bg" id="cancel-btn" onclick="abandonSession()"><i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel</button>
+        <button class="bg" id="cancel-btn" onclick="abandonSession()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;flex-shrink:0;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Cancel</button>
         <span id="session-progress" class="sess-prog"></span>
       </div>
       <h2 id="session-title" style="margin-bottom:2px;"></h2>
       <p id="session-subtitle" class="sub"></p>
       <div id="action-banner-area"></div>
       <div id="session-body"></div>
-      <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:16px;margin-bottom:8px;"><i class="ti ti-check" style="font-size:18px;margin-right:6px;"></i>Complete session</button>
+      <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:16px;margin-bottom:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>Complete session</button>
       <div id="session-support-nudge"></div>
     </div>
 
     <div id="screen-history" class="screen">
       <button class="bg" onclick="goTrain()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:16px;">Training history</h2>
-      <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;"><i class="ti ti-clipboard-text" style="font-size:16px;margin-right:6px;"></i>Copy for AI coach</button>
+      <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;flex-shrink:0;"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>Copy for AI coach</button>
       <div id="history-body"></div>
     </div>
 
@@ -1174,8 +1164,8 @@ button:active{opacity:.75;transform:scale(.97);}
 
 <!-- TAB BAR -->
 <div class="tab-bar">
-  <button class="tab-btn active" id="tab-btn-dash" onclick="switchTab('dash')"><i class="ti ti-layout-dashboard tab-btn-icon"></i><span>Dashboard</span></button>
-  <button class="tab-btn" id="tab-btn-train" onclick="switchTab('train')"><i class="ti ti-barbell tab-btn-icon"></i><span>Train</span></button>
+  <button class="tab-btn active" id="tab-btn-dash" onclick="switchTab('dash')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1z"/><path d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1z"/><path d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1z"/><path d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1z"/></svg><span>Dashboard</span></button>
+  <button class="tab-btn" id="tab-btn-train" onclick="switchTab('train')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><rect x="3" y="9" width="3" height="6" rx="0.5"/><rect x="18" y="9" width="3" height="6" rx="0.5"/><rect x="6" y="10" width="2" height="4" rx="0.5"/><rect x="16" y="10" width="2" height="4" rx="0.5"/></svg><span>Train</span></button>
 </div>
 
 <script>
@@ -1209,7 +1199,7 @@ button:active{opacity:.75;transform:scale(.97);}
     'package':'<path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"/><path d="M12 12l8 -4.5"/><line x1="12" y1="12" x2="12" y2="21"/><line x1="12" y1="12" x2="4" y2="7.5"/>',
     'mountain':'<path d="M3 20l5 -8l4 4l4 -8l5 12z"/>',
     'check':'<polyline points="20 6 9 17 4 12"/>',
-    'x':'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="6"/>',
+    'x':'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
     'plus':'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
     'star':'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
     'bolt':'<path d="M13 3l-9 12h7l-1 6l9 -12h-7l1 -6z"/>',
@@ -1220,11 +1210,19 @@ button:active{opacity:.75;transform:scale(.97);}
     'barbell':'<line x1="2" y1="12" x2="22" y2="12"/><rect x="3" y="9" width="3" height="6" rx="0.5"/><rect x="18" y="9" width="3" height="6" rx="0.5"/><rect x="6" y="10" width="2" height="4" rx="0.5"/><rect x="16" y="10" width="2" height="4" rx="0.5"/>',
     'stack-2':'<polyline points="12 2 22 8 12 14 2 8 12 2"/><polyline points="2 12 12 18 22 12"/><polyline points="2 16 12 22 22 16"/>',
     'star-filled':'<polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" fill="currentColor"/>',
+    'scale':'<path d="M7 20l10 0"/><path d="M6 6l6 -1l6 1"/><path d="M12 3l0 17"/><path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0"/><path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0"/>',
+    'heartbeat':'<path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/><path d="M3 13h2l2 -3l2 6l1 -2l1 1h3"/>',
+    'tool':'<path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/>',
+    'clipboard-text':'<path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"/><path d="M9 12h6"/><path d="M9 16h6"/>',
+    'layout-dashboard':'<path d="M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1z"/><path d="M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1z"/><path d="M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1z"/><path d="M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1z"/>',
+    'alert-triangle':'<path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/>',
+    'arrow-up':'<path d="M12 5l0 14"/><path d="M18 11l-6 -6"/><path d="M6 11l6 -6"/>',
+    'arrow-down':'<path d="M12 5l0 14"/><path d="M18 13l-6 6"/><path d="M6 13l6 6"/>',
   };
-  function icon(name,size){
+  function icon(name,size,extra){
     const sz=size||16;
     const path=ICONS[name];if(!path)return'';
-    return'<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">'+path+'</svg>';
+    return'<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"'+(extra?' '+extra:'')+'>'+path+'</svg>';
   }
   // Helper: build card header (icon + title + chevron) — sized for square cards
   function cardHead(iconName,title){
@@ -2682,7 +2680,7 @@ button:active{opacity:.75;transform:scale(.97);}
       const tagHtml=tags.map(t=>'<span class="tag">'+t+'</span>').join('');
       const demoQuery=encodeURIComponent('how to '+ex.name.replace(/ \(.*\)/,'')+' form');
       const demoLink='<a class="cue-demo" href="https://www.youtube.com/results?search_query='+demoQuery+'" onclick="event.preventDefault();openExt(this.href);">Watch a demo ›</a>';
-      const cueHtml=ex.cues&&ex.cues.length?'<button class="cue-toggle" onclick="toggleCues(\''+ei+'\')" id="cue-btn-'+ei+'"><i class="ti ti-chevron-right" style="font-size:14px;margin-right:4px;" id="cue-chev-'+ei+'"></i>Form cues</button><div class="cue-panel" id="cue-'+ei+'"><ol>'+ex.cues.map(c=>'<li>'+c+'</li>').join('')+'</ol>'+demoLink+'</div>':'';
+      const cueHtml=ex.cues&&ex.cues.length?'<button class="cue-toggle" onclick="toggleCues(\''+ei+'\')" id="cue-btn-'+ei+'">'+icon('chevron-right',14,'id="cue-chev-'+ei+'" style="margin-right:4px;flex-shrink:0;"')+'Form cues</button><div class="cue-panel" id="cue-'+ei+'"><ol>'+ex.cues.map(c=>'<li>'+c+'</li>').join('')+'</ol>'+demoLink+'</div>':'';
       const tSecs=ex.unit==='sec'?ex.repRange[0]:null;
       const tHtml=tSecs?'<div class="ex-timer-wrap" id="ex-timer-'+ei+'"><div class="ex-timer-disp">'+Math.floor(tSecs/60)+':'+(tSecs%60<10?'0':'')+tSecs%60+'</div><div class="ex-timer-row"><button class="ex-tbtn bs ex-sbt">Start</button><button class="ex-tbtn bs ex-rbt">Reset</button></div></div>':'';
       // Dropset button — only for weighted exercises (skip in quickMode to keep flow tight)
@@ -2732,7 +2730,7 @@ button:active{opacity:.75;transform:scale(.97);}
           }
           const tagText=muscles.length?'<span class="pair-tag">'+muscles.join(' · ')+'</span>':'';
           const labelText=sess.quickMode?'Pair '+(gid+1):'Superset';
-          html+='<div class="pair-header"><i class="ti ti-stack-2"></i>'+labelText+tagText+'</div>';
+          html+='<div class="pair-header">'+icon('stack-2',13)+labelText+tagText+'</div>';
           for(let k=i;k<j;k++){
             const letter=String.fromCharCode(65+(k-i)); // A, B, C…
             const cardHtml=cards[k].html.replace('<div class="ex-name">','<div class="ex-name"><span class="pair-letter">'+letter+'</span>');
@@ -2829,7 +2827,7 @@ button:active{opacity:.75;transform:scale(.97);}
         btnRowHtml='';
       }else if(!isLastSet){
         // Sets 1 and 2: green Done button, no feedback rating
-        btnRowHtml='<div class="fb-row-done"><button class="fb-done" onclick="setDone('+ei+','+si+')"><i class="ti ti-check"></i>Done</button></div>';
+        btnRowHtml='<div class="fb-row-done"><button class="fb-done" onclick="setDone('+ei+','+si+')">'+icon('check',15)+'Done</button></div>';
       }else{
         // Last set: rating buttons (this is where progression adaptation comes from)
         const fbs=['easy','good','hard','fail'].map(f=>{const sel=s.feedback===f?' sel-'+f:'';const lbl={easy:'Easy',good:'Good',hard:'Hard',fail:'Fail'};return'<button class="fb-btn'+sel+'" onclick="setFB('+ei+','+si+',\''+f+'\')">'+lbl[f]+'</button>';}).join('');
@@ -2920,7 +2918,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const el=document.createElement('div');
     el.className='action-banner';
     el.style.background=c.bg;el.style.color=c.fg;
-    el.innerHTML='<div class="ab-msg">'+msg+subHtml+'</div><button class="ab-x" onclick="dismissBanner()" aria-label="Dismiss"><i class="ti ti-x"></i></button>';
+    el.innerHTML='<div class="ab-msg">'+msg+subHtml+'</div><button class="ab-x" onclick="dismissBanner()" aria-label="Dismiss">'+icon('x',16)+'</button>';
     document.body.appendChild(el);
     bannerEl=el;
     bannerTimer=setTimeout(()=>{
@@ -3432,13 +3430,13 @@ button:active{opacity:.75;transform:scale(.97);}
     const btn=document.getElementById('cancel-btn');
     if(!cancelPending){
       cancelPending=true;
-      btn.innerHTML='<i class="ti ti-alert-triangle" style="font-size:14px;margin-right:4px;"></i>Tap again to discard';
+      btn.innerHTML=icon('alert-triangle',14,'style="margin-right:4px;flex-shrink:0;"')+'Tap again to discard';
       btn.style.color='var(--d-fg)';
-      setTimeout(()=>{cancelPending=false;btn.innerHTML='<i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel';btn.style.color='';},3000);
+      setTimeout(()=>{cancelPending=false;btn.innerHTML=icon('x',14,'style="margin-right:4px;flex-shrink:0;"')+'Cancel';btn.style.color='';},3000);
     }else{
       cancelPending=false;
       state.currentSession=null;saveNow();showTrainScreen('train-home');renderTrainHome();
-      btn.innerHTML='<i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel';btn.style.color='';
+      btn.innerHTML=icon('x',14,'style="margin-right:4px;flex-shrink:0;"')+'Cancel';btn.style.color='';
     }
   };
 
@@ -3796,7 +3794,7 @@ button:active{opacity:.75;transform:scale(.97);}
     }).join('')+'</div>';
 
     let html='<div class="str-score-card str-score-card-detail" onclick="showStrengthScore()" style="cursor:pointer;position:relative;">'
-      +'<div style="position:absolute;top:18px;right:18px;color:var(--text-3);font-size:16px;display:flex;align-items:center;"><i class="ti ti-chevron-right"></i></div>'
+      +'<div style="position:absolute;top:18px;right:18px;color:var(--text-3);display:flex;align-items:center;">'+icon('chevron-right',16)+'</div>'
       +'<div class="str-score-label">Strength Score</div>'
       +'<div class="str-score-val">'+score+'</div>'
       +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
@@ -3853,9 +3851,9 @@ button:active{opacity:.75;transform:scale(.97);}
         +cardHead('stretching','Bodyweight')
         +'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">log BW exercises</div>'
         +'<div class="str-card-fill"><div class="bw-empty-row">'
-          +'<div class="bw-empty-pill"><i class="ti ti-arrow-up"></i>Push</div>'
-          +'<div class="bw-empty-pill"><i class="ti ti-arrow-down"></i>Pull</div>'
-          +'<div class="bw-empty-pill"><i class="ti ti-clock"></i>Hold</div>'
+          +'<div class="bw-empty-pill">'+icon('arrow-up',11)+'Push</div>'
+          +'<div class="bw-empty-pill">'+icon('arrow-down',11)+'Pull</div>'
+          +'<div class="bw-empty-pill">'+icon('clock',11)+'Hold</div>'
         +'</div></div>'
         +'</div>';
     }
@@ -3935,8 +3933,8 @@ button:active{opacity:.75;transform:scale(.97);}
     const achPct=Math.round((earned.length/totalAch)*100);
     const nextAch=getNextAchievements(1);
     const nextAchHtml=nextAch.length
-      ?'<div class="ach-next"><i class="ti ti-target"></i>Next: '+nextAch[0].name+'</div>'
-      :(earned.length===totalAch?'<div class="ach-next" style="color:var(--s-fg);"><i class="ti ti-check" style="color:var(--s-fg);"></i>All unlocked</div>':'');
+      ?'<div class="ach-next">'+icon('target',11,'style="color:var(--w-fg);flex-shrink:0;"')+'Next: '+nextAch[0].name+'</div>'
+      :(earned.length===totalAch?'<div class="ach-next" style="color:var(--s-fg);">'+icon('check',11,'style="flex-shrink:0;"')+'All unlocked</div>':'');
     html+='<div class="str-overview-card" onclick="showStrengthAchievements()">'
       +cardHead('medal','Achievements')
       +'<div class="str-card-stat" style="color:var(--w-fg);">'+earned.length+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+totalAch+'</span></div>'
@@ -4060,8 +4058,8 @@ button:active{opacity:.75;transform:scale(.97);}
       const freqClass=(v.sessions===1&&v.priority!=='reduced')?' warn':'';
       // Priority indicator
       let priIcon='';
-      if(v.priority==='priority')priIcon='<i class="ti ti-star-filled priority"></i>';
-      else if(v.priority==='reduced')priIcon='<i class="ti ti-arrow-down reduced"></i>';
+      if(v.priority==='priority')priIcon=icon('star-filled',15,'class="priority"');
+      else if(v.priority==='reduced')priIcon=icon('arrow-down',15,'class="reduced"');
 
       html+='<div class="vol-row">'
         +'<div class="vol-row-top">'
@@ -4199,7 +4197,7 @@ button:active{opacity:.75;transform:scale(.97);}
             +'<div class="goal-tier-name">'+goal.targetTier+'</div>'
             +'<div class="goal-meta">'+goal.targetScore+' strength score · started '+daysSinceStart+' day'+(daysSinceStart===1?'':'s')+' ago</div>'
           +'</div>'
-          +'<div class="goal-target-pill"><i class="ti ti-target"></i> Target</div>'
+          +'<div class="goal-target-pill">'+icon('target',12)+' Target</div>'
         +'</div>'
         +'<div class="goal-bar"><div class="goal-bar-fill" style="width:'+goalProgressPct+'%;"></div></div>'
         +'<div class="goal-eta">'+(eta.etaWeeks!==null
@@ -5458,9 +5456,7 @@ button:active{opacity:.75;transform:scale(.97);}
   window.iPWA=async function(){if(!dp)return;dp.prompt();await dp.userChoice;dp=null;document.getElementById('install-hint').style.display='none';};
 
   if('serviceWorker' in navigator){
-    // Clear old caches on load
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v20';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});
   }
 
   load();
