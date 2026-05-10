@@ -62,8 +62,10 @@ button:active{opacity:.75;transform:scale(.97);}
 .stat-label{font-size:12px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
 .stat-value{font-size:32px;font-weight:800;line-height:1;letter-spacing:-0.5px;margin-bottom:6px;text-align:center;}
 .stat-sub{font-size:12px;color:var(--text-2);font-weight:600;line-height:1.35;margin-top:auto;text-align:center;}
-.stat-alert .stat-value{color:var(--d-fg);}
-.stat-good .stat-value{color:var(--s-fg);}
+.stat-good .stat-icon,.stat-good .stat-value,.stat-good .str-card-icon,.stat-good .str-card-stat{color:var(--s-fg);}
+.stat-amber .stat-icon,.stat-amber .stat-value,.stat-amber .str-card-icon,.stat-amber .str-card-stat{color:var(--w-fg);}
+.stat-alert .stat-icon,.stat-alert .stat-value,.stat-alert .str-card-icon,.stat-alert .str-card-stat{color:var(--d-fg);}
+.stat-good .stat-dot.on{background:var(--s-fg);border-color:var(--s-fg);}
 .stat-viz{margin-top:8px;}
 .stat-dots{display:flex;gap:4px;align-items:center;justify-content:center;}
 .stat-dot{width:8px;height:8px;border-radius:50%;background:var(--bg);border:1px solid var(--border-strong);}
@@ -2499,6 +2501,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
     // Week streak — last 4 weeks as dots
     document.getElementById('stat-streak').textContent=stats.streak;
+    document.getElementById('stat-streak').parentElement.className='stat-card'+(stats.streak>=1?' stat-good':'');
     document.getElementById('stat-streak-sub').textContent=stats.streak===1?'week':'weeks';
     document.getElementById('streak').textContent=stats.streak>0?stats.streak+'wk streak':'';
     // Build streak dots: filled = ≥3 sessions that week, going back 4 weeks
@@ -2518,18 +2521,21 @@ button:active{opacity:.75;transform:scale(.97);}
     // This week — progress bar toward target
     document.getElementById('stat-week').textContent=stats.thisWeek+' / '+target;
     const weekCard=document.getElementById('stat-week').parentElement;
-    weekCard.className='stat-card'+(stats.thisWeek>=target?' stat-good':(stats.thisWeek>=target-1?' stat-good':''));
+    weekCard.className='stat-card'+(stats.thisWeek>=target?' stat-good':stats.thisWeek===0?' stat-alert':stats.thisWeek===target-1?' stat-amber':'');
     document.getElementById('stat-week-sub').textContent=stats.thisWeek>=target?'target hit':stats.thisWeek>=target-1?'almost there':(target-stats.thisWeek)+' more to go';
     const weekPct=Math.min(100,Math.round((stats.thisWeek/target)*100));
-    const weekColor=stats.thisWeek>=target?'var(--s-fg)':'var(--accent)';
+    const weekColor=stats.thisWeek>=target?'var(--s-fg)':stats.thisWeek===0?'var(--d-fg)':stats.thisWeek===target-1?'var(--w-fg)':'var(--text-2)';
     document.getElementById('stat-week-viz').innerHTML='<div class="stat-bar"><div class="stat-bar-fill" style="width:'+weekPct+'%;background:'+weekColor+';"></div></div>';
 
     // Days since last
     const daysEl=document.getElementById('stat-days');
     const daysCard=document.getElementById('stat-days-card');
     if(stats.daysSince===null){daysEl.textContent='—';daysCard.className='stat-card';document.getElementById('stat-days-sub').textContent='no sessions yet';}
-    else if(stats.daysSince===0){daysEl.textContent='Today';daysCard.className='stat-card stat-good';document.getElementById('stat-days-sub').textContent='nice';}
-    else{daysEl.textContent=stats.daysSince;daysCard.className='stat-card'+(stats.daysSince>=3?' stat-alert':'');document.getElementById('stat-days-sub').textContent=stats.daysSince===1?'day ago':'days ago';}
+    else{
+      daysEl.textContent=stats.daysSince===0?'Today':stats.daysSince;
+      daysCard.className='stat-card'+(stats.daysSince<=1?' stat-good':stats.daysSince<=3?' stat-amber':' stat-alert');
+      document.getElementById('stat-days-sub').textContent=stats.daysSince===0?'nice':stats.daysSince===1?'day ago':'days ago';
+    }
 
     // Avg vol — sparkline of last 10 sessions' volumes
     document.getElementById('stat-avgvol').textContent=stats.avgVol.toLocaleString();
@@ -3816,14 +3822,14 @@ button:active{opacity:.75;transform:scale(.97);}
     const totalPRs=state.prs?state.prs.filter(p=>p.improvement).length:0;
     const prCounts=getPRTypeCounts();
     const prFillHtml='<div class="str-card-fill"><div class="pr-types">'
-      +'<div class="pr-type"><div class="pr-type-num" style="color:'+(prCounts.weight?'var(--w-fg)':'var(--text-3)')+';">'+prCounts.weight+'</div><div class="pr-type-lbl">Weight</div></div>'
-      +'<div class="pr-type"><div class="pr-type-num" style="color:'+(prCounts.reps?'var(--i-fg)':'var(--text-3)')+';">'+prCounts.reps+'</div><div class="pr-type-lbl">Reps</div></div>'
-      +'<div class="pr-type"><div class="pr-type-num" style="color:'+(prCounts.time?'var(--s-fg)':'var(--text-3)')+';">'+prCounts.time+'</div><div class="pr-type-lbl">Time</div></div>'
+      +'<div class="pr-type"><div class="pr-type-num"'+(prCounts.weight?'':' style="color:var(--text-3);"')+'>'+prCounts.weight+'</div><div class="pr-type-lbl">Weight</div></div>'
+      +'<div class="pr-type"><div class="pr-type-num"'+(prCounts.reps?'':' style="color:var(--text-3);"')+'>'+prCounts.reps+'</div><div class="pr-type-lbl">Reps</div></div>'
+      +'<div class="pr-type"><div class="pr-type-num"'+(prCounts.time?'':' style="color:var(--text-3);"')+'>'+prCounts.time+'</div><div class="pr-type-lbl">Time</div></div>'
       +'</div></div>';
     html+='<div class="str-overview-card" onclick="showStrengthPRs()">'
       +cardHead('trophy','PRs')
       +(totalPRs>0
-        ?'<div class="str-card-stat" style="color:var(--w-fg);">'+totalPRs+'</div><div class="str-card-sub">'+(recentPRs.length?'latest: '+recentPRs[0].exerciseName:'total earned')+'</div>'
+        ?'<div class="str-card-stat">'+totalPRs+'</div><div class="str-card-sub">'+(recentPRs.length?'latest: '+recentPRs[0].exerciseName:'total earned')+'</div>'
         :'<div class="str-card-stat" style="color:var(--text-3);">0</div><div class="str-card-sub">push hard for PRs</div>')
       +prFillHtml
       +'</div>';
@@ -3842,7 +3848,7 @@ button:active{opacity:.75;transform:scale(.97);}
       }
       html+='<div class="str-overview-card" onclick="showStrengthBW()">'
         +cardHead('stretching','Bodyweight')
-        +'<div class="str-card-stat" style="color:var(--d-fg);">'+top.val+' <span style="font-size:14px;color:var(--text-3);font-weight:600;">'+top.unit+'</span></div>'
+        +'<div class="str-card-stat">'+top.val+' <span style="font-size:14px;color:var(--text-3);font-weight:600;">'+top.unit+'</span></div>'
         +'<div class="str-card-sub">'+top.name+'</div>'
         +bwFillHtml
         +'</div>';
@@ -3882,16 +3888,17 @@ button:active{opacity:.75;transform:scale(.97);}
       const color=v.status==='zone'?'var(--s-fg)':v.status==='over'?'var(--w-fg)':'var(--d-fg)';
       return'<div class="vol-mini-bar"><div style="width:'+pct+'%;background:'+color+';"></div></div>';
     }).join('');
+    const anyUnder=volStats.some(v=>v.status==='under');
+    const volStateClass=priorityUnder?'stat-alert':(anyUnder?'stat-amber':'stat-good');
     if(priorityUnder){
-      // Alert state: red border, calls attention to priority gap
-      html+='<div class="str-overview-card" onclick="showVolume()" style="border-color:var(--accent);background:linear-gradient(180deg,var(--d-bg) 0%,var(--surface) 100%);">'
-        +'<div class="str-card-head"><span style="color:var(--accent);display:flex;align-items:center;">'+icon('stack-2',15)+'</span><span style="flex:1;color:var(--accent);">Volume</span><span style="color:var(--text-3);">'+icon('chevron-right',13)+'</span></div>'
-        +'<div class="str-card-stat" style="font-size:18px;color:var(--accent);">'+(MUSCLE_LABELS[priorityUnder.muscle]||priorityUnder.muscle)+' low</div>'
+      html+='<div class="str-overview-card '+volStateClass+'" onclick="showVolume()">'
+        +cardHead('stack-2','Volume')
+        +'<div class="str-card-stat" style="font-size:18px;">'+(MUSCLE_LABELS[priorityUnder.muscle]||priorityUnder.muscle)+' low</div>'
         +'<div class="str-card-sub" style="margin-top:0;">'+priorityUnder.sets+' / '+priorityUnder.target.min+' priority sets</div>'
         +'<div class="vol-mini">'+miniBars+'</div>'
         +'</div>';
     }else{
-      html+='<div class="str-overview-card" onclick="showVolume()">'
+      html+='<div class="str-overview-card '+volStateClass+'" onclick="showVolume()">'
         +cardHead('stack-2','Volume')
         +'<div class="str-card-stat" style="font-size:24px;">'+inZone+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+MUSCLES.length+'</span></div>'
         +'<div class="str-card-sub" style="margin-top:0;">in zone · this week</div>'
@@ -3916,7 +3923,7 @@ button:active{opacity:.75;transform:scale(.97);}
       }).join('')+'</div></div>';
       html+='<div class="str-overview-card" onclick="showStrengthMuscles()">'
         +cardHead('chart-bar','Muscles')
-        +'<div class="str-card-stat" style="color:var(--i-fg);">'+muscleBests.length+'</div>'
+        +'<div class="str-card-stat">'+muscleBests.length+'</div>'
         +'<div class="str-card-sub">tracked · top: '+(MUSCLE_LABELS[muscleBests[0].muscle]||muscleBests[0].muscle).toLowerCase()+'</div>'
         +barsHtml
         +'</div>';
@@ -3933,15 +3940,15 @@ button:active{opacity:.75;transform:scale(.97);}
     const achPct=Math.round((earned.length/totalAch)*100);
     const nextAch=getNextAchievements(1);
     const nextAchHtml=nextAch.length
-      ?'<div class="ach-next">'+icon('target',11,'style="color:var(--w-fg);flex-shrink:0;"')+'Next: '+nextAch[0].name+'</div>'
+      ?'<div class="ach-next">'+icon('target',11,'style="flex-shrink:0;"')+'Next: '+nextAch[0].name+'</div>'
       :(earned.length===totalAch?'<div class="ach-next" style="color:var(--s-fg);">'+icon('check',11,'style="flex-shrink:0;"')+'All unlocked</div>':'');
     html+='<div class="str-overview-card" onclick="showStrengthAchievements()">'
       +cardHead('medal','Achievements')
-      +'<div class="str-card-stat" style="color:var(--w-fg);">'+earned.length+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+totalAch+'</span></div>'
+      +'<div class="str-card-stat">'+earned.length+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+totalAch+'</span></div>'
       +(earned.length
         ?'<div class="str-card-sub">latest unlocked</div>'
         :'<div class="str-card-sub">train to unlock</div>')
-      +'<div class="str-card-fill"><div class="ach-progress" style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;"><div class="ach-progress-fill" style="height:100%;width:'+achPct+'%;background:var(--w-fg);border-radius:3px;"></div></div>'
+      +'<div class="str-card-fill"><div class="ach-progress" style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;"><div class="ach-progress-fill" style="height:100%;width:'+achPct+'%;background:var(--text-2);border-radius:3px;"></div></div>'
       +nextAchHtml
       +'</div>'
       +'</div>';
@@ -3956,7 +3963,7 @@ button:active{opacity:.75;transform:scale(.97);}
       :'';
     html+='<div class="str-overview-card" onclick="showStrengthLifts()">'
       +cardHead('trending-up','Lifts')
-      +'<div class="str-card-stat" style="color:var(--i-fg);">'+trackedLiftCount+'</div>'
+      +'<div class="str-card-stat">'+trackedLiftCount+'</div>'
       +'<div class="str-card-sub">tracked compounds</div>'
       +liftsFillHtml
       +'</div>';
