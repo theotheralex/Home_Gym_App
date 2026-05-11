@@ -38,8 +38,8 @@
   --r:12px;--rl:18px;--tap:52px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
-html{font-size:16px;background:radial-gradient(ellipse at 50% 0%,#0d0d0d 0%,var(--bg) 60%,#050505 100%);}
-body{background:transparent;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;overflow-x:hidden;}
+html{font-size:16px;background:#0a0a0a;}
+body{background:radial-gradient(ellipse at 50% 0%,#0d0d0d 0%,var(--bg) 60%,#050505 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;overflow-x:hidden;}
 html{overflow-x:hidden;}
 #app{max-width:430px;margin:0 auto;padding:20px 16px 160px;}
 .screen{display:none;}.screen.active{display:block;}
@@ -657,8 +657,16 @@ button:active{opacity:.75;transform:scale(.97);}
 .lv-center{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:clamp(8px,2vh,40px) clamp(8px,1.5vw,32px);position:relative;min-width:0;}
 .lv-set-label{font-size:clamp(8px,1.3vh,18px);color:var(--text-3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;}
 .lv-ex-name{font-size:clamp(24px,8vh,180px);font-weight:800;letter-spacing:-0.5px;line-height:1;margin:clamp(4px,0.8vh,16px) 0;}
-.lv-set-line{display:flex;gap:clamp(6px,1.2vw,20px);align-items:baseline;font-size:clamp(17px,4.8vh,90px);font-weight:800;flex-wrap:wrap;justify-content:center;}
+.lv-set-line{display:flex;gap:clamp(6px,1.2vw,20px);align-items:center;font-size:clamp(17px,4.8vh,90px);font-weight:800;flex-wrap:wrap;justify-content:center;}
 .lv-set-line .lv-x{color:var(--text-2);font-size:0.65em;}
+.lv-chip{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);color:var(--text);font-weight:700;font-family:inherit;font-size:clamp(16px,3.6vh,56px);padding:clamp(4px,0.8vh,12px) clamp(10px,1.6vw,22px);min-width:clamp(50px,8vw,120px);-webkit-appearance:none;appearance:none;cursor:pointer;text-align:center;line-height:1.1;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
+.lv-chip:focus{outline:2px solid rgba(220,38,38,0.45);outline-offset:1px;}
+.lv-chip-select{padding-right:clamp(24px,2.6vw,38px);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a0a0a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right clamp(8px,1vw,14px) center;background-size:clamp(10px,1.2vw,16px);}
+.lv-chip-input{}
+.lv-chips-unit{color:var(--text-2);font-size:clamp(12px,2.4vh,36px);font-weight:600;margin-left:clamp(2px,0.4vw,6px);}
+.lv-chips-x{color:var(--text-2);font-size:clamp(14px,3vh,48px);font-weight:400;}
+.lv-chips-sep{color:var(--text-2);font-size:clamp(12px,2.4vh,32px);}
+.lv-range-hint{font-size:clamp(9px,1.4vh,18px);color:var(--text-3);margin-top:clamp(4px,0.7vh,10px);}
 .lv-history{font-size:clamp(9px,1.5vh,20px);color:var(--text-3);margin-top:clamp(5px,1vh,14px);}
 .lv-history-now{color:var(--accent);font-weight:700;}
 .lv-fb-row{display:flex;gap:clamp(5px,0.8vw,14px);margin-top:clamp(8px,1.8vh,26px);flex-wrap:wrap;justify-content:center;}
@@ -668,7 +676,19 @@ button:active{opacity:.75;transform:scale(.97);}
 .lv-fb-btn.good{box-shadow:inset 0 -3px 0 var(--w-fg);}
 .lv-fb-btn.hard{box-shadow:inset 0 -3px 0 var(--i-fg);}
 .lv-fb-btn.fail{box-shadow:inset 0 -3px 0 var(--s-fg);}
-.lv-fb-btn.done-single{background:var(--s-bg);border-color:var(--s-fg);color:var(--s-fg);}
+.lv-fb-btn.done-single{background:var(--s-bg);border-color:var(--s-fg);color:var(--s-fg);min-width:clamp(120px,16vw,260px);}
+.lv-dropset-btn{background:none;border:none;color:var(--text-2);font-size:clamp(9px,1.4vh,18px);font-family:inherit;font-weight:600;cursor:pointer;margin-top:clamp(6px,1vh,14px);text-decoration:underline;text-decoration-color:rgba(160,160,160,0.3);text-underline-offset:3px;-webkit-tap-highlight-color:transparent;padding:clamp(4px,0.7vh,10px) clamp(8px,1.2vw,18px);}
+.lv-dropset-btn:active{opacity:0.65;}
+.lv-timer-wrap{display:flex;flex-direction:column;align-items:center;gap:clamp(4px,0.8vh,12px);margin-top:clamp(6px,1.2vh,18px);}
+.lv-timer-disp{font-size:clamp(48px,16vh,200px);font-weight:800;letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums;color:var(--text);}
+.lv-timer-disp.running{color:var(--accent);}
+.lv-timer-disp.done{color:var(--s-fg);}
+.lv-timer-row{display:flex;gap:clamp(6px,1vw,14px);}
+.lv-timer-btn-start{background:linear-gradient(180deg,var(--accent) 0%,#b91c1c 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,0.15),0 0 16px rgba(220,38,38,0.4);color:#fff;font-size:clamp(12px,1.9vh,26px);padding:clamp(8px,1.3vh,18px) clamp(20px,3vw,44px);border-radius:var(--r);font-weight:700;font-family:inherit;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;min-height:clamp(36px,5vh,68px);}
+.lv-timer-btn-start:active{transform:scale(0.96);}
+.lv-timer-btn-reset{background:var(--surface);border:1.5px solid var(--border-strong);color:var(--text-2);font-size:clamp(12px,1.9vh,26px);padding:clamp(8px,1.3vh,18px) clamp(16px,2.4vw,36px);border-radius:var(--r);font-weight:700;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;min-height:clamp(36px,5vh,68px);}
+.lv-timer-btn-reset:active{transform:scale(0.96);opacity:0.85;}
+.lv-up-pair-box{background:linear-gradient(135deg,rgba(220,38,38,0.1),rgba(220,38,38,0.02));border:1px solid rgba(220,38,38,0.3);border-radius:var(--r);padding:clamp(6px,1.1vh,14px) clamp(7px,1.1vw,16px);box-shadow:0 0 12px rgba(220,38,38,0.08),inset 0 1px 0 rgba(255,255,255,0.04);}
 .lv-pair{display:flex;flex-direction:column;justify-content:center;flex:1;width:100%;min-height:0;}
 .lv-pair-label{font-size:clamp(8px,1.4vh,20px);color:var(--accent);text-transform:uppercase;letter-spacing:2.5px;font-weight:800;text-align:center;margin-bottom:clamp(5px,1vh,14px);}
 .lv-pair-row{display:flex;gap:clamp(6px,1.5vw,22px);flex:1;min-height:0;}
@@ -2443,6 +2463,7 @@ button:active{opacity:.75;transform:scale(.97);}
   // Scroll the user's eye to the first unfinished set of an exercise. Uses block:'center'
   // so the set is centered in the viewport and the exercise name (just above the sets)
   // stays visible. Falls back to scrolling the card itself if every set is done.
+  // Retries once via RAF if the target isn't in the DOM yet (handles renderSess timing).
   function scrollToActiveSet(ei,delayMs){
     if(ei<0)return;
     const delay=delayMs!=null?delayMs:400;
@@ -2452,10 +2473,14 @@ button:active{opacity:.75;transform:scale(.97);}
       const sets=sess.exercises[ei].sets;
       let activeSi=-1;
       for(let si=0;si<sets.length;si++){if(!sets[si].done){activeSi=si;break;}}
-      let target=null;
-      if(activeSi>=0)target=document.getElementById('set-'+ei+'-'+activeSi);
-      if(!target){const cards=document.querySelectorAll('.ex-card');target=cards[ei];}
-      if(target)target.scrollIntoView({behavior:'smooth',block:'center'});
+      function doScroll(){
+        let target=null;
+        if(activeSi>=0)target=document.getElementById('set-'+ei+'-'+activeSi);
+        if(!target){const cards=document.querySelectorAll('.ex-card');target=cards[ei];}
+        if(target)target.scrollIntoView({behavior:'smooth',block:'center'});
+        return !!target;
+      }
+      if(!doScroll())requestAnimationFrame(()=>requestAnimationFrame(doScroll));
     },delay);
   }
 
@@ -2489,6 +2514,14 @@ button:active{opacity:.75;transform:scale(.97);}
         }
       }
       if(sb)sb.textContent=finished?'Done ✓':(running||inPrep?'Pause':'Start');
+      // Mirror to landscape display if visible
+      const lvDisp=document.getElementById('lv-ex-timer-disp');
+      const lvSb=document.getElementById('lv-ex-timer-sb');
+      if(lvDisp){
+        if(inPrep){lvDisp.textContent='Get ready: '+prepRem;lvDisp.className='lv-timer-disp running';}
+        else{lvDisp.textContent=fmt(rem);lvDisp.className='lv-timer-disp'+(running?' running':'')+(finished&&!running?' done':'');}
+      }
+      if(lvSb)lvSb.textContent=finished?'Done ✓':(running||inPrep?'Pause':'Start');
     }
     wrap.querySelector('.ex-sbt').addEventListener('click',()=>{
       if(finished)return;
@@ -3331,6 +3364,8 @@ button:active{opacity:.75;transform:scale(.97);}
         },2200);
       }
     }
+    // Always refresh landscape — covers partner-switch flows where startRest isn't called
+    renderLandscape();
   };
 
   // AUTO-DROPSET: criteria check for whether the app should automatically add a
@@ -5277,15 +5312,14 @@ button:active{opacity:.75;transform:scale(.97);}
     const cur=getCurrentSet();
     if(cur.ei<0){lv.innerHTML='<div class="lv-complete"><div class="lv-complete-title">Session complete</div><div class="lv-complete-sub">Rotate back to wrap up</div></div>';return;}
     const curEx=sess.exercises[cur.ei],curSet=curEx.sets[cur.si],ex=EX[curEx.id];
-    const inPair=curEx.group!=null;
-    const pairMembers=inPair?sess.exercises.filter(e=>e.group===curEx.group):[];
-    const partnerEx=pairMembers.length>=2?pairMembers.find(e=>e!==curEx):null;
     const isResting=restIv!=null;
     const railHtml=buildLvRail(sess,cur.ei);
-    const centerHtml=isResting?buildLvRestCenter(curEx,curSet):(partnerEx?buildLvPairCenter(sess,cur.ei,curEx,ex,curSet,cur.si,partnerEx):buildLvActiveCenter(sess,cur.ei,curEx,ex,curSet,cur.si));
-    const rightHtml=isResting?buildLvRestRight(sess,cur.ei,curEx,ex,cur.si):buildLvActiveRight(sess,cur.ei,curEx,ex);
+    const centerHtml=isResting?buildLvRestCenter(curEx,curSet):buildLvActiveCenter(sess,cur.ei,curEx,ex,curSet,cur.si);
+    const rightHtml=isResting?buildLvRestRight(sess,cur.ei,curEx,ex,cur.si):buildLvActiveRight(sess,cur.ei,curEx,ex,cur.si);
     const progHtml=buildLvProgress(sess,cur.ei);
     lv.innerHTML='<div class="lv-rail lv-rail-left">'+railHtml+'</div><div class="lv-center">'+centerHtml+'</div><div class="lv-rail lv-rail-right">'+rightHtml+'</div>'+progHtml;
+    // After render, mirror current timer state for timed exercises
+    if(ex.unit==='sec'&&!isResting)syncLvTimerDisp(cur.ei);
   }
 
   function buildLvRail(sess,curEi){
@@ -5316,49 +5350,75 @@ button:active{opacity:.75;transform:scale(.97);}
   function buildLvActiveCenter(sess,ei,curEx,ex,curSet,si){
     const totalSets=curEx.sets.length;
     const showWeight=exIsWeighted(ex)||ex.hasWeight;
-    const unit=ex.unit==='sec'?'s':'';
-    const repsDisp=lvRepsDisp(ex,curSet);
+    const isTimed=ex.unit==='sec';
+    const isQuick=sess.quickMode;
+    const repsUnit=isTimed?'s':'reps';
+    // Build editable chips for weight + reps/time
+    let wChip='';
+    if(showWeight){
+      const usAdj=exIsAdj(ex);
+      if(usAdj){
+        const pool=exPool(ex);
+        const opts=pool.map(w=>'<option value="'+w+'"'+(curSet.actualWeight===w?' selected':'')+'>'+w+'</option>').join('');
+        wChip='<select class="lv-chip lv-chip-select" onchange="updSet('+ei+','+si+',\'actualWeight\',this.value);renderLandscape();">'+opts+'</select><span class="lv-chips-unit">lb</span>';
+      }else{
+        wChip='<input class="lv-chip lv-chip-input" type="number" inputmode="numeric" value="'+curSet.actualWeight+'" onchange="updSet('+ei+','+si+',\'actualWeight\',this.value);renderLandscape();"><span class="lv-chips-unit">lb</span>';
+      }
+    }
+    const rChip='<input class="lv-chip lv-chip-input" type="number" inputmode="numeric" value="'+curSet.actualReps+'" onchange="updSet('+ei+','+si+',\'actualReps\',this.value);renderLandscape();"><span class="lv-chips-unit">'+repsUnit+'</span>';
+    const sepHtml=isTimed?'<span class="lv-chips-sep">·</span>':'<span class="lv-chips-x">×</span>';
+    const chipsHtml='<div class="lv-set-line">'+(wChip?wChip+sepHtml:'')+rChip+'</div>';
+    // Range hint (only if range has different bounds)
+    const rangeHint=(ex.repRange&&ex.repRange[0]!==ex.repRange[1])?'<div class="lv-range-hint">range: '+ex.repRange[0]+'–'+ex.repRange[1]+(isTimed?'s':'')+'</div>':'';
+    // History
     const histParts=[];
-    for(let i=0;i<si;i++){const s=curEx.sets[i];histParts.push('Set '+(i+1)+': '+(s.actualReps||0)+unit+' ✓');}
+    for(let i=0;i<si;i++){const s=curEx.sets[i];histParts.push('Set '+(i+1)+': '+(s.actualReps||0)+(isTimed?'s':'')+' ✓');}
     histParts.push('<span class="lv-history-now">Set '+(si+1)+': now</span>');
-    const wDisp=showWeight?curSet.actualWeight+' lb':'';
-    return'<div class="lv-set-label">Set '+(si+1)+' of '+totalSets+'</div>'
+    for(let i=si+1;i<totalSets;i++){histParts.push('Set '+(i+1));}
+    // Set label (Superset/Pair tag if grouped)
+    let setLabel='Set '+(si+1)+' of '+totalSets;
+    if(curEx.group!=null)setLabel=(isQuick?'Pair · ':'Superset · ')+setLabel;
+    // Timer for timed exercises
+    const timerHtml=isTimed?buildLvTimerWidget(ei,curSet.actualReps):'';
+    // Dropset button (weighted, not quick mode, not on a dropset, only if not last-and-done)
+    const canDrop=exIsWeighted(ex)&&!isQuick&&!curSet.isDropset;
+    const dropsetHtml=canDrop?'<button class="lv-dropset-btn" onclick="addDropset('+ei+');renderLandscape();">+ Add dropset</button>':'';
+    return'<div class="lv-set-label">'+setLabel+'</div>'
       +'<div class="lv-ex-name">'+escHtml(curEx.name)+'</div>'
-      +'<div class="lv-set-line">'+(wDisp?'<span>'+wDisp+'</span><span class="lv-x">×</span>':'')+'<span>'+repsDisp+'</span></div>'
+      +chipsHtml
+      +rangeHint
+      +timerHtml
       +'<div class="lv-history">'+histParts.join(' &nbsp;·&nbsp; ')+'</div>'
-      +buildLvFbButtons(sess,ei,si,curEx);
+      +buildLvFbButtons(sess,ei,si,curEx)
+      +dropsetHtml;
   }
 
-  function buildLvPairCenter(sess,ei,curEx,ex,curSet,si,partnerEx){
-    const totalSets=curEx.sets.length;
-    const showWeight=exIsWeighted(ex)||ex.hasWeight;
-    const pEx=EX[partnerEx.id];
-    const pShowWeight=exIsWeighted(pEx)||pEx.hasWeight;
-    // Partner's next undone set
-    const pSi=partnerEx.sets.findIndex(s=>!s.done);
-    const pSet=pSi>=0?partnerEx.sets[pSi]:partnerEx.sets[partnerEx.sets.length-1];
-    const label=sess.quickMode?'Pair · set '+(si+1)+' of '+totalSets:'Superset · set '+(si+1)+' of '+totalSets;
-    const wDisp=showWeight?curSet.actualWeight+' lb':'';
-    const pWDisp=pShowWeight?pSet.actualWeight+' lb':'';
-    const repsDisp=lvRepsDisp(ex,curSet);
-    const pRepsDisp=lvRepsDisp(pEx,pSet);
-    return'<div class="lv-pair">'
-      +'<div class="lv-pair-label">'+label+'</div>'
-      +'<div class="lv-pair-row">'
-        +'<div class="lv-pair-card lv-pair-now">'
-          +'<div class="lv-pair-tag">Now</div>'
-          +'<div class="lv-pair-name">'+escHtml(curEx.name)+'</div>'
-          +'<div class="lv-pair-targets">'+(wDisp?wDisp+' × ':'')+repsDisp+'</div>'
-        +'</div>'
-        +'<div class="lv-pair-card lv-pair-then">'
-          +'<div class="lv-pair-tag">Then</div>'
-          +'<div class="lv-pair-name">'+escHtml(partnerEx.name)+'</div>'
-          +'<div class="lv-pair-targets">'+(pWDisp?pWDisp+' × ':'')+pRepsDisp+'</div>'
-        +'</div>'
+  // Build the landscape timer widget (for timed exercises). Mirrors portrait timer state
+  // via syncLvTimerDisp() called on each tick, and forwards Start/Reset clicks to the
+  // portrait timer controller so a single source of truth controls the countdown.
+  function buildLvTimerWidget(ei,targetSecs){
+    const m=Math.floor(targetSecs/60),s=targetSecs%60;
+    const disp=m+':'+(s<10?'0':'')+s;
+    return'<div class="lv-timer-wrap">'
+      +'<div class="lv-timer-disp" id="lv-ex-timer-disp">'+disp+'</div>'
+      +'<div class="lv-timer-row">'
+        +'<button class="lv-timer-btn-start" id="lv-ex-timer-sb" onclick="lvTimerStart('+ei+')">Start</button>'
+        +'<button class="lv-timer-btn-reset" onclick="lvTimerReset('+ei+')">Reset</button>'
       +'</div>'
-      +'<div class="lv-pair-fb">'+buildLvFbButtons(sess,ei,si,curEx)+'</div>'
     +'</div>';
   }
+  // Mirror portrait timer state into landscape display. Called from initExTimer's upd()
+  // (when landscape elements exist) and from renderLandscape after a fresh render.
+  function syncLvTimerDisp(ei){
+    const portraitDisp=document.querySelector('#ex-timer-'+ei+' .ex-timer-disp');
+    const portraitSb=document.querySelector('#ex-timer-'+ei+' .ex-sbt');
+    const lvDisp=document.getElementById('lv-ex-timer-disp');
+    const lvSb=document.getElementById('lv-ex-timer-sb');
+    if(portraitDisp&&lvDisp){lvDisp.textContent=portraitDisp.textContent;lvDisp.className='lv-timer-disp'+(portraitDisp.classList.contains('running')?' running':'')+(portraitDisp.classList.contains('done')?' done':'');}
+    if(portraitSb&&lvSb)lvSb.textContent=portraitSb.textContent;
+  }
+  window.lvTimerStart=function(ei){const b=document.querySelector('#ex-timer-'+ei+' .ex-sbt');if(b)b.click();};
+  window.lvTimerReset=function(ei){const b=document.querySelector('#ex-timer-'+ei+' .ex-rbt');if(b)b.click();};
 
   function buildLvRestCenter(curEx,curSet){
     const m=Math.floor(restRem/60),s=restRem%60;
@@ -5374,29 +5434,67 @@ button:active{opacity:.75;transform:scale(.97);}
       +'</div>';
   }
 
-  function buildLvActiveRight(sess,ei,curEx,ex){
-    // Find next exercise (not in current pair if applicable)
-    let nextEi=-1;
-    for(let i=ei+1;i<sess.exercises.length;i++){
-      if(curEx.group!=null&&sess.exercises[i].group===curEx.group)continue;
-      if(sess.exercises[i].sets.some(s=>!s.done)){nextEi=i;break;}
+  function buildLvActiveRight(sess,ei,curEx,ex,si){
+    // Decide what "Up next" shows:
+    // - In a pair, if any pair-member has unfinished sets AFTER this current set finishes:
+    //     show the partner that's coming up (red tint, labeled "Up next · pair")
+    // - Otherwise (pair ending after this set, or solo exercise):
+    //     show the next exercise outside the current group (no tint, labeled "Up next")
+    const inPair=curEx.group!=null;
+    let partnerToShow=null;
+    if(inPair){
+      const pairMembers=sess.exercises.filter(e=>e.group===curEx.group);
+      // After this set is marked done, does any pair member still have unfinished sets?
+      const pairHasRemaining=pairMembers.some(e=>{
+        const eIdx=sess.exercises.indexOf(e);
+        return e.sets.some((s,sIdx)=>{
+          if(eIdx===ei&&sIdx===si)return false;
+          return !s.done;
+        });
+      });
+      if(pairHasRemaining){
+        // Prefer a partner exercise (not us) with unfinished sets
+        partnerToShow=pairMembers.find(e=>e!==curEx&&e.sets.some(s=>!s.done))||null;
+        // If no partner has work, we'd loop back to ourselves — fall through to "next exercise"
+        // since "Up next: this same exercise" reads weird across the room.
+      }
     }
-    let html='<div class="lv-rail-label">Up next</div>';
-    if(nextEi<0){
-      html+='<div class="lv-up-name">Last exercise</div><div class="lv-up-detail">Almost done</div>';
+    let html='';
+    if(partnerToShow){
+      const pEx=EX[partnerToShow.id];
+      const pSi=partnerToShow.sets.findIndex(s=>!s.done);
+      const pSet=pSi>=0?partnerToShow.sets[pSi]:partnerToShow.sets[0];
+      const showW=exIsWeighted(pEx)||pEx.hasWeight;
+      const wTxt=showW?pSet.actualWeight+' lb · ':'';
+      const repTxt=(pSet.actualReps||0)+(pEx.unit==='sec'?'s':' reps');
+      html='<div class="lv-rail-label">Up next · pair</div>'
+        +'<div class="lv-up-pair-box">'
+          +'<div class="lv-up-name">'+escHtml(partnerToShow.name)+'</div>'
+          +'<div class="lv-up-detail">'+wTxt+repTxt+'</div>'
+        +'</div>';
     }else{
-      const nx=sess.exercises[nextEi],nxEx=EX[nx.id];
-      const sets=nx.sets.length;
-      const showW=exIsWeighted(nxEx)||nxEx.hasWeight;
-      const wTxt=showW?nx.sets[0].actualWeight+' lb · ':'';
-      const repTxt=lvRepsDisp(nxEx,nx.sets[0])+(nxEx.unit==='sec'?'s':' reps');
-      html+='<div class="lv-up-name">'+escHtml(nx.name)+'</div>'
-        +'<div class="lv-up-detail">'+sets+' sets · '+wTxt+repTxt+'</div>';
+      // Find next exercise outside the current group
+      let nextEi=-1;
+      for(let i=ei+1;i<sess.exercises.length;i++){
+        if(curEx.group!=null&&sess.exercises[i].group===curEx.group)continue;
+        if(sess.exercises[i].sets.some(s=>!s.done)){nextEi=i;break;}
+      }
+      html='<div class="lv-rail-label">Up next</div>';
+      if(nextEi<0){
+        html+='<div class="lv-up-name">Last exercise</div><div class="lv-up-detail">Almost done</div>';
+      }else{
+        const nx=sess.exercises[nextEi],nxEx=EX[nx.id];
+        const sets=nx.sets.length;
+        const showW=exIsWeighted(nxEx)||nxEx.hasWeight;
+        const wTxt=showW?nx.sets[0].actualWeight+' lb · ':'';
+        const repTxt=(nx.sets[0].actualReps||0)+(nxEx.unit==='sec'?'s':' reps');
+        html+='<div class="lv-up-name">'+escHtml(nx.name)+'</div>'
+          +'<div class="lv-up-detail">'+sets+' sets · '+wTxt+repTxt+'</div>';
+      }
     }
     // Last set / last block callout
-    const totalSets=curEx.sets.length,si=curEx.sets.findIndex(s=>!s.done);
+    const totalSets=curEx.sets.length;
     if(si===totalSets-1){
-      const inPair=curEx.group!=null;
       const isLastBlock=ei>=sess.exercises.length-2||(inPair&&!sess.exercises.slice(ei+1).some(e=>e.group!==curEx.group&&e.sets.some(s=>!s.done)));
       html+='<div class="lv-up-callout">'+(isLastBlock?'Last block':'Last set')+'</div>'
         +'<div class="lv-up-callout-sub">Push hard if RIR &lt; 2</div>';
@@ -5476,17 +5574,28 @@ button:active{opacity:.75;transform:scale(.97);}
   }
 
   function lvRepsDisp(ex,set){
-    // Show actual rep target; fall back to range if no target. Append range hint if differs.
-    const t=set.targetReps||set.actualReps||0;
-    if(ex.repRange&&ex.repRange[0]!==ex.repRange[1]&&t)return ex.repRange[0]+'–'+ex.repRange[1];
-    return String(t);
+    // Show the actual rep/sec target. Range is shown as a separate hint, not inline.
+    return String(set.targetReps||set.actualReps||0);
   }
 
   function escHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
   // Listen for orientation changes and trigger landscape re-render
-  window.addEventListener('orientationchange',()=>setTimeout(renderLandscape,100));
-  window.matchMedia('(orientation:landscape)').addEventListener('change',renderLandscape);
+  window.addEventListener('orientationchange',()=>setTimeout(()=>{
+    renderLandscape();
+    // If we just rotated to portrait with an active session, scroll to the active set
+    if(!window.matchMedia('(orientation:landscape)').matches&&state.currentSession){
+      const cur=getCurrentSet();
+      if(cur.ei>=0)scrollToActiveSet(cur.ei,200);
+    }
+  },100));
+  window.matchMedia('(orientation:landscape)').addEventListener('change',e=>{
+    renderLandscape();
+    if(!e.matches&&state.currentSession){
+      const cur=getCurrentSet();
+      if(cur.ei>=0)scrollToActiveSet(cur.ei,200);
+    }
+  });
 
   // Inline toggle for auto-add dropsets (no modal — single-tap flip)
   window.toggleAutoDropset=function(){
@@ -5773,8 +5882,8 @@ button:active{opacity:.75;transform:scale(.97);}
 
   if('serviceWorker' in navigator){
     // Clear old caches on load
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v32')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v32';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v33')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v33';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
