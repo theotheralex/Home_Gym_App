@@ -38,9 +38,10 @@
   --r:12px;--rl:18px;--tap:52px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
-html{font-size:16px;}
-body{background:radial-gradient(ellipse at 50% 0%,#0d0d0d 0%,var(--bg) 60%,#050505 100%) fixed;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;overflow-x:hidden;}
+html{font-size:16px;background:radial-gradient(ellipse at 50% 0%,#0d0d0d 0%,var(--bg) 60%,#050505 100%);}
+body{background:transparent;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;overflow-x:hidden;}
 html{overflow-x:hidden;}
+@media (display-mode:standalone){html{overflow:hidden;height:100dvh;}body{height:100dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}}
 #app{max-width:430px;margin:0 auto;padding:20px 16px 160px;}
 .screen{display:none;}.screen.active{display:block;}
 h1{font-size:28px;font-weight:700;letter-spacing:-.5px;}
@@ -124,10 +125,10 @@ button:active{opacity:.75;transform:scale(.97);}
 .iunit{font-size:13px;color:var(--text-2);font-weight:500;}
 .fb-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
 .fb-btn{min-height:50px;font-size:13px;font-weight:700;border-radius:var(--r);border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text-2);}
-.fb-btn.sel-easy{background:var(--d-bg);border-color:var(--d-br);color:var(--d-fg);}
-.fb-btn.sel-good{background:var(--w-bg);border-color:var(--w-br);color:var(--w-fg);}
-.fb-btn.sel-hard{background:var(--i-bg);border-color:var(--i-br);color:var(--i-fg);}
-.fb-btn.sel-fail{background:var(--s-bg);border-color:var(--s-br);color:var(--s-fg);}
+.fb-btn.sel-easy{background:var(--d-bg);border-color:var(--d-br);color:var(--d-fg);box-shadow:inset 0 -3px 0 var(--d-fg);}
+.fb-btn.sel-good{background:var(--w-bg);border-color:var(--w-br);color:var(--w-fg);box-shadow:inset 0 -3px 0 var(--w-fg);}
+.fb-btn.sel-hard{background:var(--i-bg);border-color:var(--i-br);color:var(--i-fg);box-shadow:inset 0 -3px 0 var(--i-fg);}
+.fb-btn.sel-fail{background:var(--s-bg);border-color:var(--s-br);color:var(--s-fg);box-shadow:inset 0 -3px 0 var(--s-fg);}
 /* Session CTA cards on Train tab — Quick + Full sit side by side */
 .session-cta-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
 .session-cta{background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid rgba(255,255,255,0.08);border-radius:var(--rl);padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:transform 0.1s,background 0.15s;font-family:inherit;text-align:left;color:var(--text);-webkit-appearance:none;appearance:none;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
@@ -662,8 +663,12 @@ button:active{opacity:.75;transform:scale(.97);}
 .lv-history{font-size:clamp(9px,1.5vh,20px);color:var(--text-3);margin-top:clamp(5px,1vh,14px);}
 .lv-history-now{color:var(--accent);font-weight:700;}
 .lv-fb-row{display:flex;gap:clamp(5px,0.8vw,14px);margin-top:clamp(8px,1.8vh,26px);flex-wrap:wrap;justify-content:center;}
-.lv-fb-btn{background:var(--surface);border:1.5px solid var(--border-strong);color:var(--text-2);font-size:clamp(11px,1.7vh,24px);padding:clamp(7px,1.1vh,16px) clamp(12px,2.2vw,32px);border-radius:var(--r);font-weight:700;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform 0.08s,opacity 0.1s,background 0.1s,color 0.1s;min-height:clamp(36px,5vh,68px);}
+.lv-fb-btn{background:var(--surface);border:1.5px solid var(--border-strong);color:var(--text);font-size:clamp(11px,1.7vh,24px);padding:clamp(7px,1.1vh,16px) clamp(12px,2.2vw,32px);border-radius:var(--r);font-weight:700;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform 0.08s,opacity 0.1s,background 0.1s,color 0.1s;min-height:clamp(36px,5vh,68px);}
 .lv-fb-btn:active{transform:scale(0.96);opacity:0.85;}
+.lv-fb-btn.easy{box-shadow:inset 0 -3px 0 var(--d-fg);}
+.lv-fb-btn.good{box-shadow:inset 0 -3px 0 var(--w-fg);}
+.lv-fb-btn.hard{box-shadow:inset 0 -3px 0 var(--i-fg);}
+.lv-fb-btn.fail{box-shadow:inset 0 -3px 0 var(--s-fg);}
 .lv-fb-btn.done-single{background:var(--s-bg);border-color:var(--s-fg);color:var(--s-fg);}
 .lv-pair{display:flex;flex-direction:column;justify-content:center;flex:1;width:100%;min-height:0;}
 .lv-pair-label{font-size:clamp(8px,1.4vh,20px);color:var(--accent);text-transform:uppercase;letter-spacing:2.5px;font-weight:800;text-align:center;margin-bottom:clamp(5px,1vh,14px);}
@@ -5464,10 +5469,10 @@ button:active{opacity:.75;transform:scale(.97);}
       return'<div class="lv-fb-row"><button class="lv-fb-btn done-single" onclick="setDone('+ei+','+si+')">Done</button></div>';
     }
     return'<div class="lv-fb-row">'
-      +'<button class="lv-fb-btn" onclick="setFB('+ei+','+si+',\'easy\')">Easy</button>'
-      +'<button class="lv-fb-btn" onclick="setFB('+ei+','+si+',\'good\')">Good</button>'
-      +'<button class="lv-fb-btn" onclick="setFB('+ei+','+si+',\'hard\')">Hard</button>'
-      +'<button class="lv-fb-btn" onclick="setFB('+ei+','+si+',\'fail\')">Fail</button>'
+      +'<button class="lv-fb-btn easy" onclick="setFB('+ei+','+si+',\'easy\')">Easy</button>'
+      +'<button class="lv-fb-btn good" onclick="setFB('+ei+','+si+',\'good\')">Good</button>'
+      +'<button class="lv-fb-btn hard" onclick="setFB('+ei+','+si+',\'hard\')">Hard</button>'
+      +'<button class="lv-fb-btn fail" onclick="setFB('+ei+','+si+',\'fail\')">Fail</button>'
     +'</div>';
   }
 
@@ -5769,8 +5774,8 @@ button:active{opacity:.75;transform:scale(.97);}
 
   if('serviceWorker' in navigator){
     // Clear old caches on load
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v30')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v30';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v31')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v31';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
