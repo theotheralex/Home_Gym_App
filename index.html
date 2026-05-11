@@ -41,7 +41,6 @@
 html{font-size:16px;background:radial-gradient(ellipse at 50% 0%,#0d0d0d 0%,var(--bg) 60%,#050505 100%);}
 body{background:transparent;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;overflow-x:hidden;}
 html{overflow-x:hidden;}
-@media (display-mode:standalone){html{overflow:hidden;height:100dvh;}body{height:100dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}}
 #app{max-width:430px;margin:0 auto;padding:20px 16px 160px;}
 .screen{display:none;}.screen.active{display:block;}
 h1{font-size:28px;font-weight:700;letter-spacing:-.5px;}
@@ -5774,8 +5773,8 @@ button:active{opacity:.75;transform:scale(.97);}
 
   if('serviceWorker' in navigator){
     // Clear old caches on load
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v31')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v31';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v32')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v32';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
