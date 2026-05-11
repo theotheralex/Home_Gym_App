@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.34.0/dist/tabler-icons.min.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ETM%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ETM%3C/text%3E%3C/svg%3E">
-<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22The%20Toji%20Method%22%2C%22short_name%22%3A%22The%20Toji%20Method%22%2C%22description%22%3A%22Adaptive%20home%20gym%20training%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527102%2527%2520fill%253D%2527%2523dc2626%2527%252F%253E%253Ctext%2520x%253D%2527256%2527%2520y%253D%2527338%2527%2520font-size%253D%2527266%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%2520font-family%253D%2527system-ui%2527%2520font-weight%253D%2527700%2527%253ETM%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22The%20Toji%20Method%22%2C%22short_name%22%3A%22The%20Toji%20Method%22%2C%22description%22%3A%22Adaptive%20home%20gym%20training%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22any%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527102%2527%2520fill%253D%2527%2523dc2626%2527%252F%253E%253Ctext%2520x%253D%2527256%2527%2520y%253D%2527338%2527%2520font-size%253D%2527266%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%2520font-family%253D%2527system-ui%2527%2520font-weight%253D%2527700%2527%253ETM%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 <style>
 :root {
   --bg:#0a0a0a;--surface:#181818;--surface-2:#242424;
@@ -604,7 +604,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .switch.on{background:var(--accent);}
 .switch-thumb{position:absolute;top:2px;left:2px;width:24px;height:24px;background:#f5f5f5;border-radius:50%;transition:transform .2s;}
 .switch.on .switch-thumb{transform:translateX(20px);}
-body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;margin-left:-50dvh;margin-top:-50dvw;transform:rotate(90deg);overflow-y:auto;overflow-x:hidden;}
 
 /* Edit modal */
 .edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;animation:fade-in 0.2s ease;}
@@ -632,6 +631,73 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
 .edit-wt-chip{display:flex;align-items:center;justify-content:center;height:44px;background:transparent;border:1.5px solid var(--border-strong);border-radius:10px;font-size:14px;font-weight:600;color:var(--text-3);cursor:pointer;transition:all 0.15s;}
 .edit-wt-chip.sel{background:var(--accent);border-color:var(--accent);color:#fff;}
 @keyframes fade-in{from{opacity:0;}to{opacity:1;}}
+/* Landscape view — fullscreen workout display when device rotates */
+#landscape-view{display:none;position:fixed;inset:0;background:var(--bg);color:var(--text);z-index:200;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;}
+#landscape-prompt{display:none;position:fixed;inset:0;background:var(--bg);color:var(--text);z-index:200;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:clamp(8px,1.5vh,20px);}
+#landscape-prompt .lp-icon{font-size:clamp(48px,12vh,140px);color:var(--text-3);line-height:1;}
+#landscape-prompt .lp-title{font-size:clamp(18px,4vh,42px);font-weight:800;letter-spacing:-0.5px;}
+#landscape-prompt .lp-sub{font-size:clamp(13px,2.4vh,26px);color:var(--text-2);}
+@media (orientation:landscape){
+  body.has-session #app,body.has-session .tab-bar,body.has-session #rest-overlay{display:none!important;}
+  body.has-session #landscape-view{display:grid;grid-template-columns:22% 1fr 24%;grid-template-rows:1fr clamp(30px,5.5vh,68px);}
+  body:not(.has-session) #app,body:not(.has-session) .tab-bar,body:not(.has-session) #onboarding{display:none!important;}
+  body:not(.has-session) #landscape-prompt{display:flex;}
+}
+.lv-rail{padding:clamp(8px,1.4vh,20px) clamp(6px,1vw,16px);overflow:hidden;display:flex;flex-direction:column;gap:clamp(3px,0.6vh,8px);}
+.lv-rail-left{border-right:1px solid var(--border);}
+.lv-rail-right{border-left:1px solid var(--border);}
+.lv-rail-label{font-size:clamp(8px,1.3vh,18px);color:var(--text-2);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:clamp(3px,0.6vh,10px);}
+.lv-rail-item{font-size:clamp(9px,1.55vh,22px);color:var(--text-2);line-height:1.25;}
+.lv-rail-item.done{color:var(--text-3);}
+.lv-rail-item.done .lv-check{color:var(--s-fg);margin-right:4px;}
+.lv-rail-item.current{color:var(--text);font-weight:800;font-size:clamp(10px,1.8vh,26px);}
+.lv-rail-pair{border-left:2px solid rgba(220,38,38,0.4);padding-left:clamp(4px,0.8vw,10px);margin-left:-2px;display:flex;flex-direction:column;gap:clamp(3px,0.6vh,8px);}
+.lv-rail-pair.current-pair{border-color:var(--accent);background:linear-gradient(90deg,rgba(220,38,38,0.08),transparent);}
+.lv-center{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:clamp(8px,2vh,40px) clamp(8px,1.5vw,32px);position:relative;min-width:0;}
+.lv-set-label{font-size:clamp(8px,1.3vh,18px);color:var(--text-3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;}
+.lv-ex-name{font-size:clamp(24px,8vh,180px);font-weight:800;letter-spacing:-0.5px;line-height:1;margin:clamp(4px,0.8vh,16px) 0;}
+.lv-set-line{display:flex;gap:clamp(6px,1.2vw,20px);align-items:baseline;font-size:clamp(17px,4.8vh,90px);font-weight:800;flex-wrap:wrap;justify-content:center;}
+.lv-set-line .lv-x{color:var(--text-2);font-size:0.65em;}
+.lv-history{font-size:clamp(9px,1.5vh,20px);color:var(--text-3);margin-top:clamp(5px,1vh,14px);}
+.lv-history-now{color:var(--accent);font-weight:700;}
+.lv-fb-row{display:flex;gap:clamp(5px,0.8vw,14px);margin-top:clamp(8px,1.8vh,26px);flex-wrap:wrap;justify-content:center;}
+.lv-fb-btn{background:var(--surface);border:1px solid var(--border-strong);color:var(--text);font-size:clamp(11px,1.7vh,24px);padding:clamp(7px,1.1vh,16px) clamp(12px,2.2vw,32px);border-radius:6px;font-weight:700;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform 0.08s,opacity 0.1s;min-height:clamp(36px,5vh,68px);}
+.lv-fb-btn:active{transform:scale(0.96);opacity:0.85;}
+.lv-fb-btn.easy{color:var(--text-2);}
+.lv-fb-btn.hard{background:linear-gradient(135deg,rgba(220,38,38,0.22),rgba(220,38,38,0.08));border-color:var(--accent);color:var(--accent);}
+.lv-fb-btn.fail{background:linear-gradient(135deg,rgba(220,38,38,0.34),rgba(220,38,38,0.14));border-color:var(--accent);color:#fff;}
+.lv-fb-btn.done-single{background:var(--accent);color:#fff;border-color:var(--accent);}
+.lv-pair{display:flex;flex-direction:column;justify-content:center;flex:1;width:100%;min-height:0;}
+.lv-pair-label{font-size:clamp(8px,1.4vh,20px);color:var(--accent);text-transform:uppercase;letter-spacing:2.5px;font-weight:800;text-align:center;margin-bottom:clamp(5px,1vh,14px);}
+.lv-pair-row{display:flex;gap:clamp(6px,1.5vw,22px);flex:1;min-height:0;}
+.lv-pair-card{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border-radius:8px;padding:clamp(8px,1.8vh,28px) clamp(6px,1vw,18px);min-width:0;}
+.lv-pair-now{background:linear-gradient(135deg,rgba(220,38,38,0.2),rgba(220,38,38,0.05));border:1.5px solid var(--accent);}
+.lv-pair-then{background:var(--surface);border:1px solid var(--border);opacity:0.55;}
+.lv-pair-tag{font-size:clamp(8px,1.3vh,18px);text-transform:uppercase;letter-spacing:1.5px;font-weight:800;}
+.lv-pair-now .lv-pair-tag{color:var(--accent);}
+.lv-pair-then .lv-pair-tag{color:var(--text-2);}
+.lv-pair-name{font-size:clamp(15px,4.8vh,90px);font-weight:800;letter-spacing:-0.3px;line-height:1.05;margin-top:clamp(3px,0.6vh,10px);}
+.lv-pair-targets{font-size:clamp(13px,3.2vh,58px);font-weight:800;margin-top:clamp(4px,0.8vh,12px);}
+.lv-pair-fb{margin-top:clamp(6px,1.2vh,18px);}
+.lv-rest-label{font-size:clamp(11px,2.2vh,36px);color:var(--accent);text-transform:uppercase;letter-spacing:3px;font-weight:800;}
+.lv-rest-timer{font-size:clamp(60px,28vh,360px);font-weight:800;letter-spacing:-2px;line-height:1;margin-top:clamp(4px,0.8vh,16px);font-variant-numeric:tabular-nums;background:radial-gradient(ellipse at center,rgba(220,38,38,0.07),transparent 65%);padding:clamp(8px,2vh,50px) clamp(16px,4vw,100px);}
+.lv-rest-sub{font-size:clamp(10px,1.7vh,24px);color:var(--text-2);margin-top:clamp(4px,0.8vh,14px);}
+.lv-rest-actions{display:flex;gap:clamp(6px,1vw,14px);margin-top:clamp(8px,1.5vh,22px);}
+.lv-up-name{font-size:clamp(11px,1.9vh,26px);font-weight:700;line-height:1.15;}
+.lv-up-detail{font-size:clamp(9px,1.5vh,22px);color:var(--text-2);margin-top:3px;line-height:1.3;}
+.lv-up-callout{font-size:clamp(8px,1.4vh,20px);color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;font-weight:800;margin-top:clamp(8px,1.5vh,20px);}
+.lv-up-callout-sub{font-size:clamp(9px,1.5vh,20px);color:var(--text-2);margin-top:2px;line-height:1.3;}
+.lv-up-lastwk{font-size:clamp(8px,1.3vh,18px);color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;font-weight:700;margin-top:clamp(8px,1.5vh,18px);}
+.lv-up-lastwk-val{font-size:clamp(9px,1.4vh,18px);color:var(--text-2);margin-top:2px;line-height:1.3;}
+.lv-progress{grid-column:1/-1;border-top:1px solid var(--border);padding:0 clamp(8px,1.5vw,28px);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#070707,#050505);}
+.lv-dots{display:flex;gap:clamp(4px,0.7vw,12px);align-items:center;}
+.lv-dot{width:clamp(6px,1.2vh,18px);height:clamp(6px,1.2vh,18px);border-radius:50%;background:var(--text-3);flex-shrink:0;}
+.lv-dot.done{background:var(--s-fg);}
+.lv-dot.current{background:var(--accent);width:clamp(8px,1.7vh,24px);height:clamp(8px,1.7vh,24px);}
+.lv-stats{font-size:clamp(9px,1.4vh,20px);color:var(--text-3);font-weight:600;letter-spacing:0.3px;}
+.lv-complete{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;height:100%;width:100%;grid-column:1/-1;grid-row:1/-1;gap:clamp(6px,1.2vh,18px);padding:24px;}
+.lv-complete-title{font-size:clamp(22px,6vh,90px);font-weight:800;letter-spacing:-0.5px;}
+.lv-complete-sub{font-size:clamp(12px,2.2vh,30px);color:var(--text-2);}
 </style>
 </head>
 <body>
@@ -664,6 +730,14 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
     <button class="rest-add" onclick="addRestTime(30)">+30s</button>
     <button class="rest-btn rest-done" onclick="skipRest()">Done</button>
   </div>
+</div>
+
+<!-- Landscape view — fullscreen workout display when device rotates -->
+<div id="landscape-view" aria-hidden="true"></div>
+<div id="landscape-prompt" aria-hidden="true">
+  <i class="ti ti-rotate-360 lp-icon"></i>
+  <div class="lp-title">Active session required</div>
+  <div class="lp-sub">Rotate back to portrait</div>
 </div>
 
 <!-- ONBOARDING -->
@@ -2359,9 +2433,10 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
     if(restIv)clearInterval(restIv);
     restTotal=REST[exType]||60;restRem=restTotal;
     updRest();document.getElementById('rest-overlay').classList.add('visible');
+    renderLandscape();
     restIv=setInterval(()=>{restRem--;updRest();if(restRem<=0){clearInterval(restIv);restIv=null;beep(true);finRest();}else if(restRem<=3)beep(false);},1000);
   }
-  function updRest(){const m=Math.floor(restRem/60),s=restRem%60;document.getElementById('rest-display').textContent=m+':'+(s<10?'0':'')+s;document.getElementById('rest-ring').style.strokeDashoffset=CIRC*(1-(restRem/restTotal));}
+  function updRest(){const m=Math.floor(restRem/60),s=restRem%60;const disp=m+':'+(s<10?'0':'')+s;document.getElementById('rest-display').textContent=disp;document.getElementById('rest-ring').style.strokeDashoffset=CIRC*(1-(restRem/restTotal));const lvt=document.getElementById('lv-rest-timer');if(lvt)lvt.textContent=disp;}
 
   // Scroll the user's eye to the first unfinished set of an exercise. Uses block:'center'
   // so the set is centered in the viewport and the exercise name (just above the sets)
@@ -2384,6 +2459,7 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
 
   function finRest(){
     document.getElementById('rest-overlay').classList.remove('visible');
+    renderLandscape();
     if(pendingScroll>=0){
       scrollToActiveSet(pendingScroll,300);
       pendingScroll=-1;
@@ -2758,6 +2834,7 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
 
     document.getElementById('session-body').innerHTML=html;
     sess.exercises.forEach((e,ei)=>{const ex=EX[e.id];if(ex.unit==='sec')initExTimer(ei,ex.repRange[0]);});
+    renderLandscape();
   }
 
   function bdgFor(fb){return{easy:{bg:'var(--d-bg)',fg:'var(--d-fg)',label:'Too easy'},good:{bg:'var(--w-bg)',fg:'var(--w-fg)',label:'Good'},hard:{bg:'var(--i-bg)',fg:'var(--i-fg)',label:'Hard ✓'},fail:{bg:'var(--s-bg)',fg:'var(--s-fg)',label:'Failed ✓'}}[fb];}
@@ -2902,6 +2979,7 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
       const cel=document.getElementById('set-'+c.ei+'-'+c.si);
       if(cel){const tmp=document.createElement('div');tmp.innerHTML=rSet(c.ei,c.si,cs,cex);cel.replaceWith(tmp.firstChild);}
     }
+    renderLandscape();
   }
 
   function toast(msg,kind,duration){
@@ -3362,6 +3440,7 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
     const oldTier=getStrengthTier(oldScore);
 
     state.sessions.push(sess);state.lastSession=sess.templateKey;state.currentSession=null;
+    renderLandscape();
 
     // Detect PRs and check tier crossing
     const newPRs=checkPRsForSession(sess);
@@ -3444,7 +3523,7 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
       setTimeout(()=>{cancelPending=false;btn.innerHTML='<i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel';btn.style.color='';},3000);
     }else{
       cancelPending=false;
-      state.currentSession=null;saveNow();showTrainScreen('train-home');renderTrainHome();
+      state.currentSession=null;saveNow();showTrainScreen('train-home');renderTrainHome();renderLandscape();
       btn.innerHTML='<i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel';btn.style.color='';
     }
   };
@@ -5181,6 +5260,232 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
     );
   };
 
+  // ── LANDSCAPE VIEW ────────────────────────────────────
+  // Fullscreen workout display when device rotates to landscape during a session.
+  // Reads from the same state as the portrait UI; renders into #landscape-view.
+  // Body class 'has-session' gates the CSS orientation media query.
+
+  function renderLandscape(){
+    const sess=state.currentSession;
+    if(sess)document.body.classList.add('has-session');else document.body.classList.remove('has-session');
+    if(!window.matchMedia('(orientation:landscape)').matches)return;
+    const lv=document.getElementById('landscape-view');
+    if(!lv)return;
+    if(!sess){lv.innerHTML='';return;}
+    const cur=getCurrentSet();
+    if(cur.ei<0){lv.innerHTML='<div class="lv-complete"><div class="lv-complete-title">Session complete</div><div class="lv-complete-sub">Rotate back to wrap up</div></div>';return;}
+    const curEx=sess.exercises[cur.ei],curSet=curEx.sets[cur.si],ex=EX[curEx.id];
+    const inPair=curEx.group!=null;
+    const pairMembers=inPair?sess.exercises.filter(e=>e.group===curEx.group):[];
+    const partnerEx=pairMembers.length>=2?pairMembers.find(e=>e!==curEx):null;
+    const isResting=restIv!=null;
+    const railHtml=buildLvRail(sess,cur.ei);
+    const centerHtml=isResting?buildLvRestCenter(curEx,curSet):(partnerEx?buildLvPairCenter(sess,cur.ei,curEx,ex,curSet,cur.si,partnerEx):buildLvActiveCenter(sess,cur.ei,curEx,ex,curSet,cur.si));
+    const rightHtml=isResting?buildLvRestRight(sess,cur.ei,curEx,ex,cur.si):buildLvActiveRight(sess,cur.ei,curEx,ex);
+    const progHtml=buildLvProgress(sess,cur.ei);
+    lv.innerHTML='<div class="lv-rail lv-rail-left">'+railHtml+'</div><div class="lv-center">'+centerHtml+'</div><div class="lv-rail lv-rail-right">'+rightHtml+'</div>'+progHtml;
+  }
+
+  function buildLvRail(sess,curEi){
+    let html='<div class="lv-rail-label">Session</div>';
+    let i=0;
+    while(i<sess.exercises.length){
+      const e=sess.exercises[i];
+      if(e.group!=null){
+        const gid=e.group;let j=i;
+        while(j<sess.exercises.length&&sess.exercises[j].group===gid)j++;
+        const isCurrentPair=curEi>=i&&curEi<j;
+        html+='<div class="lv-rail-pair'+(isCurrentPair?' current-pair':'')+'">';
+        for(let k=i;k<j;k++)html+=buildLvRailItem(sess.exercises[k],k,curEi);
+        html+='</div>';
+        i=j;
+      }else{html+=buildLvRailItem(e,i,curEi);i++;}
+    }
+    return html;
+  }
+
+  function buildLvRailItem(e,ei,curEi){
+    const allDone=e.sets.every(s=>s.done);
+    if(allDone)return'<div class="lv-rail-item done"><span class="lv-check">✓</span>'+escHtml(e.name)+'</div>';
+    if(ei===curEi)return'<div class="lv-rail-item current">→ '+escHtml(e.name)+'</div>';
+    return'<div class="lv-rail-item">'+escHtml(e.name)+'</div>';
+  }
+
+  function buildLvActiveCenter(sess,ei,curEx,ex,curSet,si){
+    const totalSets=curEx.sets.length;
+    const showWeight=exIsWeighted(ex)||ex.hasWeight;
+    const unit=ex.unit==='sec'?'s':'';
+    const repsDisp=lvRepsDisp(ex,curSet);
+    const histParts=[];
+    for(let i=0;i<si;i++){const s=curEx.sets[i];histParts.push('Set '+(i+1)+': '+(s.actualReps||0)+unit+' ✓');}
+    histParts.push('<span class="lv-history-now">Set '+(si+1)+': now</span>');
+    const wDisp=showWeight?curSet.actualWeight+' lb':'';
+    return'<div class="lv-set-label">Set '+(si+1)+' of '+totalSets+'</div>'
+      +'<div class="lv-ex-name">'+escHtml(curEx.name)+'</div>'
+      +'<div class="lv-set-line">'+(wDisp?'<span>'+wDisp+'</span><span class="lv-x">×</span>':'')+'<span>'+repsDisp+'</span></div>'
+      +'<div class="lv-history">'+histParts.join(' &nbsp;·&nbsp; ')+'</div>'
+      +buildLvFbButtons(sess,ei,si,curEx);
+  }
+
+  function buildLvPairCenter(sess,ei,curEx,ex,curSet,si,partnerEx){
+    const totalSets=curEx.sets.length;
+    const showWeight=exIsWeighted(ex)||ex.hasWeight;
+    const pEx=EX[partnerEx.id];
+    const pShowWeight=exIsWeighted(pEx)||pEx.hasWeight;
+    // Partner's next undone set
+    const pSi=partnerEx.sets.findIndex(s=>!s.done);
+    const pSet=pSi>=0?partnerEx.sets[pSi]:partnerEx.sets[partnerEx.sets.length-1];
+    const label=sess.quickMode?'Pair · set '+(si+1)+' of '+totalSets:'Superset · set '+(si+1)+' of '+totalSets;
+    const wDisp=showWeight?curSet.actualWeight+' lb':'';
+    const pWDisp=pShowWeight?pSet.actualWeight+' lb':'';
+    const repsDisp=lvRepsDisp(ex,curSet);
+    const pRepsDisp=lvRepsDisp(pEx,pSet);
+    return'<div class="lv-pair">'
+      +'<div class="lv-pair-label">'+label+'</div>'
+      +'<div class="lv-pair-row">'
+        +'<div class="lv-pair-card lv-pair-now">'
+          +'<div class="lv-pair-tag">Now</div>'
+          +'<div class="lv-pair-name">'+escHtml(curEx.name)+'</div>'
+          +'<div class="lv-pair-targets">'+(wDisp?wDisp+' × ':'')+repsDisp+'</div>'
+        +'</div>'
+        +'<div class="lv-pair-card lv-pair-then">'
+          +'<div class="lv-pair-tag">Then</div>'
+          +'<div class="lv-pair-name">'+escHtml(partnerEx.name)+'</div>'
+          +'<div class="lv-pair-targets">'+(pWDisp?pWDisp+' × ':'')+pRepsDisp+'</div>'
+        +'</div>'
+      +'</div>'
+      +'<div class="lv-pair-fb">'+buildLvFbButtons(sess,ei,si,curEx)+'</div>'
+    +'</div>';
+  }
+
+  function buildLvRestCenter(curEx,curSet){
+    const m=Math.floor(restRem/60),s=restRem%60;
+    const disp=m+':'+(s<10?'0':'')+s;
+    const last=curEx.sets.filter(s=>s.done).slice(-1)[0];
+    const sub=last?'Just logged: '+(last.actualReps||0)+' reps':'';
+    return'<div class="lv-rest-label">Rest</div>'
+      +'<div class="lv-rest-timer" id="lv-rest-timer">'+disp+'</div>'
+      +(sub?'<div class="lv-rest-sub">'+sub+'</div>':'')
+      +'<div class="lv-rest-actions">'
+        +'<button class="lv-fb-btn easy" onclick="addRestTime(30)">+30s</button>'
+        +'<button class="lv-fb-btn" onclick="skipRest()">Skip</button>'
+      +'</div>';
+  }
+
+  function buildLvActiveRight(sess,ei,curEx,ex){
+    // Find next exercise (not in current pair if applicable)
+    let nextEi=-1;
+    for(let i=ei+1;i<sess.exercises.length;i++){
+      if(curEx.group!=null&&sess.exercises[i].group===curEx.group)continue;
+      if(sess.exercises[i].sets.some(s=>!s.done)){nextEi=i;break;}
+    }
+    let html='<div class="lv-rail-label">Up next</div>';
+    if(nextEi<0){
+      html+='<div class="lv-up-name">Last exercise</div><div class="lv-up-detail">Almost done</div>';
+    }else{
+      const nx=sess.exercises[nextEi],nxEx=EX[nx.id];
+      const sets=nx.sets.length;
+      const showW=exIsWeighted(nxEx)||nxEx.hasWeight;
+      const wTxt=showW?nx.sets[0].actualWeight+' lb · ':'';
+      const repTxt=lvRepsDisp(nxEx,nx.sets[0])+(nxEx.unit==='sec'?'s':' reps');
+      html+='<div class="lv-up-name">'+escHtml(nx.name)+'</div>'
+        +'<div class="lv-up-detail">'+sets+' sets · '+wTxt+repTxt+'</div>';
+    }
+    // Last set / last block callout
+    const totalSets=curEx.sets.length,si=curEx.sets.findIndex(s=>!s.done);
+    if(si===totalSets-1){
+      const inPair=curEx.group!=null;
+      const isLastBlock=ei>=sess.exercises.length-2||(inPair&&!sess.exercises.slice(ei+1).some(e=>e.group!==curEx.group&&e.sets.some(s=>!s.done)));
+      html+='<div class="lv-up-callout">'+(isLastBlock?'Last block':'Last set')+'</div>'
+        +'<div class="lv-up-callout-sub">Push hard if RIR &lt; 2</div>';
+    }
+    // Last week's numbers (from progressions)
+    const prog=state.progressions[curEx.id];
+    if(prog&&prog.lastSets&&prog.lastSets.length){
+      const reps=prog.lastSets.slice(-3).map(s=>s.reps||s.actualReps||0).join('/');
+      const w=prog.lastSets.slice(-1)[0].weight||prog.lastSets.slice(-1)[0].actualWeight;
+      if(reps)html+='<div class="lv-up-lastwk">Last week</div><div class="lv-up-lastwk-val">'+(w?w+' × ':'')+reps+'</div>';
+    }
+    return html;
+  }
+
+  function buildLvRestRight(sess,ei,curEx,ex,si){
+    // Next undone set in this exercise (or partner if pair)
+    let nextSet=null,nextEx=curEx,nextEi=ei,nextSi=-1;
+    const next=getCurrentSet();
+    if(next.ei>=0){
+      nextEi=next.ei;nextSi=next.si;
+      nextEx=sess.exercises[nextEi];
+      nextSet=nextEx.sets[nextSi];
+    }
+    if(!nextSet)return'<div class="lv-rail-label">Up next</div><div class="lv-up-detail">Almost done</div>';
+    const nEx=EX[nextEx.id];
+    const showW=exIsWeighted(nEx)||nEx.hasWeight;
+    const wTxt=showW?nextSet.actualWeight+' lb':'';
+    const repsDisp=lvRepsDisp(nEx,nextSet);
+    const isLast=nextSi===nextEx.sets.length-1;
+    const sameEx=nextEi===ei;
+    let html='<div class="lv-rail-label">'+(sameEx?'Next set':'Next up')+'</div>'
+      +(sameEx?'':'<div class="lv-up-name" style="margin-bottom:4px;">'+escHtml(nextEx.name)+'</div>')
+      +'<div class="lv-rail-item current" style="margin:2px 0;">Set '+(nextSi+1)+' of '+nextEx.sets.length+'</div>'
+      +'<div class="lv-pair-targets" style="font-size:clamp(13px,2.8vh,40px);text-align:left;margin-top:6px;">'+(wTxt?wTxt+' × ':'')+repsDisp+'</div>';
+    if(isLast)html+='<div class="lv-up-callout">Last set</div><div class="lv-up-callout-sub">Push to failure if RIR &lt; 2</div>';
+    return html;
+  }
+
+  function buildLvProgress(sess,curEi){
+    // Group exercises into "blocks" — each pair is one block, each single is one block
+    const blocks=[];let i=0;
+    while(i<sess.exercises.length){
+      const e=sess.exercises[i];
+      if(e.group!=null){
+        const gid=e.group;let j=i;
+        while(j<sess.exercises.length&&sess.exercises[j].group===gid)j++;
+        blocks.push({start:i,end:j});i=j;
+      }else{blocks.push({start:i,end:i+1});i++;}
+    }
+    let dotsHtml='';
+    blocks.forEach(b=>{
+      const allDone=sess.exercises.slice(b.start,b.end).every(e=>e.sets.every(s=>s.done));
+      const isCurrent=curEi>=b.start&&curEi<b.end;
+      const cls=allDone?'lv-dot done':(isCurrent?'lv-dot current':'lv-dot');
+      dotsHtml+='<span class="'+cls+'"></span>';
+    });
+    // Stats: exercise N of total · minutes in · volume moved
+    const totalEx=sess.exercises.length;
+    const elapsed=sess.startTime?Math.round((Date.now()-sess.startTime)/60000):0;
+    let vol=0;
+    sess.exercises.forEach(e=>{const ex=EX[e.id];const isW=exIsWeighted(ex)||ex.hasWeight;e.sets.forEach(s=>{if(s.done&&isW)vol+=(s.actualWeight||0)*(s.actualReps||0);});});
+    const volK=vol>=1000?(vol/1000).toFixed(1)+'k':vol;
+    return'<div class="lv-progress"><div class="lv-dots">'+dotsHtml+'</div><div class="lv-stats">'+(curEi+1)+' of '+totalEx+' · '+elapsed+' min in · '+volK+' lb moved</div></div>';
+  }
+
+  function buildLvFbButtons(sess,ei,si,curEx){
+    const isQuick=sess.quickMode,isLast=si===curEx.sets.length-1;
+    if(isQuick&&!isLast){
+      return'<div class="lv-fb-row"><button class="lv-fb-btn done-single" onclick="setDone('+ei+','+si+')">Done</button></div>';
+    }
+    return'<div class="lv-fb-row">'
+      +'<button class="lv-fb-btn easy" onclick="setFB('+ei+','+si+',\'easy\')">Easy</button>'
+      +'<button class="lv-fb-btn" onclick="setFB('+ei+','+si+',\'good\')">Good</button>'
+      +'<button class="lv-fb-btn hard" onclick="setFB('+ei+','+si+',\'hard\')">Hard</button>'
+      +'<button class="lv-fb-btn fail" onclick="setFB('+ei+','+si+',\'fail\')">Fail</button>'
+    +'</div>';
+  }
+
+  function lvRepsDisp(ex,set){
+    // Show actual rep target; fall back to range if no target. Append range hint if differs.
+    const t=set.targetReps||set.actualReps||0;
+    if(ex.repRange&&ex.repRange[0]!==ex.repRange[1]&&t)return ex.repRange[0]+'–'+ex.repRange[1];
+    return String(t);
+  }
+
+  function escHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+  // Listen for orientation changes and trigger landscape re-render
+  window.addEventListener('orientationchange',()=>setTimeout(renderLandscape,100));
+  window.matchMedia('(orientation:landscape)').addEventListener('change',renderLandscape);
+
   // Inline toggle for auto-add dropsets (no modal — single-tap flip)
   window.toggleAutoDropset=function(){
     if(!state.profile)return;
@@ -5188,16 +5493,6 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
     save();
     showSettings();
     toast(state.profile.autoDropset?'Auto-dropsets on':'Auto-dropsets off',state.profile.autoDropset?'hard':'good');
-  };
-
-  // Inline toggle for landscape mode — rotates the app 90° via body class
-  window.toggleLandscape=function(){
-    if(!state.profile)return;
-    state.profile.landscape=!state.profile.landscape;
-    save();
-    document.body.classList.toggle('force-landscape',state.profile.landscape);
-    showSettings();
-    toast(state.profile.landscape?'Landscape mode on':'Landscape mode off','good');
   };
 
   window.editGoal=function(){
@@ -5416,12 +5711,6 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
       +'<div style="font-size:11px;color:var(--text-3);padding:4px 14px 12px;line-height:1.5;">When you push the last set hard on a weighted exercise, the app drops the weight and adds an extra set. Manual button stays available either way.</div>'
       +'</div>';
 
-    // Display — utility toggles for mirroring/screen-share scenarios
-    html+='<div class="set-section"><div class="set-section-title">Display</div>'
-      +'<div class="set-row toggle" onclick="toggleLandscape()"><span class="set-row-label">Landscape mode</span><span class="switch'+(p.landscape?' on':'')+'"><span class="switch-thumb"></span></span></div>'
-      +'<div style="font-size:11px;color:var(--text-3);padding:4px 14px 12px;line-height:1.5;">Rotates the app 90° so the iPhone display fills a landscape monitor when mirroring. The phone screen will look sideways while this is on.</div>'
-      +'</div>';
-
     html+='<div class="set-section"><div class="set-section-title">Data</div>'
       +'<div class="set-row"><span class="set-row-label">Total sessions</span><span class="set-row-value">'+state.sessions.length+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">Weight entries</span><span class="set-row-value">'+(state.weightLog?state.weightLog.length:0)+'</span></div>'
@@ -5482,14 +5771,11 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
 
   if('serviceWorker' in navigator){
     // Clear old caches on load
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v24')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v24';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v26')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v26';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
-
-  // Apply persisted landscape mode (for screen-mirroring use cases)
-  if(state.profile&&state.profile.landscape)document.body.classList.add('force-landscape');
 
   // Check if onboarding needed
   if(!state.profile){
@@ -5502,6 +5788,7 @@ body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;
   }else{
     renderHome();checkWeighIn();
   }
+  renderLandscape();
 })();
 </script>
 </body>
