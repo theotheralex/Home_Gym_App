@@ -589,44 +589,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .ob-wt-chip{display:flex;align-items:center;justify-content:center;height:44px;background:transparent;border:1.5px solid var(--border-strong);border-radius:10px;font-size:14px;font-weight:600;color:var(--text-3);cursor:pointer;transition:all 0.15s;}
 .ob-wt-chip.sel{background:var(--accent);border-color:var(--accent);color:#fff;}
 
-/* Welcome (step 0) */
-.ob-welcome{display:none;flex-direction:column;flex:1;}
-.ob-welcome.active{display:flex;}
-.wel-logo{width:64px;height:64px;border-radius:18px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:24px;}
-.wel-title{font-size:32px;font-weight:800;letter-spacing:-1px;line-height:1.05;margin-bottom:10px;}
-.wel-tag{font-size:15px;color:var(--text-2);line-height:1.5;margin-bottom:28px;}
-.wel-tag strong{color:var(--text);font-weight:600;}
-.wel-pillars{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
-.wel-pillar{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);}
-.wel-pillar-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;}
-.wel-pillar-icon.gym{background:rgba(220,38,38,0.15);color:var(--accent);}
-.wel-pillar-icon.lock{background:var(--s-bg);color:var(--s-fg);}
-.wel-pillar-icon.free{background:var(--i-bg);color:var(--i-fg);}
-.wel-pillar-text strong{font-size:14px;font-weight:700;display:block;margin-bottom:2px;}
-.wel-pillar-text span{font-size:12px;color:var(--text-2);line-height:1.4;display:block;}
-.wel-meta{font-size:11px;color:var(--text-3);text-align:center;margin-top:auto;padding:16px 0 4px;line-height:1.5;}
-
-/* Ready (step 5) */
-.ob-ready{display:none;flex-direction:column;flex:1;}
-.ob-ready.active{display:flex;}
-.rdy-check{width:64px;height:64px;border-radius:50%;background:var(--s-bg);color:var(--s-fg);display:flex;align-items:center;justify-content:center;font-size:34px;margin-bottom:20px;}
-.rdy-summary{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:18px;}
-.rdy-summary-title{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px;}
-.rdy-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px;gap:12px;}
-.rdy-row span:first-child{color:var(--text-2);flex-shrink:0;}
-.rdy-row span:last-child{font-weight:600;text-align:right;}
-.rdy-install{background:var(--surface);border:1.5px solid var(--accent);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;display:none;}
-.rdy-install-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.rdy-install-head strong{font-size:14px;font-weight:700;}
-.rdy-install-head .rdy-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--accent);color:#fff;text-transform:uppercase;letter-spacing:1px;}
-.rdy-install-body{font-size:13px;color:var(--text-2);line-height:1.5;}
-.rdy-install-steps{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
-.rdy-install-step{display:flex;gap:10px;align-items:center;font-size:13px;line-height:1.4;}
-.rdy-install-step-num{width:22px;height:22px;border-radius:50%;background:var(--surface-2);color:var(--text);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0;}
-.rdy-share-icon{display:inline-flex;align-items:center;justify-content:center;font-size:17px;color:var(--text);vertical-align:-3px;margin:0 2px;}
-.rdy-install-cta{width:100%;height:44px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;margin-top:10px;cursor:pointer;font-family:inherit;}
-.rdy-finish{background:var(--accent);color:#fff;border:none;width:100%;min-height:56px;border-radius:var(--r);font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:auto;}
-
 /* Settings */
 .set-section{margin-bottom:24px;}
 .set-section-title{font-size:12px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
@@ -636,6 +598,13 @@ button:active{opacity:.75;transform:scale(.97);}
 .set-row.editable{cursor:pointer;transition:background .15s;}
 .set-row.editable:active{background:var(--surface-2);}
 .set-row.editable .set-row-value::after{content:'›';margin-left:8px;color:var(--text-3);font-weight:700;}
+.set-row.toggle{cursor:pointer;}
+.set-row.toggle .set-row-value::after{content:none;}
+.switch{display:inline-block;width:48px;height:28px;background:#2e2e2e;border-radius:14px;position:relative;flex-shrink:0;transition:background .2s;}
+.switch.on{background:var(--accent);}
+.switch-thumb{position:absolute;top:2px;left:2px;width:24px;height:24px;background:#f5f5f5;border-radius:50%;transition:transform .2s;}
+.switch.on .switch-thumb{transform:translateX(20px);}
+body.force-landscape{position:fixed;top:50%;left:50%;width:100dvh;height:100dvw;margin-left:-50dvh;margin-top:-50dvw;transform:rotate(90deg);overflow-y:auto;overflow-x:hidden;}
 
 /* Edit modal */
 .edit-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;animation:fade-in 0.2s ease;}
@@ -701,25 +670,11 @@ button:active{opacity:.75;transform:scale(.97);}
 <div id="onboarding" style="display:none;">
   <div class="ob-wrap">
 
-    <!-- Step 0: Welcome -->
-    <div class="ob-welcome active" id="ob-welcome">
-      <div class="wel-logo">TM</div>
-      <div class="wel-title">Real workouts.<br>No filler.</div>
-      <div class="wel-tag">A <strong>home gym</strong> training app that adapts to the equipment you own and learns from how every set feels.</div>
-      <div class="wel-pillars">
-        <div class="wel-pillar"><div class="wel-pillar-icon gym"><i class="ti ti-barbell"></i></div><div class="wel-pillar-text"><strong>Built for home gyms</strong><span>Programs only what your kit can do — dumbbells, kettlebells, bench, bands, whatever you've got.</span></div></div>
-        <div class="wel-pillar"><div class="wel-pillar-icon lock"><i class="ti ti-shield-lock"></i></div><div class="wel-pillar-text"><strong>100% on-device</strong><span>No accounts, no servers, nothing leaves your phone.</span></div></div>
-        <div class="wel-pillar"><div class="wel-pillar-icon free"><i class="ti ti-discount-check"></i></div><div class="wel-pillar-text"><strong>Free. No ads. No paywall.</strong><span>Every feature, forever. Optional Ko-fi if it helps you.</span></div></div>
-      </div>
-      <div class="ob-nav" style="padding-top:0;"><button class="ob-next" onclick="obNext(0)">Set up — 60 sec</button></div>
-      <div class="wel-meta">Not a startup. Not a brand. Just an app.</div>
-    </div>
-
     <!-- Step 1: Basics -->
     <div class="ob-step active" id="ob-step-1">
       <div class="ob-progress"><div class="ob-dot current"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
-      <div class="ob-title">Tell us about you</div>
-      <div class="ob-sub">Used to estimate calories, set targets, and personalize your dashboard. Nothing leaves this device.</div>
+      <div class="ob-title">Let's get started</div>
+      <div class="ob-sub">Basic info to personalize your training. Everything stays on your device.</div>
       <div class="ob-field"><div class="ob-label">Name</div><input class="ob-input" id="ob-name" placeholder="Your first name"></div>
       <div class="ob-field"><div class="ob-label">Sex</div><select class="ob-select" id="ob-sex"><option value="male">Male</option><option value="female">Female</option></select></div>
       <div class="ob-field">
@@ -730,7 +685,7 @@ button:active{opacity:.75;transform:scale(.97);}
         </div>
       </div>
       <div class="ob-field"><div class="ob-label">Current weight (lb)</div><input class="ob-input" id="ob-weight" type="number" inputmode="decimal" placeholder="Enter weight"></div>
-      <div class="ob-field"><div class="ob-label">Body fat % <span style="color:var(--text-3);font-weight:400;">— skip if unsure</span></div><input class="ob-input" id="ob-bf" type="number" inputmode="decimal" placeholder="Optional"></div>
+      <div class="ob-field"><div class="ob-label">Body fat % (optional — skip if unsure)</div><input class="ob-input" id="ob-bf" type="number" inputmode="decimal" placeholder="If known"></div>
       <div class="ob-nav"><button class="ob-next" onclick="obNext(1)">Next</button></div>
     </div>
 
@@ -738,7 +693,7 @@ button:active{opacity:.75;transform:scale(.97);}
     <div class="ob-step" id="ob-step-2">
       <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot current"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
       <div class="ob-title">Your equipment</div>
-      <div class="ob-sub">Check everything you have. We'll only program exercises you can actually do.</div>
+      <div class="ob-sub">Check everything you have. We'll only program exercises you can do.</div>
       <div class="ob-check-grid" id="ob-equip">
         <div class="ob-check" onclick="obToggle(this,'bodyweight')"><div class="ob-check-box"></div>Bodyweight</div>
         <div class="ob-check" onclick="obToggle(this,'db')"><div class="ob-check-box"></div><div>Dumbbells
@@ -768,7 +723,7 @@ button:active{opacity:.75;transform:scale(.97);}
     <div class="ob-step" id="ob-step-3">
       <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot done"></div><div class="ob-dot current"></div><div class="ob-dot"></div></div>
       <div class="ob-title">Your schedule</div>
-      <div class="ob-sub">Sets your weekly target. The dashboard tracks consistency against this.</div>
+      <div class="ob-sub">This sets your weekly target — the dashboard tracks your consistency against it.</div>
       <div class="ob-field"><div class="ob-label">How many days per week can you train?</div>
         <div class="ob-goal-grid">
           <div class="ob-goal" onclick="obSelectDays(this,2)"><div class="ob-goal-name">2 days</div><div class="ob-goal-desc">Minimum effective dose. Full body each session.</div></div>
@@ -801,22 +756,7 @@ button:active{opacity:.75;transform:scale(.97);}
         <div class="ob-label" style="margin-bottom:10px;">Set priority for each muscle group</div>
         <div id="ob-pri-list"></div>
       </div>
-      <div class="ob-nav"><button class="ob-back" onclick="obBack(4)">Back</button><button class="ob-next" onclick="obNext(4)">Next</button></div>
-    </div>
-
-    <!-- Step 5: Ready -->
-    <div class="ob-ready" id="ob-ready">
-      <div class="rdy-check"><i class="ti ti-check"></i></div>
-      <div class="ob-title" id="rdy-title">You're set</div>
-      <div class="ob-sub">Your plan is locked in. One last thing before your first workout.</div>
-      <div class="rdy-summary">
-        <div class="rdy-summary-title">Your plan</div>
-        <div class="rdy-row"><span>Schedule</span><span id="rdy-schedule"></span></div>
-        <div class="rdy-row"><span>Goal</span><span id="rdy-goal"></span></div>
-        <div class="rdy-row"><span>Equipment</span><span id="rdy-equipment"></span></div>
-      </div>
-      <div class="rdy-install" id="rdy-install"></div>
-      <button class="rdy-finish" onclick="obStartTraining()">Start your first workout</button>
+      <div class="ob-nav"><button class="ob-back" onclick="obBack(4)">Back</button><button class="ob-next" onclick="obFinish()">Start training</button></div>
     </div>
 
   </div>
@@ -4616,7 +4556,7 @@ button:active{opacity:.75;transform:scale(.97);}
       document.getElementById('app').style.display='none';
       document.querySelector('.tab-bar').style.display='none';
       document.getElementById('onboarding').style.display='block';
-      obStep=0;obRender();
+      obStep=1;obRender();
       btn.textContent='Reset all data';btn.style.color='';btn.style.borderColor='';
     }
   };
@@ -4895,8 +4835,7 @@ button:active{opacity:.75;transform:scale(.97);}
   }
 
   // ── ONBOARDING ──────────────────────────────────────────
-  let obStep=0;
-  let obIsRerun=false;
+  let obStep=1;
   let obData={name:'',sex:'male',heightFt:0,heightIn:0,weight:0,bf:null,equipment:[],dbWeights:[],kbWeights:[],daysPerWeek:3,goal:'general',priorities:{},bodyCompTarget:'healthy'};
 
   const OB_MUSCLES=['back','chest','shoulders','biceps','triceps','legs','core','traps','forearms'];
@@ -4944,12 +4883,9 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   function obRender(){
-    document.getElementById('ob-welcome').classList.toggle('active',obStep===0);
-    document.getElementById('ob-ready').classList.toggle('active',obStep===5);
     document.querySelectorAll('.ob-step').forEach((s,i)=>s.classList.toggle('active',i+1===obStep));
     if(obStep===2){obRenderDBGrid();obRenderKBGrid();}
     if(obStep===4){obRenderBodyCompGrid();}
-    if(obStep===5){obRenderReady();}
   }
 
   function obRenderBodyCompGrid(){
@@ -5031,7 +4967,6 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   window.obNext=function(step){
-    if(step===0){obStep=1;obRender();return;}
     if(step===1){
       // Validate basics
       const name=document.getElementById('ob-name').value.trim();
@@ -5054,19 +4989,14 @@ button:active{opacity:.75;transform:scale(.97);}
       if(obData.equipment.includes('kb')&&!obData.kbWeights.length){toast('Select your kettlebell weights','easy');return;}
       if(!obData.equipment.length){toast('Select at least one piece of equipment','easy');return;}
     }
-    if(step===4){
-      if(!obSaveProfile())return;
-      if(obIsRerun){obIsRerun=false;obFinishOnboarding();toast('Settings saved','easy');return;}
-      obStep=5;obRender();return;
-    }
     obStep=step+1;
     obRender();
   };
 
   window.obBack=function(step){obStep=step-1;obRender();};
 
-  function obSaveProfile(){
-    if(!obData.goal){toast('Pick a goal','easy');return false;}
+  window.obFinish=function(){
+    if(!obData.goal){toast('Pick a goal','easy');return;}
 
     // Build profile
     const totalIn=obData.heightFt*12+obData.heightIn;
@@ -5114,75 +5044,15 @@ button:active{opacity:.75;transform:scale(.97);}
     }
 
     saveNow();
-    return true;
-  }
 
-  function obFinishOnboarding(){
+    // Hide onboarding, show app
     document.getElementById('onboarding').style.display='none';
     document.getElementById('app').style.display='block';
     document.querySelector('.tab-bar').style.display='flex';
     renderHome();
-  }
-
-  window.obStartTraining=function(){
-    obFinishOnboarding();
-    switchTab('train');
-  };
-
-  function obRenderReady(){
-    document.getElementById('rdy-title').textContent="You're set, "+(obData.name||'');
-    document.getElementById('rdy-schedule').textContent=obData.daysPerWeek+' days / week';
-    const goalNames={fat_loss:'Fat loss',muscle:'Build muscle',recomp:'Recomposition',general:'General fitness',custom:'Custom physique'};
-    const goalLabel=goalNames[obData.goal]||obData.goal;
-    let goalStr=goalLabel;
-    if(obData.bodyCompTarget&&obData.bodyCompTarget!=='healthy'){
-      const cats=getBodyCompCategories(obData.sex||'male');
-      const match=cats.find(c=>c[0]===obData.bodyCompTarget);
-      if(match)goalStr+=' · '+match[1];
-    }
-    document.getElementById('rdy-goal').textContent=goalStr;
-    const eqCount=obData.equipment.length;
-    let eqStr=eqCount+(eqCount===1?' item':' items');
-    if(obData.dbWeights.length){
-      eqStr+=' · DB '+Math.min(...obData.dbWeights)+'–'+Math.max(...obData.dbWeights)+'lb';
-    }
-    document.getElementById('rdy-equipment').textContent=eqStr;
-    obRenderInstallCard();
-  }
-
-  function obRenderInstallCard(){
-    const card=document.getElementById('rdy-install');
-    if(!card)return;
-    // Already installed
-    if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){
-      card.style.display='none';return;
-    }
-    // Chrome/Edge with prompt available
-    if(dp){
-      card.innerHTML='<div class="rdy-install-head"><strong>Install the app</strong><span class="rdy-pill">Chrome</span></div><div class="rdy-install-body">Get full-screen, offline access. One tap.</div><button class="rdy-install-cta" onclick="obInstallPWA()">Install app</button>';
-      card.style.display='block';return;
-    }
-    // iOS
-    if(/iPad|iPhone|iPod/.test(navigator.userAgent)){
-      card.innerHTML='<div class="rdy-install-head"><strong>Add to Home Screen</strong><span class="rdy-pill">iOS</span></div><div class="rdy-install-body">Install as an app for full-screen, offline use. Takes 5 seconds.</div><div class="rdy-install-steps"><div class="rdy-install-step"><span class="rdy-install-step-num">1</span><div>Tap the <span class="rdy-share-icon"><i class="ti ti-square-arrow-up"></i></span> Share button below</div></div><div class="rdy-install-step"><span class="rdy-install-step-num">2</span><div>Scroll and tap "Add to Home Screen"</div></div><div class="rdy-install-step"><span class="rdy-install-step-num">3</span><div>Tap "Add" — done</div></div></div>';
-      card.style.display='block';return;
-    }
-    // Generic fallback
-    card.innerHTML='<div class="rdy-install-head"><strong>Install for offline use</strong></div><div class="rdy-install-body">Use your browser\'s "Install" or "Add to Home Screen" option in the menu for full-screen access.</div>';
-    card.style.display='block';
-  }
-
-  window.obInstallPWA=async function(){
-    if(!dp)return;
-    dp.prompt();
-    await dp.userChoice;
-    dp=null;
-    const card=document.getElementById('rdy-install');
-    if(card)card.style.display='none';
   };
 
   window.rerunOnboarding=function(){
-    obIsRerun=true;
     document.getElementById('app').style.display='none';
     document.querySelector('.tab-bar').style.display='none';
     document.getElementById('onboarding').style.display='block';
@@ -5318,6 +5188,16 @@ button:active{opacity:.75;transform:scale(.97);}
     save();
     showSettings();
     toast(state.profile.autoDropset?'Auto-dropsets on':'Auto-dropsets off',state.profile.autoDropset?'hard':'good');
+  };
+
+  // Inline toggle for landscape mode — rotates the app 90° via body class
+  window.toggleLandscape=function(){
+    if(!state.profile)return;
+    state.profile.landscape=!state.profile.landscape;
+    save();
+    document.body.classList.toggle('force-landscape',state.profile.landscape);
+    showSettings();
+    toast(state.profile.landscape?'Landscape mode on':'Landscape mode off','good');
   };
 
   window.editGoal=function(){
@@ -5532,8 +5412,14 @@ button:active{opacity:.75;transform:scale(.97);}
 
     // Intensity techniques — opt-in features that push the user harder on hard last sets
     html+='<div class="set-section"><div class="set-section-title">Intensity techniques</div>'
-      +'<div class="set-row editable" onclick="toggleAutoDropset()"><span class="set-row-label">Auto-add dropsets</span><span class="set-row-value" style="color:'+(p.autoDropset?'var(--accent)':'var(--text-3)')+';font-weight:700;">'+(p.autoDropset?'On':'Off')+'</span></div>'
+      +'<div class="set-row toggle" onclick="toggleAutoDropset()"><span class="set-row-label">Auto-add dropsets</span><span class="switch'+(p.autoDropset?' on':'')+'"><span class="switch-thumb"></span></span></div>'
       +'<div style="font-size:11px;color:var(--text-3);padding:4px 14px 12px;line-height:1.5;">When you push the last set hard on a weighted exercise, the app drops the weight and adds an extra set. Manual button stays available either way.</div>'
+      +'</div>';
+
+    // Display — utility toggles for mirroring/screen-share scenarios
+    html+='<div class="set-section"><div class="set-section-title">Display</div>'
+      +'<div class="set-row toggle" onclick="toggleLandscape()"><span class="set-row-label">Landscape mode</span><span class="switch'+(p.landscape?' on':'')+'"><span class="switch-thumb"></span></span></div>'
+      +'<div style="font-size:11px;color:var(--text-3);padding:4px 14px 12px;line-height:1.5;">Rotates the app 90° so the iPhone display fills a landscape monitor when mirroring. The phone screen will look sideways while this is on.</div>'
       +'</div>';
 
     html+='<div class="set-section"><div class="set-section-title">Data</div>'
@@ -5591,31 +5477,26 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // ── INIT ──────────────────────────────────────────────
   let dp=null;
-  window.addEventListener('beforeinstallprompt',e=>{
-    e.preventDefault();dp=e;
-    const h=document.getElementById('install-hint');
-    h.innerHTML='Install to home screen for offline use. <button onclick="iPWA()" style="padding:6px 14px;font-size:13px;font-weight:700;border-radius:8px;background:var(--i-bg);color:var(--i-fg);border:none;cursor:pointer;">Install</button>';
-    h.style.display='flex';
-    // If onboarding ready screen is visible, refresh install card to show Chrome variant
-    if(typeof obRenderInstallCard==='function'&&obStep===5)obRenderInstallCard();
-  });
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;const h=document.getElementById('install-hint');h.innerHTML='Install to home screen for offline use. <button onclick="iPWA()" style="padding:6px 14px;font-size:13px;font-weight:700;border-radius:8px;background:var(--i-bg);color:var(--i-fg);border:none;cursor:pointer;">Install</button>';h.style.display='flex';});
   window.iPWA=async function(){if(!dp)return;dp.prompt();await dp.userChoice;dp=null;document.getElementById('install-hint').style.display='none';};
 
   if('serviceWorker' in navigator){
     // Clear old caches on load
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v6')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v22';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v24')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v24';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
 
+  // Apply persisted landscape mode (for screen-mirroring use cases)
+  if(state.profile&&state.profile.landscape)document.body.classList.add('force-landscape');
+
   // Check if onboarding needed
   if(!state.profile){
-    // First time — show onboarding starting at welcome (step 0)
+    // First time — show onboarding
     document.getElementById('app').style.display='none';
     document.querySelector('.tab-bar').style.display='none';
     document.getElementById('onboarding').style.display='block';
-    obStep=0;obRender();
   }else if(state.currentSession){
     renderSess();showTrainScreen('session');requestWakeLock();
   }else{
