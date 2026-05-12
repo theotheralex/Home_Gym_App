@@ -657,15 +657,16 @@ button:active{opacity:.75;transform:scale(.97);}
 .lv-center{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:clamp(8px,2vh,40px) clamp(8px,1.5vw,32px);position:relative;min-width:0;}
 .lv-set-label{font-size:clamp(8px,1.3vh,18px);color:var(--text-3);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;}
 .lv-ex-name{font-size:clamp(24px,8vh,180px);font-weight:800;letter-spacing:-0.5px;line-height:1;margin:clamp(4px,0.8vh,16px) 0;}
-.lv-set-line{display:flex;gap:clamp(6px,1.2vw,20px);align-items:center;font-size:clamp(17px,4.8vh,90px);font-weight:800;flex-wrap:wrap;justify-content:center;}
+.lv-set-line{display:flex;gap:clamp(6px,0.9vw,12px);align-items:center;flex-wrap:nowrap;justify-content:center;}
 .lv-set-line .lv-x{color:var(--text-2);font-size:0.65em;}
-.lv-chip{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);color:var(--text);font-weight:700;font-family:inherit;font-size:clamp(16px,3.6vh,56px);padding:clamp(4px,0.8vh,12px) clamp(10px,1.6vw,22px);min-width:clamp(50px,8vw,120px);-webkit-appearance:none;appearance:none;cursor:pointer;text-align:center;line-height:1.1;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
+.lv-chip-pair{display:inline-flex;align-items:baseline;gap:3px;flex-shrink:0;}
+.lv-chip{background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);color:var(--text);font-weight:700;font-family:inherit;font-size:clamp(18px,3vh,30px);padding:clamp(4px,0.7vh,8px) clamp(8px,1.1vw,14px);width:clamp(60px,9vw,90px);min-width:0;-webkit-appearance:none;appearance:none;cursor:pointer;text-align:center;line-height:1.1;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
 .lv-chip:focus{outline:2px solid rgba(220,38,38,0.45);outline-offset:1px;}
-.lv-chip-select{padding-right:clamp(24px,2.6vw,38px);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a0a0a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right clamp(8px,1vw,14px) center;background-size:clamp(10px,1.2vw,16px);}
+.lv-chip-select{padding-right:clamp(20px,1.8vw,26px);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a0a0a0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right clamp(6px,0.8vw,10px) center;background-size:clamp(8px,1vw,12px);}
 .lv-chip-input{}
-.lv-chips-unit{color:var(--text-2);font-size:clamp(12px,2.4vh,36px);font-weight:600;margin-left:clamp(2px,0.4vw,6px);}
-.lv-chips-x{color:var(--text-2);font-size:clamp(14px,3vh,48px);font-weight:400;}
-.lv-chips-sep{color:var(--text-2);font-size:clamp(12px,2.4vh,32px);}
+.lv-chips-unit{color:var(--text-2);font-size:clamp(11px,1.8vh,18px);font-weight:600;}
+.lv-chips-x{color:var(--text-2);font-size:clamp(14px,2.4vh,24px);font-weight:400;flex-shrink:0;}
+.lv-chips-sep{color:var(--text-2);font-size:clamp(12px,2vh,22px);flex-shrink:0;}
 .lv-range-hint{font-size:clamp(9px,1.4vh,18px);color:var(--text-3);margin-top:clamp(4px,0.7vh,10px);}
 .lv-history{font-size:clamp(9px,1.5vh,20px);color:var(--text-3);margin-top:clamp(5px,1vh,14px);}
 .lv-history-now{color:var(--accent);font-weight:700;}
@@ -1892,21 +1893,21 @@ button:active{opacity:.75;transform:scale(.97);}
     db_pullover:{name:'DB pullover',muscles:{back:.7,chest:.4},type:'accessory',equip:['db','bench'],repRange:[10,12],cues:['Lie perpendicular across the bench, only upper back supported','Hold one DB with both hands, arms almost straight','Lower the weight behind your head in a wide arc — feel the lats stretch','Pull back up using your lats, not your arms','Keep a slight bend in the elbows throughout']},
     kb_swing:{name:'Kettlebell swing',muscles:{back:.6,legs:.6,core:.4},type:'compound',equip:['kb'],repRange:[12,15],cues:['Hinge at the hips — this is NOT a squat. Push your butt back','Hike the KB back between your legs like hiking a football','Drive hips forward explosively — hips generate power, arms just guide','At the top, squeeze glutes hard and stand tall','Let the KB fall back naturally, hinge again before it pulls you forward']},
     kb_row:{name:'Single-arm KB row',muscles:{back:1,biceps:.3},type:'compound',equip:['kb','bench'],repRange:[10,12],cues:['Same setup as DB row — hand and knee braced on bench','KB handle changes the angle slightly — keep a neutral wrist','Pull the horn of the KB toward your hip, not your armpit','Full dead hang at the bottom every rep','Control the descent — 2 seconds down']},
-    db_floor_press:{name:'DB floor press (neutral grip)',muscles:{chest:1,triceps:.4,shoulders:.3},type:'compound',equip:['db'],repRange:[8,12],cues:['Lie on the floor, knees bent, feet flat. DBs at chest level','Palms face each other (neutral grip) — easier on the wrists','Press up and slightly together at the top — DBs almost touch','Lower until triceps touch the floor, pause, press again','Floor limits range of motion — focus on the squeeze at the top']},
-    db_bench_press:{name:'DB bench press (neutral grip)',muscles:{chest:1,triceps:.4,shoulders:.3},type:'compound',equip:['db','bench'],repRange:[8,12],cues:['Palms face each other throughout — neutral grip protects the wrist','Plant feet flat, slight arch in lower back, shoulder blades pinched','Lower DBs to the sides of your chest in a slight arc','Press up and in together — squeeze your chest not just push up','Keep elbows at roughly 45° from your torso — not flared out']},
-    db_incline_press:{name:'DB incline press (neutral grip)',muscles:{chest:1,shoulders:.4,triceps:.3},type:'compound',equip:['db','bench'],repRange:[8,12],cues:['Set bench to 30–45°. Higher = more shoulder, lower = more chest','Neutral grip, palms facing each other','Lower DBs to upper chest — not to your shoulders','Press up and in together at the top','Keep your lower back in contact with the bench']},
+    db_floor_press:{name:'DB floor press',muscles:{chest:1,triceps:.4,shoulders:.3},type:'compound',equip:['db'],repRange:[8,12],cues:['Lie on the floor, knees bent, feet flat. DBs at chest level','Palms face each other (neutral grip) — easier on the wrists','Press up and slightly together at the top — DBs almost touch','Lower until triceps touch the floor, pause, press again','Floor limits range of motion — focus on the squeeze at the top']},
+    db_bench_press:{name:'DB bench press',muscles:{chest:1,triceps:.4,shoulders:.3},type:'compound',equip:['db','bench'],repRange:[8,12],cues:['Palms face each other throughout — neutral grip protects the wrist','Plant feet flat, slight arch in lower back, shoulder blades pinched','Lower DBs to the sides of your chest in a slight arc','Press up and in together — squeeze your chest not just push up','Keep elbows at roughly 45° from your torso — not flared out']},
+    db_incline_press:{name:'DB incline press',muscles:{chest:1,shoulders:.4,triceps:.3},type:'compound',equip:['db','bench'],repRange:[8,12],cues:['Set bench to 30–45°. Higher = more shoulder, lower = more chest','Neutral grip, palms facing each other','Lower DBs to upper chest — not to your shoulders','Press up and in together at the top','Keep your lower back in contact with the bench']},
     db_fly:{name:'DB fly',muscles:{chest:.8},type:'accessory',equip:['db','bench'],repRange:[12,15],cues:['Slight bend in elbows — maintain this angle throughout','Lower arms in a wide arc like hugging a barrel','Stop when you feel a deep chest stretch — don\'t push past it','Squeeze your chest to bring the DBs back together','Use light weight — this is a stretch-and-squeeze movement']},
     db_squeeze_press:{name:'DB squeeze press',muscles:{chest:.9,triceps:.3},type:'accessory',equip:['db','bench'],repRange:[10,12],cues:['Press the DBs together as hard as you can before you start','DBs should be touching or nearly touching the whole set','Press up from chest height, keeping DBs squeezed together','Slow and controlled — no bouncing','Intense inner chest contraction if done right']},
-    db_ohp:{name:'DB overhead press (neutral grip)',muscles:{shoulders:1,triceps:.4,traps:.3},type:'compound',equip:['db'],repRange:[8,12],cues:['Sit or stand, DBs at shoulder height, palms facing each other','Brace your core hard before pressing — no lower back arch','Press straight up until arms are nearly locked out','Don\'t let DBs drift forward — keep them over shoulder joints','Lower slowly — 2–3 seconds on the way down']},
+    db_ohp:{name:'DB overhead press',muscles:{shoulders:1,triceps:.4,traps:.3},type:'compound',equip:['db'],repRange:[8,12],cues:['Sit or stand, DBs at shoulder height, palms facing each other','Brace your core hard before pressing — no lower back arch','Press straight up until arms are nearly locked out','Don\'t let DBs drift forward — keep them over shoulder joints','Lower slowly — 2–3 seconds on the way down']},
     db_lateral:{name:'DB lateral raise',muscles:{shoulders:1},type:'accessory',equip:['db'],repRange:[12,15],cues:['Slight bend in elbows, maintain throughout','Lead with your elbows, not your hands — pour a cup of water at top','Raise to shoulder height only — higher is ego, not muscle','Lean forward very slightly to hit the middle delt','Lowering phase is where it works — take 3 seconds to come down']},
     db_rear_delt:{name:'DB rear delt raise',muscles:{shoulders:.7,back:.3},type:'accessory',equip:['db'],repRange:[12,15],cues:['Hinge forward until torso is near parallel to the floor','Let arms hang, slight elbow bend maintained throughout','Raise DBs out to the sides — lead with elbows, not hands','Pinch shoulder blades at the top','Keep your neck neutral — don\'t crane to look up']},
     db_y_raise:{name:'DB Y-raise',muscles:{shoulders:.7,traps:.4},type:'accessory',equip:['db','bench'],repRange:[12,15],cues:['Set bench to 30°, lie face down, arms hanging','Raise arms diagonally — forming a Y over your head, thumbs up','Squeeze the lower traps and rear delts at the top','Use very light weight — this is a control exercise','Full dead hang at the bottom before each rep']},
     db_shrug:{name:'DB shrug',muscles:{traps:1},type:'accessory',equip:['db'],repRange:[12,15],cues:['Hold heavy DBs at your sides, arms straight','Shrug your shoulders straight up toward your ears — no rolling','Hold at the top for a full 1–2 seconds. Squeeze hard.','Lower slowly — the stretch at the bottom matters','Don\'t bend your elbows to cheat the weight up']},
     farmer_carry:{name:'Farmer carry',muscles:{traps:.7,forearms:.8,core:.4},type:'compound',equip:['db'],repRange:[40,60],unit:'sec',hasWeight:true,cues:['Pick up the heaviest DBs you have — go heavy','Stand tall: chest up, shoulders back and down, core braced','Walk with purpose — short, controlled steps','Don\'t let shoulders creep up or torso lean to one side','Grip is the limiting factor — when grip fails, set them down']},
     kb_high_pull:{name:'Kettlebell high pull',muscles:{traps:.7,shoulders:.5,back:.4},type:'compound',equip:['kb'],repRange:[10,12],cues:['Start with KB on the floor between your feet, hips hinged','Drive hips forward like a swing, then pull the KB high with elbows flaring','Pull to chin height — elbows should be above the KB at the top','Control the descent — hinge back as the KB drops','Explosive move — use hip drive, not just arms']},
-    db_curl:{name:'DB hammer curl (neutral grip)',muscles:{biceps:1,forearms:.4},type:'accessory',equip:['db'],repRange:[10,12],cues:['Palms face each other throughout (hammer grip) — great for wrists','Keep elbows pinned at your sides — they shouldn\'t drift forward','Curl up to just past 90° — going all the way limits tension at top','Squeeze at the top, then lower slowly — 3 seconds down','Alternate arms for more time under tension']},
-    db_incline_curl:{name:'DB incline curl (neutral grip)',muscles:{biceps:1},type:'accessory',equip:['db','bench'],repRange:[10,12],cues:['Set bench to 45–60°, sit back with arms hanging straight down','The incline stretches the bicep at the bottom — don\'t skip this','Curl up with neutral or slight supination at the top','The stretch position is the key advantage — control it','Keep your back against the bench — no swinging']},
-    db_skullcrusher:{name:'DB skullcrusher (neutral grip)',muscles:{triceps:1},type:'accessory',equip:['db','bench'],repRange:[10,12],cues:['Lie on bench, DBs extended above you, palms facing each other','Keep upper arms vertical and stationary — only forearms move','Lower DBs toward your temples or just above your head','Feel the tricep stretch at the bottom — don\'t rush it','Press back up by extending the elbows only']},
+    db_curl:{name:'DB hammer curl',muscles:{biceps:1,forearms:.4},type:'accessory',equip:['db'],repRange:[10,12],cues:['Palms face each other throughout (hammer grip) — great for wrists','Keep elbows pinned at your sides — they shouldn\'t drift forward','Curl up to just past 90° — going all the way limits tension at top','Squeeze at the top, then lower slowly — 3 seconds down','Alternate arms for more time under tension']},
+    db_incline_curl:{name:'DB incline curl',muscles:{biceps:1},type:'accessory',equip:['db','bench'],repRange:[10,12],cues:['Set bench to 45–60°, sit back with arms hanging straight down','The incline stretches the bicep at the bottom — don\'t skip this','Curl up with neutral or slight supination at the top','The stretch position is the key advantage — control it','Keep your back against the bench — no swinging']},
+    db_skullcrusher:{name:'DB skullcrusher',muscles:{triceps:1},type:'accessory',equip:['db','bench'],repRange:[10,12],cues:['Lie on bench, DBs extended above you, palms facing each other','Keep upper arms vertical and stationary — only forearms move','Lower DBs toward your temples or just above your head','Feel the tricep stretch at the bottom — don\'t rush it','Press back up by extending the elbows only']},
     db_kickback:{name:'DB tricep kickback',muscles:{triceps:.9},type:'accessory',equip:['db'],repRange:[12,15],cues:['Hinge forward until torso is near parallel to floor','Pin your upper arm parallel to the floor — stays there the whole set','Extend the forearm back until the arm is fully straight','Squeeze the tricep hard at full extension — hold 1 sec','Lower slowly. If you\'re swinging, weight is too heavy.']},
     db_overhead_extension:{name:'DB overhead tricep extension',muscles:{triceps:1},type:'accessory',equip:['db'],repRange:[10,12],cues:['Hold one DB with both hands overhead, elbows pointing forward','Lower the DB behind your head by bending at the elbows only','Feel the long head of the tricep stretch — biggest tricep head','Press back up to full lockout','Keep your elbows close — don\'t let them flare out']},
     goblet_squat:{name:'Goblet squat',muscles:{legs:1,core:.3},type:'compound',equip:['db'],repRange:[10,12],cues:['Hold DB vertically at your chest with both hands under the top plate','Feet shoulder-width, toes slightly out (10–30°)','Squat down until elbows touch your inner knees — full depth','Keep your chest tall and weight through your full foot','Drive your knees out over your toes as you press up']},
@@ -2108,13 +2109,32 @@ button:active{opacity:.75;transform:scale(.97);}
         }
         return true;
       });
-      // Sort: prefer weighted over bodyweight, then not recently used, then not already picked
+      // Muscle-aware tiebreak: among eligible candidates, prefer the one whose
+      // dominant muscle is under its target volume for the rolling 7-day window.
+      // Small magnitude (range ~-0.5..+0.5) so it only breaks ties between
+      // candidates that are otherwise close on weighted/avoid/used scoring.
+      const weeklyVol=getWeeklyVolume();
+      function muscleScore(id){
+        const ex=EX[id];
+        if(!ex||!ex.muscles)return 0;
+        // Find the exercise's dominant muscle (highest weighting)
+        let domMuscle=null,domWeight=0;
+        for(const m in ex.muscles){if(ex.muscles[m]>domWeight){domWeight=ex.muscles[m];domMuscle=m;}}
+        if(!domMuscle||!weeklyVol[domMuscle])return 0;
+        const target=getMuscleTarget(domMuscle);
+        if(!target||!target.min)return 0;
+        // Ratio < 1 means under target.min; gives negative score (preferred).
+        const ratio=weeklyVol[domMuscle].sets/target.min;
+        return Math.max(-0.5,Math.min(0.5,(ratio-1)*0.3));
+      }
+      // Sort: prefer weighted over bodyweight, then not recently used, then not already picked,
+      // then prefer exercises that target under-worked muscles.
       const sorted=pool.slice().sort((a,b)=>{
         const exA=EX[a],exB=EX[b];
         const aWeighted=exA&&!exA.noWeight&&exA.unit!=='sec'?0:(exA&&exA.hasWeight?0:3);
         const bWeighted=exB&&!exB.noWeight&&exB.unit!=='sec'?0:(exB&&exB.hasWeight?0:3);
-        const aScore=aWeighted+(avoid.has(a)?1:0)+(used.has(a)?10:0);
-        const bScore=bWeighted+(avoid.has(b)?1:0)+(used.has(b)?10:0);
+        const aScore=aWeighted+(avoid.has(a)?1:0)+(used.has(a)?10:0)+muscleScore(a);
+        const bScore=bWeighted+(avoid.has(b)?1:0)+(used.has(b)?10:0)+muscleScore(b);
         return aScore-bScore;
       });
       const out=[];
@@ -3482,6 +3502,9 @@ button:active{opacity:.75;transform:scale(.97);}
     exData.sets.push({targetWeight:dropW,targetReps:dropR,actualWeight:dropW,actualReps:dropR,feedback:null,done:false,isDropset:true});
     save();renderSess();
     banner('Dropset → '+dropW+' lb',null,'fail');
+    // Scroll the user straight to the new dropset row — no rest, no hunting.
+    // Both auto- and manual-dropset paths land here.
+    scrollToActiveSet(ei,150);
   };
 
   // Epley e1RM formula
@@ -3495,18 +3518,28 @@ button:active{opacity:.75;transform:scale(.97);}
     const sess=state.currentSession;let vol=0;
     sess.exercises.forEach(e=>{
       const completed=e.sets.filter(s=>s.done);if(!completed.length)return;
+      // Exclude dropsets from adaptation: dropsets are intentional intensifiers, not
+      // signals about whether the working weight was too heavy. Including them would
+      // mean a dropset rated 'good' tells the next-session adapter to lower the
+      // starting weight, which is the opposite of what dropsets are for. Volume and
+      // e1RM tracking still include dropsets — the work happened.
+      const completedMain=completed.filter(s=>!s.isDropset);
       let agg;
       if(sess.quickMode){
         // Quick Session: only the last set carries a rating (sets 1-2 are just "done").
         // Use the last set with feedback; if none rated, default to 'good'.
-        const ratedSets=completed.filter(s=>s.feedback);
+        const ratedSets=completedMain.filter(s=>s.feedback);
         agg=ratedSets.length?ratedSets[ratedSets.length-1].feedback:'good';
       }else{
-        // Full Session: aggregate ratings across all completed sets.
-        const c={easy:0,good:0,hard:0,fail:0};completed.forEach(s=>{if(s.feedback)c[s.feedback]++;});
-        agg='good';if(c.fail>0)agg='fail';else if(c.hard>c.easy)agg='hard';else if(c.easy>c.hard&&c.easy>=completed.length/2)agg='easy';
+        // Full Session: aggregate ratings across all completed non-dropset sets.
+        const c={easy:0,good:0,hard:0,fail:0};completedMain.forEach(s=>{if(s.feedback)c[s.feedback]++;});
+        agg='good';if(c.fail>0)agg='fail';else if(c.hard>c.easy)agg='hard';else if(c.easy>c.hard&&c.easy>=completedMain.length/2)agg='easy';
       }
-      const last=completed[completed.length-1];adapt(e.id,agg,last.actualReps,last.actualWeight);
+      // Adapt off the last main working set, not the lighter dropset.
+      if(completedMain.length){
+        const lastMain=completedMain[completedMain.length-1];
+        adapt(e.id,agg,lastMain.actualReps,lastMain.actualWeight);
+      }
       const ex=EX[e.id];
       // Volume
       completed.forEach(s=>{
@@ -5419,12 +5452,12 @@ button:active{opacity:.75;transform:scale(.97);}
       if(usAdj){
         const pool=exPool(ex);
         const opts=pool.map(w=>'<option value="'+w+'"'+(curSet.actualWeight===w?' selected':'')+'>'+w+'</option>').join('');
-        wChip='<select class="lv-chip lv-chip-select" onchange="updSet('+ei+','+si+',\'actualWeight\',this.value);renderLandscape();">'+opts+'</select><span class="lv-chips-unit">lb</span>';
+        wChip='<span class="lv-chip-pair"><select class="lv-chip lv-chip-select" onchange="updSet('+ei+','+si+',\'actualWeight\',this.value);renderLandscape();">'+opts+'</select><span class="lv-chips-unit">lb</span></span>';
       }else{
-        wChip='<input class="lv-chip lv-chip-input" type="number" inputmode="numeric" value="'+curSet.actualWeight+'" onchange="updSet('+ei+','+si+',\'actualWeight\',this.value);renderLandscape();"><span class="lv-chips-unit">lb</span>';
+        wChip='<span class="lv-chip-pair"><input class="lv-chip lv-chip-input" type="number" inputmode="numeric" value="'+curSet.actualWeight+'" onchange="updSet('+ei+','+si+',\'actualWeight\',this.value);renderLandscape();"><span class="lv-chips-unit">lb</span></span>';
       }
     }
-    const rChip='<input class="lv-chip lv-chip-input" type="number" inputmode="numeric" value="'+curSet.actualReps+'" onchange="updSet('+ei+','+si+',\'actualReps\',this.value);renderLandscape();"><span class="lv-chips-unit">'+repsUnit+'</span>';
+    const rChip='<span class="lv-chip-pair"><input class="lv-chip lv-chip-input" type="number" inputmode="numeric" value="'+curSet.actualReps+'" onchange="updSet('+ei+','+si+',\'actualReps\',this.value);renderLandscape();"><span class="lv-chips-unit">'+repsUnit+'</span></span>';
     const sepHtml=isTimed?'<span class="lv-chips-sep">·</span>':'<span class="lv-chips-x">×</span>';
     const chipsHtml='<div class="lv-set-line">'+(wChip?wChip+sepHtml:'')+rChip+'</div>';
     // Range hint (only if range has different bounds)
@@ -5941,8 +5974,8 @@ button:active{opacity:.75;transform:scale(.97);}
 
   if('serviceWorker' in navigator){
     // Clear old caches on load
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v34')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v34';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v36')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v36';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
