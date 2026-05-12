@@ -2201,13 +2201,18 @@ button:active{opacity:.75;transform:scale(.97);}
     });
 
     const phaseData=phase.phase;
+    // Frequency-aware volume: a 2-day/week user needs more sets per session
+    // to hit the ~15-25 sets/muscle/week target; a 6-day/week user needs fewer
+    // so they're not drowning in junk volume across the week.
+    const daysPerWeek=state.profile?.daysPerWeek||3;
+    const freqMult=daysPerWeek<=2?1.4:daysPerWeek===3?1.15:daysPerWeek===4?1.0:daysPerWeek===5?0.9:0.8;
     const result={
       templateKey:focusKey,templateName:f.name,time,timestamp:Date.now(),
       phase:phase.key,
       exercises:exercises.map((id,i)=>{
         const ex=EX[id],prog=gProg(id);
         let baseSets=time===60?(ex.type==='compound'?4:(ex.rounds||3)):(ex.type==='compound'?3:(ex.rounds||3));
-        let numSets=Math.max(2,Math.round(baseSets*phaseData.setMult));
+        let numSets=Math.max(2,Math.round(baseSets*phaseData.setMult*freqMult));
         let targetReps=prog.reps;
         if(phase.key==='strength'&&ex.type==='compound'&&exIsWeighted(ex)){
           targetReps=Math.max(4,Math.min(6,Math.round(prog.reps*0.6)));
@@ -2764,13 +2769,17 @@ button:active{opacity:.75;transform:scale(.97);}
     const ssSlots=new Set();
     supersets.forEach(pair=>pair.forEach(idx=>{if(idx<maxEx)ssSlots.add(idx);}));
 
+    // Mirror buildSess's frequency-aware set calculation so estimates match actual sessions.
+    const daysPerWeek=state.profile?.daysPerWeek||3;
+    const freqMult=daysPerWeek<=2?1.4:daysPerWeek===3?1.15:daysPerWeek===4?1.0:daysPerWeek===5?0.9:0.8;
+
     let totalSec=0;
     structure.forEach((slot,i)=>{
       const poolExs=(POOLS[slot.pool]||[]).map(id=>EX[id]).filter(Boolean);
       const isCompound=poolExs.some(e=>e.type==='compound');
       const isTimed=poolExs.some(e=>e.unit==='sec');
       const baseSets=time===60?(isCompound?4:3):(isCompound?3:3);
-      const numSets=Math.max(2,Math.round(baseSets*phaseData.setMult));
+      const numSets=Math.max(2,Math.round(baseSets*phaseData.setMult*freqMult));
 
       for(let s=0;s<numSets;s++){
         if(isTimed){
@@ -5973,9 +5982,23 @@ button:active{opacity:.75;transform:scale(.97);}
   window.iPWA=async function(){if(!dp)return;dp.prompt();await dp.userChoice;dp=null;document.getElementById('install-hint').style.display='none';};
 
   if('serviceWorker' in navigator){
-    // Clear old caches on load
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v36')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v36';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    // Aggressive upgrade path: if the user is coming from a different shipped
+    // version, force-unregister all SWs and nuke all caches, then reload once.
+    // The sessionStorage flag prevents a reload loop if SW state races.
+    const APP_VERSION='v37';
+    const seen=localStorage.getItem('app_version');
+    if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
+      sessionStorage.setItem('upgraded','1');
+      Promise.all([
+        navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))),
+        caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))),
+      ]).then(()=>{localStorage.setItem('app_version',APP_VERSION);location.reload();});
+    }else{
+      localStorage.setItem('app_version',APP_VERSION);
+    }
+    // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v37')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v37';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
