@@ -1972,6 +1972,9 @@ button:active{opacity:.75;transform:scale(.97);}
     prone_t_raise:{name:'Prone T-raise',muscles:{traps:.7,back:.5,shoulders:.4},type:'accessory',equip:['bodyweight'],repRange:[12,20],noWeight:true,cues:['Lie face down on the floor, arms straight out to your sides forming a T','Thumbs point up toward the ceiling — this engages the upper back and rear delts','Lift both arms off the floor by squeezing your shoulder blades together','Hold at the top for 1 second — focus on the squeeze between your shoulder blades','Lower slowly with control','These hit the middle traps and rear delts hard with zero weight needed']},
     band_pulldown:{name:'Band lat pulldown',muscles:{back:1,biceps:.4},type:'compound',equip:['bands'],repRange:[10,15],noWeight:true,cues:['Anchor the band overhead — top of a sturdy door, beam, or pull-up bar with a band loop','Kneel or sit facing the anchor, arms straight up grabbing both ends of the band','Pull down to chest level by driving elbows down and back','Squeeze your lats hard at the bottom — chest up, shoulder blades down','Control the return — let arms straighten fully overhead before the next rep','For more tension, walk back slightly to add band stretch']},
     band_straight_arm_pulldown:{name:'Band straight-arm pulldown',muscles:{back:.8},type:'accessory',equip:['bands'],repRange:[12,15],noWeight:true,cues:['Anchor the band overhead — same setup as the lat pulldown','Stand facing the anchor with a slight forward lean at the hips','Grab the band with arms straight out in front, slight bend at the elbows held throughout','Pull down in a wide arc until your hands reach your thighs','Keep arms straight throughout — this is shoulder extension, not a row','Squeeze lats hard at the bottom — let arms return slowly overhead']},
+    incline_lateral_raise:{name:'Incline DB lateral raise',muscles:{shoulders:1,traps:.2},type:'accessory',equip:['db','bench'],repRange:[10,15],cues:['Set the bench back to ~45° incline','Lie on your side along the bench — torso against the inclined back, hip on the seat','Bottom arm cradles your head for support; top arm holds the DB hanging across your body','Raise the DB up and away from your body to shoulder height — lead with the elbow, don\'t swing past','Lower slowly — the incline keeps tension on the side delt even at the bottom, that\'s the whole point','Switch sides after the set']},
+    preacher_curl:{name:'Preacher curl',muscles:{biceps:1,forearms:.3},type:'accessory',equip:['db','bench'],repRange:[10,12],cues:['No preacher pad? Set the bench back to ~60° incline — the angled padding becomes your preacher pad','Kneel or sit on the floor behind the bench, facing the back of it','Drape your upper arm over the top edge — armpit at the top, back of arm pressed against the angled padding','DB hangs down on the far side, arm fully extended — biceps under stretch','Curl up by flexing the elbow only — shoulder and upper arm stay pinned to the pad','Squeeze hard at the top, lower slowly to full extension — no momentum means no cheating']},
+    incline_reverse_fly:{name:'Chest-supported reverse fly',muscles:{shoulders:.9,traps:.5,back:.3},type:'accessory',equip:['db','bench'],repRange:[12,15],cues:['Set the bench back to ~45° incline','Lie face down with your chest pressed against the inclined back — head extends over the top, feet on the floor for balance','DBs hanging straight down below your shoulders, slight bend in elbows held throughout','Raise arms out to the sides in a wide arc until they\'re parallel to the floor','Squeeze shoulder blades together at the top — feel the rear delts, not the traps','Lower under control; chest support eliminates the lower-back stress that bent-over flies suffer from']},
   };
 
   // ── EXERCISE POOLS (by movement pattern) ───────────────
@@ -1982,19 +1985,19 @@ button:active{opacity:.75;transform:scale(.97);}
   // tracked separately via each exercise's muscles{} weights.
   const POOLS={
     // Pull patterns
-    horizontal_pull:    ['db_row','single_arm_row','kb_row','inverted_row','renegade_row'],
+    horizontal_pull:    ['db_row','single_arm_row','kb_row','inverted_row','renegade_row','door_row'],
     vertical_pull:      ['pull_up','chin_up','band_pulldown'],
     lat_isolation:      ['db_pullover','band_straight_arm_pulldown'],
-    rear_delt:          ['db_rear_delt','band_face_pull'],
+    rear_delt:          ['db_rear_delt','band_face_pull','incline_reverse_fly'],
     posterior_finisher: ['db_y_raise','prone_y_raise','prone_t_raise','scapular_push_up','band_pull_apart','superman'],
     trap_shrug:         ['db_shrug'],
-    bicep_curl:         ['db_curl','db_incline_curl','zottman_curl','concentration_curl','band_curl','inverted_curl','door_row'],
+    bicep_curl:         ['db_curl','db_incline_curl','preacher_curl','concentration_curl','band_curl','inverted_curl'],
     loaded_carry:       ['farmer_carry'],
     // Push patterns
     horizontal_press:   ['db_bench_press','db_incline_press','db_floor_press','single_arm_floor_press','push_up','archer_push_up','dip'],
     vertical_press:     ['db_ohp','arnold_press','pike_push_up','hindu_push_up'],
     chest_isolation:    ['db_fly','db_squeeze_press'],
-    shoulder_isolation: ['db_lateral'],
+    shoulder_isolation: ['db_lateral','incline_lateral_raise'],
     tricep_extension:   ['db_skullcrusher','db_kickback','db_overhead_extension','band_pushdown','bench_dip','floor_tricep_dip','diamond_push_up'],
     // Lower patterns
     squat:              ['goblet_squat','kb_goblet_squat','bw_squat','wall_sit','cossack_squat'],
@@ -2032,18 +2035,21 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // Focus types (replace fixed templates)
   const FOCUS_TYPES={
-    pull:{name:'Pull + back',subtitle:'Back, traps, rear delts, biceps',emphasis:['back','traps','biceps'],
+    pull:{name:'Pull',subtitle:'Back, traps, rear delts, biceps',emphasis:['back','traps','biceps'],
       structure:[{pool:'horizontal_pull',n:1},{pool:'rear_delt',n:1},{pool:'vertical_pull',n:1},{pool:'bicep_curl',n:1},{pool:'horizontal_pull',n:1},{pool:'posterior_finisher',n:1},{pool:'anti_extension_core',n:1}],
       supersets:[[0,1],[2,3]]},
-    push:{name:'Push + chest',subtitle:'Chest, shoulders, triceps',emphasis:['chest','shoulders','triceps'],
+    push:{name:'Push',subtitle:'Chest, shoulders, triceps',emphasis:['chest','shoulders','triceps'],
       structure:[{pool:'horizontal_press',n:1},{pool:'shoulder_isolation',n:1},{pool:'vertical_press',n:1},{pool:'tricep_extension',n:1},{pool:'horizontal_press',n:1},{pool:'chest_isolation',n:1},{pool:'tricep_extension',n:1},{pool:'anti_rotation_core',n:1}],
       supersets:[[0,1],[2,3]]},
-    legs:{name:'Legs + posterior',subtitle:'Quads, hams, glutes, core',emphasis:['legs','core'],
+    legs:{name:'Legs',subtitle:'Quads, hams, glutes, core',emphasis:['legs','core'],
       structure:[{pool:'squat',n:1},{pool:'hinge',n:1},{pool:'lunge',n:1},{pool:'anti_rotation_core',n:1},{pool:'hinge',n:1},{pool:'calf',n:1},{pool:'metabolic',n:1},{pool:'flexion_core',n:1}],
       supersets:[[0,1],[2,3]]},
-    upper:{name:'Upper full',subtitle:'Balanced push + pull',emphasis:['back','chest','shoulders'],
+    upper:{name:'Upper',subtitle:'Balanced push + pull',emphasis:['back','chest','shoulders'],
       structure:[{pool:'horizontal_pull',n:1},{pool:'horizontal_press',n:1},{pool:'vertical_pull',n:1},{pool:'vertical_press',n:1},{pool:'bicep_curl',n:1},{pool:'tricep_extension',n:1},{pool:'posterior_finisher',n:1},{pool:'anti_extension_core',n:1}],
       supersets:[[0,1],[2,3]]},
+    full_body:{name:'Full Body',subtitle:'Every major pattern, balanced',emphasis:['back','chest','legs','core'],
+      structure:[{pool:'squat',n:1},{pool:'horizontal_pull',n:1},{pool:'horizontal_press',n:1},{pool:'hinge',n:1},{pool:'vertical_press',n:1},{pool:'bicep_curl',n:1},{pool:'tricep_extension',n:1},{pool:'anti_extension_core',n:1}],
+      supersets:[[0,1],[2,3],[4,5]]},
     conditioning:{name:'Conditioning',subtitle:'Fighter circuit, power',emphasis:['core','legs','back'],
       structure:[{pool:'ballistic_hinge',n:1},{pool:'squat',n:1},{pool:'metabolic',n:1},{pool:'horizontal_pull',n:1},{pool:'ballistic_press',n:1},{pool:'jump',n:1},{pool:'anti_rotation_core',n:1},{pool:'flexion_core',n:1}],
       supersets:[[0,1]]},
@@ -2058,6 +2064,7 @@ button:active{opacity:.75;transform:scale(.97);}
     push:{pairs:[['horizontal_press','tricep_extension'],['vertical_press','chest_isolation'],['shoulder_isolation','tricep_extension']]},
     legs:{pairs:[['squat','anti_extension_core'],['hinge','lunge'],['hinge','metabolic']]},
     upper:{pairs:[['horizontal_press','horizontal_pull'],['vertical_press','bicep_curl'],['tricep_extension','posterior_finisher']]},
+    full_body:{pairs:[['squat','horizontal_pull'],['horizontal_press','hinge'],['vertical_press','anti_extension_core']]},
     conditioning:{pairs:[['ballistic_hinge','anti_extension_core'],['squat','metabolic'],['horizontal_pull','ballistic_press']]},
   };
 
@@ -2160,13 +2167,31 @@ button:active{opacity:.75;transform:scale(.97);}
   function pickFocusTypes(time){
     const rec=getRec();
     const pri=state.profile&&state.profile.priorities?state.profile.priorities:{};
+    // Track most recent session timestamp per focus type, so the picker can
+    // surface stale focus types — prevents users from skipping legs (or any
+    // category) indefinitely because their recovery numbers stay perfect.
+    const now=Date.now();
+    const lastByKey={};
+    state.sessions.forEach(s=>{
+      if(s.templateKey&&(!lastByKey[s.templateKey]||s.timestamp>lastByKey[s.templateKey])){
+        lastByKey[s.templateKey]=s.timestamp;
+      }
+    });
     return Object.keys(FOCUS_TYPES).map(key=>{
       const f=FOCUS_TYPES[key];
       let avgR=f.emphasis.reduce((s,m)=>s+rec[m],0)/f.emphasis.length;
       // Priority boost
       f.emphasis.forEach(m=>{if(pri[m]==='high')avgR+=10;if(pri[m]==='low')avgR-=10;});
       const lastSame=state.lastSession===key?-30:0;
-      return{key,focus:f,score:avgR+lastSame,avgRecovery:Math.round(rec[f.emphasis[0]]||100)};
+      // Staleness boost: focus types neglected for too long get bumped to the
+      // top of the picker. Magnitude matches the same-session penalty so a
+      // stale type will reliably outrank a fresh-but-already-cycled-recently one.
+      const lastDone=lastByKey[key];
+      const daysSince=lastDone?(now-lastDone)/86400000:Infinity;
+      let staleBonus=0;
+      if(daysSince>7)staleBonus=30;
+      else if(daysSince>5)staleBonus=15;
+      return{key,focus:f,score:avgR+lastSame+staleBonus,avgRecovery:Math.round(rec[f.emphasis[0]]||100)};
     }).sort((a,b)=>b.score-a.score).slice(0,4);
   }
 
@@ -2313,7 +2338,17 @@ button:active{opacity:.75;transform:scale(.97);}
   let state={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},prs:[],scoreHistory:[],achievements:{},strengthGoal:null,musclePriorities:{},weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
   let pendingTime=null,pendingMode='full',restIv=null,restTotal=0,restRem=0,pendingScroll=-1;
 
-  function load(){try{const r=localStorage.getItem(SK);if(r)state=Object.assign(state,JSON.parse(r));}catch(e){}loadDBW();loadKBW();}
+  function load(){
+    try{const r=localStorage.getItem(SK);if(r)state=Object.assign(state,JSON.parse(r));}catch(e){}
+    // Migration: backfill profile.createdAt for users who onboarded before this
+    // field existed. Best approximation is the first session's timestamp; if
+    // there are no sessions yet, start counting from now. Persists on next save.
+    if(state.profile&&!state.profile.createdAt){
+      state.profile.createdAt=state.sessions&&state.sessions.length?state.sessions[0].timestamp:Date.now();
+      save();
+    }
+    loadDBW();loadKBW();
+  }
   function loadKBW(){
     if(state.profile&&state.profile.kbWeights&&state.profile.kbWeights.length){
       KBW=state.profile.kbWeights.slice().sort((a,b)=>a-b);
@@ -2329,7 +2364,7 @@ button:active{opacity:.75;transform:scale(.97);}
     if(ex.unit==='sec'&&!ex.hasWeight)return null;
     if(ex.fixedWeight)return ex.fixedWeight;
     const d={
-      db_row:30,single_arm_row:30,db_pullover:20,db_floor_press:30,db_bench_press:30,db_incline_press:20,db_fly:10,db_squeeze_press:20,db_ohp:20,db_lateral:10,db_rear_delt:10,db_y_raise:5,db_shrug:40,farmer_carry:40,db_curl:20,db_incline_curl:10,db_skullcrusher:10,db_kickback:10,db_overhead_extension:20,goblet_squat:40,db_rdl:30,bulgarian:20,db_step_up:20,sl_rdl:20,db_calf_raise:30,db_push_press:20,arnold_press:20,zottman_curl:10,concentration_curl:10,single_arm_floor_press:20,renegade_row:20,
+      db_row:30,single_arm_row:30,db_pullover:20,db_floor_press:30,db_bench_press:30,db_incline_press:20,db_fly:10,db_squeeze_press:20,db_ohp:20,db_lateral:10,db_rear_delt:10,db_y_raise:5,db_shrug:40,farmer_carry:40,db_curl:20,db_incline_curl:10,db_skullcrusher:10,db_kickback:10,db_overhead_extension:20,goblet_squat:40,db_rdl:30,bulgarian:20,db_step_up:20,sl_rdl:20,db_calf_raise:30,db_push_press:20,arnold_press:20,zottman_curl:10,concentration_curl:10,single_arm_floor_press:20,renegade_row:20,preacher_curl:10,incline_lateral_raise:10,incline_reverse_fly:10,
       kb_swing:25,kb_row:25,kb_high_pull:25,kb_goblet_squat:35,kb_clean_press:25,kb_snatch:25,turkish_getup:25
     };
     if(exIsKB(ex))return nKB(d[id]||25);
@@ -5531,7 +5566,7 @@ button:active{opacity:.75;transform:scale(.97);}
       +(sub?'<div class="lv-rest-sub">'+sub+'</div>':'')
       +'<div class="lv-rest-actions">'
         +'<button class="lv-fb-btn" onclick="addRestTime(30)">+30s</button>'
-        +'<button class="lv-fb-btn done-single" onclick="skipRest()">Skip</button>'
+        +'<button class="lv-fb-btn done-single" onclick="skipRest()">Done</button>'
       +'</div>';
   }
 
@@ -5985,7 +6020,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v37';
+    const APP_VERSION='v44';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -5997,8 +6032,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v37')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v37';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v44')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v44';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
