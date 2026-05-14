@@ -106,6 +106,19 @@ button:active{opacity:.75;transform:scale(.97);}
 .ex-tbtn{font-size:15px;font-weight:700;min-height:50px;border-radius:var(--r);}
 .sets-wrap{padding:0 10px 12px;display:flex;flex-direction:column;gap:8px;}
 .set-card{background:var(--surface-2);border-radius:var(--rl);padding:14px;border-left:4px solid transparent;transition:background .15s,border-color .15s,box-shadow .15s;}
+.set-section{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;margin:12px 0 6px;display:flex;align-items:center;gap:6px;}
+.set-section i{font-size:13px;}
+.set-section.warmup{color:var(--w-fg);}
+.wu-row{background:var(--surface-2);border-radius:var(--r);padding:10px 14px;margin-bottom:6px;border-left:3px solid transparent;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s;}
+.wu-row.current{background:linear-gradient(90deg,rgba(234,179,8,0.10),rgba(234,179,8,0.02));border-left-color:var(--w-fg);box-shadow:0 0 0 1.5px rgba(234,179,8,0.35),inset 0 1px 0 rgba(255,255,255,0.04);}
+.wu-row.done{opacity:0.5;border-left-color:var(--w-fg);}
+.wu-num{font-size:11px;font-weight:700;color:var(--text-2);letter-spacing:0.5px;flex-shrink:0;width:60px;}
+.wu-row.current .wu-num{color:var(--w-fg);}
+.wu-prescription{flex:1;font-size:15px;font-weight:600;color:var(--text);}
+.wu-row.done .wu-prescription{text-decoration:line-through;color:var(--text-3);}
+.wu-action{flex-shrink:0;}
+.wu-done-btn{background:var(--w-bg);border:1px solid var(--w-br);color:var(--w-fg);font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;font-family:inherit;-webkit-appearance:none;appearance:none;cursor:pointer;letter-spacing:0.3px;min-height:36px;}
+.wu-check{color:var(--w-fg);font-size:18px;}
 .set-card.logged-easy{background:var(--d-bg);border-left-color:var(--d-fg);}
 .set-card.logged-good{background:var(--w-bg);border-left-color:var(--w-fg);}
 .set-card.logged-hard{background:var(--i-bg);border-left-color:var(--i-fg);}
@@ -2427,6 +2440,31 @@ button:active{opacity:.75;transform:scale(.97);}
         }
       });
     });
+    // Warmup pass — add 1-2 warmup sets before compounds in Full sessions.
+    // Computed from user's owned DB/KB pool: warmups land on real weights they can use.
+    // Skips: Quick mode, isolations, bodyweight/timed/fixed-weight, pre-exhaust pairs
+    // (the pre-exhaust isolation already primes the same muscle, no warmup needed).
+    if(time===60){
+      result.exercises.forEach((e,i)=>{
+        const ex=EX[e.id];
+        if(!ex||ex.type!=='compound')return;
+        if(!exIsWeighted(ex)||ex.fixedWeight)return;
+        if(i>0&&result.exercises[i-1].preExhaust)return;
+        if(!e.sets.length)return;
+        const workingW=e.sets[0].targetWeight;
+        if(workingW==null)return;
+        const pool=exPool(ex);
+        if(!pool||!pool.length)return;
+        const idx=pool.indexOf(workingW);
+        if(idx<=0)return; // working weight is already at or below pool minimum
+        const warmups=[];
+        if(idx>=2){
+          warmups.push({targetWeight:pool[idx-2],targetReps:5,actualWeight:pool[idx-2],actualReps:5,feedback:null,done:false,warmup:true});
+        }
+        warmups.push({targetWeight:pool[idx-1],targetReps:3,actualWeight:pool[idx-1],actualReps:3,feedback:null,done:false,warmup:true});
+        e.sets=[...warmups,...e.sets];
+      });
+    }
     return result;
   }
 
@@ -2970,6 +3008,9 @@ button:active{opacity:.75;transform:scale(.97);}
       const baseSets=time===60?(isCompound?4:3):(isCompound?3:3);
       const numSets=Math.max(2,Math.round(baseSets*phaseData.setMult*freqMult));
 
+      // Warmup overhead — ~75s per compound in Full sessions (2 light sets + short rests)
+      if(time===60&&isCompound)totalSec+=75;
+
       for(let s=0;s<numSets;s++){
         if(isTimed){
           const avgSecs=poolExs.filter(e=>e.unit==='sec').reduce((sum,e)=>sum+(e.repRange[0]+e.repRange[1])/2,0)/Math.max(1,poolExs.filter(e=>e.unit==='sec').length);
@@ -3083,7 +3124,24 @@ button:active{opacity:.75;transform:scale(.97);}
       // Dropset button — only for weighted exercises (skip in quickMode to keep flow tight)
       const canDrop=exIsWeighted(ex)&&!sess.quickMode;
       const dropHtml=canDrop?'<div style="padding:0 10px 12px;"><button class="drop-btn" onclick="addDropset('+ei+')">+ Drop set (lower weight, no rest)</button></div>':'';
-      const setsHtml='<div class="sets-wrap">'+e.sets.map((s,si)=>rSet(ei,si,s,ex)).join('')+'</div>';
+      // Build sets with section headers — only inject "Warmup" / "Working" labels
+      // when an exercise actually has warmup sets. Otherwise rendering is unchanged.
+      const hasWarmups=e.sets.some(s=>s.warmup);
+      let setsHtml='<div class="sets-wrap">';
+      if(hasWarmups){
+        const wuCount=e.sets.filter(s=>s.warmup).length;
+        const wkCount=e.sets.filter(s=>!s.warmup).length;
+        setsHtml+='<div class="set-section warmup"><i class="ti ti-flame"></i> Warmup · '+wuCount+(wuCount===1?' set':' sets')+'</div>';
+        e.sets.forEach((s,si)=>{
+          if(!s.warmup&&(si===0||e.sets[si-1].warmup)){
+            setsHtml+='<div class="set-section"><i class="ti ti-barbell"></i> Working · '+wkCount+(wkCount===1?' set':' sets')+'</div>';
+          }
+          setsHtml+=rSet(ei,si,s,ex);
+        });
+      }else{
+        setsHtml+=e.sets.map((s,si)=>rSet(ei,si,s,ex)).join('');
+      }
+      setsHtml+='</div>';
       // Apply in-pair class to grouped exercises in both modes — gives pair-letter
       // proper flex alignment in the ex-name. Quick = pair flow, Full = supersets.
       const cardClass=e.group!=null?'ex-card in-pair':'ex-card';
@@ -3193,6 +3251,17 @@ button:active{opacity:.75;transform:scale(.97);}
   }
 
   function rSet(ei,si,s,ex){
+    // Warmup sets render as slim rows with just a "Mark done" tap — no feedback
+    // rating, no intra-session adaptation. Computed from user's owned weights so
+    // the prescription always lands on a weight they can actually use.
+    if(s.warmup){
+      const wuCurrent=(()=>{const c=getCurrentSet();return c.ei===ei&&c.si===si;})();
+      const cls='wu-row'+(s.done?' done':(wuCurrent?' current':''));
+      const action=s.done
+        ?'<i class="ti ti-check wu-check"></i>'
+        :(wuCurrent?'<button class="wu-done-btn" onclick="setWarmupDone('+ei+','+si+')">Mark done</button>':'');
+      return'<div class="'+cls+'" id="set-'+ei+'-'+si+'"><div class="wu-num">SET '+(si+1)+'</div><div class="wu-prescription">'+s.actualWeight+' lb × '+s.actualReps+' reps</div><div class="wu-action">'+action+'</div></div>';
+    }
     let wIn='';
     const showWeight=exIsWeighted(ex)||ex.hasWeight;
     if(showWeight){
@@ -3248,6 +3317,18 @@ button:active{opacity:.75;transform:scale(.97);}
     const dropTag=s.isDropset?'<span class="tag" style="background:var(--w-bg);color:var(--w-fg);">Dropset</span>':'';
     return'<div class="set-card'+lc+isCurrent+'" id="set-'+ei+'-'+si+'"><div class="set-row1"><span class="set-lbl">Set '+(si+1)+currentPill+dropTag+bdg+'</span><div class="set-inputs">'+wIn+(wIn?'<span class="set-sep">·</span>':'')+rIn+'</div></div>'+btnRowHtml+'</div>';
   }
+
+  // Mark a warmup set complete. No feedback collected, no intra-session
+  // adaptation — warmups are intentionally light and don't drive progression.
+  // Persists immediately so a reload mid-warmup doesn't lose state.
+  window.setWarmupDone=function(ei,si){
+    const sess=state.currentSession;
+    if(!sess||!sess.exercises[ei])return;
+    const exData=sess.exercises[ei],set=exData.sets[si];
+    if(!set||!set.warmup)return;
+    set.done=true;
+    save();reRSet(ei,si);updProg();
+  };
 
   // Quick Session — mark a non-last set as done without recording feedback.
   // Triggers the same partner-switch banner as the rated path so the user
@@ -3721,7 +3802,10 @@ button:active{opacity:.75;transform:scale(.97);}
       // mean a dropset rated 'good' tells the next-session adapter to lower the
       // starting weight, which is the opposite of what dropsets are for. Volume and
       // e1RM tracking still include dropsets — the work happened.
-      const completedMain=completed.filter(s=>!s.isDropset);
+      // Warmups and dropsets are excluded from progression aggregation. Warmups
+      // are intentionally light (no progression signal); dropsets carry their
+      // own intent and shouldn't influence the next session's starting weight.
+      const completedMain=completed.filter(s=>!s.isDropset&&!s.warmup);
       let agg;
       if(sess.quickMode){
         // Quick Session: only the last set carries a rating (sets 1-2 are just "done").
@@ -3739,17 +3823,20 @@ button:active{opacity:.75;transform:scale(.97);}
         adapt(e.id,agg,lastMain.actualReps,lastMain.actualWeight);
       }
       const ex=EX[e.id];
-      // Volume
+      // Volume — exclude warmups (they're prep, not training stimulus); include dropsets (real work)
       completed.forEach(s=>{
+        if(s.warmup)return;
         const isW=exIsWeighted(ex);
         if(isW)vol+=(s.actualWeight||0)*(s.actualReps||0)*(ex.perSide?2:1);
       });
       // e1RM tracking — all weighted exercises (compounds and accessories).
       // Strength score still uses only compounds via ALL_COMPOUNDS; this history
-      // exists to support PR detection across all weighted exercises.
+      // exists to support PR detection across all weighted exercises. Warmups
+      // are excluded so a 50%-weight warmup never gets misread as a best set.
       if(exIsWeighted(ex)){
         let bestE1rm=0;
         completed.forEach(s=>{
+          if(s.warmup)return;
           const w=s.actualWeight||0,r=s.actualReps||0;
           if(w>0&&r>0){const est=e1rm(w,r);if(est>bestE1rm)bestE1rm=est;}
         });
@@ -5713,22 +5800,29 @@ button:active{opacity:.75;transform:scale(.97);}
     for(let i=0;i<si;i++){const s=curEx.sets[i];histParts.push('Set '+(i+1)+': '+(s.actualReps||0)+(isTimed?'s':'')+' ✓');}
     histParts.push('<span class="lv-history-now">Set '+(si+1)+': now</span>');
     for(let i=si+1;i<totalSets;i++){histParts.push('Set '+(i+1));}
-    // Set label (Superset/Pair/Pre-exhaust tag if grouped)
+    // Set label: Warmup takes priority, then Pre-exhaust, then Superset/Pair grouping.
     let setLabel='Set '+(si+1)+' of '+totalSets;
-    if(curEx.preExhaust)setLabel='Pre-exhaust · '+setLabel;
+    if(curSet.warmup){
+      const wuTotal=curEx.sets.filter(s=>s.warmup).length;
+      setLabel='Warmup · Set '+(si+1)+' of '+wuTotal;
+    }else if(curEx.preExhaust)setLabel='Pre-exhaust · '+setLabel;
     else if(curEx.group!=null)setLabel=(isQuick?'Pair · ':'Superset · ')+setLabel;
     // Timer for timed exercises
     const timerHtml=isTimed?buildLvTimerWidget(ei,curSet.actualReps):'';
-    // Dropset button (weighted, not quick mode, not on a dropset, only if not last-and-done)
-    const canDrop=exIsWeighted(ex)&&!isQuick&&!curSet.isDropset;
+    // Dropset button (weighted, not quick mode, not on a dropset, only if not last-and-done) — skip on warmups
+    const canDrop=exIsWeighted(ex)&&!isQuick&&!curSet.isDropset&&!curSet.warmup;
     const dropsetHtml=canDrop?'<button class="lv-dropset-btn" onclick="addDropset('+ei+');renderLandscape();">+ Add dropset</button>':'';
-    return'<div class="lv-set-label">'+setLabel+'</div>'
+    // Warmups show a single Mark done button instead of the feedback grid
+    const actionHtml=curSet.warmup
+      ?'<button class="lv-fb-btn done-single" style="background:var(--w-bg);border-color:var(--w-br);color:var(--w-fg);" onclick="setWarmupDone('+ei+','+si+');renderLandscape();">Mark warmup done</button>'
+      :buildLvFbButtons(sess,ei,si,curEx);
+    return'<div class="lv-set-label"'+(curSet.warmup?' style="color:var(--w-fg);"':'')+'>'+setLabel+'</div>'
       +'<div class="lv-ex-name">'+escHtml(curEx.name)+'</div>'
       +chipsHtml
       +rangeHint
       +timerHtml
       +'<div class="lv-history">'+histParts.join(' &nbsp;·&nbsp; ')+'</div>'
-      +buildLvFbButtons(sess,ei,si,curEx)
+      +actionHtml
       +dropsetHtml;
   }
 
@@ -6223,7 +6317,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v49';
+    const APP_VERSION='v50';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6235,8 +6329,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v49')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v49';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v50')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v50';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
