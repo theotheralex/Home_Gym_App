@@ -485,6 +485,32 @@ button:active{opacity:.75;transform:scale(.97);}
 .ach-summary-num{font-size:24px;font-weight:800;color:var(--w-fg);margin-right:4px;}
 .achievement{background:var(--surface);border-radius:var(--rl);padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:8px;}
 .ach-icon{width:42px;height:42px;background:var(--w-bg);color:var(--w-fg);border:1px solid var(--w-br);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ach-text{flex:1;min-width:0;}
+.ach-name{font-size:14px;font-weight:700;}
+.ach-desc{font-size:12px;color:var(--text-2);margin-top:2px;line-height:1.4;}
+.ach-pending{opacity:0.7;}
+.ach-pending .ach-icon{background:var(--surface-2);color:var(--text-3);border-color:var(--border);}
+.ach-almost{opacity:1;}
+.ach-almost .ach-icon{background:var(--w-bg);color:var(--w-fg);border-color:var(--w-br);}
+.ach-progress-mini{height:4px;background:var(--surface-2);border-radius:2px;margin-top:8px;overflow:hidden;}
+.ach-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent) 0%,#ef4444 100%);border-radius:2px;}
+.ach-almost .ach-progress-fill{background:linear-gradient(90deg,var(--w-fg) 0%,#fde047 100%);}
+.ach-progress-label{font-size:11px;color:var(--text-3);margin-top:4px;}
+.ach-featured{background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:8px;}
+.ach-featured.next{border-color:var(--w-br);}
+.ach-featured.recent{border-color:var(--s-br);}
+.ach-featured-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.ach-featured-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;padding:3px 8px;border-radius:6px;}
+.ach-featured.next .ach-featured-tag{background:var(--w-bg);color:var(--w-fg);}
+.ach-featured.recent .ach-featured-tag{background:var(--s-bg);color:var(--s-fg);}
+.ach-featured-time{font-size:12px;color:var(--text-3);}
+.ach-featured-name{font-size:18px;font-weight:700;letter-spacing:-0.2px;}
+.ach-featured-desc{font-size:13px;color:var(--text-2);margin-top:2px;}
+.ach-featured-prog{margin-top:12px;}
+.ach-featured-prog-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);margin-bottom:4px;}
+.ach-featured-prog-row .lbl{color:var(--text-3);}
+.ach-featured-bar{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;}
+.ach-featured-bar-fill{height:100%;background:linear-gradient(90deg,var(--w-fg) 0%,#fde047 100%);border-radius:4px;}
 .ach-text{flex:1;}
 .ach-name{font-size:14px;font-weight:700;}
 .ach-desc{font-size:12px;color:var(--text-3);margin-top:2px;line-height:1.4;}
@@ -1715,6 +1741,53 @@ button:active{opacity:.75;transform:scale(.97);}
     };
   }
 
+  // Helpers used by achievement checks. These intentionally guard against
+  // missing data — a new user with no weighIns or no goalWeight should not
+  // crash any check, just return 0 or false.
+  function getFatLost(){
+    const start=state.profile?.startWeight;
+    const cur=getCurrentWeight();
+    if(!start||!cur)return 0;
+    return Math.max(0,start-cur);
+  }
+  function getCompletedCycles(){
+    // PHASE_ORDER hyper(12)+strength(6)+deload(3) = 21 sessions per cycle
+    return Math.floor((state.sessions?.length||0)/21);
+  }
+  function getCoveredFocusTypes14d(){
+    const cutoff=Date.now()-14*86400000;
+    const types=new Set();
+    (state.sessions||[]).forEach(s=>{if(s.timestamp>=cutoff&&s.templateKey)types.add(s.templateKey);});
+    return types.size;
+  }
+  function hasHitDBCeiling(){
+    const dbw=state.profile?.dbWeights||[];
+    if(!dbw.length)return false;
+    const maxDB=Math.max.apply(null,dbw);
+    // Verify an actual completed set at ceiling weight, not just a prescribed weight
+    return (state.sessions||[]).some(s=>s.exercises.some(e=>{
+      const ex=EX[e.id];
+      if(!ex||ex.type!=='compound')return false;
+      if(!ex.equip||!ex.equip.includes('db'))return false;
+      return e.sets.some(set=>set.done&&set.actualWeight>=maxDB);
+    }));
+  }
+  function hitGoalWeight(){
+    const goal=state.profile?.goalWeight;
+    const cur=getCurrentWeight();
+    if(!goal||!cur)return false;
+    return cur<=goal;
+  }
+  function hitGoalBF(){
+    const target=state.profile?.bodyCompTarget;
+    const sex=state.profile?.sex||'male';
+    if(!target)return false;
+    const targetBF=getBodyCompTargetBF(target,sex);
+    const cur=getCurrentBF();
+    if(!cur||!targetBF)return false;
+    return cur<=targetBF;
+  }
+
   function getPRStreak(){
     // Count consecutive weeks (looking back) where at least one PR happened
     if(!state.prs||!state.prs.length)return 0;
@@ -1753,31 +1826,43 @@ button:active{opacity:.75;transform:scale(.97);}
   // ── ACHIEVEMENTS ─────────────────────────────────────────
   // Each achievement: {id, name, desc, icon, check(state) → boolean, progress(state) → {current, target}}
   const ACHIEVEMENTS=[
-    // Tier crossings
-    {id:'tier_novice',name:'Reached Novice',desc:'Crossed 150 strength score',icon:'medal',check:()=>getStrengthScore()>=150,progress:()=>({current:getStrengthScore(),target:150})},
-    {id:'tier_intermediate',name:'Reached Intermediate',desc:'Crossed 400 strength score',icon:'medal-2',check:()=>getStrengthScore()>=400,progress:()=>({current:getStrengthScore(),target:400})},
-    {id:'tier_advanced',name:'Reached Advanced',desc:'Crossed 700 strength score',icon:'award',check:()=>getStrengthScore()>=700,progress:()=>({current:getStrengthScore(),target:700})},
-    {id:'tier_elite',name:'Reached Elite',desc:'Crossed 1000 strength score',icon:'crown',check:()=>getStrengthScore()>=1000,progress:()=>({current:getStrengthScore(),target:1000})},
-    // Bodyweight milestones
-    {id:'first_pullup',name:'First Pull-up',desc:'Logged a pull-up rep',icon:'stretching',check:()=>getBestReps('pull_up')>=1,progress:()=>({current:getBestReps('pull_up'),target:1})},
-    {id:'pullups_10',name:'10 Pull-ups',desc:'10 pull-ups in a single set',icon:'stretching',check:()=>getBestReps('pull_up')>=10,progress:()=>({current:getBestReps('pull_up'),target:10})},
-    {id:'pushups_25',name:'25 Push-ups',desc:'25 push-ups in a single set',icon:'bolt',check:()=>getBestReps('push_up')>=25,progress:()=>({current:getBestReps('push_up'),target:25})},
-    {id:'pushups_50',name:'50 Push-ups',desc:'50 push-ups in a single set',icon:'bolt',check:()=>getBestReps('push_up')>=50,progress:()=>({current:getBestReps('push_up'),target:50})},
-    {id:'plank_60',name:'1 Minute Plank',desc:'Hold a plank for 60 seconds',icon:'wall',check:()=>getBestTime('plank')>=60,progress:()=>({current:getBestTime('plank'),target:60})},
-    {id:'plank_120',name:'2 Minute Plank',desc:'Hold a plank for 120 seconds',icon:'wall',check:()=>getBestTime('plank')>=120,progress:()=>({current:getBestTime('plank'),target:120})},
-    // Streak achievements
-    {id:'streak_4',name:'4-Week PR Streak',desc:'4 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=4,progress:()=>({current:getPRStreak(),target:4})},
-    {id:'streak_12',name:'12-Week PR Streak',desc:'12 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=12,progress:()=>({current:getPRStreak(),target:12})},
-    {id:'streak_26',name:'Half-Year PR Streak',desc:'26 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=26,progress:()=>({current:getPRStreak(),target:26})},
-    // Volume milestones
-    {id:'vol_100k',name:'100k Volume Lifted',desc:'100,000 lb of total lifetime volume',icon:'package',check:()=>getLifetimeStats().totalVolume>=100000,progress:()=>({current:getLifetimeStats().totalVolume,target:100000})},
-    {id:'vol_500k',name:'500k Volume Lifted',desc:'500,000 lb of total lifetime volume',icon:'package',check:()=>getLifetimeStats().totalVolume>=500000,progress:()=>({current:getLifetimeStats().totalVolume,target:500000})},
-    {id:'vol_1m',name:'1M Volume Lifted',desc:'1 million lb of total lifetime volume',icon:'mountain',check:()=>getLifetimeStats().totalVolume>=1000000,progress:()=>({current:getLifetimeStats().totalVolume,target:1000000})},
-    // Session count
-    {id:'sess_50',name:'50 Sessions',desc:'Completed 50 training sessions',icon:'target',check:()=>state.sessions.length>=50,progress:()=>({current:state.sessions.length,target:50})},
-    {id:'sess_100',name:'100 Sessions',desc:'Completed 100 training sessions',icon:'target',check:()=>state.sessions.length>=100,progress:()=>({current:state.sessions.length,target:100})},
-    {id:'sess_250',name:'250 Sessions',desc:'Completed 250 training sessions',icon:'target',check:()=>state.sessions.length>=250,progress:()=>({current:state.sessions.length,target:250})},
-    {id:'sess_500',name:'500 Sessions',desc:'Completed 500 training sessions',icon:'target',check:()=>state.sessions.length>=500,progress:()=>({current:state.sessions.length,target:500})},
+    // === LIFETIME (session counts + volume) ===
+    {id:'sess_10',cat:'Lifetime',name:'10 Sessions',desc:'First 10 sessions in the books',icon:'target',check:()=>state.sessions.length>=10,progress:()=>({current:state.sessions.length,target:10})},
+    {id:'sess_25',cat:'Lifetime',name:'25 Sessions',desc:'Quarter way to 100',icon:'target',check:()=>state.sessions.length>=25,progress:()=>({current:state.sessions.length,target:25})},
+    {id:'sess_50',cat:'Lifetime',name:'50 Sessions',desc:'Completed 50 training sessions',icon:'target',check:()=>state.sessions.length>=50,progress:()=>({current:state.sessions.length,target:50})},
+    {id:'sess_100',cat:'Lifetime',name:'100 Sessions',desc:'Completed 100 training sessions',icon:'target',check:()=>state.sessions.length>=100,progress:()=>({current:state.sessions.length,target:100})},
+    {id:'sess_250',cat:'Lifetime',name:'250 Sessions',desc:'Completed 250 training sessions',icon:'target',check:()=>state.sessions.length>=250,progress:()=>({current:state.sessions.length,target:250})},
+    {id:'sess_500',cat:'Lifetime',name:'500 Sessions',desc:'Completed 500 training sessions',icon:'target',check:()=>state.sessions.length>=500,progress:()=>({current:state.sessions.length,target:500})},
+    {id:'vol_10k',cat:'Lifetime',name:'10k Volume Lifted',desc:'10,000 lb of total lifetime volume',icon:'package',check:()=>getLifetimeStats().totalVolume>=10000,progress:()=>({current:getLifetimeStats().totalVolume,target:10000})},
+    {id:'vol_100k',cat:'Lifetime',name:'100k Volume Lifted',desc:'100,000 lb of total lifetime volume',icon:'package',check:()=>getLifetimeStats().totalVolume>=100000,progress:()=>({current:getLifetimeStats().totalVolume,target:100000})},
+    {id:'vol_500k',cat:'Lifetime',name:'500k Volume Lifted',desc:'500,000 lb of total lifetime volume',icon:'package',check:()=>getLifetimeStats().totalVolume>=500000,progress:()=>({current:getLifetimeStats().totalVolume,target:500000})},
+    {id:'vol_1m',cat:'Lifetime',name:'1M Volume Lifted',desc:'1 million lb of total lifetime volume',icon:'mountain',check:()=>getLifetimeStats().totalVolume>=1000000,progress:()=>({current:getLifetimeStats().totalVolume,target:1000000})},
+    // === STRENGTH (tier crossings + equipment + calisthenics) ===
+    {id:'tier_novice',cat:'Strength',name:'Reached Novice',desc:'Crossed 150 strength score',icon:'medal',check:()=>getStrengthScore()>=150,progress:()=>({current:getStrengthScore(),target:150})},
+    {id:'tier_intermediate',cat:'Strength',name:'Reached Intermediate',desc:'Crossed 400 strength score',icon:'medal-2',check:()=>getStrengthScore()>=400,progress:()=>({current:getStrengthScore(),target:400})},
+    {id:'tier_advanced',cat:'Strength',name:'Reached Advanced',desc:'Crossed 700 strength score',icon:'award',check:()=>getStrengthScore()>=700,progress:()=>({current:getStrengthScore(),target:700})},
+    {id:'tier_elite',cat:'Strength',name:'Reached Elite',desc:'Crossed 1000 strength score',icon:'crown',check:()=>getStrengthScore()>=1000,progress:()=>({current:getStrengthScore(),target:1000})},
+    {id:'db_ceiling',cat:'Strength',name:'DB Ceiling Reached',desc:'Hit your max DB on any compound — time for more weight?',icon:'arrow-up',check:hasHitDBCeiling,progress:()=>({current:hasHitDBCeiling()?1:0,target:1})},
+    {id:'first_pullup',cat:'Strength',name:'First Pull-up',desc:'Logged a pull-up rep',icon:'stretching',check:()=>getBestReps('pull_up')>=1,progress:()=>({current:getBestReps('pull_up'),target:1})},
+    {id:'pullups_10',cat:'Strength',name:'10 Pull-ups',desc:'10 pull-ups in a single set',icon:'stretching',check:()=>getBestReps('pull_up')>=10,progress:()=>({current:getBestReps('pull_up'),target:10})},
+    {id:'pushups_25',cat:'Strength',name:'25 Push-ups',desc:'25 push-ups in a single set',icon:'bolt',check:()=>getBestReps('push_up')>=25,progress:()=>({current:getBestReps('push_up'),target:25})},
+    {id:'pushups_50',cat:'Strength',name:'50 Push-ups',desc:'50 push-ups in a single set',icon:'bolt',check:()=>getBestReps('push_up')>=50,progress:()=>({current:getBestReps('push_up'),target:50})},
+    {id:'plank_60',cat:'Strength',name:'1 Minute Plank',desc:'Hold a plank for 60 seconds',icon:'wall',check:()=>getBestTime('plank')>=60,progress:()=>({current:getBestTime('plank'),target:60})},
+    {id:'plank_120',cat:'Strength',name:'2 Minute Plank',desc:'Hold a plank for 120 seconds',icon:'wall',check:()=>getBestTime('plank')>=120,progress:()=>({current:getBestTime('plank'),target:120})},
+    // === CONSISTENCY (streaks + phase cycles) ===
+    {id:'streak_4',cat:'Consistency',name:'4-Week PR Streak',desc:'4 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=4,progress:()=>({current:getPRStreak(),target:4})},
+    {id:'streak_12',cat:'Consistency',name:'12-Week PR Streak',desc:'12 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=12,progress:()=>({current:getPRStreak(),target:12})},
+    {id:'streak_26',cat:'Consistency',name:'Half-Year PR Streak',desc:'26 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=26,progress:()=>({current:getPRStreak(),target:26})},
+    {id:'streak_52',cat:'Consistency',name:'Year-Long PR Streak',desc:'52 consecutive weeks with a PR',icon:'flame',check:()=>getPRStreak()>=52,progress:()=>({current:getPRStreak(),target:52})},
+    {id:'phase_cycle',cat:'Consistency',name:'Full Phase Cycle',desc:'Completed a full Hypertrophy → Strength → Deload cycle',icon:'refresh',check:()=>getCompletedCycles()>=1,progress:()=>({current:getCompletedCycles(),target:1})},
+    // === BODY COMPOSITION (weight loss + goal hits) ===
+    {id:'fat_lost_5',cat:'Body composition',name:'First 5 lb lost',desc:'Lost your first 5 pounds',icon:'trending-down',check:()=>getFatLost()>=5,progress:()=>({current:getFatLost(),target:5})},
+    {id:'fat_lost_10',cat:'Body composition',name:'10 lb lost',desc:'Lost 10 pounds since you started',icon:'trending-down',check:()=>getFatLost()>=10,progress:()=>({current:getFatLost(),target:10})},
+    {id:'fat_lost_20',cat:'Body composition',name:'20 lb lost',desc:'Significant body composition shift',icon:'trending-down',check:()=>getFatLost()>=20,progress:()=>({current:getFatLost(),target:20})},
+    {id:'goal_weight',cat:'Body composition',name:'Goal Weight Reached',desc:'Hit your target body weight',icon:'flag-check',check:hitGoalWeight,progress:()=>({current:hitGoalWeight()?1:0,target:1})},
+    {id:'goal_bf',cat:'Body composition',name:'Goal Body Fat Reached',desc:'Hit your target body fat percentage',icon:'flag-check',check:hitGoalBF,progress:()=>({current:hitGoalBF()?1:0,target:1})},
+    // === COVERAGE (variety) ===
+    {id:'allrounder',cat:'Coverage',name:'All-rounder',desc:'Trained all 6 focus types within 14 days',icon:'compass',check:()=>getCoveredFocusTypes14d()>=6,progress:()=>({current:getCoveredFocusTypes14d(),target:6})},
   ];
 
   function checkAchievements(){
@@ -4792,40 +4877,88 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   // ── DETAIL: Achievements ────────────────────────────────
+  // Format the progress text for an achievement based on its id prefix.
+  // Volume-based show formatted lb totals; fat-loss show decimals; planks show seconds.
+  function formatAchProgress(a){
+    const cur=a.current,tgt=a.target;
+    if(a.id.startsWith('vol_'))return Math.round(cur).toLocaleString()+' / '+tgt.toLocaleString()+' lb';
+    if(a.id.startsWith('fat_lost_'))return cur.toFixed(1)+' / '+tgt+' lb lost';
+    if(a.id.startsWith('plank_'))return cur+'s / '+tgt+'s';
+    if(tgt===1)return cur>=1?'Unlocked':'Locked';
+    return cur+' / '+tgt;
+  }
+
   window.showStrengthAchievements=function(){
     const body=document.getElementById('strength-achievements-body');
     const earned=getEarnedAchievements().sort((a,b)=>b.earnedAt-a.earnedAt);
-    const next=getNextAchievements(20);
+    const next=getNextAchievements(ACHIEVEMENTS.length);
+    const total=ACHIEVEMENTS.length;
+    const pctComplete=Math.round((earned.length/total)*100);
 
-    let html='<div class="ach-summary"><span class="ach-summary-num">'+earned.length+'</span> / '+ACHIEVEMENTS.length+' earned</div>';
+    let html='';
 
-    if(earned.length){
-      html+='<h3 style="margin-top:20px;margin-bottom:10px;">Earned</h3>';
-      earned.forEach(a=>{
-        const days=Math.round((Date.now()-a.earnedAt)/86400000);
-        const dateStr=days===0?'Today':days===1?'Yesterday':days<30?days+' days ago':Math.round(days/30)+' months ago';
-        html+='<div class="achievement">'
-          +'<div class="ach-icon">'+icon(a.icon,22)+'</div>'
-          +'<div class="ach-text"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+' · '+dateStr+'</div></div>'
-          +'</div>';
-      });
+    // Summary
+    html+='<div class="ach-summary"><span class="ach-summary-num">'+earned.length+'</span> / '+total+' unlocked · '+pctComplete+'% complete</div>';
+
+    // Recently unlocked — only show if there's an unlock within the last 30 days
+    const recent=earned.find(a=>(Date.now()-a.earnedAt)<30*86400000);
+    if(recent){
+      const days=Math.round((Date.now()-recent.earnedAt)/86400000);
+      const dateStr=days===0?'today':days===1?'yesterday':days+' days ago';
+      html+='<h3 style="margin-top:20px;">Recently unlocked</h3>'
+        +'<div class="ach-featured recent">'
+        +'<div class="ach-featured-hdr"><span class="ach-featured-tag">Just unlocked</span><span class="ach-featured-time">'+dateStr+'</span></div>'
+        +'<div class="ach-featured-name">'+recent.name+'</div>'
+        +'<div class="ach-featured-desc">'+recent.desc+'</div>'
+        +'</div>';
     }
 
-    if(next.length){
-      html+='<h3 style="margin-top:24px;margin-bottom:10px;">Up next</h3>';
-      next.forEach(a=>{
-        const remaining=a.target-a.current;
-        let progressLabel='';
-        if(a.id.startsWith('vol_'))progressLabel=Math.round(a.current).toLocaleString()+' / '+a.target.toLocaleString()+' lb';
-        else progressLabel=a.current+' / '+a.target;
-        html+='<div class="achievement ach-pending">'
+    // Closest to unlock — highest-progress unearned achievement
+    const closest=next[0];
+    if(closest&&closest.pct<100){
+      html+='<h3 style="margin-top:20px;">Closest to unlock</h3>'
+        +'<div class="ach-featured next">'
+        +'<div class="ach-featured-hdr"><span class="ach-featured-tag">Next up</span></div>'
+        +'<div class="ach-featured-name">'+closest.name+'</div>'
+        +'<div class="ach-featured-desc">'+closest.desc+'</div>'
+        +'<div class="ach-featured-prog">'
+          +'<div class="ach-featured-prog-row"><span class="lbl">Progress</span><span>'+formatAchProgress(closest)+'</span></div>'
+          +'<div class="ach-featured-bar"><div class="ach-featured-bar-fill" style="width:'+closest.pct+'%;"></div></div>'
+        +'</div>'
+        +'</div>';
+    }
+
+    // Categorized sections — earned and not-yet-earned mixed within each category,
+    // with earned shown first per category (date earned), then unearned (with progress)
+    const cats=['Lifetime','Strength','Consistency','Body composition','Coverage'];
+    cats.forEach(cat=>{
+      const inCat=ACHIEVEMENTS.filter(a=>a.cat===cat);
+      if(!inCat.length)return;
+      html+='<h3 style="margin-top:24px;margin-bottom:10px;">'+cat+'</h3>';
+      // Earned first, then unearned in order of % progress descending
+      const earnedInCat=inCat.filter(a=>state.achievements&&state.achievements[a.id]);
+      const unearnedInCat=inCat.filter(a=>!state.achievements||!state.achievements[a.id])
+        .map(a=>{const p=a.progress();return{...a,...p,pct:Math.min(100,Math.round((p.current/p.target)*100))};})
+        .sort((a,b)=>b.pct-a.pct);
+      earnedInCat.forEach(a=>{
+        const earnedAt=state.achievements[a.id].earnedAt;
+        const days=Math.round((Date.now()-earnedAt)/86400000);
+        const dateStr=days===0?'Today':days===1?'Yesterday':days<30?days+' days ago':Math.round(days/30)+' mo ago';
+        html+='<div class="achievement">'
+          +'<div class="ach-icon">'+icon(a.icon,22)+'</div>'
+          +'<div class="ach-text"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+' · Earned '+dateStr+'</div></div>'
+          +'</div>';
+      });
+      unearnedInCat.forEach(a=>{
+        const isAlmost=a.pct>=60;
+        html+='<div class="achievement ach-pending'+(isAlmost?' ach-almost':'')+'">'
           +'<div class="ach-icon">'+icon(a.icon,22)+'</div>'
           +'<div class="ach-text"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div>'
           +'<div class="ach-progress-mini"><div class="ach-progress-fill" style="width:'+a.pct+'%;"></div></div>'
-          +'<div class="ach-progress-label">'+progressLabel+'</div>'
+          +'<div class="ach-progress-label">'+formatAchProgress(a)+'</div>'
           +'</div></div>';
       });
-    }
+    });
 
     body.innerHTML=html;
     showScreen('strength-achievements');
@@ -6090,7 +6223,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v48';
+    const APP_VERSION='v49';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6102,8 +6235,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v48')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v48';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v49')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v49';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
