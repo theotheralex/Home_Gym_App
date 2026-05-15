@@ -106,9 +106,9 @@ button:active{opacity:.75;transform:scale(.97);}
 .ex-tbtn{font-size:15px;font-weight:700;min-height:50px;border-radius:var(--r);}
 .sets-wrap{padding:0 10px 12px;display:flex;flex-direction:column;gap:8px;}
 .set-card{background:var(--surface-2);border-radius:var(--rl);padding:14px;border-left:4px solid transparent;transition:background .15s,border-color .15s,box-shadow .15s;}
-.set-section{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;margin:12px 0 6px;display:flex;align-items:center;gap:6px;}
-.set-section i{font-size:13px;}
-.set-section.warmup{color:var(--w-fg);}
+.sets-divider{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;margin:12px 0 6px;display:flex;align-items:center;gap:6px;}
+.sets-divider i{font-size:13px;}
+.sets-divider.warmup{color:var(--w-fg);}
 .wu-row{background:var(--surface-2);border-radius:var(--r);padding:10px 14px;margin-bottom:6px;border-left:3px solid transparent;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s;}
 .wu-row.current{background:linear-gradient(90deg,rgba(234,179,8,0.10),rgba(234,179,8,0.02));border-left-color:var(--w-fg);box-shadow:0 0 0 1.5px rgba(234,179,8,0.35),inset 0 1px 0 rgba(255,255,255,0.04);}
 .wu-row.done{opacity:0.5;border-left-color:var(--w-fg);}
@@ -3131,10 +3131,10 @@ button:active{opacity:.75;transform:scale(.97);}
       if(hasWarmups){
         const wuCount=e.sets.filter(s=>s.warmup).length;
         const wkCount=e.sets.filter(s=>!s.warmup).length;
-        setsHtml+='<div class="set-section warmup"><i class="ti ti-flame"></i> Warmup · '+wuCount+(wuCount===1?' set':' sets')+'</div>';
+        setsHtml+='<div class="sets-divider warmup"><i class="ti ti-flame"></i> Warmup · '+wuCount+(wuCount===1?' set':' sets')+'</div>';
         e.sets.forEach((s,si)=>{
           if(!s.warmup&&(si===0||e.sets[si-1].warmup)){
-            setsHtml+='<div class="set-section"><i class="ti ti-barbell"></i> Working · '+wkCount+(wkCount===1?' set':' sets')+'</div>';
+            setsHtml+='<div class="sets-divider"><i class="ti ti-barbell"></i> Working · '+wkCount+(wkCount===1?' set':' sets')+'</div>';
           }
           setsHtml+=rSet(ei,si,s,ex);
         });
@@ -6317,7 +6317,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v50';
+    const APP_VERSION='v51';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6329,8 +6329,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v50')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v50';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v51')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v51';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
