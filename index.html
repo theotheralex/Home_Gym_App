@@ -671,6 +671,19 @@ button:active{opacity:.75;transform:scale(.97);}
 .edit-wt-chip{display:flex;align-items:center;justify-content:center;height:44px;background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1.5px solid rgba(255,255,255,0.08);border-radius:10px;font-size:14px;font-weight:600;color:var(--text-2);cursor:pointer;transition:all 0.15s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
 .edit-wt-chip.sel{background:linear-gradient(135deg,rgba(220,38,38,0.45),rgba(220,38,38,0.18));border-color:var(--accent);color:#fff;box-shadow:0 0 12px rgba(220,38,38,0.3),inset 0 1px 0 rgba(255,255,255,0.08);}
 @keyframes fade-in{from{opacity:0;}to{opacity:1;}}
+/* Strength-drop notice — reuses .edit-overlay backdrop */
+.sd-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.sd-head i{font-size:16px;color:var(--w-fg);}
+.sd-title{font-size:13px;font-weight:800;color:var(--w-fg);text-transform:uppercase;letter-spacing:0.8px;}
+.sd-body{font-size:14px;color:var(--text);line-height:1.55;}
+.sd-body strong{font-weight:700;}
+.sd-trend{font-variant-numeric:tabular-nums;color:var(--w-fg);font-weight:700;}
+.sd-context{font-size:13px;color:var(--text-2);margin-top:12px;padding-top:12px;border-top:1px solid var(--w-br);line-height:1.5;}
+.sd-context strong{color:var(--text);font-weight:700;}
+.sd-actions{display:flex;gap:10px;margin-top:18px;}
+.sd-actions button{flex:1;min-height:46px;border-radius:var(--r);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;border:none;}
+.sd-dismiss{background:transparent;border:1px solid var(--border-strong);color:var(--text-2);}
+.sd-more{background:rgba(234,179,8,0.2);color:var(--w-fg);}
 /* Landscape view — fullscreen workout display when device rotates */
 #landscape-view{display:none;position:fixed;inset:0;background:radial-gradient(ellipse at 50% 35%,#0d0d0d 0%,var(--bg) 50%,#050505 100%);color:var(--text);z-index:200;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
 #landscape-prompt{display:none;position:fixed;inset:0;background:var(--bg);color:var(--text);z-index:200;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:clamp(8px,1.5vh,20px);}
@@ -1064,7 +1077,7 @@ button:active{opacity:.75;transform:scale(.97);}
         <h3>Periodization</h3>
         <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">The app automatically cycles through three training phases so your body doesn't adapt to the same stimulus. You don't need to manage this — it happens based on your session count.</p>
         <div class="key-row" style="background:var(--i-bg);color:var(--i-fg);"><strong>Hypertrophy (sessions 1–12)</strong> — high volume, 8–12 reps for compounds, 12–15 for accessories. The muscle-building phase. Push hard — target Hard and Failed feedback.</div>
-        <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Strength (sessions 13–18)</strong> — heavier weight, 4–6 reps for compounds. Fewer sets. Focus on lifting heavy with good form. This phase builds the raw strength that makes the hypertrophy phase more effective.</div>
+        <div class="key-row" style="background:var(--w-bg);color:var(--w-fg);"><strong>Strength (sessions 13–18)</strong> — heavier weight, 4–6 reps for compounds, same set volume as hypertrophy. Lower reps and higher load — not less work. This phase builds the raw strength that makes the hypertrophy phase more effective.</div>
         <div class="key-row" style="background:var(--s-bg);color:var(--s-fg);"><strong>Deload (sessions 19–21)</strong> — weights drop to 60%, sets are halved. Easy and Good are expected. This isn't laziness — it's recovery. Your muscles grow during rest, not during lifting. After deload, the cycle repeats and you'll be stronger.</div>
       </div>
 
@@ -1560,6 +1573,35 @@ button:active{opacity:.75;transform:scale(.97);}
     const hist=state.e1rmHistory&&state.e1rmHistory[id];
     if(!hist||!hist.length)return 0;
     return Math.max(...hist.map(h=>h.e1rm));
+  }
+
+  // Strength-drop detection. Flags a compound when its last 2 logged sessions
+  // each fell vs the prior one AND the latest e1RM sits >=4% below the lift's
+  // all-time peak (the 4% gate filters day-to-day noise). Suppressed entirely
+  // when a deload sits in the last 3 sessions — e1RM is intentionally low
+  // around deload, so comparing across it isn't a real regression signal.
+  // Won't re-fire for a lift until it posts a fresh peak (tracked via
+  // state.sdAck), so a dismissed warning doesn't nag every session.
+  function detectStrengthDrops(){
+    const recent=state.sessions.slice(-3);
+    if(recent.some(s=>s&&s.phase==='deload'))return [];
+    const drops=[];
+    ALL_COMPOUNDS.forEach(id=>{
+      const hist=state.e1rmHistory&&state.e1rmHistory[id];
+      if(!hist||hist.length<4)return;
+      const n=hist.length;
+      const v0=hist[n-3].e1rm,v1=hist[n-2].e1rm,v2=hist[n-1].e1rm;
+      if(!(v2<v1&&v1<v0))return;
+      const peak=Math.max(...hist.map(h=>h.e1rm));
+      if(v2>peak*0.96)return;
+      // Suppress if we already warned about this lift at this-or-lower e1RM
+      // and it hasn't recovered above where the decline began.
+      const ack=state.sdAck&&state.sdAck[id];
+      if(ack!=null&&v2<=ack)return;
+      drops.push({id:id,name:EX[id]?EX[id].name:id,trend:[v0,v1,v2],
+        pct:Math.round((1-v2/peak)*100),declineStart:v0});
+    });
+    return drops;
   }
 
   function getBestReps(id){
@@ -2169,7 +2211,7 @@ button:active{opacity:.75;transform:scale(.97);}
   // ── PERIODIZATION ──────────────────────────────────────
   const PHASES={
     hypertrophy:{name:'Hypertrophy',repMult:[1,1],setMult:1,deload:false,sessions:12},
-    strength:{name:'Strength',repMult:[0.5,0.75],setMult:0.85,deload:false,sessions:6},
+    strength:{name:'Strength',repMult:[0.5,0.75],setMult:1,deload:false,sessions:6},
     deload:{name:'Deload',repMult:[1,1],setMult:0.5,deload:true,sessions:3},
   };
   const PHASE_ORDER=['hypertrophy','strength','deload'];
@@ -3419,6 +3461,53 @@ button:active{opacity:.75;transform:scale(.97);}
     setTimeout(()=>document.body.removeChild(a),100);
   };
 
+  // Post-session strength-drop notice. Persistent modal (explicit dismiss) so a
+  // recovery signal isn't missed behind auto-timed celebration banners. Shown
+  // once per detection; dismissing records sdAck so it won't re-fire for the
+  // same lift until that lift posts a fresh peak.
+  function showStrengthDropNotice(drops){
+    if(!drops||!drops.length)return;
+    if(!state.sdAck)state.sdAck={};
+    drops.forEach(d=>{state.sdAck[d.id]=d.declineStart;});
+    saveNow();
+    let body;
+    if(drops.length===1){
+      const d=drops[0];
+      body='Your <strong>'+d.name+'</strong> estimated 1RM has dropped 3 sessions running '
+        +'(<span class="sd-trend">'+d.trend[0]+' &rarr; '+d.trend[1]+' &rarr; '+d.trend[2]+' lb</span>). '
+        +'Regression while training consistently usually points to under-recovery — look at sleep, '
+        +'rest days, and stress before the next session.';
+    }else{
+      const lifts=drops.slice(0,3).map(d=>'<strong>'+d.name+'</strong> (<span class="sd-trend">'
+        +d.trend[0]+' &rarr; '+d.trend[2]+' lb</span>)').join(' and ');
+      body='<strong>'+drops.length+' of your main lifts are trending down at the same time</strong> — '
+        +lifts+' over the last 3 sessions. When multiple lifts regress together it\u2019s usually '
+        +'systemic recovery, not the exercises — sleep, stress, or not enough rest between sessions.';
+    }
+    const goal=state.profile&&state.profile.goal;
+    let ctx='';
+    if(goal==='recomp'||goal==='fat_loss'){
+      const gl=goal==='recomp'?'Recomposition':'Fat loss';
+      ctx='<div class="sd-context">Your goal is set to <strong>'+gl+'</strong>. A sustained '
+        +'strength drop while training hard can also mean a calorie deficit is too aggressive — '
+        +'strength holding is the signal your deficit is dialed in.</div>';
+    }
+    const ov=document.createElement('div');
+    ov.className='edit-overlay show';
+    ov.innerHTML='<div class="edit-card">'
+      +'<div class="sd-head"><i class="ti ti-alert-triangle"></i><span class="sd-title">Strength check</span></div>'
+      +'<div class="sd-body">'+body+'</div>'+ctx
+      +'<div class="sd-actions">'
+      +'<button class="sd-dismiss">Got it</button>'
+      +'<button class="sd-more">View lift history</button>'
+      +'</div></div>';
+    document.body.appendChild(ov);
+    const close=()=>{ov.style.animation='fade-in 0.15s ease reverse';setTimeout(()=>ov.remove(),140);};
+    ov.querySelector('.sd-dismiss').onclick=close;
+    ov.querySelector('.sd-more').onclick=()=>{close();if(window.showStrengthLifts)showStrengthLifts();};
+    ov.onclick=e=>{if(e.target===ov)close();};
+  }
+
   window.toggleCues=function(ei){const p=document.getElementById('cue-'+ei),chev=document.getElementById('cue-chev-'+ei);if(!p)return;const o=p.classList.toggle('open');if(chev){chev.style.transform=o?'rotate(90deg)':'rotate(0deg)';chev.style.transition='transform 0.15s';}};
   window.updSet=function(ei,si,f,v){
     const sess=state.currentSession;
@@ -3925,6 +4014,13 @@ button:active{opacity:.75;transform:scale(.97);}
         }
       },1500);
     }
+
+    // Strength-drop notice — after celebration banners have had their moment
+    // (a typical PR banner fires ~1.2s and clears ~4.7s), so a regression
+    // warning doesn't step on a good session. Persistent modal, explicit
+    // dismiss; suppressed near deload and de-duped via state.sdAck.
+    const sdDrops=detectStrengthDrops();
+    if(sdDrops.length){setTimeout(()=>showStrengthDropNotice(sdDrops),4500);}
   };
 
   let cancelPending=false;
@@ -6317,7 +6413,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v51';
+    const APP_VERSION='v52';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6329,8 +6425,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v51')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v51';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v52')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v52';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
