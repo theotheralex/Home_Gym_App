@@ -684,6 +684,31 @@ button:active{opacity:.75;transform:scale(.97);}
 .sd-actions button{flex:1;min-height:46px;border-radius:var(--r);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;border:none;}
 .sd-dismiss{background:transparent;border:1px solid var(--border-strong);color:var(--text-2);}
 .sd-more{background:rgba(234,179,8,0.2);color:var(--w-fg);}
+/* Your Week — dashboard weekly structure card */
+.yw{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin:8px 0 4px;}
+.yw-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
+.yw-t{font-size:13px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:0.8px;}
+.yw-w{font-size:11px;color:var(--text-3);font-weight:600;}
+.yw-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.yw-chip{background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:600;color:var(--text);}
+.yw-chip .d{color:var(--text-3);font-weight:500;}
+.yw-none{font-size:13px;color:var(--text-3);font-style:italic;margin-bottom:14px;}
+.yw-frq{display:flex;flex-direction:column;gap:8px;}
+.yw-row{display:flex;align-items:center;gap:11px;}
+.yw-name{font-size:13.5px;font-weight:600;width:74px;flex-shrink:0;}
+.yw-dots{display:flex;gap:5px;flex:1;}
+.yw-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--border-strong);}
+.yw-dot.met{background:var(--s-fg);border-color:var(--s-fg);}
+.yw-dot.par{background:var(--w-fg);border-color:var(--w-fg);}
+.yw-tag{font-size:11px;font-weight:700;width:54px;text-align:right;flex-shrink:0;letter-spacing:0.3px;}
+.yw-tag.ok{color:var(--s-fg);}.yw-tag.low{color:var(--w-fg);}.yw-tag.miss{color:var(--text-3);}
+.yw-coach{display:flex;gap:9px;margin-top:15px;padding-top:14px;border-top:1px solid var(--border);}
+.yw-coach i{font-size:15px;flex-shrink:0;margin-top:1px;}
+.yw-coach.affirm i{color:var(--s-fg);}
+.yw-coach.flag i{color:var(--w-fg);}
+.yw-cb{font-size:13px;line-height:1.6;color:var(--text);}
+.yw-cb strong{font-weight:700;}
+.yw-cb .yw-nx{color:var(--text-2);}
 /* Landscape view — fullscreen workout display when device rotates */
 #landscape-view{display:none;position:fixed;inset:0;background:radial-gradient(ellipse at 50% 35%,#0d0d0d 0%,var(--bg) 50%,#050505 100%);color:var(--text);z-index:200;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
 #landscape-prompt{display:none;position:fixed;inset:0;background:var(--bg);color:var(--text);z-index:200;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:clamp(8px,1.5vh,20px);}
@@ -952,6 +977,7 @@ button:active{opacity:.75;transform:scale(.97);}
         <div class="stat-card" id="stat-days-card"><div class="stat-head"><span class="stat-icon" id="stat-days-icon"></span><span class="stat-label">Days since last</span></div><div id="stat-days" class="stat-value">—</div><div class="stat-sub" id="stat-days-sub"></div></div>
         <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-avgvol-icon"></span><span class="stat-label">Avg vol / session</span></div><div id="stat-avgvol" class="stat-value">0</div><div class="stat-sub" id="stat-avgvol-sub"></div><div class="stat-viz" id="stat-avgvol-viz"></div></div>
       </div>
+      <div id="your-week"></div>
       <h3>Body composition</h3>
       <div id="body-comp"></div>
       <div id="gain-expectations"></div>
@@ -3017,8 +3043,105 @@ button:active{opacity:.75;transform:scale(.97);}
     // Body composition
     renderBodyComp();
 
+    // Weekly structure card
+    renderYourWeek();
+
     // Strength overview (full version, rendered inline on dashboard)
     showStrength();
+  }
+
+  // ── YOUR WEEK ────────────────────────────────────────────
+  // Makes the emergent plan visible: rolling-7-day sessions, per-muscle
+  // frequency vs the 2x target, and a coach line that flags imbalance and
+  // prescribes a correction. No forward projection by design — a wrong
+  // prediction erodes trust more than a missing one.
+  const YW_GROUPS=[
+    {key:'Back',muscles:['back','traps']},
+    {key:'Chest',muscles:['chest']},
+    {key:'Shoulders',muscles:['shoulders']},
+    {key:'Legs',muscles:['legs']},
+    {key:'Arms',muscles:['biceps','triceps','forearms']},
+    {key:'Core',muscles:['core']}
+  ];
+  function ywGroupOf(m){for(let i=0;i<YW_GROUPS.length;i++){if(YW_GROUPS[i].muscles.indexOf(m)>=0)return YW_GROUPS[i].key;}return null;}
+  function ywTrained(sess){
+    // A group counts as trained in a session when meaningful (>=0.4 weight,
+    // not incidental) contributions sum to >=1.0 — roughly one primary
+    // movement, or a few solid secondary contributions (e.g. triceps on a
+    // press-heavy push day, which genuinely is training stimulus).
+    const acc={};
+    (sess.exercises||[]).forEach(e=>{
+      const ex=EX[e.id];if(!ex||!ex.muscles)return;
+      Object.keys(ex.muscles).forEach(m=>{
+        const w=ex.muscles[m];if(w<0.4)return;
+        const g=ywGroupOf(m);if(!g)return;
+        acc[g]=(acc[g]||0)+w;
+      });
+    });
+    const t={};Object.keys(acc).forEach(k=>{if(acc[k]>=1)t[k]=true;});
+    return t;
+  }
+  function renderYourWeek(){
+    const el=document.getElementById('your-week');
+    if(!el)return;
+    if(!state.sessions||!state.sessions.length){el.innerHTML='';return;}
+    const now=Date.now(),win=state.sessions.filter(s=>s.timestamp>=now-7*86400000);
+    const freq={};YW_GROUPS.forEach(G=>freq[G.key]=0);
+    win.forEach(s=>{const t=ywTrained(s);Object.keys(t).forEach(k=>freq[k]++);});
+    const DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const chips=win.slice().sort((a,b)=>a.timestamp-b.timestamp).map(s=>{
+      const nm=(FOCUS_TYPES[s.templateKey]&&FOCUS_TYPES[s.templateKey].name)||s.templateName||'Session';
+      return'<span class="yw-chip">'+nm+' <span class="d">'+DAY[new Date(s.timestamp).getDay()]+'</span></span>';
+    }).join('');
+    const chipHtml=chips?'<div class="yw-chips">'+chips+'</div>':'<div class="yw-none">No sessions in the last 7 days.</div>';
+    const rows=YW_GROUPS.map(G=>{
+      const f=freq[G.key];
+      let d0='yw-dot',d1='yw-dot',tag,tc;
+      if(f>=2){d0+=' met';d1+=' met';tag=f+'&times;&nbsp;✓';tc='ok';}
+      else if(f===1){d0+=' par';tag='1&times;';tc='low';}
+      else{tag='0&times;';tc='miss';}
+      return'<div class="yw-row"><span class="yw-name">'+G.key+'</span>'
+        +'<span class="yw-dots"><span class="'+d0+'"></span><span class="'+d1+'"></span></span>'
+        +'<span class="yw-tag '+tc+'">'+tag+'</span></div>';
+    }).join('');
+    // Coach line — tiered so low-frequency users aren't shamed for a pattern
+    // they don't have enough sessions to form.
+    const n=win.length;let cls,body;
+    if(n===0){
+      cls='flag';
+      body='No training logged in the last 7 days. Frequency is built by showing up — the next session is the only thing that matters right now.';
+    }else if(n<=2){
+      cls='flag';
+      body='<strong>'+n+' session'+(n>1?'s':'')+' in the last 7 days.</strong> At this frequency the priority isn\u2019t balance yet, it\u2019s consistency — and Full Body covers the most ground per session when you train infrequently. <span class="yw-nx">Next: <strong>Full Body</strong>.</span>';
+    }else{
+      const low=YW_GROUPS.filter(G=>freq[G.key]<2);
+      if(low.length===0){
+        cls='affirm';
+        body='Every muscle group trained at least twice in the last 7 days with recovery between — this is the structure that drives growth. <span class="yw-nx">Keep the rotation balanced.</span>';
+      }else{
+        cls='flag';
+        const zero=low.filter(G=>freq[G.key]===0).map(G=>G.key);
+        const one=low.filter(G=>freq[G.key]===1).map(G=>G.key);
+        const pushCt=win.filter(s=>s.templateKey==='push').length;
+        const pat=(pushCt>=2&&(freq.Back<2||freq.Legs<2))?'Push-heavy week — ':'';
+        let gaps;
+        if(zero.length)gaps=zero.join(' and ')+(zero.length>1?' both at zero':' at zero');
+        else gaps=one.join(' and ')+(one.length>1?' trained only once':' trained only once');
+        let rx;
+        if(low.length>=3)rx='Full Body';
+        else if(low.some(G=>G.key==='Legs'))rx='Lower or Full Body';
+        else if(low.some(G=>G.key==='Back'))rx='Pull or Upper';
+        else if(low.some(G=>G.key==='Chest'||G.key==='Shoulders'))rx='Push or Upper';
+        else rx='Full Body';
+        const lead=pat?('<strong>'+pat+gaps+'.</strong> '):('<strong>You\u2019re behind this week — '+gaps+'.</strong> ');
+        body=lead+'That\u2019s the imbalance to fix before it compounds — pushing past it isn\u2019t more dedication, it\u2019s a lopsided physique and a lagging area. <span class="yw-nx">Next: <strong>'+rx+'</strong>. Not optional this time.</span>';
+      }
+    }
+    const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
+    el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span><span class="yw-w">Last 7 days</span></div>'
+      +chipHtml
+      +'<div class="yw-frq">'+rows+'</div>'
+      +'<div class="yw-coach '+cls+'"><i class="ti '+ic+'"></i><div class="yw-cb">'+body+'</div></div></div>';
   }
 
   function miniSpark(vals,w,h){
@@ -6413,7 +6536,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v52';
+    const APP_VERSION='v53';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6425,8 +6548,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v52')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v52';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v53')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v53';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
