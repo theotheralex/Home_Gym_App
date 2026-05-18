@@ -689,10 +689,20 @@ button:active{opacity:.75;transform:scale(.97);}
 .yw-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
 .yw-t{font-size:13px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:0.8px;}
 .yw-w{font-size:11px;color:var(--text-3);font-weight:600;}
-.yw-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
-.yw-chip{background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:600;color:var(--text);}
-.yw-chip .d{color:var(--text-3);font-weight:500;}
-.yw-none{font-size:13px;color:var(--text-3);font-style:italic;margin-bottom:14px;}
+.yw-strip{display:flex;gap:5px;margin-bottom:6px;}
+.yw-cell{flex:1;border-radius:9px;padding:7px 3px 8px;text-align:center;min-width:0;background:var(--surface-2);border:1px solid var(--border);}
+.yw-dl{font-size:9px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.4px;}
+.yw-df{font-size:11px;font-weight:700;color:var(--text);margin-top:3px;line-height:1.15;}
+.yw-cell.now{background:rgba(34,197,94,0.12);border-color:var(--s-br);}
+.yw-cell.now .yw-dl{color:var(--s-fg);}
+.yw-cell.now .yw-df{color:var(--s-fg);}
+.yw-cell.proj{background:var(--i-bg);border:1px dashed var(--i-br);}
+.yw-cell.proj .yw-df{color:var(--i-fg);font-style:italic;}
+.yw-cell.proj .yw-dl{color:var(--i-fg);opacity:.7;}
+.yw-cell.rest{background:transparent;border-color:transparent;}
+.yw-cell.rest .yw-df{color:var(--text-3);font-weight:600;font-size:10px;}
+.yw-key{font-size:10px;color:var(--text-3);margin-bottom:4px;}
+.yw-cov-lbl{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.7px;margin:14px 0 9px;padding-top:13px;border-top:1px solid var(--border);}
 .yw-frq{display:flex;flex-direction:column;gap:8px;}
 .yw-row{display:flex;align-items:center;gap:11px;}
 .yw-name{font-size:13.5px;font-weight:600;width:74px;flex-shrink:0;}
@@ -3099,11 +3109,51 @@ button:active{opacity:.75;transform:scale(.97);}
     const freq={};YW_GROUPS.forEach(G=>freq[G.key]=0);
     win.forEach(s=>{const t=ywTrained(s);Object.keys(t).forEach(k=>freq[k]++);});
     const DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    const chips=win.slice().sort((a,b)=>a.timestamp-b.timestamp).map(s=>{
-      const nm=(FOCUS_TYPES[s.templateKey]&&FOCUS_TYPES[s.templateKey].name)||s.templateName||'Session';
-      return'<span class="yw-chip">'+nm+' <span class="d">'+DAY[new Date(s.timestamp).getDay()]+'</span></span>';
-    }).join('');
-    const chipHtml=chips?'<div class="yw-chips">'+chips+'</div>':'<div class="yw-none">No sessions in the last 7 days.</div>';
+    const dpw=state.profile&&state.profile.daysPerWeek?state.profile.daysPerWeek:3;
+    // Forward plan. Cadence inferred from days-per-week: spread N training days
+    // evenly across the next 7, anchored at today. Today's focus is the REAL
+    // picker recommendation (single source of truth — same as the picker pill).
+    // Later training days are PROJECTED: a greedy fill that covers the most
+    // still-uncovered groups without repeating the previous focus. Deterministic,
+    // honestly provisional, and re-resolves whenever a real session is logged.
+    const N=Math.max(1,Math.min(7,dpw));
+    const trainIdx=[];for(let i=0;i<N;i++){trainIdx.push(N===1?0:Math.round(i*6/(N-1)));}
+    const trainSet=new Set(trainIdx);
+    const recList=pickFocusTypes()||[];
+    const rec=recList[0];
+    const recName=rec?rec.focus.name:'a full session';
+    const recKey=rec?rec.key:'';
+    const YW_COVERS={pull:['Back','Shoulders','Arms','Core'],push:['Chest','Shoulders','Arms','Core'],legs:['Legs','Core'],upper:['Back','Chest','Shoulders','Arms','Core'],full_body:['Back','Chest','Shoulders','Legs','Arms','Core'],conditioning:['Back','Shoulders','Legs','Core']};
+    const ORDER=['pull','push','legs','upper','full_body','conditioning'];
+    const cov={};YW_GROUPS.forEach(G=>cov[G.key]=0);
+    const focusByIdx={};let prevKey='';
+    trainIdx.forEach((di,slot)=>{
+      let key;
+      if(slot===0){key=recKey||ORDER[0];}
+      else{
+        let best=null,bestScore=-1;
+        ORDER.forEach(k=>{
+          if(k===prevKey)return;
+          const gain=(YW_COVERS[k]||[]).reduce((a,g)=>a+(cov[g]<2?1:0),0);
+          if(gain>bestScore){bestScore=gain;best=k;}
+        });
+        key=best||ORDER[0];
+      }
+      (YW_COVERS[key]||[]).forEach(g=>{cov[g]=(cov[g]||0)+1;});
+      focusByIdx[di]=key;prevKey=key;
+    });
+    const cells=[];
+    for(let d=0;d<7;d++){
+      const lbl=d===0?'Today':DAY[new Date(now+d*86400000).getDay()];
+      if(trainSet.has(d)){
+        const k=focusByIdx[d];
+        const nm=(FOCUS_TYPES[k]&&FOCUS_TYPES[k].name)||'Session';
+        cells.push('<div class="yw-cell '+(d===0?'now':'proj')+'"><div class="yw-dl">'+lbl+'</div><div class="yw-df">'+nm+'</div></div>');
+      }else{
+        cells.push('<div class="yw-cell rest"><div class="yw-dl">'+lbl+'</div><div class="yw-df">Rest</div></div>');
+      }
+    }
+    const strip='<div class="yw-strip">'+cells.join('')+'</div><div class="yw-key">↻ Blue = projected — re-plans as you train</div>';
     const rows=YW_GROUPS.map(G=>{
       const f=freq[G.key];
       let d0='yw-dot',d1='yw-dot',tag,tc;
@@ -3117,12 +3167,9 @@ button:active{opacity:.75;transform:scale(.97);}
     // Coach line — tiered so low-frequency users aren't shamed for a pattern
     // they don't have enough sessions to form.
     const n=win.length;let cls,body;
-    // Single source of truth for "what's next": the SAME scoring the Pick-focus
-    // screen uses (pickFocusTypes()[0] === the card with the Recommended pill),
-    // so Your Week and the picker can never contradict each other again.
-    const rec=(pickFocusTypes()||[])[0];
-    const recName=rec?rec.focus.name:'a full session';
-    const recKey=rec?rec.key:'';
+    // rec/recName/recKey computed once above (the forward-strip block) — the
+    // SAME pickFocusTypes()[0] the picker uses, so strip, coach line, and the
+    // Pick-focus screen can never contradict each other.
     // Which groups each focus meaningfully trains (derived from the FOCUS_TYPES
     // structures — keep in sync if those pools change). Only used to stay
     // honest about whether the recommended session closes the flagged gap.
@@ -3165,8 +3212,9 @@ button:active{opacity:.75;transform:scale(.97);}
       }
     }
     const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
-    el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span><span class="yw-w">Last 7 days</span></div>'
-      +chipHtml
+    el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span><span class="yw-w">Plan &middot; '+dpw+' days/wk</span></div>'
+      +strip
+      +'<div class="yw-cov-lbl">2&times; coverage &middot; this week</div>'
       +'<div class="yw-frq">'+rows+'</div>'
       +'<div class="yw-coach '+cls+'"><i class="ti '+ic+'"></i><div class="yw-cb">'+body+'</div></div></div>';
   }
@@ -6563,7 +6611,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v56';
+    const APP_VERSION='v57';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6575,8 +6623,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v56')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v56';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v57')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v57';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
