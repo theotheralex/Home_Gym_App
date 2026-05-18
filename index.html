@@ -1208,7 +1208,7 @@ button:active{opacity:.75;transform:scale(.97);}
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight only</strong> — 34 pure-bodyweight exercises across all 5 focus types. Push-ups, squats, lunges, planks, and supermans alongside improvisations like inverted rows (under a table or low surface), door towel rows, and prone T-raises that need no equipment. Every focus type generates a complete 6-exercise Quick Session for bodyweight-only users.</div>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Bodyweight + weights</strong> — weighted exercises take priority for muscle building. Bodyweight rotates in for variety and to fill gaps where weighted options aren't appropriate.</div>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Dumbbell pool</strong> — pick exactly which weights you have (5–100 lb in 5 lb increments). The app only uses weights from your pool, never suggests something you don't own.</div>
-        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Kettlebell pool</strong> — same system as dumbbells, separate selection. Used for KB-specific exercises like swings, snatches, and Turkish get-ups.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Kettlebell pool</strong> — same system as dumbbells, separate selection. Used for KB-specific exercises like swings, snatches, and cleans.</div>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Accessories</strong> — toggle pullup bar, dip bars, bench, step, bands, or ab wheel if you have them. Each unlocks the relevant exercises in the generator.</div>
       </div>
 
@@ -2085,7 +2085,7 @@ button:active{opacity:.75;transform:scale(.97);}
     db_calf_raise:{name:'DB calf raise',muscles:{legs:.6},type:'accessory',equip:['db','step'],repRange:[15,20],cues:['Stand with ball of feet on edge of the step, heels hanging off','Hold a DB for resistance. Start from a full stretch — heel below step','Rise as high as possible onto your toes — full contraction','Hold at the top for 1 second, then lower slowly over 3 seconds','Don\'t bounce — the stretch and pause are what make calves grow']},
     ab_wheel:{name:'Ab wheel rollout',muscles:{core:1},type:'accessory',equip:['ab_wheel'],repRange:[8,12],noWeight:true,cues:['Start from kneeling. Brace your core like you\'re about to get punched','Roll out slowly — lower back must stay flat, not arched','Only go as far as you can without your lower back dropping','Pull back by contracting your abs — not by pushing with arms','Progress by going further out as you get stronger']},
     hanging_leg_raise:{name:'Hanging or lying leg raise',muscles:{core:1},type:'accessory',equip:['bodyweight'],repRange:[10,12],noWeight:true,cues:['Lying: lie flat, hands under your lower back for support','Keep legs straight or slightly bent — raise until perpendicular','Lower slowly — stop just before heels touch the floor','The lowering phase is where abs work hardest — don\'t drop them','If back arches, bend the knees more']},
-    side_plank:{name:'Side plank',muscles:{core:.8},type:'accessory',equip:['bodyweight'],repRange:[30,45],unit:'sec',perSide:true,noWeight:true,cues:['Forearm on the floor, elbow under your shoulder','Stack your feet or stagger them for more stability','Drive your hip up — body forms a straight line head to foot','Don\'t let your hip sag — if it drops, shorten the hold time','Breathe normally — don\'t hold your breath']},
+    side_plank:{name:'Plank',muscles:{core:.8},type:'accessory',equip:['bodyweight'],repRange:[30,45],unit:'sec',perSide:true,noWeight:true,cues:['Forearm on the floor, elbow under your shoulder','Stack your feet or stagger them for more stability','Drive your hip up — body forms a straight line head to foot','Don\'t let your hip sag — if it drops, shorten the hold time','Breathe normally — don\'t hold your breath']},
     dead_bug:{name:'Dead bug',muscles:{core:.7},type:'accessory',equip:['bodyweight'],repRange:[10,12],perSide:true,noWeight:true,cues:['Lie on your back, arms pointing at ceiling, knees bent 90° in the air','Press your lower back into the floor — must stay there the whole time','Slowly lower opposite arm and leg toward the floor simultaneously','Lower only as far as you can keep the back flat','Return to start, then switch sides — slow and controlled']},
     plank:{name:'Plank',muscles:{core:.7},type:'accessory',equip:['bodyweight'],repRange:[45,60],unit:'sec',noWeight:true,cues:['Forearms on the floor, elbows under shoulders','Body forms a straight line — don\'t let hips sag or pike up','Squeeze everything: glutes, quads, abs — all at once','Breathe — if you\'re holding your breath, you\'re too tense','When you can hold 60s easily, add weight or progress further']},
     jump_rope:{name:'Jump rope intervals',muscles:{legs:.3,core:.2},type:'finisher',equip:['rope'],repRange:[60,60],unit:'sec',noWeight:true,rounds:5,cues:['Keep the rope turning from your wrists — not your whole arms','Light on your feet — land on the balls of your feet, not your heels','Stay relaxed in the shoulders. Tension wastes energy.','If you trip, just restart immediately — don\'t stop the clock','Work:rest is 1:0.5 — 60s on, 30s off']},
@@ -2097,7 +2097,6 @@ button:active{opacity:.75;transform:scale(.97);}
     single_arm_floor_press:{name:'Single arm floor press',muscles:{chest:.8,triceps:.5,core:.4},type:'compound',equip:['db'],repRange:[8,12],perSide:true,cues:['Lie on the floor, one DB in hand, other arm out for stability','Press the DB straight up — lock out fully','Lower until your upper arm touches the floor — that\'s your range of motion','The floor limits your range which protects the shoulder','Keep your core braced hard — the single arm wants to twist you']},
     kb_snatch:{name:'KB snatch',muscles:{shoulders:.7,traps:.5,legs:.4,core:.5},type:'compound',equip:['kb'],repRange:[6,10],perSide:true,cues:['Start like a swing — KB between your legs, hinge at hips','Explode up and pull the KB close to your body — elbow high','Punch your hand through at the top so the KB rolls onto your forearm','Lock out overhead — arm straight, bicep by ear, core tight','Lower by letting the KB fall forward and absorb with a hinge']},
     renegade_row:{name:'Renegade row',muscles:{back:.8,core:.9,chest:.2},type:'compound',equip:['db'],repRange:[6,10],cues:['High plank position with hands on DBs, feet wide for stability','Brace your core hard — hips should not rotate at all','Row one DB to your hip while pushing the other into the floor','Lower under control, then row the other side — that\'s one rep per side','If your hips are swaying, go lighter — the anti-rotation IS the exercise']},
-    turkish_getup:{name:'Turkish get up',muscles:{core:.9,shoulders:.7,legs:.4,traps:.3},type:'compound',equip:['kb'],repRange:[3,5],perSide:true,cues:['Lie on your back, KB pressed up with one arm, same-side knee bent','Roll onto your elbow, then your hand — keep the KB locked out overhead','Bridge your hips up, sweep your leg under to a kneeling position','Stand up from the kneel — KB stays overhead the entire time','Reverse every step back to the floor. That\'s one rep. Slow and controlled.']},
     pull_up:{name:'Pull-up',muscles:{back:1,biceps:.5,core:.2},type:'compound',equip:['pullup_bar'],repRange:[5,12],noWeight:true,cues:['Grab the bar with palms facing away, hands just outside shoulder width','Start from a dead hang — arms fully extended, shoulders engaged','Pull your chest toward the bar by driving elbows down and back','Chin over the bar at the top — squeeze your lats hard','Lower slowly to dead hang — full range of motion every rep']},
     chin_up:{name:'Chin-up',muscles:{biceps:.8,back:.7,core:.2},type:'compound',equip:['pullup_bar'],repRange:[5,10],noWeight:true,cues:['Grab the bar with palms facing you, hands shoulder-width apart','Dead hang start — full arm extension','Pull up by driving elbows down toward your hips','Chin over the bar — hold for a beat at the top','Lower under control — no dropping. The eccentric builds strength.']},
     band_pull_apart:{name:'Band pull-apart',muscles:{back:.6,shoulders:.5},type:'accessory',equip:['bands'],repRange:[15,20],noWeight:true,cues:['Hold the band at shoulder height with arms straight out in front','Pull the band apart by squeezing your shoulder blades together','The band should touch your chest at full contraction','Return slowly to the start — don\'t let the band snap back','Keep your arms straight throughout — elbows slightly soft']},
@@ -2131,6 +2130,9 @@ button:active{opacity:.75;transform:scale(.97);}
     scapular_push_up:{name:'Scapular push-up',muscles:{back:.6,core:.3},type:'accessory',equip:['bodyweight'],repRange:[12,15],noWeight:true,cues:['High plank position — arms straight, body rigid','Without bending your elbows, let your chest sink between your shoulders','Push the floor away, spreading your shoulder blades apart (protract)','The movement is small but you should feel your serratus and mid-back fire','Think about making your upper back as wide as possible at the top']},
     v_up:{name:'V-up',muscles:{core:1},type:'accessory',equip:['bodyweight'],repRange:[8,15],noWeight:true,cues:['Lie flat on your back, arms extended overhead, legs straight','Simultaneously lift your arms and legs, reaching hands toward your toes','Your body forms a V shape at the top — everything off the floor','Lower everything back down with control — don\'t just drop','If full V-ups are too hard, bend your knees to modify']},
     flutter_kicks:{name:'Flutter kicks',muscles:{core:.8,legs:.2},type:'accessory',equip:['bodyweight'],repRange:[30,45],unit:'sec',noWeight:true,cues:['Lie on your back, hands under your lower back for support','Lift both feet 6 inches off the floor','Alternate small, quick kicks — like flutter kicking in a pool','Keep your lower back pressed into your hands — if it arches, raise legs higher','Head and shoulders can stay down — the work is all lower abs']},
+    crunch:{name:'Crunch',muscles:{core:1},type:'accessory',equip:['bodyweight'],repRange:[15,25],noWeight:true,cues:['Lie on your back, knees bent, feet flat on the floor','Hands lightly behind your head or crossed on your chest — don\'t pull your neck','Curl your shoulder blades off the floor by contracting your abs','Pause and squeeze hard at the top — the squeeze is the point','Lower slowly under control — don\'t flop back down']},
+    weighted_crunch:{name:'Weighted crunch',muscles:{core:1},type:'accessory',equip:['db'],repRange:[10,15],cues:['Lie on your back, knees bent, feet flat — hold a DB or plate on your chest','Hug the weight tight to your sternum with both hands','Curl your shoulder blades off the floor, driving the weight up with your abs','Squeeze hard at the top — control the load, don\'t throw it','Lower slowly — the negative is loaded too, use it']},
+    sit_up:{name:'Sit-up',muscles:{core:1},type:'accessory',equip:['bodyweight'],repRange:[12,20],noWeight:true,cues:['Lie on your back, knees bent, feet flat and anchored if needed','Cross arms on your chest or hands at your temples','Sit all the way up by curling your trunk — lead with your abs not your neck','Control the descent — lower vertebra by vertebra, no slamming','If your hip flexors take over, slow down and focus on rounding up through the abs']},
     bear_crawl:{name:'Bear crawl',muscles:{shoulders:.5,core:.6,legs:.4},type:'compound',equip:['bodyweight'],repRange:[30,45],unit:'sec',noWeight:true,cues:['Start on all fours — hands under shoulders, knees under hips','Lift your knees 2 inches off the floor — this is the starting position','Move forward: opposite hand and foot step together','Keep your hips low and level — no swaying or bouncing','Go slow — the stability challenge IS the exercise. Speed makes it easy.']},
     inverted_row:{name:'Inverted row',muscles:{back:1,biceps:.5,core:.2},type:'compound',equip:['bodyweight'],repRange:[8,15],noWeight:true,cues:['Find a sturdy surface at waist height — table edge, low railing, or two chairs with a broomstick across them','Lie under it, grip the surface with palms facing away (overhand), arms fully extended','Heels on the floor, body in a straight line — the more horizontal, the harder','Pull your chest up to the surface, driving elbows back and down','Lower with control to a full hang — control the eccentric','No bar? Couch front edge, sturdy desk, or two chairs work fine']},
     inverted_curl:{name:'Inverted curl',muscles:{biceps:.9,back:.4,core:.2},type:'accessory',equip:['bodyweight'],repRange:[8,15],noWeight:true,cues:['Same setup as an inverted row but with palms facing you (underhand grip)','Lie under a sturdy table or low surface, hands shoulder-width apart','Heels on the floor, body straight — more horizontal = more difficult','Pull yourself up by curling — focus on the bicep squeeze, not the back','Lower slowly to full extension — feel the bicep stretch at the bottom','To progress: walk feet forward to make body more horizontal']},
@@ -2176,8 +2178,8 @@ button:active{opacity:.75;transform:scale(.97);}
     jump:               ['squat_jump','jump_lunge'],
     metabolic:          ['jump_rope','jumping_jacks','high_knees','mountain_climbers','burpees','bear_crawl'],
     // Core patterns
-    anti_extension_core:['ab_wheel','plank','dead_bug','turkish_getup'],
-    flexion_core:       ['hanging_leg_raise','v_up','flutter_kicks'],
+    anti_extension_core:['ab_wheel','plank','dead_bug'],
+    flexion_core:       ['hanging_leg_raise','v_up','flutter_kicks','crunch','weighted_crunch','sit_up'],
     anti_rotation_core: ['side_plank','plank_shoulder_tap'],
   };
 
@@ -2624,8 +2626,8 @@ button:active{opacity:.75;transform:scale(.97);}
     if(ex.unit==='sec'&&!ex.hasWeight)return null;
     if(ex.fixedWeight)return ex.fixedWeight;
     const d={
-      db_row:30,single_arm_row:30,db_pullover:20,db_floor_press:30,db_bench_press:30,db_incline_press:20,db_fly:10,db_squeeze_press:20,db_ohp:20,db_lateral:10,db_rear_delt:10,db_y_raise:5,db_shrug:40,farmer_carry:40,db_curl:20,db_incline_curl:10,db_skullcrusher:10,db_kickback:10,db_overhead_extension:20,goblet_squat:40,db_rdl:30,bulgarian:20,db_step_up:20,sl_rdl:20,db_calf_raise:30,db_push_press:20,arnold_press:20,zottman_curl:10,concentration_curl:10,single_arm_floor_press:20,renegade_row:20,preacher_curl:10,incline_lateral_raise:10,incline_reverse_fly:10,
-      kb_swing:25,kb_row:25,kb_high_pull:25,kb_goblet_squat:35,kb_clean_press:25,kb_snatch:25,turkish_getup:25
+      db_row:30,single_arm_row:30,db_pullover:20,db_floor_press:30,db_bench_press:30,db_incline_press:20,db_fly:10,db_squeeze_press:20,db_ohp:20,db_lateral:10,db_rear_delt:10,db_y_raise:5,db_shrug:40,farmer_carry:40,db_curl:20,db_incline_curl:10,db_skullcrusher:10,db_kickback:10,weighted_crunch:15,db_overhead_extension:20,goblet_squat:40,db_rdl:30,bulgarian:20,db_step_up:20,sl_rdl:20,db_calf_raise:30,db_push_press:20,arnold_press:20,zottman_curl:10,concentration_curl:10,single_arm_floor_press:20,renegade_row:20,preacher_curl:10,incline_lateral_raise:10,incline_reverse_fly:10,
+      kb_swing:25,kb_row:25,kb_high_pull:25,kb_goblet_squat:35,kb_clean_press:25,kb_snatch:25
     };
     if(exIsKB(ex))return nKB(d[id]||25);
     return nDB(d[id]||20);
@@ -3065,20 +3067,28 @@ button:active{opacity:.75;transform:scale(.97);}
   ];
   function ywGroupOf(m){for(let i=0;i<YW_GROUPS.length;i++){if(YW_GROUPS[i].muscles.indexOf(m)>=0)return YW_GROUPS[i].key;}return null;}
   function ywTrained(sess){
-    // A group counts as trained in a session when meaningful (>=0.4 weight,
-    // not incidental) contributions sum to >=1.0 — roughly one primary
-    // movement, or a few solid secondary contributions (e.g. triceps on a
-    // press-heavy push day, which genuinely is training stimulus).
-    const acc={};
+    // A group counts as trained in a session if EITHER its meaningful
+    // (>=0.4 weight) contributions sum to >=1.0 — catching secondary work
+    // like triceps across a press-heavy push day — OR any exercise in the
+    // session has that group as its primary target. The second rule fixes
+    // core: dedicated core exercises sit at core 0.7-0.9 (dead bug .7,
+    // plank .8, side plank .8) and never reach 1.0 alone, so a session
+    // with one core slot was wrongly read as "core untrained".
+    const acc={},prim={};
     (sess.exercises||[]).forEach(e=>{
       const ex=EX[e.id];if(!ex||!ex.muscles)return;
+      let pm=null,pw=0;
       Object.keys(ex.muscles).forEach(m=>{
-        const w=ex.muscles[m];if(w<0.4)return;
-        const g=ywGroupOf(m);if(!g)return;
-        acc[g]=(acc[g]||0)+w;
+        const w=ex.muscles[m];
+        if(w>pw){pw=w;pm=m;}
+        if(w<0.4)return;
+        const g=ywGroupOf(m);if(g)acc[g]=(acc[g]||0)+w;
       });
+      const pg=pm&&ywGroupOf(pm);if(pg)prim[pg]=true;
     });
-    const t={};Object.keys(acc).forEach(k=>{if(acc[k]>=1)t[k]=true;});
+    const t={};
+    Object.keys(acc).forEach(k=>{if(acc[k]>=1)t[k]=true;});
+    Object.keys(prim).forEach(k=>{t[k]=true;});
     return t;
   }
   function renderYourWeek(){
@@ -3107,34 +3117,51 @@ button:active{opacity:.75;transform:scale(.97);}
     // Coach line — tiered so low-frequency users aren't shamed for a pattern
     // they don't have enough sessions to form.
     const n=win.length;let cls,body;
+    // Single source of truth for "what's next": the SAME scoring the Pick-focus
+    // screen uses (pickFocusTypes()[0] === the card with the Recommended pill),
+    // so Your Week and the picker can never contradict each other again.
+    const rec=(pickFocusTypes()||[])[0];
+    const recName=rec?rec.focus.name:'a full session';
+    const recKey=rec?rec.key:'';
+    // Which groups each focus meaningfully trains (derived from the FOCUS_TYPES
+    // structures — keep in sync if those pools change). Only used to stay
+    // honest about whether the recommended session closes the flagged gap.
+    const FOCUS_COVERS={pull:['Back','Shoulders','Arms','Core'],push:['Chest','Shoulders','Arms','Core'],legs:['Legs','Core'],upper:['Back','Chest','Shoulders','Arms','Core'],full_body:['Back','Chest','Shoulders','Legs','Arms','Core'],conditioning:['Back','Shoulders','Legs','Core']};
+    const lj=a=>a.length<=1?(a[0]||''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
     if(n===0){
       cls='flag';
-      body='No training logged in the last 7 days. Frequency is built by showing up — the next session is the only thing that matters right now.';
+      body='No training logged in the last 7 days. Frequency is built by showing up — the next session is the only thing that matters. <span class="yw-nx">Next: <strong>'+recName+'</strong>.</span>';
     }else if(n<=2){
       cls='flag';
-      body='<strong>'+n+' session'+(n>1?'s':'')+' in the last 7 days.</strong> At this frequency the priority isn\u2019t balance yet, it\u2019s consistency — and Full Body covers the most ground per session when you train infrequently. <span class="yw-nx">Next: <strong>Full Body</strong>.</span>';
+      body='<strong>'+n+' session'+(n>1?'s':'')+' in the last 7 days.</strong> At this frequency the priority isn\u2019t balance yet, it\u2019s consistency — just train. <span class="yw-nx">Next: <strong>'+recName+'</strong>.</span>';
     }else{
       const low=YW_GROUPS.filter(G=>freq[G.key]<2);
       if(low.length===0){
         cls='affirm';
-        body='Every muscle group trained at least twice in the last 7 days with recovery between — this is the structure that drives growth. <span class="yw-nx">Keep the rotation balanced.</span>';
+        body='Every muscle group trained at least twice in the last 7 days with recovery between — this is the structure that drives growth. <span class="yw-nx">Next: <strong>'+recName+'</strong> — keep the rotation balanced.</span>';
       }else{
         cls='flag';
         const zero=low.filter(G=>freq[G.key]===0).map(G=>G.key);
         const one=low.filter(G=>freq[G.key]===1).map(G=>G.key);
+        const lowKeys=low.map(G=>G.key);
         const pushCt=win.filter(s=>s.templateKey==='push').length;
         const pat=(pushCt>=2&&(freq.Back<2||freq.Legs<2))?'Push-heavy week — ':'';
         let gaps;
-        if(zero.length)gaps=zero.join(' and ')+(zero.length>1?' both at zero':' at zero');
-        else gaps=one.join(' and ')+(one.length>1?' trained only once':' trained only once');
-        let rx;
-        if(low.length>=3)rx='Full Body';
-        else if(low.some(G=>G.key==='Legs'))rx='Lower or Full Body';
-        else if(low.some(G=>G.key==='Back'))rx='Pull or Upper';
-        else if(low.some(G=>G.key==='Chest'||G.key==='Shoulders'))rx='Push or Upper';
-        else rx='Full Body';
+        if(zero.length)gaps=lj(zero)+(zero.length>1?' both at zero':' at zero');
+        else gaps=lj(one)+' trained only once';
+        const covers=FOCUS_COVERS[recKey]||[];
+        const hit=lowKeys.filter(k=>covers.indexOf(k)>=0);
+        const miss=lowKeys.filter(k=>covers.indexOf(k)<0);
+        let nextLine;
+        if(miss.length===0){
+          nextLine='<span class="yw-nx">Next: <strong>'+recName+'</strong> — it trains '+lj(hit)+'. Not optional this time.</span>';
+        }else if(hit.length){
+          nextLine='<span class="yw-nx">Next: <strong>'+recName+'</strong> — covers '+lj(hit)+', but '+lj(miss)+(miss.length>1?' are':' is')+' still short. Don\u2019t let '+(miss.length>1?'them':'it')+' slide.</span>';
+        }else{
+          nextLine='<span class="yw-nx"><strong>'+recName+'</strong> is the recovery-smart pick, but it won\u2019t touch '+lj(miss)+' — get a session that hits '+(miss.length>1?'them':'it')+' in soon.</span>';
+        }
         const lead=pat?('<strong>'+pat+gaps+'.</strong> '):('<strong>You\u2019re behind this week — '+gaps+'.</strong> ');
-        body=lead+'That\u2019s the imbalance to fix before it compounds — pushing past it isn\u2019t more dedication, it\u2019s a lopsided physique and a lagging area. <span class="yw-nx">Next: <strong>'+rx+'</strong>. Not optional this time.</span>';
+        body=lead+'That\u2019s the imbalance to fix before it compounds — pushing past it isn\u2019t more dedication, it\u2019s a lopsided physique and a lagging area. '+nextLine;
       }
     }
     const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
@@ -6536,7 +6563,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v53';
+    const APP_VERSION='v56';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6548,8 +6575,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v53')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v53';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v56')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v56';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
