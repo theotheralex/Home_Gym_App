@@ -271,26 +271,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .vol-mini-bar div{height:100%;border-radius:2px;}
 
 /* Volume detail screen */
-.vol-summary{display:flex;justify-content:space-between;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:12px;}
-.vol-summary-item{text-align:center;flex:1;}
-.vol-summary-num{font-size:22px;font-weight:800;line-height:1;}
-.vol-summary-lbl{font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:0.6px;font-weight:700;margin-top:4px;}
-.vol-row{padding:14px 0;border-bottom:1px solid var(--border);}
-.vol-row:last-child{border-bottom:none;}
-.vol-row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.vol-name{font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px;}
-.vol-name i.priority{color:var(--accent);}
-.vol-name i.reduced{color:var(--text-3);}
-.vol-count{font-size:14px;font-weight:700;}
-.vol-count.under{color:var(--d-fg);}
-.vol-count.zone{color:var(--s-fg);}
-.vol-count.over{color:var(--w-fg);}
-.vol-bar-wrap{position:relative;height:8px;background:var(--surface-2);border-radius:4px;}
-.vol-bar-fill{height:100%;border-radius:4px;}
-.vol-bar-mark{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--text-3);opacity:0.5;transform:translateX(-50%);}
-.vol-bar-marks{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--text-3);font-weight:600;}
-.vol-frequency{font-size:11px;color:var(--text-3);margin-top:4px;font-weight:600;}
-.vol-frequency.warn{color:var(--w-fg);}
 
 /* Priority muscle setting */
 .pri-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);}
@@ -705,6 +685,9 @@ button:active{opacity:.75;transform:scale(.97);}
 .yw-cell.rest .yw-df{color:var(--text-3);font-weight:600;font-size:10px;}
 .yw-key{font-size:10px;color:var(--text-3);margin-bottom:4px;}
 .yw-cov-lbl{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.7px;margin:14px 0 9px;padding-top:13px;border-top:1px solid var(--border);}
+.yw-vsum{font-size:11px;font-weight:600;color:var(--text-2);margin:-3px 0 11px;}
+.yw-vsum b{font-weight:700;}
+.yw-vsum b.u{color:var(--w-fg);}.yw-vsum b.k{color:var(--s-fg);}.yw-vsum b.o{color:var(--i-fg);}
 .yw-frq{display:flex;flex-direction:column;gap:8px;}
 .yw-row{display:flex;align-items:center;gap:11px;}
 .yw-name{font-size:13.5px;font-weight:600;width:74px;flex-shrink:0;}
@@ -1241,16 +1224,9 @@ button:active{opacity:.75;transform:scale(.97);}
       <div id="strength-score-body"></div>
     </div>
 
-    <div id="screen-volume" class="screen">
-      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
-      <h2 style="margin-bottom:4px;">Volume</h2>
-      <p class="sub">Sets per muscle, last 7 days</p>
-      <div id="volume-body"></div>
-      <button class="bs" onclick="showMusclePriorities()" style="margin-top:16px;width:100%;"><i class="ti ti-star"></i> Set priority muscles</button>
-    </div>
 
     <div id="screen-muscle-priorities" class="screen">
-      <button class="bg" onclick="showVolume()" style="margin-bottom:16px;">← Back</button>
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:4px;">Priority muscles</h2>
       <p class="sub">Bias volume toward up to 2 priority muscles. Mark others as Reduced if they're already developed.</p>
       <div id="muscle-priorities-body"></div>
@@ -1519,7 +1495,7 @@ button:active{opacity:.75;transform:scale(.97);}
         const trained=new Set();
         (s.exercises||[]).forEach(e=>{
           const ex=EX[e.id];if(!ex||!ex.muscles)return;
-          const completedSets=(e.sets||[]).filter(set=>set.done&&set.feedback!=='fail').length;
+          const completedSets=(e.sets||[]).filter(set=>set.done&&set.feedback!=='fail'&&!set.warmup).length;
           if(!completedSets)return;
           Object.keys(ex.muscles).forEach(m=>{
             if(!out[m])return;
@@ -3101,30 +3077,22 @@ button:active{opacity:.75;transform:scale(.97);}
   // structures — keep in sync if pools change). Module-scope so it's defined
   // once, not rebuilt on every dashboard render.
   const YW_FOCUS_COVERS={pull:['Back','Shoulders','Arms','Core'],push:['Chest','Shoulders','Arms','Core'],legs:['Legs','Core'],upper:['Back','Chest','Shoulders','Arms','Core'],full_body:['Back','Chest','Shoulders','Legs','Arms','Core'],conditioning:['Back','Shoulders','Legs','Core']};
-  function ywGroupOf(m){for(let i=0;i<YW_GROUPS.length;i++){if(YW_GROUPS[i].muscles.indexOf(m)>=0)return YW_GROUPS[i].key;}return null;}
   function renderYourWeek(){
     const el=document.getElementById('your-week');
     if(!el)return;
     if(!state.sessions||!state.sessions.length){el.innerHTML='';return;}
     const now=Date.now(),win=state.sessions.filter(s=>s.timestamp>=now-7*86400000);
-    // Per-muscle weekly EFFECTIVE working sets: each completed set of an
-    // exercise contributes to a muscle group in proportion to that muscle's
-    // weight in EX[].muscles (the app's standard fractional-volume model).
-    // Effective range ≈ 8–20 sets/group/week (LOW_V .. HI_V).
-    const LOW_V=8,HI_V=20;
-    const vol={};YW_GROUPS.forEach(G=>vol[G.key]=0);
-    win.forEach(s=>{
-      (s.exercises||[]).forEach(e=>{
-        const cs=(e.sets||[]).filter(st=>st.done&&st.feedback!=='fail').length;
-        if(!cs)return;
-        const ex=EX[e.id];if(!ex||!ex.muscles)return;
-        Object.keys(ex.muscles).forEach(m=>{
-          const w=ex.muscles[m];if(w<0.3)return;
-          const g=ywGroupOf(m);if(g)vol[g]+=cs*w;
-        });
-      });
+    // Per-muscle weekly volume — single source of truth (getWeeklyVolume:
+    // full set count where the muscle's contribution >=0.4, warmups excluded,
+    // rolling 7 days). Same data the rest of the app uses. Targets are the
+    // app's existing per-muscle ranges (getMuscleTarget).
+    const wv=getWeeklyVolume();
+    const VORDER=['chest','back','shoulders','legs','biceps','triceps','traps','forearms','core'];
+    const mstats=VORDER.map(m=>{
+      const sets=wv[m]?wv[m].sets:0;
+      const tgt=getMuscleTarget(m);
+      return{m,sets,tgt,status:getVolumeStatus(sets,tgt)};
     });
-    YW_GROUPS.forEach(G=>{vol[G.key]=Math.round(vol[G.key]);});
     const DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const dpw=state.profile&&state.profile.daysPerWeek?state.profile.daysPerWeek:3;
     // Forward plan. Cadence inferred from days-per-week: spread N training days
@@ -3169,58 +3137,60 @@ button:active{opacity:.75;transform:scale(.97);}
       }
     }
     const strip='<div class="yw-strip">'+cells.join('')+'</div><div class="yw-key">↻ Blue = projected — re-plans as you train</div>';
-    const rows=YW_GROUPS.map(G=>{
-      const v=vol[G.key];
-      const st=v<LOW_V?'low':(v>HI_V?'over':'ok');
-      let nf=Math.max(v>0?1:0,Math.min(5,Math.round(v/4)));
+    const rows=mstats.map(x=>{
+      const v=x.sets,st=x.status,unit=x.tgt.max/5;
+      const cls=st==='under'?'low':(st==='over'?'over':'ok');
+      let nf=Math.max(v>0?1:0,Math.min(5,Math.round(v/unit)));
       if(st==='over')nf=5;
       let pips='';
       for(let i=0;i<5;i++){
         let c='yw-pip';
-        if(i<nf)c+=st==='over'?(i===4?' over':' f'):(st==='low'?' fa':' f');
+        if(i<nf)c+=st==='over'?(i===4?' over':' f'):(st==='under'?' fa':' f');
         pips+='<span class="'+c+'"></span>';
       }
-      return'<div class="yw-row"><span class="yw-name">'+G.key+'</span>'
+      return'<div class="yw-row"><span class="yw-name">'+(MUSCLE_LABELS[x.m]||x.m)+'</span>'
         +'<span class="yw-pips">'+pips+'</span>'
-        +'<span class="yw-sv '+st+'">'+v+' <span class="u">sets</span></span></div>';
+        +'<span class="yw-sv '+cls+'">'+v+' <span class="u">sets</span></span></div>';
     }).join('');
-    // Coach line — flagging only. "What's next / why" now lives on the picker
-    // cards (Piece 1) and the forward strip, so this is purely the week-level
-    // volume diagnosis: under the effective range, or past it into junk volume.
+    const sUnder=mstats.filter(x=>x.status==='under');
+    const sOver=mstats.filter(x=>x.status==='over');
+    const sZone=mstats.filter(x=>x.status==='zone');
+    const summary='<div class="yw-vsum"><b class="u">'+sUnder.length+' under</b> &middot; <b class="k">'+sZone.length+' in range</b> &middot; <b class="o">'+sOver.length+' over</b></div>';
+    // Coach line — flagging only. "What's next / why" lives on the picker
+    // cards (Piece 1) and the forward strip; this is the week-level volume
+    // diagnosis: under the effective range, or past the top of it.
     const n=win.length;let cls,body;
     const lj=a=>a.length<=1?(a[0]||''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
+    const lbl=x=>MUSCLE_LABELS[x.m]||x.m;
     if(n===0){
       cls='flag';
       body='No training logged in the last 7 days. Volume is built by showing up — the next session is the only thing that matters.';
     }else if(n<=2){
       cls='flag';
       body='<strong>'+n+' session'+(n>1?'s':'')+' in the last 7 days.</strong> Most muscles are under the effective range at this frequency — the priority isn\u2019t balance yet, it\u2019s consistency. Just train.';
+    }else if(sUnder.length===0&&sOver.length===0){
+      cls='affirm';
+      body='Every muscle inside the effective range this week — the week is working.';
     }else{
-      const under=YW_GROUPS.filter(G=>vol[G.key]<LOW_V);
-      const over=YW_GROUPS.filter(G=>vol[G.key]>HI_V);
-      if(under.length===0&&over.length===0){
-        cls='affirm';
-        body='Every muscle inside the effective range this week — the week is working.';
+      cls='flag';
+      const parts=[];
+      if(sUnder.length){
+        parts.push('<strong>'+lj(sUnder.map(lbl))+(sUnder.length>1?' are':' is')+' under the effective range</strong> — '+lj(sUnder.map(x=>String(x.sets)))+' sets this week');
+      }
+      if(sOver.length){
+        parts.push(lj(sOver.map(lbl))+(sOver.length>1?' are':' is')+' past the top of the range');
+      }
+      if(sUnder.length){
+        body=parts.join('. ')+'. That\u2019s the imbalance to fix before it compounds — pushing past it isn\u2019t more dedication, it\u2019s a lopsided physique and a lagging area.';
       }else{
-        cls='flag';
-        const parts=[];
-        if(under.length){
-          parts.push('<strong>'+lj(under.map(G=>G.key))+(under.length>1?' are':' is')+' well under the effective range</strong> — '+lj(under.map(G=>String(vol[G.key])))+' sets this week');
-        }
-        if(over.length){
-          parts.push(lj(over.map(G=>G.key))+(over.length>1?' are':' is')+' past 20 into junk volume');
-        }
-        if(under.length){
-          body=parts.join('. ')+'. That\u2019s the imbalance to fix before it compounds — pushing past it isn\u2019t more dedication, it\u2019s a lopsided physique and a lagging area.';
-        }else{
-          body=parts.join('. ')+'. Those extra sets are recovery cost without extra growth — trim them or redirect the volume somewhere that needs it.';
-        }
+        body=parts.join('. ')+'. Those extra sets are recovery cost without extra growth — trim them or redirect the volume somewhere that needs it.';
       }
     }
     const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
     el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span><span class="yw-w">Plan &middot; '+dpw+' days/wk</span></div>'
       +strip
       +'<div class="yw-cov-lbl">Volume this week &middot; <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-3);">sets per muscle</span></div>'
+      +summary
       +'<div class="yw-frq">'+rows+'</div>'
       +'<div class="yw-coach '+cls+'"><i class="ti '+ic+'"></i><div class="yw-cb">'+body+'</div></div></div>';
   }
@@ -4688,14 +4658,14 @@ button:active{opacity:.75;transform:scale(.97);}
     }).join('');
     if(priorityUnder){
       // Alert state: red border, calls attention to priority gap
-      html+='<div class="str-overview-card" onclick="showVolume()" style="border-color:var(--accent);background:linear-gradient(180deg,var(--d-bg) 0%,var(--surface) 100%);">'
+      html+='<div class="str-overview-card" onclick="showMusclePriorities()" style="border-color:var(--accent);background:linear-gradient(180deg,var(--d-bg) 0%,var(--surface) 100%);">'
         +'<div class="str-card-head"><span style="color:var(--accent);display:flex;align-items:center;">'+icon('stack-2',15)+'</span><span style="flex:1;color:var(--accent);">Volume</span><span style="color:var(--text-3);">'+icon('chevron-right',13)+'</span></div>'
         +'<div class="str-card-stat" style="font-size:18px;color:var(--accent);">'+(MUSCLE_LABELS[priorityUnder.muscle]||priorityUnder.muscle)+' low</div>'
         +'<div class="str-card-sub" style="margin-top:0;">'+priorityUnder.sets+' / '+priorityUnder.target.min+' priority sets</div>'
         +'<div class="vol-mini">'+miniBars+'</div>'
         +'</div>';
     }else{
-      html+='<div class="str-overview-card" onclick="showVolume()">'
+      html+='<div class="str-overview-card" onclick="showMusclePriorities()">'
         +cardHead('stack-2','Volume')
         +'<div class="str-card-stat" style="font-size:24px;">'+inZone+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+MUSCLES.length+'</span></div>'
         +'<div class="str-card-sub" style="margin-top:0;">in zone · last 7 days</div>'
@@ -4816,73 +4786,6 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // ── DETAIL: Score History ───────────────────────────────
   // ── VOLUME DETAIL SCREEN ────────────────────────────
-  window.showVolume=function(){
-    const body=document.getElementById('volume-body');
-    const wkVol=getWeeklyVolume();
-    const stats=MUSCLES.map(m=>{
-      const sets=wkVol[m].sets;
-      const sessions=wkVol[m].sessions;
-      const target=getMuscleTarget(m);
-      return{muscle:m,sets,sessions,target,status:getVolumeStatus(sets,target),priority:getMusclePriority(m)};
-    });
-    // Sort: priority first (regardless of status), then under, then over, then zone
-    const order={priority:0,under:1,over:2,zone:3};
-    stats.sort((a,b)=>{
-      const aRank=a.priority==='priority'?-1:order[a.status];
-      const bRank=b.priority==='priority'?-1:order[b.status];
-      if(aRank!==bRank)return aRank-bRank;
-      return b.sets-a.sets;
-    });
-    const summary={
-      zone:stats.filter(v=>v.status==='zone').length,
-      under:stats.filter(v=>v.status==='under').length,
-      over:stats.filter(v=>v.status==='over').length,
-      total:stats.reduce((a,v)=>a+v.sets,0),
-    };
-
-    let html='<div class="vol-summary">'
-      +'<div class="vol-summary-item"><div class="vol-summary-num" style="color:var(--s-fg);">'+summary.zone+'</div><div class="vol-summary-lbl">In zone</div></div>'
-      +'<div class="vol-summary-item"><div class="vol-summary-num" style="color:var(--d-fg);">'+summary.under+'</div><div class="vol-summary-lbl">Under</div></div>'
-      +'<div class="vol-summary-item"><div class="vol-summary-num" style="color:var(--w-fg);">'+summary.over+'</div><div class="vol-summary-lbl">Over</div></div>'
-      +'<div class="vol-summary-item"><div class="vol-summary-num">'+summary.total+'</div><div class="vol-summary-lbl">Total sets</div></div>'
-      +'</div>';
-
-    html+='<h3>Muscles</h3>';
-    stats.forEach(v=>{
-      const fillPct=Math.min(120,Math.round((v.sets/v.target.max)*100));
-      const fillColor=v.status==='zone'?'var(--s-fg)':v.status==='over'?'var(--w-fg)':'var(--d-fg)';
-      // Tick mark at min and max of target zone, scaled to bar width (max=100% bar, min=min/max%)
-      const minTick=Math.round((v.target.min/v.target.max)*100);
-      const maxTick=100;
-      // Frequency line — surface 1x→2x as a high-value upgrade
-      let freqLine='';
-      if(v.sessions===0)freqLine='Not trained yet';
-      else if(v.sessions===1&&v.priority!=='reduced')freqLine='Trained 1x · 2x/week is associated with ~30% better gains';
-      else if(v.sessions>=2)freqLine='Trained '+v.sessions+'x · good frequency';
-      const freqClass=(v.sessions===1&&v.priority!=='reduced')?' warn':'';
-      // Priority indicator
-      let priIcon='';
-      if(v.priority==='priority')priIcon='<i class="ti ti-star-filled priority"></i>';
-      else if(v.priority==='reduced')priIcon='<i class="ti ti-arrow-down reduced"></i>';
-
-      html+='<div class="vol-row">'
-        +'<div class="vol-row-top">'
-          +'<div class="vol-name">'+priIcon+(MUSCLE_LABELS[v.muscle]||v.muscle)+'</div>'
-          +'<div class="vol-count '+v.status+'">'+v.sets+' / '+v.target.min+'–'+v.target.max+'</div>'
-        +'</div>'
-        +'<div class="vol-bar-wrap">'
-          +'<div class="vol-bar-fill" style="width:'+Math.min(100,fillPct)+'%;background:'+fillColor+';"></div>'
-          +'<div class="vol-bar-mark" style="left:'+minTick+'%;"></div>'
-          +'<div class="vol-bar-mark" style="left:'+maxTick+'%;"></div>'
-        +'</div>'
-        +'<div class="vol-bar-marks"><span>0</span><span>'+v.target.min+'</span><span>'+v.target.max+'+</span></div>'
-        +(freqLine?'<div class="vol-frequency'+freqClass+'">'+freqLine+'</div>':'')
-        +'</div>';
-    });
-
-    body.innerHTML=html;
-    showScreen('volume');
-  };
 
   // ── PRIORITY MUSCLES SCREEN ────────────────────────
   function renderMusclePriorities(){
@@ -6619,7 +6522,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v59';
+    const APP_VERSION='v60';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6631,8 +6534,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v59')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v59';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v60')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v60';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
