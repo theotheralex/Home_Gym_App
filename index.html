@@ -77,8 +77,10 @@ button:active{opacity:.75;transform:scale(.97);}
 .rec-fresh{background:var(--s-bg);color:var(--s-fg);}
 .rec-recovering{background:var(--w-bg);color:var(--w-fg);}
 .rec-fatigued{background:var(--d-bg);color:var(--d-fg);}
-.pick-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 16px;margin-bottom:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;min-height:76px;}
+.pick-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 16px;margin-bottom:12px;cursor:pointer;display:flex;flex-direction:column;align-items:stretch;min-height:76px;}
 .pick-card:active{background:var(--surface-2);}
+.pick-top{display:flex;justify-content:space-between;align-items:center;}
+.pick-why{font-size:12.5px;color:var(--text-2);line-height:1.55;margin-top:11px;padding-top:11px;border-top:1px solid var(--border);}
 .pick-name{font-size:17px;font-weight:700;margin-bottom:3px;}
 .pick-sub{font-size:13px;color:var(--text-2);}
 .pick-meta{font-size:14px;font-weight:700;color:var(--text-2);text-align:right;white-space:nowrap;padding-left:12px;}
@@ -706,19 +708,20 @@ button:active{opacity:.75;transform:scale(.97);}
 .yw-frq{display:flex;flex-direction:column;gap:8px;}
 .yw-row{display:flex;align-items:center;gap:11px;}
 .yw-name{font-size:13.5px;font-weight:600;width:74px;flex-shrink:0;}
-.yw-dots{display:flex;gap:5px;flex:1;}
-.yw-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--border-strong);}
-.yw-dot.met{background:var(--s-fg);border-color:var(--s-fg);}
-.yw-dot.par{background:var(--w-fg);border-color:var(--w-fg);}
-.yw-tag{font-size:11px;font-weight:700;width:54px;text-align:right;flex-shrink:0;letter-spacing:0.3px;}
-.yw-tag.ok{color:var(--s-fg);}.yw-tag.low{color:var(--w-fg);}.yw-tag.miss{color:var(--text-3);}
+.yw-pips{display:flex;gap:3px;flex:1;}
+.yw-pip{height:9px;flex:1;border-radius:3px;background:var(--surface-2);border:1px solid var(--border);}
+.yw-pip.f{background:var(--s-fg);border-color:var(--s-fg);}
+.yw-pip.fa{background:var(--w-fg);border-color:var(--w-fg);}
+.yw-pip.over{background:var(--i-fg);border-color:var(--i-fg);}
+.yw-sv{font-size:12px;font-weight:700;width:62px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;}
+.yw-sv.ok{color:var(--s-fg);}.yw-sv.low{color:var(--w-fg);}.yw-sv.over{color:var(--i-fg);}
+.yw-sv .u{font-size:10px;font-weight:500;color:var(--text-3);}
 .yw-coach{display:flex;gap:9px;margin-top:15px;padding-top:14px;border-top:1px solid var(--border);}
 .yw-coach i{font-size:15px;flex-shrink:0;margin-top:1px;}
 .yw-coach.affirm i{color:var(--s-fg);}
 .yw-coach.flag i{color:var(--w-fg);}
 .yw-cb{font-size:13px;line-height:1.6;color:var(--text);}
 .yw-cb strong{font-weight:700;}
-.yw-cb .yw-nx{color:var(--text-2);}
 /* Landscape view — fullscreen workout display when device rotates */
 #landscape-view{display:none;position:fixed;inset:0;background:radial-gradient(ellipse at 50% 35%,#0d0d0d 0%,var(--bg) 50%,#050505 100%);color:var(--text);z-index:200;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
 #landscape-prompt{display:none;position:fixed;inset:0;background:var(--bg);color:var(--text);z-index:200;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:clamp(8px,1.5vh,20px);}
@@ -2369,8 +2372,27 @@ button:active{opacity:.75;transform:scale(.97);}
       let staleBonus=0;
       if(daysSince>7)staleBonus=30;
       else if(daysSince>5)staleBonus=15;
-      return{key,focus:f,score:avgR+lastSame+staleBonus,avgRecovery:Math.round(rec[f.emphasis[0]]||100)};
+      return{key,focus:f,score:avgR+lastSame+staleBonus,avgRecovery:Math.round(rec[f.emphasis[0]]||100),_avgR:avgR,_stale:staleBonus,_same:lastSame,_days:daysSince};
     }).sort((a,b)=>b.score-a.score).slice(0,4);
+  }
+  // Piece 1: the "why this session" line. Derived from the SAME scoring
+  // components pickFocusTypes computes (recovery / staleness / repeat), so the
+  // sentence can never contradict the % the card shows. Fuller coach voice.
+  function ywPickReason(o,isRec){
+    const r=o.avgRecovery,fresh=r>=85,mid=r>=50&&r<85,low=r<50;
+    const overdue=o._stale>=30,dueSoon=o._stale>=15;
+    if(o._same<0)return 'You trained this last session — going again now stacks fatigue on muscles that haven\u2019t recovered yet. Usually worth waiting a turn.';
+    if(low)return 'These muscles are still deep in recovery from your last session here — training them now would be low-quality work. Give them another day or two.';
+    if(isRec){
+      if(overdue&&fresh)return 'Fully recovered, and the most overdue pattern this week — that combination is why it\u2019s the call.';
+      if(overdue)return 'You haven\u2019t trained this in over a week. It\u2019s overdue, which is what pushes it to the top today.';
+      if(fresh)return 'These muscles are fully recovered and it\u2019s the strongest fit for where your week is — that\u2019s why it\u2019s recommended.';
+      return 'The best balance of recovery and what your week needs right now.';
+    }
+    if(fresh&&dueSoon)return 'Fully recovered and getting due — a strong alternative, just behind today\u2019s pick.';
+    if(fresh)return 'Fully recovered too — a solid choice; it loses to the top pick only on what your week needs more right now.';
+    if(mid)return 'Partly recovered — workable, but not as productive as the fresher options today.';
+    return 'A reasonable option, just not the priority given your recovery and recent sessions.';
   }
 
   // Pre-exhaust mode: when a DB-based compound is at the user's hardware ceiling
@@ -3075,39 +3097,34 @@ button:active{opacity:.75;transform:scale(.97);}
     {key:'Arms',muscles:['biceps','triceps','forearms']},
     {key:'Core',muscles:['core']}
   ];
+  // Which YW groups each focus meaningfully trains (derived from FOCUS_TYPES
+  // structures — keep in sync if pools change). Module-scope so it's defined
+  // once, not rebuilt on every dashboard render.
+  const YW_FOCUS_COVERS={pull:['Back','Shoulders','Arms','Core'],push:['Chest','Shoulders','Arms','Core'],legs:['Legs','Core'],upper:['Back','Chest','Shoulders','Arms','Core'],full_body:['Back','Chest','Shoulders','Legs','Arms','Core'],conditioning:['Back','Shoulders','Legs','Core']};
   function ywGroupOf(m){for(let i=0;i<YW_GROUPS.length;i++){if(YW_GROUPS[i].muscles.indexOf(m)>=0)return YW_GROUPS[i].key;}return null;}
-  function ywTrained(sess){
-    // A group counts as trained in a session if EITHER its meaningful
-    // (>=0.4 weight) contributions sum to >=1.0 — catching secondary work
-    // like triceps across a press-heavy push day — OR any exercise in the
-    // session has that group as its primary target. The second rule fixes
-    // core: dedicated core exercises sit at core 0.7-0.9 (dead bug .7,
-    // plank .8, side plank .8) and never reach 1.0 alone, so a session
-    // with one core slot was wrongly read as "core untrained".
-    const acc={},prim={};
-    (sess.exercises||[]).forEach(e=>{
-      const ex=EX[e.id];if(!ex||!ex.muscles)return;
-      let pm=null,pw=0;
-      Object.keys(ex.muscles).forEach(m=>{
-        const w=ex.muscles[m];
-        if(w>pw){pw=w;pm=m;}
-        if(w<0.4)return;
-        const g=ywGroupOf(m);if(g)acc[g]=(acc[g]||0)+w;
-      });
-      const pg=pm&&ywGroupOf(pm);if(pg)prim[pg]=true;
-    });
-    const t={};
-    Object.keys(acc).forEach(k=>{if(acc[k]>=1)t[k]=true;});
-    Object.keys(prim).forEach(k=>{t[k]=true;});
-    return t;
-  }
   function renderYourWeek(){
     const el=document.getElementById('your-week');
     if(!el)return;
     if(!state.sessions||!state.sessions.length){el.innerHTML='';return;}
     const now=Date.now(),win=state.sessions.filter(s=>s.timestamp>=now-7*86400000);
-    const freq={};YW_GROUPS.forEach(G=>freq[G.key]=0);
-    win.forEach(s=>{const t=ywTrained(s);Object.keys(t).forEach(k=>freq[k]++);});
+    // Per-muscle weekly EFFECTIVE working sets: each completed set of an
+    // exercise contributes to a muscle group in proportion to that muscle's
+    // weight in EX[].muscles (the app's standard fractional-volume model).
+    // Effective range ≈ 8–20 sets/group/week (LOW_V .. HI_V).
+    const LOW_V=8,HI_V=20;
+    const vol={};YW_GROUPS.forEach(G=>vol[G.key]=0);
+    win.forEach(s=>{
+      (s.exercises||[]).forEach(e=>{
+        const cs=(e.sets||[]).filter(st=>st.done&&st.feedback!=='fail').length;
+        if(!cs)return;
+        const ex=EX[e.id];if(!ex||!ex.muscles)return;
+        Object.keys(ex.muscles).forEach(m=>{
+          const w=ex.muscles[m];if(w<0.3)return;
+          const g=ywGroupOf(m);if(g)vol[g]+=cs*w;
+        });
+      });
+    });
+    YW_GROUPS.forEach(G=>{vol[G.key]=Math.round(vol[G.key]);});
     const DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const dpw=state.profile&&state.profile.daysPerWeek?state.profile.daysPerWeek:3;
     // Forward plan. Cadence inferred from days-per-week: spread N training days
@@ -3121,9 +3138,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const trainSet=new Set(trainIdx);
     const recList=pickFocusTypes()||[];
     const rec=recList[0];
-    const recName=rec?rec.focus.name:'a full session';
     const recKey=rec?rec.key:'';
-    const YW_COVERS={pull:['Back','Shoulders','Arms','Core'],push:['Chest','Shoulders','Arms','Core'],legs:['Legs','Core'],upper:['Back','Chest','Shoulders','Arms','Core'],full_body:['Back','Chest','Shoulders','Legs','Arms','Core'],conditioning:['Back','Shoulders','Legs','Core']};
     const ORDER=['pull','push','legs','upper','full_body','conditioning'];
     const cov={};YW_GROUPS.forEach(G=>cov[G.key]=0);
     const focusByIdx={};let prevKey='';
@@ -3134,12 +3149,12 @@ button:active{opacity:.75;transform:scale(.97);}
         let best=null,bestScore=-1;
         ORDER.forEach(k=>{
           if(k===prevKey)return;
-          const gain=(YW_COVERS[k]||[]).reduce((a,g)=>a+(cov[g]<2?1:0),0);
+          const gain=(YW_FOCUS_COVERS[k]||[]).reduce((a,g)=>a+(cov[g]<2?1:0),0);
           if(gain>bestScore){bestScore=gain;best=k;}
         });
         key=best||ORDER[0];
       }
-      (YW_COVERS[key]||[]).forEach(g=>{cov[g]=(cov[g]||0)+1;});
+      (YW_FOCUS_COVERS[key]||[]).forEach(g=>{cov[g]=(cov[g]||0)+1;});
       focusByIdx[di]=key;prevKey=key;
     });
     const cells=[];
@@ -3155,66 +3170,57 @@ button:active{opacity:.75;transform:scale(.97);}
     }
     const strip='<div class="yw-strip">'+cells.join('')+'</div><div class="yw-key">↻ Blue = projected — re-plans as you train</div>';
     const rows=YW_GROUPS.map(G=>{
-      const f=freq[G.key];
-      let d0='yw-dot',d1='yw-dot',tag,tc;
-      if(f>=2){d0+=' met';d1+=' met';tag=f+'&times;&nbsp;✓';tc='ok';}
-      else if(f===1){d0+=' par';tag='1&times;';tc='low';}
-      else{tag='0&times;';tc='miss';}
+      const v=vol[G.key];
+      const st=v<LOW_V?'low':(v>HI_V?'over':'ok');
+      let nf=Math.max(v>0?1:0,Math.min(5,Math.round(v/4)));
+      if(st==='over')nf=5;
+      let pips='';
+      for(let i=0;i<5;i++){
+        let c='yw-pip';
+        if(i<nf)c+=st==='over'?(i===4?' over':' f'):(st==='low'?' fa':' f');
+        pips+='<span class="'+c+'"></span>';
+      }
       return'<div class="yw-row"><span class="yw-name">'+G.key+'</span>'
-        +'<span class="yw-dots"><span class="'+d0+'"></span><span class="'+d1+'"></span></span>'
-        +'<span class="yw-tag '+tc+'">'+tag+'</span></div>';
+        +'<span class="yw-pips">'+pips+'</span>'
+        +'<span class="yw-sv '+st+'">'+v+' <span class="u">sets</span></span></div>';
     }).join('');
-    // Coach line — tiered so low-frequency users aren't shamed for a pattern
-    // they don't have enough sessions to form.
+    // Coach line — flagging only. "What's next / why" now lives on the picker
+    // cards (Piece 1) and the forward strip, so this is purely the week-level
+    // volume diagnosis: under the effective range, or past it into junk volume.
     const n=win.length;let cls,body;
-    // rec/recName/recKey computed once above (the forward-strip block) — the
-    // SAME pickFocusTypes()[0] the picker uses, so strip, coach line, and the
-    // Pick-focus screen can never contradict each other.
-    // Which groups each focus meaningfully trains (derived from the FOCUS_TYPES
-    // structures — keep in sync if those pools change). Only used to stay
-    // honest about whether the recommended session closes the flagged gap.
-    const FOCUS_COVERS={pull:['Back','Shoulders','Arms','Core'],push:['Chest','Shoulders','Arms','Core'],legs:['Legs','Core'],upper:['Back','Chest','Shoulders','Arms','Core'],full_body:['Back','Chest','Shoulders','Legs','Arms','Core'],conditioning:['Back','Shoulders','Legs','Core']};
     const lj=a=>a.length<=1?(a[0]||''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
     if(n===0){
       cls='flag';
-      body='No training logged in the last 7 days. Frequency is built by showing up — the next session is the only thing that matters. <span class="yw-nx">Next: <strong>'+recName+'</strong>.</span>';
+      body='No training logged in the last 7 days. Volume is built by showing up — the next session is the only thing that matters.';
     }else if(n<=2){
       cls='flag';
-      body='<strong>'+n+' session'+(n>1?'s':'')+' in the last 7 days.</strong> At this frequency the priority isn\u2019t balance yet, it\u2019s consistency — just train. <span class="yw-nx">Next: <strong>'+recName+'</strong>.</span>';
+      body='<strong>'+n+' session'+(n>1?'s':'')+' in the last 7 days.</strong> Most muscles are under the effective range at this frequency — the priority isn\u2019t balance yet, it\u2019s consistency. Just train.';
     }else{
-      const low=YW_GROUPS.filter(G=>freq[G.key]<2);
-      if(low.length===0){
+      const under=YW_GROUPS.filter(G=>vol[G.key]<LOW_V);
+      const over=YW_GROUPS.filter(G=>vol[G.key]>HI_V);
+      if(under.length===0&&over.length===0){
         cls='affirm';
-        body='Every muscle group trained at least twice in the last 7 days with recovery between — this is the structure that drives growth. <span class="yw-nx">Next: <strong>'+recName+'</strong> — keep the rotation balanced.</span>';
+        body='Every muscle inside the effective range this week — the week is working.';
       }else{
         cls='flag';
-        const zero=low.filter(G=>freq[G.key]===0).map(G=>G.key);
-        const one=low.filter(G=>freq[G.key]===1).map(G=>G.key);
-        const lowKeys=low.map(G=>G.key);
-        const pushCt=win.filter(s=>s.templateKey==='push').length;
-        const pat=(pushCt>=2&&(freq.Back<2||freq.Legs<2))?'Push-heavy week — ':'';
-        let gaps;
-        if(zero.length)gaps=lj(zero)+(zero.length>1?' both at zero':' at zero');
-        else gaps=lj(one)+' trained only once';
-        const covers=FOCUS_COVERS[recKey]||[];
-        const hit=lowKeys.filter(k=>covers.indexOf(k)>=0);
-        const miss=lowKeys.filter(k=>covers.indexOf(k)<0);
-        let nextLine;
-        if(miss.length===0){
-          nextLine='<span class="yw-nx">Next: <strong>'+recName+'</strong> — it trains '+lj(hit)+'. Not optional this time.</span>';
-        }else if(hit.length){
-          nextLine='<span class="yw-nx">Next: <strong>'+recName+'</strong> — covers '+lj(hit)+', but '+lj(miss)+(miss.length>1?' are':' is')+' still short. Don\u2019t let '+(miss.length>1?'them':'it')+' slide.</span>';
-        }else{
-          nextLine='<span class="yw-nx"><strong>'+recName+'</strong> is the recovery-smart pick, but it won\u2019t touch '+lj(miss)+' — get a session that hits '+(miss.length>1?'them':'it')+' in soon.</span>';
+        const parts=[];
+        if(under.length){
+          parts.push('<strong>'+lj(under.map(G=>G.key))+(under.length>1?' are':' is')+' well under the effective range</strong> — '+lj(under.map(G=>String(vol[G.key])))+' sets this week');
         }
-        const lead=pat?('<strong>'+pat+gaps+'.</strong> '):('<strong>You\u2019re behind this week — '+gaps+'.</strong> ');
-        body=lead+'That\u2019s the imbalance to fix before it compounds — pushing past it isn\u2019t more dedication, it\u2019s a lopsided physique and a lagging area. '+nextLine;
+        if(over.length){
+          parts.push(lj(over.map(G=>G.key))+(over.length>1?' are':' is')+' past 20 into junk volume');
+        }
+        if(under.length){
+          body=parts.join('. ')+'. That\u2019s the imbalance to fix before it compounds — pushing past it isn\u2019t more dedication, it\u2019s a lopsided physique and a lagging area.';
+        }else{
+          body=parts.join('. ')+'. Those extra sets are recovery cost without extra growth — trim them or redirect the volume somewhere that needs it.';
+        }
       }
     }
     const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
     el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span><span class="yw-w">Plan &middot; '+dpw+' days/wk</span></div>'
       +strip
-      +'<div class="yw-cov-lbl">2&times; coverage &middot; this week</div>'
+      +'<div class="yw-cov-lbl">Volume this week &middot; <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-3);">sets per muscle</span></div>'
       +'<div class="yw-frq">'+rows+'</div>'
       +'<div class="yw-coach '+cls+'"><i class="ti '+ic+'"></i><div class="yw-cb">'+body+'</div></div></div>';
   }
@@ -3295,8 +3301,9 @@ button:active{opacity:.75;transform:scale(.97);}
       const rec=i===0?'<span class="pill">Recommended</span>':'';
       const est=estimates[o.key];
       return'<div class="pick-card" onclick="pickTemplate(\''+o.key+'\')">'
-        +'<div><div class="pick-name">'+o.focus.name+rec+'</div><div class="pick-sub">'+o.focus.subtitle+'</div></div>'
-        +'<div class="pick-meta">'+o.avgRecovery+'%<br><span style="font-size:11px;font-weight:500;">fresh</span><br><span style="font-size:11px;font-weight:500;color:var(--text-3);">~'+est+' min</span></div></div>';
+        +'<div class="pick-top"><div><div class="pick-name">'+o.focus.name+rec+'</div><div class="pick-sub">'+o.focus.subtitle+'</div></div>'
+        +'<div class="pick-meta">'+o.avgRecovery+'%<br><span style="font-size:11px;font-weight:500;">fresh</span><br><span style="font-size:11px;font-weight:500;color:var(--text-3);">~'+est+' min</span></div></div>'
+        +'<div class="pick-why">'+ywPickReason(o,i===0)+'</div></div>';
     }).join('');
     showTrainScreen('pick');
   };
@@ -3314,8 +3321,9 @@ button:active{opacity:.75;transform:scale(.97);}
     document.getElementById('pick-options').innerHTML=opts.map((o,i)=>{
       const rec=i===0?'<span class="pill">Recommended</span>':'';
       return'<div class="pick-card" onclick="pickTemplate(\''+o.key+'\')">'
-        +'<div><div class="pick-name">'+o.focus.name+rec+'</div><div class="pick-sub">'+o.focus.subtitle+'</div></div>'
-        +'<div class="pick-meta">'+o.avgRecovery+'%<br><span style="font-size:11px;font-weight:500;">fresh</span><br><span style="font-size:11px;font-weight:500;color:var(--text-3);">~22 min</span></div></div>';
+        +'<div class="pick-top"><div><div class="pick-name">'+o.focus.name+rec+'</div><div class="pick-sub">'+o.focus.subtitle+'</div></div>'
+        +'<div class="pick-meta">'+o.avgRecovery+'%<br><span style="font-size:11px;font-weight:500;">fresh</span><br><span style="font-size:11px;font-weight:500;color:var(--text-3);">~22 min</span></div></div>'
+        +'<div class="pick-why">'+ywPickReason(o,i===0)+'</div></div>';
     }).join('');
     showTrainScreen('pick');
   };
@@ -6611,7 +6619,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v57';
+    const APP_VERSION='v59';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6623,8 +6631,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v57')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v57';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v59')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v59';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
