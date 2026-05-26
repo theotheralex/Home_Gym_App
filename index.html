@@ -593,6 +593,7 @@ button:active{opacity:.75;transform:scale(.97);}
 .ob-check.checked .ob-check-box{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:0 0 8px rgba(220,38,38,0.5);}
 .ob-sub-input{margin-top:8px;display:none;}
 .ob-check.checked .ob-sub-input{display:block;}
+.ob-sub-desc{font-size:12px;color:var(--text-3);font-weight:500;margin-top:4px;line-height:1.4;}
 .ob-goal-grid{display:flex;flex-direction:column;gap:8px;}
 .ob-goal{padding:16px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;}
 .ob-goal.selected{border-color:var(--accent);background:rgba(220,38,38,0.1);}
@@ -864,28 +865,7 @@ button:active{opacity:.75;transform:scale(.97);}
       <div class="ob-progress"><div class="ob-dot done"></div><div class="ob-dot current"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
       <div class="ob-title">Your equipment</div>
       <div class="ob-sub">Check everything you have. We'll only program exercises you can do.</div>
-      <div class="ob-check-grid" id="ob-equip">
-        <div class="ob-check" onclick="obToggle(this,'bodyweight')"><div class="ob-check-box"></div>Bodyweight</div>
-        <div class="ob-check" onclick="obToggle(this,'db')"><div class="ob-check-box"></div><div>Dumbbells
-          <div class="ob-sub-input" onclick="event.stopPropagation()">
-            <div class="ob-label" style="margin-top:8px;margin-bottom:10px;">Tap your available weights</div>
-            <div id="ob-db-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;"></div>
-          </div>
-        </div></div>
-        <div class="ob-check" onclick="obToggle(this,'kb')"><div class="ob-check-box"></div><div>Kettlebell
-          <div class="ob-sub-input" onclick="event.stopPropagation()">
-            <div class="ob-label" style="margin-top:8px;margin-bottom:10px;">Tap your available weights</div>
-            <div id="ob-kb-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;"></div>
-          </div>
-        </div></div>
-        <div class="ob-check" onclick="obToggle(this,'bench')"><div class="ob-check-box"></div>Adjustable bench</div>
-        <div class="ob-check" onclick="obToggle(this,'step')"><div class="ob-check-box"></div>Step platform</div>
-        <div class="ob-check" onclick="obToggle(this,'ab_wheel')"><div class="ob-check-box"></div>Ab wheel</div>
-        <div class="ob-check" onclick="obToggle(this,'rope')"><div class="ob-check-box"></div>Jump rope</div>
-        <div class="ob-check" onclick="obToggle(this,'pullup_bar')"><div class="ob-check-box"></div>Pull-up bar</div>
-        <div class="ob-check" onclick="obToggle(this,'dip_bars')"><div class="ob-check-box"></div>Dip bars / dip station</div>
-        <div class="ob-check" onclick="obToggle(this,'bands')"><div class="ob-check-box"></div>Resistance bands</div>
-      </div>
+      <div class="ob-check-grid" id="ob-equip"></div>
       <div class="ob-nav"><button class="ob-back" onclick="obBack(2)">Back</button><button class="ob-next" onclick="obNext(2)">Next</button></div>
     </div>
 
@@ -2072,8 +2052,8 @@ button:active{opacity:.75;transform:scale(.97);}
     sl_rdl:{name:'Single-leg DB RDL',muscles:{legs:.9,core:.4},type:'compound',equip:['db'],repRange:[8,10],perSide:true,cues:['Hold DBs in both hands, balance on one leg with a slight knee bend','Hinge at the hip, letting the free leg float back as a counterbalance','Keep your hips square to the floor — don\'t let the floating hip rise','Lower until you feel the hamstring stretch, then drive hip forward','Find a focus point on the floor to help with balance']},
     kb_goblet_squat:{name:'KB goblet squat',muscles:{legs:1,core:.3},type:'compound',equip:['kb'],repRange:[10,12],cues:['Hold the KB by the horns at your chest','Same cues as goblet squat — full depth, chest tall, knees out','The KB weight shifts your center forward — use it to sit deeper','Pause at the bottom to kill momentum','Drive through the whole foot on the way up']},
     db_calf_raise:{name:'DB calf raise',muscles:{legs:.6},type:'accessory',equip:['db','step'],repRange:[15,20],cues:['Stand with ball of feet on edge of the step, heels hanging off','Hold a DB for resistance. Start from a full stretch — heel below step','Rise as high as possible onto your toes — full contraction','Hold at the top for 1 second, then lower slowly over 3 seconds','Don\'t bounce — the stretch and pause are what make calves grow']},
-    ab_wheel:{name:'Ab wheel rollout',muscles:{core:1},type:'accessory',equip:['ab_wheel'],repRange:[8,12],noWeight:true,cues:['Start from kneeling. Brace your core like you\'re about to get punched','Roll out slowly — lower back must stay flat, not arched','Only go as far as you can without your lower back dropping','Pull back by contracting your abs — not by pushing with arms','Progress by going further out as you get stronger']},
-    hanging_leg_raise:{name:'Hanging or lying leg raise',muscles:{core:1},type:'accessory',equip:['bodyweight'],repRange:[10,12],noWeight:true,cues:['Lying: lie flat, hands under your lower back for support','Keep legs straight or slightly bent — raise until perpendicular','Lower slowly — stop just before heels touch the floor','The lowering phase is where abs work hardest — don\'t drop them','If back arches, bend the knees more']},
+    ab_wheel:{name:'Ab wheel rollout',muscles:{core:1},type:'accessory',equip:['ab_wheel'],repRange:[8,12],noWeight:true,loadTier:'high',cues:['Start from kneeling. Brace your core like you\'re about to get punched','Roll out slowly — lower back must stay flat, not arched','Only go as far as you can without your lower back dropping','Pull back by contracting your abs — not by pushing with arms','Progress by going further out as you get stronger']},
+    hanging_leg_raise:{name:'Hanging or lying leg raise',muscles:{core:1},type:'accessory',equip:['bodyweight'],repRange:[10,12],noWeight:true,loadTier:'high',cues:['Lying: lie flat, hands under your lower back for support','Keep legs straight or slightly bent — raise until perpendicular','Lower slowly — stop just before heels touch the floor','The lowering phase is where abs work hardest — don\'t drop them','If back arches, bend the knees more']},
     side_plank:{name:'Plank',muscles:{core:.8},type:'accessory',equip:['bodyweight'],repRange:[30,45],unit:'sec',perSide:true,noWeight:true,cues:['Forearm on the floor, elbow under your shoulder','Stack your feet or stagger them for more stability','Drive your hip up — body forms a straight line head to foot','Don\'t let your hip sag — if it drops, shorten the hold time','Breathe normally — don\'t hold your breath']},
     dead_bug:{name:'Dead bug',muscles:{core:.7},type:'accessory',equip:['bodyweight'],repRange:[10,12],perSide:true,noWeight:true,cues:['Lie on your back, arms pointing at ceiling, knees bent 90° in the air','Press your lower back into the floor — must stay there the whole time','Slowly lower opposite arm and leg toward the floor simultaneously','Lower only as far as you can keep the back flat','Return to start, then switch sides — slow and controlled']},
     plank:{name:'Plank',muscles:{core:.7},type:'accessory',equip:['bodyweight'],repRange:[45,60],unit:'sec',noWeight:true,cues:['Forearms on the floor, elbows under shoulders','Body forms a straight line — don\'t let hips sag or pike up','Squeeze everything: glutes, quads, abs — all at once','Breathe — if you\'re holding your breath, you\'re too tense','When you can hold 60s easily, add weight or progress further']},
@@ -2086,8 +2066,8 @@ button:active{opacity:.75;transform:scale(.97);}
     single_arm_floor_press:{name:'Single arm floor press',muscles:{chest:.8,triceps:.5,core:.4},type:'compound',equip:['db'],repRange:[8,12],perSide:true,cues:['Lie on the floor, one DB in hand, other arm out for stability','Press the DB straight up — lock out fully','Lower until your upper arm touches the floor — that\'s your range of motion','The floor limits your range which protects the shoulder','Keep your core braced hard — the single arm wants to twist you']},
     kb_snatch:{name:'KB snatch',muscles:{shoulders:.7,traps:.5,legs:.4,core:.5},type:'compound',equip:['kb'],repRange:[6,10],perSide:true,cues:['Start like a swing — KB between your legs, hinge at hips','Explode up and pull the KB close to your body — elbow high','Punch your hand through at the top so the KB rolls onto your forearm','Lock out overhead — arm straight, bicep by ear, core tight','Lower by letting the KB fall forward and absorb with a hinge']},
     renegade_row:{name:'Renegade row',muscles:{back:.8,core:.9,chest:.2},type:'compound',equip:['db'],repRange:[6,10],cues:['High plank position with hands on DBs, feet wide for stability','Brace your core hard — hips should not rotate at all','Row one DB to your hip while pushing the other into the floor','Lower under control, then row the other side — that\'s one rep per side','If your hips are swaying, go lighter — the anti-rotation IS the exercise']},
-    pull_up:{name:'Pull-up',muscles:{back:1,biceps:.5,core:.2},type:'compound',equip:['pullup_bar'],repRange:[5,12],noWeight:true,cues:['Grab the bar with palms facing away, hands just outside shoulder width','Start from a dead hang — arms fully extended, shoulders engaged','Pull your chest toward the bar by driving elbows down and back','Chin over the bar at the top — squeeze your lats hard','Lower slowly to dead hang — full range of motion every rep']},
-    chin_up:{name:'Chin-up',muscles:{biceps:.8,back:.7,core:.2},type:'compound',equip:['pullup_bar'],repRange:[5,10],noWeight:true,cues:['Grab the bar with palms facing you, hands shoulder-width apart','Dead hang start — full arm extension','Pull up by driving elbows down toward your hips','Chin over the bar — hold for a beat at the top','Lower under control — no dropping. The eccentric builds strength.']},
+    pull_up:{name:'Pull-up',muscles:{back:1,biceps:.5,core:.2},type:'compound',equip:['pullup_bar'],repRange:[5,12],noWeight:true,loadTier:'high',cues:['Grab the bar with palms facing away, hands just outside shoulder width','Start from a dead hang — arms fully extended, shoulders engaged','Pull your chest toward the bar by driving elbows down and back','Chin over the bar at the top — squeeze your lats hard','Lower slowly to dead hang — full range of motion every rep']},
+    chin_up:{name:'Chin-up',muscles:{biceps:.8,back:.7,core:.2},type:'compound',equip:['pullup_bar'],repRange:[5,10],noWeight:true,loadTier:'high',cues:['Grab the bar with palms facing you, hands shoulder-width apart','Dead hang start — full arm extension','Pull up by driving elbows down toward your hips','Chin over the bar — hold for a beat at the top','Lower under control — no dropping. The eccentric builds strength.']},
     band_pull_apart:{name:'Band pull-apart',muscles:{back:.6,shoulders:.5},type:'accessory',equip:['bands'],repRange:[15,20],noWeight:true,cues:['Hold the band at shoulder height with arms straight out in front','Pull the band apart by squeezing your shoulder blades together','The band should touch your chest at full contraction','Return slowly to the start — don\'t let the band snap back','Keep your arms straight throughout — elbows slightly soft']},
     band_face_pull:{name:'Band face pull',muscles:{shoulders:.7,traps:.5,back:.3},type:'accessory',equip:['bands'],repRange:[15,20],noWeight:true,cues:['Anchor the band at face height — doorframe or post','Grab both ends with palms facing each other','Pull toward your face, flaring elbows high and wide','Externally rotate at the end — fists should end up by your ears','Squeeze rear delts and traps at full contraction — hold 1 sec']},
     band_curl:{name:'Band bicep curl',muscles:{biceps:.9},type:'accessory',equip:['bands'],repRange:[12,15],noWeight:true,cues:['Stand on the band with both feet, hold ends at your sides','Curl up with elbows pinned — don\'t let them drift forward','Squeeze at the top — the band tension peaks here','Lower slowly — the resistance changes throughout the range','Keep your wrists neutral and straight throughout']},
@@ -2098,13 +2078,13 @@ button:active{opacity:.75;transform:scale(.97);}
     bw_lunge:{name:'Bodyweight lunge',muscles:{legs:1,core:.2},type:'compound',equip:['bodyweight'],repRange:[10,15],perSide:true,noWeight:true,cues:['Step forward into a long stride — both knees should bend to ~90 degrees','Front knee tracks over your toes — don\'t let it cave inward','Lower until your back knee nearly touches the floor','Drive through the front heel to return to standing','Keep your torso upright throughout — no forward lean']},
     glute_bridge:{name:'Glute bridge',muscles:{legs:.8,core:.3},type:'accessory',equip:['bodyweight'],repRange:[12,20],noWeight:true,cues:['Lie on your back, knees bent, feet flat on the floor hip-width apart','Drive through your heels and squeeze your glutes to lift your hips','At the top, your body should form a straight line from knees to shoulders','Hold at the top for 2 seconds — really squeeze the glutes','Lower slowly — don\'t just drop. The eccentric matters.']},
     bench_dip:{name:'Bench dip',muscles:{triceps:.9,chest:.3,shoulders:.2},type:'accessory',equip:['bench'],repRange:[10,15],noWeight:true,cues:['Hands on the edge of a bench behind you, fingers forward','Feet out in front — the further out, the harder it gets','Lower by bending your elbows to ~90 degrees','Push back up to full lockout — squeeze triceps at the top','Keep your back close to the bench — don\'t let your body drift forward']},
-    dip:{name:'Dip',muscles:{chest:.7,triceps:.8,shoulders:.4},type:'compound',equip:['dip_bars'],repRange:[6,12],noWeight:true,cues:['Grip the bars with arms straight, shoulders down and back','Lean slightly forward for more chest — stay upright for more triceps','Lower until your upper arms are parallel to the floor — full depth','Press back up to full lockout — squeeze chest and triceps at the top','Control the descent — don\'t drop. If you can do 12+, add weight with a belt or DB between feet.']},
+    dip:{name:'Dip',muscles:{chest:.7,triceps:.8,shoulders:.4},type:'compound',equip:['dip_bars'],repRange:[6,12],noWeight:true,loadTier:'high',cues:['Grip the bars with arms straight, shoulders down and back','Lean slightly forward for more chest — stay upright for more triceps','Lower until your upper arms are parallel to the floor — full depth','Press back up to full lockout — squeeze chest and triceps at the top','Control the descent — don\'t drop. If you can do 12+, add weight with a belt or DB between feet.']},
     jumping_jacks:{name:'Jumping jacks',muscles:{legs:.3,shoulders:.2,core:.1},type:'finisher',equip:['bodyweight'],repRange:[45,60],unit:'sec',noWeight:true,cues:['Start standing with arms at your sides, feet together','Jump feet apart while raising arms overhead simultaneously','Land softly on the balls of your feet — don\'t stomp','Jump back to starting position — that\'s one rep','Keep a steady rhythm — this is about sustained effort, not speed']},
     wall_sit:{name:'Wall sit',muscles:{legs:.9,core:.2},type:'accessory',equip:['bodyweight'],repRange:[30,60],unit:'sec',noWeight:true,cues:['Back flat against a wall, slide down until thighs are parallel to floor','Knees at 90 degrees, directly above your ankles','Press your entire back into the wall — no gap at the lower back','Arms can hang at your sides or cross over your chest','The burn is the point — when your quads are screaming, you\'re doing it right']},
     high_knees:{name:'High knees',muscles:{legs:.5,core:.4},type:'finisher',equip:['bodyweight'],repRange:[30,45],unit:'sec',noWeight:true,cues:['Run in place, driving each knee up to hip height','Pump your arms — opposite arm to opposite knee','Stay on the balls of your feet — quick, light ground contact','Keep your core tight and torso upright — don\'t lean back','This is a sprint in place — go as fast as you can maintain']},
     mountain_climbers:{name:'Mountain climbers',muscles:{core:.7,legs:.4,shoulders:.2},type:'finisher',equip:['bodyweight'],repRange:[30,45],unit:'sec',noWeight:true,cues:['Start in a high plank position — hands under shoulders','Drive one knee toward your chest, then quickly switch legs','Keep your hips level — don\'t let them pike up or sag','The faster you go, the more cardio — slower is more core','Hands stay planted, core stays braced throughout']},
     burpees:{name:'Burpees',muscles:{legs:.6,chest:.4,core:.4,shoulders:.3},type:'compound',equip:['bodyweight'],repRange:[6,12],noWeight:true,cues:['Stand, then squat down and place hands on the floor','Jump or step your feet back into a plank position','Do a push-up (optional but recommended)','Jump or step feet forward to your hands','Explosively jump up with arms overhead — that\'s one rep']},
-    archer_push_up:{name:'Archer push-up',muscles:{chest:.9,triceps:.4,shoulders:.3,core:.3},type:'compound',equip:['bodyweight'],repRange:[5,10],perSide:true,noWeight:true,cues:['Wide push-up position — hands much wider than shoulder width','As you lower, shift your body toward one hand — the other arm straightens','Push back up from the bent arm — that arm does most of the work','Alternate sides each rep, or do all one side then switch','This is a single-arm push-up progression — go slow and controlled']},
+    archer_push_up:{name:'Archer push-up',muscles:{chest:.9,triceps:.4,shoulders:.3,core:.3},type:'compound',equip:['bodyweight'],repRange:[5,10],perSide:true,noWeight:true,loadTier:'high',cues:['Wide push-up position — hands much wider than shoulder width','As you lower, shift your body toward one hand — the other arm straightens','Push back up from the bent arm — that arm does most of the work','Alternate sides each rep, or do all one side then switch','This is a single-arm push-up progression — go slow and controlled']},
     single_leg_bridge:{name:'Single-leg glute bridge',muscles:{legs:.9,core:.4},type:'accessory',equip:['bodyweight'],repRange:[8,12],perSide:true,noWeight:true,cues:['Lie on your back, one foot flat on the floor, other leg extended straight up','Drive through the planted heel to lift your hips','At the top, your body forms a straight line from knee to shoulder','Hold for 1 second — squeeze the working glute hard','Lower slowly. Much harder than the two-leg version — that\'s the point.']},
     plank_shoulder_tap:{name:'Plank shoulder tap',muscles:{core:.9,shoulders:.3},type:'accessory',equip:['bodyweight'],repRange:[10,20],noWeight:true,cues:['High plank position — hands under shoulders, feet wide for stability','Lift one hand and tap the opposite shoulder','The goal: your hips should NOT rotate at all during the tap','Place the hand back down and tap with the other hand — that\'s one rep','Go slower than you think — speed makes this easy, control makes it hard']},
     jump_lunge:{name:'Jump lunge',muscles:{legs:1,core:.3},type:'compound',equip:['bodyweight'],repRange:[6,10],noWeight:true,cues:['Start in a lunge position — both knees at 90 degrees','Explosively jump up, switching legs mid-air','Land softly in a lunge with the opposite leg forward','Absorb the landing through your quads — don\'t let knees collapse','This is plyometric — focus on soft landings over height']},
@@ -2132,6 +2112,18 @@ button:active{opacity:.75;transform:scale(.97);}
     incline_lateral_raise:{name:'Incline DB lateral raise',muscles:{shoulders:1,traps:.2},type:'accessory',equip:['db','bench'],repRange:[10,15],cues:['Set the bench back to ~45° incline','Lie on your side along the bench — torso against the inclined back, hip on the seat','Bottom arm cradles your head for support; top arm holds the DB hanging across your body','Raise the DB up and away from your body to shoulder height — lead with the elbow, don\'t swing past','Lower slowly — the incline keeps tension on the side delt even at the bottom, that\'s the whole point','Switch sides after the set']},
     preacher_curl:{name:'Preacher curl',muscles:{biceps:1,forearms:.3},type:'accessory',equip:['db','bench'],repRange:[10,12],cues:['No preacher pad? Set the bench back to ~60° incline — the angled padding becomes your preacher pad','Kneel or sit on the floor behind the bench, facing the back of it','Drape your upper arm over the top edge — armpit at the top, back of arm pressed against the angled padding','DB hangs down on the far side, arm fully extended — biceps under stretch','Curl up by flexing the elbow only — shoulder and upper arm stay pinned to the pad','Squeeze hard at the top, lower slowly to full extension — no momentum means no cheating']},
     incline_reverse_fly:{name:'Chest-supported reverse fly',muscles:{shoulders:.9,traps:.5,back:.3},type:'accessory',equip:['db','bench'],repRange:[12,15],cues:['Set the bench back to ~45° incline','Lie face down with your chest pressed against the inclined back — head extends over the top, feet on the floor for balance','DBs hanging straight down below your shoulders, slight bend in elbows held throughout','Raise arms out to the sides in a wide arc until they\'re parallel to the floor','Squeeze shoulder blades together at the top — feel the rear delts, not the traps','Lower under control; chest support eliminates the lower-back stress that bent-over flies suffer from']},
+    cable_bench_press:{name:'Cable bench press',muscles:{chest:1,triceps:.4,shoulders:.3},type:'compound',equip:['cable_machine','bench'],repRange:[8,12],cues:['Set the cable arms low — handles below shoulder height when you lie on the bench','Grab one handle in each hand, palms down or neutral','Press up and slightly inward — cables converge at the top like a DB bench, you can\'t do that on a barbell','Lower until handles are at the sides of your chest, elbows about 45° from your torso','Cable resistance is constant the whole rep — control the eccentric, don\'t let the handles whip back','Smaller 1 lb jumps mean you can progress slower and smoother than barbell — use that']},
+    cable_squat:{name:'Cable squat',muscles:{legs:1,core:.3},type:'compound',equip:['cable_machine'],repRange:[10,12],cues:['Set the cable arms low — handles at hip height when standing','Grab a handle in each hand, step back to put tension on the cables','Cables pull forward — counter by squatting straight down, chest tall, no forward dump','The forward pull acts like a goblet squat counterweight — lets you sit deeper','Drive through the whole foot, keep cables tense the whole rep — no slack at the top']},
+    cable_rdl:{name:'Cable Romanian deadlift',muscles:{legs:.8,back:.5,core:.3},type:'compound',equip:['cable_machine'],repRange:[10,12],cues:['Set the cable arms at the lowest position — handles at floor level','Stand close to the machine, grab handles with arms long, soft knees','Hinge at the hips — push your butt back, this is NOT a squat','Lower until you feel a deep stretch in your hamstrings, back stays flat','Drive hips forward to come up, squeeze glutes at the top — don\'t hyperextend the lower back']},
+    cable_ohp:{name:'Cable overhead press',muscles:{shoulders:1,triceps:.4,traps:.3},type:'compound',equip:['cable_machine'],repRange:[8,12],cues:['Set the cable arms at the lowest position — handles at hip/floor height','Grab a handle in each hand, bring them to shoulder height, palms facing forward','Press straight up to lockout — handles converge slightly at the top','Brace your core hard — no leaning back to cheat the press into an incline','Lower under control to shoulder height, no rebound at the bottom']},
+    cable_row:{name:'Cable row',muscles:{back:1,biceps:.3},type:'compound',equip:['cable_machine'],repRange:[10,12],cues:['Set the cable arms at chest/mid height — straight pull line into your torso','Step back, brace your core, slight bend in the knees','Pull handles to your lower ribs — elbows track back close to your body, not flaring out wide','Squeeze shoulder blades together at the end of each rep, hold for a beat','Slow release on the way out — let your shoulder blades come forward, full stretch before the next pull']},
+    cable_lat_pulldown:{name:'Cable lat pulldown',muscles:{back:.9,biceps:.4},type:'compound',equip:['cable_machine'],repRange:[10,12],cues:['Set the cable arms overhead','Kneel or sit so your arms can fully extend overhead at the top','Pull handles down to chest level — elbows drive down and back, not just down','Squeeze lats at the bottom — focus on lat engagement, not pulling with biceps','Let the handles travel all the way back up — full overhead stretch on each rep']},
+    cable_curl:{name:'Cable curl',muscles:{biceps:1,forearms:.3},type:'accessory',equip:['cable_machine'],repRange:[10,12],cues:['Set the cable arms low — handles at hip height','Stand close, elbows pinned tight to your sides, palms facing up','Curl up to shoulder height — only the elbow joint moves, no shoulder swing','Cable keeps tension at the top of the curl (DBs don\'t) — squeeze hard there','Lower slowly to full extension — no momentum, no hip drive']},
+    cable_tricep_pushdown:{name:'Cable tricep pushdown',muscles:{triceps:1},type:'accessory',equip:['cable_machine'],repRange:[10,12],cues:['Set the cable arms high overhead','Grab handles with palms down, elbows pinned firmly to your ribs','Press handles straight down to your sides — only the elbow joint extends, upper arm stays put','Squeeze triceps hard at the bottom, hold for a second','Let handles come back up to about 90° at the elbow — don\'t let them go higher, you lose tension']},
+    cable_lateral:{name:'Cable lateral raise',muscles:{shoulders:1},type:'accessory',equip:['cable_machine'],repRange:[12,15],perSide:true,cues:['Set one cable arm low on the opposite side of the body — only need one cable for this','Grab the handle across your body with the far hand, palm in toward your hip','Raise the arm out to the side to shoulder height — lead with the elbow, not the hand','Lean very slightly away from the cable to keep tension across the full range','Lower slowly — cable keeps tension at the bottom too, which DBs can\'t','Switch sides after the set']},
+    cable_fly:{name:'Cable fly',muscles:{chest:.8},type:'accessory',equip:['cable_machine'],repRange:[12,15],cues:['Set both cable arms at chest height, position the handles slightly behind your shoulders','Grab a handle in each hand, step forward into a staggered stance for stability','Slight bend in elbows — maintain throughout, this is a fly not a press','Bring hands together in front of your sternum in a wide arc — like hugging a barrel','Squeeze chest hard at the top where the handles meet, slow controlled return — full stretch at the bottom']},
+    cable_face_pull:{name:'Cable face pull',muscles:{shoulders:.7,back:.3},type:'accessory',equip:['cable_machine'],repRange:[12,15],cues:['Set both cable arms at upper-chest or face height','Grab handles with thumbs pointing back, palms facing each other','Pull handles toward your face — elbows high, externally rotate so hands end up next to your ears at the top','Squeeze rear delts and upper back hard at the end position','Slow controlled return — this is a high-rep posture and shoulder-health movement, not a strength lift']},
+    cable_pallof_press:{name:'Cable Pallof press',muscles:{core:1},type:'accessory',equip:['cable_machine'],repRange:[10,12],perSide:true,cues:['Set one cable arm at chest height — only need one side','Stand perpendicular to the cable, grab the handle with both hands at your chest','Step away from the machine to put tension on the cable, feet shoulder-width','Press the handle straight out from your sternum — the cable tries to rotate you, you resist','Hold the extended position for a second before pulling back to chest — zero rotation allowed','Switch sides after the set']},
   };
 
   // ── EXERCISE POOLS (by movement pattern) ───────────────
@@ -2140,25 +2132,68 @@ button:active{opacity:.75;transform:scale(.97);}
   // is guaranteed to have a vertical pull, not just whatever the picker
   // happens to find in a heterogeneous "back" bucket). Muscle coverage is
   // tracked separately via each exercise's muscles{} weights.
+  // ── EQUIPMENT (single source of truth) ─────────────────
+  // Both onboarding (the chip grid on screen 2) and Settings → Equipment
+  // render from this array. Adding a new piece of equipment is a one-line
+  // change — both surfaces pick it up automatically.
+  // Fields: key (the equip flag used in EX[].equip and state.profile.equipment),
+  //         label (display name), and two optional rendering hints:
+  //         weightGrid (placeholder id for the available-weights sub-input
+  //         grid — only DB and KB need this), subDesc (descriptive subtext
+  //         shown under the label on the onboarding chip).
+  const EQUIPMENT_OPTIONS=[
+    {key:'bodyweight',   label:'Bodyweight'},
+    {key:'db',           label:'Dumbbells',           weightGrid:'ob-db-grid'},
+    {key:'kb',           label:'Kettlebell',          weightGrid:'ob-kb-grid'},
+    {key:'bench',        label:'Adjustable bench'},
+    {key:'cable_machine',label:'Cable machine',       subDesc:'Cable stations, functional trainers, smart home gyms (Tonal, Vitruvian, AEKE)'},
+    {key:'step',         label:'Step platform'},
+    {key:'ab_wheel',     label:'Ab wheel'},
+    {key:'rope',         label:'Jump rope'},
+    {key:'pullup_bar',   label:'Pull-up bar'},
+    {key:'dip_bars',     label:'Dip bars / dip station'},
+    {key:'bands',        label:'Resistance bands'},
+  ];
+  function renderEquipmentChips(){
+    const el=document.getElementById('ob-equip');
+    if(!el)return;
+    el.innerHTML=EQUIPMENT_OPTIONS.map(opt=>{
+      const box='<div class="ob-check-box"></div>';
+      let inner;
+      if(opt.weightGrid){
+        inner='<div>'+opt.label
+          +'<div class="ob-sub-input" onclick="event.stopPropagation()">'
+            +'<div class="ob-label" style="margin-top:8px;margin-bottom:10px;">Tap your available weights</div>'
+            +'<div id="'+opt.weightGrid+'" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;"></div>'
+          +'</div></div>';
+      }else if(opt.subDesc){
+        inner='<div>'+opt.label+'<div class="ob-sub-desc">'+opt.subDesc+'</div></div>';
+      }else{
+        inner=opt.label;
+      }
+      return '<div class="ob-check" onclick="obToggle(this,\''+opt.key+'\')">'+box+inner+'</div>';
+    }).join('');
+  }
+
   const POOLS={
     // Pull patterns
-    horizontal_pull:    ['db_row','single_arm_row','kb_row','inverted_row','renegade_row','door_row'],
-    vertical_pull:      ['pull_up','chin_up','band_pulldown'],
+    horizontal_pull:    ['cable_row','db_row','single_arm_row','kb_row','renegade_row','inverted_row','door_row'],
+    vertical_pull:      ['pull_up','chin_up','cable_lat_pulldown','band_pulldown'],
     lat_isolation:      ['db_pullover','band_straight_arm_pulldown'],
-    rear_delt:          ['db_rear_delt','band_face_pull','incline_reverse_fly'],
+    rear_delt:          ['cable_face_pull','incline_reverse_fly','db_rear_delt','band_face_pull'],
     posterior_finisher: ['db_y_raise','prone_y_raise','prone_t_raise','scapular_push_up','band_pull_apart','superman'],
     trap_shrug:         ['db_shrug'],
-    bicep_curl:         ['db_curl','db_incline_curl','preacher_curl','concentration_curl','band_curl','inverted_curl'],
+    bicep_curl:         ['db_incline_curl','cable_curl','preacher_curl','db_curl','concentration_curl','band_curl','inverted_curl'],
     loaded_carry:       ['farmer_carry'],
     // Push patterns
-    horizontal_press:   ['db_bench_press','db_incline_press','db_floor_press','single_arm_floor_press','push_up','archer_push_up','dip'],
-    vertical_press:     ['db_ohp','arnold_press','pike_push_up','hindu_push_up'],
-    chest_isolation:    ['db_fly','db_squeeze_press'],
-    shoulder_isolation: ['db_lateral','incline_lateral_raise'],
-    tricep_extension:   ['db_skullcrusher','db_kickback','db_overhead_extension','band_pushdown','bench_dip','floor_tricep_dip','diamond_push_up'],
+    horizontal_press:   ['db_bench_press','db_incline_press','db_floor_press','single_arm_floor_press','push_up','archer_push_up','dip','cable_bench_press'],
+    vertical_press:     ['db_ohp','arnold_press','pike_push_up','hindu_push_up','cable_ohp'],
+    chest_isolation:    ['cable_fly','db_fly','db_squeeze_press'],
+    shoulder_isolation: ['cable_lateral','incline_lateral_raise','db_lateral'],
+    tricep_extension:   ['db_overhead_extension','db_skullcrusher','cable_tricep_pushdown','band_pushdown','bench_dip','diamond_push_up','floor_tricep_dip','db_kickback'],
     // Lower patterns
-    squat:              ['goblet_squat','kb_goblet_squat','bw_squat','wall_sit','cossack_squat'],
-    hinge:              ['db_rdl','sl_rdl','glute_bridge','single_leg_bridge'],
+    squat:              ['goblet_squat','kb_goblet_squat','bw_squat','wall_sit','cossack_squat','cable_squat'],
+    hinge:              ['db_rdl','sl_rdl','glute_bridge','single_leg_bridge','cable_rdl'],
     lunge:              ['bulgarian','db_step_up','bw_lunge'],
     calf:               ['db_calf_raise','bw_calf_raise'],
     // Power / conditioning patterns
@@ -2168,8 +2203,8 @@ button:active{opacity:.75;transform:scale(.97);}
     metabolic:          ['jump_rope','jumping_jacks','high_knees','mountain_climbers','burpees','bear_crawl'],
     // Core patterns
     anti_extension_core:['ab_wheel','plank','dead_bug'],
-    flexion_core:       ['hanging_leg_raise','v_up','flutter_kicks','crunch','weighted_crunch','sit_up'],
-    anti_rotation_core: ['side_plank','plank_shoulder_tap'],
+    flexion_core:       ['weighted_crunch','hanging_leg_raise','v_up','sit_up','crunch','flutter_kicks'],
+    anti_rotation_core: ['cable_pallof_press','side_plank','plank_shoulder_tap'],
   };
 
   // ── FALLBACK CHAINS ────────────────────────────────────
@@ -2268,6 +2303,7 @@ button:active{opacity:.75;transform:scale(.97);}
               if(e==='bands'&&!equip.includes('bands'))return false;
               if(e==='ab_wheel'&&!equip.includes('ab_wheel'))return false;
               if(e==='dip_bars'&&!equip.includes('dip_bars'))return false;
+              if(e==='cable_machine'&&!equip.includes('cable_machine'))return false;
             }
           }
         }
@@ -2293,10 +2329,13 @@ button:active{opacity:.75;transform:scale(.97);}
       }
       // Sort: prefer weighted over bodyweight, then not recently used, then not already picked,
       // then prefer exercises that target under-worked muscles.
+      // Note: exercises tagged loadTier:'high' (pull-up, dip, archer push-up, hanging leg
+      // raise, ab wheel) load the muscle at weighted-tier intensity despite being
+      // bodyweight — they bypass the BW penalty so the picker doesn't deprioritize them.
       const sorted=pool.slice().sort((a,b)=>{
         const exA=EX[a],exB=EX[b];
-        const aWeighted=exA&&!exA.noWeight&&exA.unit!=='sec'?0:(exA&&exA.hasWeight?0:3);
-        const bWeighted=exB&&!exB.noWeight&&exB.unit!=='sec'?0:(exB&&exB.hasWeight?0:3);
+        const aWeighted=exA&&exA.loadTier==='high'?0:(exA&&!exA.noWeight&&exA.unit!=='sec'?0:(exA&&exA.hasWeight?0:3));
+        const bWeighted=exB&&exB.loadTier==='high'?0:(exB&&!exB.noWeight&&exB.unit!=='sec'?0:(exB&&exB.hasWeight?0:3));
         const aScore=aWeighted+(avoid.has(a)?1:0)+(used.has(a)?10:0)+muscleScore(a);
         const bScore=bWeighted+(avoid.has(b)?1:0)+(used.has(b)?10:0)+muscleScore(b);
         return aScore-bScore;
@@ -2635,8 +2674,12 @@ button:active{opacity:.75;transform:scale(.97);}
     if(ex.fixedWeight)return ex.fixedWeight;
     const d={
       db_row:30,single_arm_row:30,db_pullover:20,db_floor_press:30,db_bench_press:30,db_incline_press:20,db_fly:10,db_squeeze_press:20,db_ohp:20,db_lateral:10,db_rear_delt:10,db_y_raise:5,db_shrug:40,farmer_carry:40,db_curl:20,db_incline_curl:10,db_skullcrusher:10,db_kickback:10,weighted_crunch:15,db_overhead_extension:20,goblet_squat:40,db_rdl:30,bulgarian:20,db_step_up:20,sl_rdl:20,db_calf_raise:30,db_push_press:20,arnold_press:20,zottman_curl:10,concentration_curl:10,single_arm_floor_press:20,renegade_row:20,preacher_curl:10,incline_lateral_raise:10,incline_reverse_fly:10,
-      kb_swing:25,kb_row:25,kb_high_pull:25,kb_goblet_squat:35,kb_clean_press:25,kb_snatch:25
+      kb_swing:25,kb_row:25,kb_high_pull:25,kb_goblet_squat:35,kb_clean_press:25,kb_snatch:25,
+      cable_bench_press:50,cable_squat:60,cable_rdl:50,cable_ohp:35,cable_row:50,cable_lat_pulldown:60,cable_curl:25,cable_tricep_pushdown:35,cable_lateral:15,cable_fly:25,cable_face_pull:25,cable_pallof_press:20
     };
+    // Cable machines have continuous resistance (typically 1 lb increments) so
+    // they don't need to round to a discrete DB/KB pool — return the default directly.
+    if(ex.equip&&ex.equip.includes('cable_machine'))return d[id]||30;
     if(exIsKB(ex))return nKB(d[id]||25);
     return nDB(d[id]||20);
   }
@@ -5630,7 +5673,11 @@ button:active{opacity:.75;transform:scale(.97);}
 
   function obRender(){
     document.querySelectorAll('.ob-step').forEach((s,i)=>s.classList.toggle('active',i+1===obStep));
-    if(obStep===2){obRenderDBGrid();obRenderKBGrid();}
+    if(obStep===2){
+      const eq=document.getElementById('ob-equip');
+      if(eq&&!eq.children.length)renderEquipmentChips();
+      obRenderDBGrid();obRenderKBGrid();
+    }
     if(obStep===4){obRenderBodyCompGrid();}
   }
 
@@ -6345,20 +6392,8 @@ button:active{opacity:.75;transform:scale(.97);}
   window.editEquipment=function(){
     const p=state.profile||{};
     const cur=new Set(p.equipment||[]);
-    const items=[
-      ['bodyweight','Bodyweight'],
-      ['db','Dumbbells'],
-      ['kb','Kettlebell'],
-      ['bench','Adjustable bench'],
-      ['step','Step platform'],
-      ['ab_wheel','Ab wheel'],
-      ['rope','Jump rope'],
-      ['pullup_bar','Pull-up bar'],
-      ['dip_bars','Dip bars / dip station'],
-      ['bands','Resistance bands'],
-    ];
-    const opts=items.map(([v,l])=>{
-      return'<div class="edit-radio-opt'+(cur.has(v)?' sel':'')+'" data-val="'+v+'" onclick="this.classList.toggle(\'sel\');"><div class="edit-radio-opt-circle"></div><div class="edit-radio-opt-label">'+l+'</div></div>';
+    const opts=EQUIPMENT_OPTIONS.map(opt=>{
+      return'<div class="edit-radio-opt'+(cur.has(opt.key)?' sel':'')+'" data-val="'+opt.key+'" onclick="this.classList.toggle(\'sel\');"><div class="edit-radio-opt-circle"></div><div class="edit-radio-opt-label">'+opt.label+'</div></div>';
     }).join('');
     openEditModal('Equipment',
       '<div class="edit-label">What do you have access to?</div><div class="edit-radio">'+opts+'</div>'
@@ -6522,7 +6557,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v60';
+    const APP_VERSION='v65';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6534,8 +6569,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v60')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v60';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v65')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v65';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
