@@ -786,6 +786,21 @@ button:active{opacity:.75;transform:scale(.97);}
 .lv-up-callout-sub{font-size:clamp(9px,1.5vh,20px);color:var(--text-2);margin-top:2px;line-height:1.3;}
 .lv-up-lastwk{font-size:clamp(8px,1.3vh,18px);color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;font-weight:700;margin-top:clamp(8px,1.5vh,18px);}
 .lv-up-lastwk-val{font-size:clamp(9px,1.4vh,18px);color:var(--text-2);margin-top:2px;line-height:1.3;}
+/* Last-time delta (progressive-overload reinforcement) */
+.lv-lt{margin-top:clamp(8px,1.5vh,18px);}
+.lv-lt-lbl{font-size:clamp(8px,1.3vh,18px);color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;font-weight:700;}
+.lv-lt-val{font-size:clamp(10px,1.6vh,22px);color:var(--text-2);margin-top:3px;line-height:1.25;display:flex;flex-wrap:wrap;align-items:center;gap:4px;}
+.lv-lt-arrow{color:var(--text-3);}
+.lv-lt-delta{font-size:clamp(9px,1.4vh,18px);font-weight:800;padding:1px 6px;border-radius:6px;}
+.lv-lt-delta.up{background:var(--s-bg);color:var(--s-fg);}
+.lv-lt-delta.match{background:var(--surface-2);color:var(--text-3);}
+/* Form cues — compact top-3 pinned to bottom during a set; full list on rest */
+.lv-cues{margin-top:auto;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:clamp(8px,1.2vh,14px);padding:clamp(7px,1.1vh,14px) clamp(8px,1.1vw,14px);min-height:0;overflow:hidden;}
+.lv-cues-full{margin-top:clamp(8px,1.5vh,18px);}
+.lv-cues-lbl{font-size:clamp(8px,1.2vh,16px);color:var(--i-fg);text-transform:uppercase;letter-spacing:1px;font-weight:800;margin-bottom:clamp(4px,0.8vh,8px);}
+.lv-cues ol{margin:0;padding-left:clamp(13px,1.4vw,20px);}
+.lv-cues li{font-size:clamp(9px,1.35vh,18px);color:var(--text-2);line-height:1.35;margin-bottom:clamp(3px,0.5vh,7px);}
+.lv-cues li:last-child{margin-bottom:0;}
 .lv-progress{grid-column:1/-1;border-top:1px solid var(--border);padding:0 clamp(8px,1.5vw,28px);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,#040404 0%,#020202 100%);box-shadow:inset 0 2px 6px rgba(0,0,0,0.5);}
 .lv-dots{display:flex;gap:clamp(4px,0.7vw,12px);align-items:center;}
 .lv-dot{width:clamp(6px,1.2vh,18px);height:clamp(6px,1.2vh,18px);border-radius:50%;background:var(--surface-2);flex-shrink:0;}
@@ -1717,7 +1732,10 @@ button:active{opacity:.75;transform:scale(.97);}
     const newPRs=[];
     sess.exercises.forEach(e=>{
       const ex=EX[e.id];
-      const completed=e.sets.filter(s=>s.done&&s.feedback!=='fail');
+      // Completed working sets: include to-failure sets (reps before failure are
+      // real and may set a PR) and exclude warmups. Matches the e1rmHistory filter
+      // so the tracked e1RM and PR detection never disagree.
+      const completed=e.sets.filter(s=>s.done&&!s.warmup);
       if(!completed.length)return;
 
       if(exIsWeighted(ex)){
@@ -1935,7 +1953,7 @@ button:active{opacity:.75;transform:scale(.97);}
     while(true){
       const key=weekKey(cursor);
       if(weeksWithPRs.has(key))streak++;else break;
-      cursor=new Date(cursor.getTime()-7*86400000);
+      cursor=addDays(cursor,-7);
       if(streak>52)break; // safety cap
     }
     return streak;
@@ -2088,13 +2106,23 @@ button:active{opacity:.75;transform:scale(.97);}
   // pass while staying correct across user actions.
   let saveTimer=null;
   let _stateVersion=0;
+  let _saveWarned=false;
   function bumpCache(){_stateVersion++;}
+  // Storage writes can fail (quota exceeded, private-mode restrictions). Swallowing
+  // that silently means a user keeps training while nothing persists. Warn once so
+  // they can export before losing progress; e1rmHistory is the likeliest culprit
+  // as it grows unbounded.
+  function onSaveError(e){
+    if(_saveWarned)return;
+    _saveWarned=true;
+    try{toast('Storage full — export your data from Settings to avoid losing progress','fail',6000);}catch(_){}
+  }
   function save(){
     if(saveTimer)clearTimeout(saveTimer);
-    saveTimer=setTimeout(()=>{try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){}saveTimer=null;},150);
+    saveTimer=setTimeout(()=>{try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){onSaveError(e);}saveTimer=null;},150);
     bumpCache();
   }
-  function saveNow(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;}try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){}bumpCache();}
+  function saveNow(){if(saveTimer){clearTimeout(saveTimer);saveTimer=null;}try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){onSaveError(e);}bumpCache();}
 
   // Memo helper. fn() runs only when version differs from cached version.
   const _memo={};
@@ -2943,9 +2971,11 @@ button:active{opacity:.75;transform:scale(.97);}
       prog.consecutiveFailCount=(prog.consecutiveFailCount||0)+1;
       if(noL){
         prog.reps=Math.max(ex.repRange[0],prog.reps-1);
-      }else if(usAdj){
-        prog.reps=Math.min(prog.reps+1,ex.repRange[1]);
       }
+      // Weighted lifts: hold reps flat on a single fail. Weight is the load variable
+      // here, so the only backoff is the 3-consecutive-fail weight deload below.
+      // (The old behavior nudged reps UP after a fail, which made the next session
+      // harder right after a failure and accelerated toward the deload.)
       // 3 consecutive fails → deload
       if(prog.consecutiveFailCount>=3){
         if(usAdj){
@@ -3105,6 +3135,11 @@ button:active{opacity:.75;transform:scale(.97);}
   function recLabel(score){if(score>=75)return{cls:'rec-fresh',label:'Fresh'};if(score>=40)return{cls:'rec-recovering',label:'Recovering'};return{cls:'rec-fatigued',label:'Fatigued'};}
 
   function getMonday(d){const dt=new Date(d);const day=dt.getDay();const diff=dt.getDate()-day+(day===0?-6:1);dt.setHours(0,0,0,0);dt.setDate(diff);return dt;}
+  // DST-safe day stepping. Adding/subtracting fixed 86400000ms drifts across
+  // spring-forward/fall-back (a calendar day can gain or lose an hour), which
+  // made days vanish from the heatmap grid and threw off streak week-matching.
+  // setDate() steps by calendar days and keeps wall-clock time, so it's exact.
+  function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
 
   // ── CONSISTENCY HEATMAP ────────────────────────────────
   const HM_MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -3118,24 +3153,24 @@ button:active{opacity:.75;transform:scale(.97);}
   // Volume → 1-4 shade. Quartiles of the user's own non-zero daily volumes so the
   // scale self-calibrates to their training; falls back to a flat mid-shade when
   // there's too little data to bucket meaningfully.
-  function hmLeveler(){
-    const vols=[...hmDailyVolume().values()].filter(v=>v>0).sort((a,b)=>a-b);
+  function hmLeveler(dv){
+    const vols=[...dv.values()].filter(v=>v>0).sort((a,b)=>a-b);
     if(vols.length<4)return v=>v>0?2:0;
     const t1=vols[Math.floor(vols.length*0.25)],t2=vols[Math.floor(vols.length*0.5)],t3=vols[Math.floor(vols.length*0.75)];
     return v=>v<=0?0:(v<=t1?1:v<=t2?2:v<=t3?3:4);
   }
-  function hmWeeks(numWeeks){
-    const dv=hmDailyVolume(),lvl=hmLeveler();
-    const thisMon=getMonday(new Date()).getTime();
+  function hmWeeks(numWeeks,dv){
+    const lvl=hmLeveler(dv);
+    const thisMon=getMonday(new Date());
     const todayDs=hmLocalDate(Date.now()),nowTs=Date.now();
     const weeks=[];
     for(let w=numWeeks-1;w>=0;w--){
-      const monTs=thisMon-w*7*86400000,days=[];
+      const monDate=addDays(thisMon,-w*7),days=[];
       for(let d=0;d<7;d++){
-        const dayTs=monTs+d*86400000,ds=hmLocalDate(dayTs),vol=dv.get(ds)||0;
+        const dayDate=addDays(monDate,d),dayTs=dayDate.getTime(),ds=hmLocalDate(dayTs),vol=dv.get(ds)||0;
         days.push({ds,vol,lvl:lvl(vol),isToday:ds===todayDs,isFuture:dayTs>nowTs});
       }
-      weeks.push({monTs,days});
+      weeks.push({monTs:monDate.getTime(),days});
     }
     return weeks;
   }
@@ -3162,10 +3197,10 @@ button:active{opacity:.75;transform:scale(.97);}
     // the week until it's over.
     const wset=new Set();
     (state.sessions||[]).forEach(s=>wset.add(getMonday(s.timestamp).getTime()));
-    let wk=getMonday(now).getTime();
-    if(!wset.has(wk))wk-=7*86400000;
+    let wkDate=getMonday(now);
+    if(!wset.has(wkDate.getTime()))wkDate=addDays(wkDate,-7);
     let streak=0;
-    while(wset.has(wk)){streak++;wk-=7*86400000;}
+    while(wset.has(wkDate.getTime())){streak++;wkDate=addDays(wkDate,-7);}
     return{thisMonth,allTime:(state.sessions||[]).length,activeStreak:streak};
   }
   // Dashboard card — 18-week compact grid. Whole card taps through to the
@@ -3177,7 +3212,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const el=document.getElementById('heatmap-card');
     if(!el)return;
     if(!state.sessions||!state.sessions.length){el.innerHTML='';return;}
-    const weeks=hmWeeks(18),st=hmStats();
+    const weeks=hmWeeks(18,hmDailyVolume()),st=hmStats();
     el.innerHTML='<div class="hm-card" onclick="showHeatmapDetail()">'
       +'<div class="hm-head"><div class="hm-title">Consistency</div><div class="hm-sub">'+st.thisMonth+' this month · '+st.allTime+' all-time ›</div></div>'
       +'<div class="hm-months" style="grid-template-columns:repeat('+weeks.length+',1fr);">'+hmMonthsHTML(weeks)+'</div>'
@@ -3191,7 +3226,7 @@ button:active{opacity:.75;transform:scale(.97);}
   function renderHeatmapDetail(){
     const el=document.getElementById('heatmap-detail-body');
     if(!el)return;
-    const weeks=hmWeeks(52),st=hmStats();
+    const weeks=hmWeeks(52,hmDailyVolume()),st=hmStats();
     el.innerHTML='<div class="hm-stats">'
       +'<div class="hm-stat"><div class="hm-stat-v accent">'+st.thisMonth+'</div><div class="hm-stat-l">This month</div></div>'
       +'<div class="hm-stat"><div class="hm-stat-v">'+st.activeStreak+'</div><div class="hm-stat-l">Active weeks</div></div>'
@@ -3226,8 +3261,9 @@ button:active{opacity:.75;transform:scale(.97);}
   // Single-pass stats computation
   function calcAllStats(){
     const now=new Date();
-    const monTs=getMonday(now).getTime();
-    const sunTs=monTs+7*86400000;
+    const monDate=getMonday(now);
+    const monTs=monDate.getTime();
+    const sunTs=addDays(monDate,7).getTime();
     const weeks=new Map();
     let totalVol=0, thisWeek=0, lastTs=0;
 
@@ -3239,20 +3275,21 @@ button:active{opacity:.75;transform:scale(.97);}
       weeks.set(mon,(weeks.get(mon)||0)+1);
     });
 
-    // Week streak
+    // Week streak — step week-by-week with addDays so the keys keep matching
+    // getMonday() timestamps across DST transitions.
     let streak=0;
-    let checkWeek=monTs;
-    const thisCount=weeks.get(checkWeek)||0;
-    if(thisCount>=STREAK_THRESHOLD)streak=1;
-    let prev=checkWeek-7*86400000;
-    while(weeks.has(prev)&&(weeks.get(prev)||0)>=STREAK_THRESHOLD){streak++;prev-=7*86400000;}
+    if((weeks.get(monTs)||0)>=STREAK_THRESHOLD)streak=1;
+    let prevDate=addDays(monDate,-7);
+    while(weeks.has(prevDate.getTime())&&(weeks.get(prevDate.getTime())||0)>=STREAK_THRESHOLD){streak++;prevDate=addDays(prevDate,-7);}
 
     // Days since last
     let daysSince=null;
     if(lastTs>0){
       const nowDate=new Date();nowDate.setHours(0,0,0,0);
       const lastDate=new Date(lastTs);lastDate.setHours(0,0,0,0);
-      daysSince=Math.floor((nowDate-lastDate)/86400000);
+      // round, not floor: both are local-midnight so the true gap is a whole
+      // number of days; a DST hour offset would otherwise floor down by one.
+      daysSince=Math.round((nowDate-lastDate)/86400000);
     }
 
     return{
@@ -3284,11 +3321,11 @@ button:active{opacity:.75;transform:scale(.97);}
     document.getElementById('streak').textContent=stats.streak>0?stats.streak+'wk streak':'';
     // Build streak dots: filled = ≥3 sessions that week, going back 4 weeks
     const streakDots=(()=>{
-      const monNow=getMonday(new Date()).getTime();
+      const monNow=getMonday(new Date());
       const dots=[];
       for(let i=3;i>=0;i--){
-        const weekStart=monNow-i*7*86400000;
-        const weekEnd=weekStart+7*86400000;
+        const weekStart=addDays(monNow,-i*7).getTime();
+        const weekEnd=addDays(monNow,-i*7+7).getTime();
         const count=state.sessions.filter(s=>s.timestamp>=weekStart&&s.timestamp<weekEnd).length;
         dots.push(count>=STREAK_THRESHOLD?'<span class="stat-dot on"></span>':'<span class="stat-dot"></span>');
       }
@@ -3402,7 +3439,7 @@ button:active{opacity:.75;transform:scale(.97);}
     });
     const cells=[];
     for(let d=0;d<7;d++){
-      const lbl=d===0?'Today':DAY[new Date(now+d*86400000).getDay()];
+      const lbl=d===0?'Today':DAY[addDays(new Date(now),d).getDay()];
       if(trainSet.has(d)){
         const k=focusByIdx[d];
         const nm=(FOCUS_TYPES[k]&&FOCUS_TYPES[k].name)||'Session';
@@ -4445,10 +4482,12 @@ button:active{opacity:.75;transform:scale(.97);}
     const newAchievements=checkAchievements();
 
     invalidateRecCache();
-    // Trim old session detail (keep last 50 full, archive older to summary)
+    // Trim old session detail (keep last 50 full, archive older to summary).
+    // Keep warmup/isDropset flags — the heatmap day-detail counts working sets
+    // via !warmup, so dropping the flag would over-count old archived sessions.
     if(state.sessions.length>50){
       state.sessions.slice(0,-50).forEach(s=>{
-        s.exercises.forEach(e=>{e.sets=e.sets.map(set=>({feedback:set.feedback,done:set.done,actualWeight:set.actualWeight,actualReps:set.actualReps}));});
+        s.exercises.forEach(e=>{e.sets=e.sets.map(set=>({feedback:set.feedback,done:set.done,actualWeight:set.actualWeight,actualReps:set.actualReps,warmup:set.warmup,isDropset:set.isDropset}));});
       });
     }
     saveNow();
@@ -6032,7 +6071,7 @@ button:active{opacity:.75;transform:scale(.97);}
       // Validate basics
       const name=document.getElementById('ob-name').value.trim();
       const hFt=parseInt(document.getElementById('ob-height-ft').value)||0;
-      const hIn=parseInt(document.getElementById('ob-height-in').value)||0;
+      const hIn=Math.max(0,Math.min(11,parseInt(document.getElementById('ob-height-in').value)||0));
       const w=parseFloat(document.getElementById('ob-weight').value)||0;
       if(!name){toast('Enter your name','easy');return;}
       if(hFt<4||hFt>7){toast('Enter a valid height','easy');return;}
@@ -6387,6 +6426,23 @@ button:active{opacity:.75;transform:scale(.97);}
       +'</div>';
   }
 
+  // Most recent prior session that included this exercise, with its completed
+  // working sets (warmups excluded). Used by the landscape "Last time" delta.
+  // Derived from history because progressions carry no per-set log. Archived
+  // sessions keep the warmup flag, so the filter holds across slimmed sessions.
+  function getLastExerciseSets(exId){
+    const sessions=state.sessions||[];
+    for(let i=sessions.length-1;i>=0;i--){
+      const s=sessions[i];
+      const e=(s.exercises||[]).find(x=>x.id===exId);
+      if(!e)continue;
+      const working=(e.sets||[]).filter(st=>st.done&&!st.warmup);
+      if(!working.length)continue;
+      return{sets:working,daysAgo:Math.round((Date.now()-(s.timestamp||Date.now()))/86400000)};
+    }
+    return null;
+  }
+
   function buildLvActiveRight(sess,ei,curEx,ex,si){
     // Decide what "Up next" shows:
     // - In a pair, if any pair-member has unfinished sets AFTER this current set finishes:
@@ -6452,12 +6508,39 @@ button:active{opacity:.75;transform:scale(.97);}
       html+='<div class="lv-up-callout">'+(isLastBlock?'Last block':'Last set')+'</div>'
         +'<div class="lv-up-callout-sub">Push hard if RIR &lt; 2</div>';
     }
-    // Last week's numbers (from progressions)
-    const prog=state.progressions[curEx.id];
-    if(prog&&prog.lastSets&&prog.lastSets.length){
-      const reps=prog.lastSets.slice(-3).map(s=>s.reps||s.actualReps||0).join('/');
-      const w=prog.lastSets.slice(-1)[0].weight||prog.lastSets.slice(-1)[0].actualWeight;
-      if(reps)html+='<div class="lv-up-lastwk">Last week</div><div class="lv-up-lastwk-val">'+(w?w+' × ':'')+reps+'</div>';
+    // ── vs last time ─────────────────────────────────────
+    // Reinforce progressive overload: compare the current working set to the best
+    // comparable set from the last session that trained this exercise.
+    const curSet=curEx.sets[si];
+    if(curSet&&!curSet.warmup){
+      const lt=getLastExerciseSets(curEx.id);
+      if(lt){
+        const weighted=exIsWeighted(ex)||ex.hasWeight;
+        const isTimed=ex.unit==='sec';
+        let top=lt.sets[0];
+        lt.sets.forEach(s=>{
+          const sw=s.actualWeight||0,sr=s.actualReps||0,tw=top.actualWeight||0,tr=top.actualReps||0;
+          if(weighted){if(sw>tw||(sw===tw&&sr>tr))top=s;}else{if(sr>tr)top=s;}
+        });
+        const ltW=top.actualWeight||0,ltR=top.actualReps||0,cW=curSet.actualWeight||0,cR=curSet.actualReps||0;
+        const fmt=(w,r)=>(weighted&&w?w+' × ':'')+r+(isTimed?'s':'');
+        let delta='';
+        if(weighted){
+          if(cW>ltW)delta='<span class="lv-lt-delta up">+'+(cW-ltW)+' lb</span>';
+          else if(cW===ltW&&cR>ltR)delta='<span class="lv-lt-delta up">+'+(cR-ltR)+(cR-ltR===1?' rep':' reps')+'</span>';
+          else if(cW===ltW&&cR===ltR)delta='<span class="lv-lt-delta match">matched</span>';
+        }else{
+          if(cR>ltR)delta='<span class="lv-lt-delta up">+'+(cR-ltR)+(isTimed?'s':(cR-ltR===1?' rep':' reps'))+'</span>';
+          else if(cR===ltR)delta='<span class="lv-lt-delta match">matched</span>';
+        }
+        const ago=lt.daysAgo<=0?'today':lt.daysAgo===1?'1d ago':lt.daysAgo+'d ago';
+        html+='<div class="lv-lt"><div class="lv-lt-lbl">Last time · '+ago+'</div>'
+          +'<div class="lv-lt-val">'+fmt(ltW,ltR)+(delta?' <span class="lv-lt-arrow">→</span> '+fmt(cW,cR)+' '+delta:'')+'</div></div>';
+      }
+    }
+    // ── form cues (compact: top 3, pinned to bottom) ─────
+    if(ex.cues&&ex.cues.length){
+      html+='<div class="lv-cues"><div class="lv-cues-lbl">Form</div><ol>'+ex.cues.slice(0,3).map(c=>'<li>'+escHtml(c)+'</li>').join('')+'</ol></div>';
     }
     return html;
   }
@@ -6483,6 +6566,9 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="lv-rail-item current" style="margin:2px 0;">Set '+(nextSi+1)+' of '+nextEx.sets.length+'</div>'
       +'<div class="lv-pair-targets" style="font-size:clamp(13px,2.8vh,40px);text-align:left;margin-top:6px;">'+(wTxt?wTxt+' × ':'')+repsDisp+'</div>';
     if(isLast)html+='<div class="lv-up-callout">Last set</div><div class="lv-up-callout-sub">Push to failure if RIR &lt; 2</div>';
+    if(nEx.cues&&nEx.cues.length){
+      html+='<div class="lv-cues lv-cues-full"><div class="lv-cues-lbl">Form</div><ol>'+nEx.cues.map(c=>'<li>'+escHtml(c)+'</li>').join('')+'</ol></div>';
+    }
     return html;
   }
 
@@ -6803,8 +6889,15 @@ button:active{opacity:.75;transform:scale(.97);}
     reader.onload=function(e){
       try{
         const imported=JSON.parse(e.target.result);
-        if(!imported.sessions&&!imported.profile){toast('Invalid backup file','easy');return;}
-        state=Object.assign(state,imported);
+        if(!imported||typeof imported!=='object'||(!Array.isArray(imported.sessions)&&!imported.profile)){toast('Invalid backup file','easy');return;}
+        // Replace, don't merge. Object.assign(state,imported) would leave stale
+        // keys from the *current* session stitched onto the restored data (e.g. a
+        // currentSession or progressions the backup doesn't have), creating a
+        // Frankenstein state. Start from a clean default so only the backup's
+        // data survives.
+        const fresh={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},prs:[],scoreHistory:[],achievements:{},strengthGoal:null,musclePriorities:{},weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
+        state=Object.assign(fresh,imported);
+        if(!Array.isArray(state.sessions))state.sessions=[];
         saveNow();loadDBW();loadKBW();invalidateRecCache();
         renderHome();
         toast('Data restored — '+state.sessions.length+' sessions','hard');
@@ -6825,7 +6918,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v68';
+    const APP_VERSION='v70';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6837,8 +6930,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v68')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v68';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v70')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v70';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
