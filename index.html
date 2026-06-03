@@ -795,6 +795,44 @@ button:active{opacity:.75;transform:scale(.97);}
 .lv-complete{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;height:100%;width:100%;grid-column:1/-1;grid-row:1/-1;gap:clamp(6px,1.2vh,18px);padding:24px;}
 .lv-complete-title{font-size:clamp(22px,6vh,90px);font-weight:800;letter-spacing:-0.5px;}
 .lv-complete-sub{font-size:clamp(12px,2.2vh,30px);color:var(--text-2);}
+/* Consistency heatmap */
+.hm-card{background:var(--surface);border-radius:var(--rl);padding:18px 16px;border:1px solid #1f1f1f;margin-bottom:16px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.hm-card:active{background:var(--surface-2);}
+.hm-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.hm-title{font-size:16px;font-weight:700;}
+.hm-sub{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;}
+.hm-stats{display:flex;gap:8px;margin-bottom:20px;}
+.hm-stat{flex:1;background:var(--surface-2);border-radius:var(--r);padding:11px 8px;text-align:center;}
+.hm-stat-v{font-size:20px;font-weight:800;line-height:1;}
+.hm-stat-v.accent{color:var(--accent);}
+.hm-stat-l{font-size:9.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;margin-top:5px;}
+.hm-months{display:grid;font-size:9px;color:var(--text-3);margin-left:20px;margin-bottom:5px;}
+.hm-months span{text-transform:uppercase;letter-spacing:.5px;}
+.hm-grid-wrap{display:flex;gap:5px;}
+.hm-days{display:flex;flex-direction:column;justify-content:space-around;font-size:9px;color:var(--text-3);width:15px;padding:1px 0;}
+.hm-grid{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;gap:3px;flex:1;}
+.hm-cell{aspect-ratio:1;border-radius:3px;background:var(--surface-2);}
+.hm-cell.l1{background:rgba(220,38,38,0.30);}
+.hm-cell.l2{background:rgba(220,38,38,0.55);}
+.hm-cell.l3{background:rgba(220,38,38,0.80);}
+.hm-cell.l4{background:var(--accent);box-shadow:0 0 5px rgba(220,38,38,0.5);}
+.hm-cell.today{outline:1.5px solid var(--text);outline-offset:1px;}
+.hm-cell.sel{outline:2px solid var(--i-fg);outline-offset:1px;}
+.hm-cell.hm-future{background:transparent;}
+.hm-leg{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:14px;font-size:10px;color:var(--text-3);}
+.hm-leg .cells{display:flex;gap:3px;}
+.hm-leg .hm-cell{width:11px;height:11px;aspect-ratio:auto;}
+/* expanded screen */
+.hm-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;}
+.hm-scroll-inner{display:inline-block;}
+.hm-day-detail{margin-top:20px;background:var(--surface);border:1px solid #1f1f1f;border-radius:var(--r);padding:14px 16px;min-height:64px;}
+.hm-dd-hint{color:var(--text-3);font-size:13px;}
+.hm-dd-date{font-size:14px;font-weight:700;margin-bottom:8px;}
+.hm-dd-empty{color:var(--text-2);font-size:13px;}
+.hm-dd-sess{padding:8px 0;border-top:1px solid #222;}
+.hm-dd-sess:first-of-type{border-top:none;}
+.hm-dd-name{font-size:14px;font-weight:600;}
+.hm-dd-meta{font-size:12px;color:var(--text-2);margin-top:3px;}
 </style>
 </head>
 <body>
@@ -954,6 +992,7 @@ button:active{opacity:.75;transform:scale(.97);}
         <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-avgvol-icon"></span><span class="stat-label">Avg vol / session</span></div><div id="stat-avgvol" class="stat-value">0</div><div class="stat-sub" id="stat-avgvol-sub"></div><div class="stat-viz" id="stat-avgvol-viz"></div></div>
       </div>
       <div id="your-week"></div>
+      <div id="heatmap-card"></div>
       <h3>Body composition</h3>
       <div id="body-comp"></div>
       <div id="gain-expectations"></div>
@@ -1252,6 +1291,13 @@ button:active{opacity:.75;transform:scale(.97);}
       <h2 style="margin-bottom:4px;">Career Stats</h2>
       <p class="sub">Lifetime training totals</p>
       <div id="strength-career-body"></div>
+    </div>
+
+    <div id="screen-heatmap" class="screen">
+      <button class="bg" onclick="goHome()" style="margin-bottom:16px;">← Back</button>
+      <h2 style="margin-bottom:4px;">Consistency</h2>
+      <p class="sub">Every training day, the last year</p>
+      <div id="heatmap-detail-body"></div>
     </div>
 
     <div id="screen-settings" class="screen">
@@ -1568,6 +1614,44 @@ button:active{opacity:.75;transform:scale(.97);}
     const hist=state.e1rmHistory&&state.e1rmHistory[id];
     if(!hist||!hist.length)return 0;
     return Math.max(...hist.map(h=>h.e1rm));
+  }
+
+  // Stale-muscle detection. Returns days since the muscle last received at least
+  // one meaningful working set (contribution >= VOLUME_MIN_CONTRIBUTION, warmups
+  // excluded). Null if the muscle has never been trained. Independent of weekly
+  // volume — a muscle can be inside its volume range overall and still be stale
+  // if all that volume came two weeks ago.
+  function getMuscleLastTrainedDays(muscle){
+    if(!state.sessions||!state.sessions.length)return null;
+    const now=Date.now();
+    const sorted=state.sessions.slice().sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    for(const s of sorted){
+      if(!s.exercises)continue;
+      for(const e of s.exercises){
+        const ex=EX[e.id];
+        if(!ex||!ex.muscles)continue;
+        if((ex.muscles[muscle]||0)<VOLUME_MIN_CONTRIBUTION)continue;
+        if(e.sets&&e.sets.some(set=>set.done&&!set.warmup)){
+          return Math.floor((now-(s.timestamp||0))/86400000);
+        }
+      }
+    }
+    return null;
+  }
+
+  // Headline "current" e1RM = max from the last 30 days. Avoids the false-decline
+  // problem where a deliberately light/high-rep day (Quick session, deload, back-off
+  // work) computes a lower Epley e1RM and looks like strength regression even though
+  // the lifter is just doing different work. The raw chart still shows every value
+  // honestly; only the headline number gets the recent-peak treatment. Falls back
+  // to the most recent entry for lifts that haven't been trained in 30+ days so
+  // dormant exercises still display something rather than collapsing to 0.
+  function getRecentPeakE1RM(hist){
+    if(!hist||!hist.length)return 0;
+    const cutoff=Date.now()-30*86400000;
+    const recent=hist.filter(h=>h.date>=cutoff);
+    if(recent.length)return Math.max(...recent.map(h=>h.e1rm));
+    return hist[hist.length-1].e1rm;
   }
 
   // Strength-drop detection. Flags a compound when its last 2 logged sessions
@@ -2034,7 +2118,7 @@ button:active{opacity:.75;transform:scale(.97);}
     db_fly:{name:'DB fly',muscles:{chest:.8},type:'accessory',equip:['db','bench'],repRange:[12,15],cues:['Slight bend in elbows — maintain this angle throughout','Lower arms in a wide arc like hugging a barrel','Stop when you feel a deep chest stretch — don\'t push past it','Squeeze your chest to bring the DBs back together','Use light weight — this is a stretch-and-squeeze movement']},
     db_squeeze_press:{name:'DB squeeze press',muscles:{chest:.9,triceps:.3},type:'accessory',equip:['db','bench'],repRange:[10,12],cues:['Press the DBs together as hard as you can before you start','DBs should be touching or nearly touching the whole set','Press up from chest height, keeping DBs squeezed together','Slow and controlled — no bouncing','Intense inner chest contraction if done right']},
     db_ohp:{name:'DB overhead press',muscles:{shoulders:1,triceps:.4,traps:.3},type:'compound',equip:['db'],repRange:[8,12],cues:['Sit or stand, DBs at shoulder height, palms facing each other','Start with elbows tucked in at the bottom, flare them outward as you press up — protects the shoulder joint','Brace your core hard before pressing — no lower back arch','Press straight up until arms are nearly locked out','Don\'t let DBs drift forward — keep them over shoulder joints','Lower slowly — 2–3 seconds on the way down']},
-    db_lateral:{name:'DB lateral raise',muscles:{shoulders:1},type:'accessory',equip:['db'],repRange:[12,15],cues:['Slight bend in elbows, maintain throughout','Lead with your elbows, not your hands — pour a cup of water at top','Raise to shoulder height only — higher is ego, not muscle','Lean forward very slightly to hit the middle delt','Lowering phase is where it works — take 3 seconds to come down']},
+    db_lateral:{name:'DB lateral raise',muscles:{shoulders:1},type:'accessory',equip:['db'],repRange:[8,12],cues:['Slight bend in elbows, maintain throughout','Lead with your elbows, not your hands — pour a cup of water at top','Raise to shoulder height only — higher is ego, not muscle','Lean forward very slightly to hit the middle delt','Lowering phase is where it works — take 3 seconds to come down']},
     db_rear_delt:{name:'DB rear delt raise',muscles:{shoulders:.7,back:.3},type:'accessory',equip:['db'],repRange:[12,15],cues:['Hinge forward until torso is near parallel to the floor','Let arms hang, slight elbow bend maintained throughout','Raise DBs out to the sides — lead with elbows, not hands','Pinch shoulder blades at the top','Keep your neck neutral — don\'t crane to look up']},
     db_y_raise:{name:'DB Y-raise',muscles:{shoulders:.7,traps:.4},type:'accessory',equip:['db','bench'],repRange:[12,15],cues:['Set bench to 30°, lie face down, arms hanging','Raise arms diagonally — forming a Y over your head, thumbs up','Squeeze the lower traps and rear delts at the top','Use very light weight — this is a control exercise','Full dead hang at the bottom before each rep']},
     db_shrug:{name:'DB shrug',muscles:{traps:1},type:'accessory',equip:['db'],repRange:[12,15],cues:['Hold heavy DBs at your sides, arms straight','Shrug your shoulders straight up toward your ears — no rolling','Hold at the top for a full 1–2 seconds. Squeeze hard.','Lower slowly — the stretch at the bottom matters','Don\'t bend your elbows to cheat the weight up']},
@@ -2065,6 +2149,10 @@ button:active{opacity:.75;transform:scale(.97);}
     concentration_curl:{name:'Concentration curl',muscles:{biceps:1},type:'accessory',equip:['db'],repRange:[10,15],perSide:true,cues:['Sit on a bench, spread your knees, rest your elbow on your inner thigh','Let the DB hang straight down — full arm extension','Curl up squeezing the bicep hard at the top — hold for a beat','Lower slowly under control — no swinging or momentum','This is an isolation exercise — light weight, perfect form, full squeeze']},
     single_arm_floor_press:{name:'Single arm floor press',muscles:{chest:.8,triceps:.5,core:.4},type:'compound',equip:['db'],repRange:[8,12],perSide:true,cues:['Lie on the floor, one DB in hand, other arm out for stability','Press the DB straight up — lock out fully','Lower until your upper arm touches the floor — that\'s your range of motion','The floor limits your range which protects the shoulder','Keep your core braced hard — the single arm wants to twist you']},
     kb_snatch:{name:'KB snatch',muscles:{shoulders:.7,traps:.5,legs:.4,core:.5},type:'compound',equip:['kb'],repRange:[6,10],perSide:true,cues:['Start like a swing — KB between your legs, hinge at hips','Explode up and pull the KB close to your body — elbow high','Punch your hand through at the top so the KB rolls onto your forearm','Lock out overhead — arm straight, bicep by ear, core tight','Lower by letting the KB fall forward and absorb with a hinge']},
+    kb_upright_row:{name:'KB upright row',muscles:{shoulders:.6,traps:.5,biceps:.2},type:'accessory',equip:['kb'],repRange:[10,12],cues:['Hold KB with both hands by the horns, arms hanging straight','Pull straight up by leading with the elbows — elbows go above wrists','Pull to upper chest height, no higher than collarbones','Squeeze traps and rear delts at the top','Lower slowly — control the descent']},
+    kb_curl:{name:'KB curl',muscles:{biceps:.85,forearms:.3},type:'accessory',equip:['kb'],repRange:[8,12],perSide:true,cues:['Hold KB by the handle in one hand, arm hanging at your side','Curl by flexing the elbow — keep the upper arm pinned to your ribs','The KB\'s offset weight challenges the forearm differently than a DB','Squeeze the bicep hard at the top','Lower under control — 2–3 seconds down','Switch sides after the set']},
+    kb_lateral:{name:'KB lateral raise',muscles:{shoulders:.9,traps:.1},type:'accessory',equip:['kb'],repRange:[8,12],perSide:true,cues:['Hold KB by the handle with the bell hanging on the back of your forearm','Slight bend in the elbow, maintain throughout','Lead with the elbow — raise the arm out to shoulder height','The KB offset trains stabilizers harder than a DB lateral','Lower slowly — 3 seconds down for maximum tension','Switch sides after the set']},
+    kb_overhead_extension:{name:'KB overhead tricep extension',muscles:{triceps:.95},type:'accessory',equip:['kb'],repRange:[8,12],cues:['Hold KB by the horns overhead with both hands, elbows pointed up','Keep upper arms vertical and close to your head','Lower the KB behind your head by bending the elbows','Stretch the long head of the triceps at the bottom — that\'s the money zone','Extend back up under control — don\'t lock out hard']},
     renegade_row:{name:'Renegade row',muscles:{back:.8,core:.9,chest:.2},type:'compound',equip:['db'],repRange:[6,10],cues:['High plank position with hands on DBs, feet wide for stability','Brace your core hard — hips should not rotate at all','Row one DB to your hip while pushing the other into the floor','Lower under control, then row the other side — that\'s one rep per side','If your hips are swaying, go lighter — the anti-rotation IS the exercise']},
     pull_up:{name:'Pull-up',muscles:{back:1,biceps:.5,core:.2},type:'compound',equip:['pullup_bar'],repRange:[5,12],noWeight:true,loadTier:'high',cues:['Grab the bar with palms facing away, hands just outside shoulder width','Start from a dead hang — arms fully extended, shoulders engaged','Pull your chest toward the bar by driving elbows down and back','Chin over the bar at the top — squeeze your lats hard','Lower slowly to dead hang — full range of motion every rep']},
     chin_up:{name:'Chin-up',muscles:{biceps:.8,back:.7,core:.2},type:'compound',equip:['pullup_bar'],repRange:[5,10],noWeight:true,loadTier:'high',cues:['Grab the bar with palms facing you, hands shoulder-width apart','Dead hang start — full arm extension','Pull up by driving elbows down toward your hips','Chin over the bar — hold for a beat at the top','Lower under control — no dropping. The eccentric builds strength.']},
@@ -2120,7 +2208,7 @@ button:active{opacity:.75;transform:scale(.97);}
     cable_lat_pulldown:{name:'Cable lat pulldown',muscles:{back:.9,biceps:.4},type:'compound',equip:['cable_machine'],repRange:[10,12],cues:['Set the cable arms overhead','Kneel or sit so your arms can fully extend overhead at the top','Pull handles down to chest level — elbows drive down and back, not just down','Squeeze lats at the bottom — focus on lat engagement, not pulling with biceps','Let the handles travel all the way back up — full overhead stretch on each rep']},
     cable_curl:{name:'Cable curl',muscles:{biceps:1,forearms:.3},type:'accessory',equip:['cable_machine'],repRange:[10,12],cues:['Set the cable arms low — handles at hip height','Stand close, elbows pinned tight to your sides, palms facing up','Curl up to shoulder height — only the elbow joint moves, no shoulder swing','Cable keeps tension at the top of the curl (DBs don\'t) — squeeze hard there','Lower slowly to full extension — no momentum, no hip drive']},
     cable_tricep_pushdown:{name:'Cable tricep pushdown',muscles:{triceps:1},type:'accessory',equip:['cable_machine'],repRange:[10,12],cues:['Set the cable arms high overhead','Grab handles with palms down, elbows pinned firmly to your ribs','Press handles straight down to your sides — only the elbow joint extends, upper arm stays put','Squeeze triceps hard at the bottom, hold for a second','Let handles come back up to about 90° at the elbow — don\'t let them go higher, you lose tension']},
-    cable_lateral:{name:'Cable lateral raise',muscles:{shoulders:1},type:'accessory',equip:['cable_machine'],repRange:[12,15],perSide:true,cues:['Set one cable arm low on the opposite side of the body — only need one cable for this','Grab the handle across your body with the far hand, palm in toward your hip','Raise the arm out to the side to shoulder height — lead with the elbow, not the hand','Lean very slightly away from the cable to keep tension across the full range','Lower slowly — cable keeps tension at the bottom too, which DBs can\'t','Switch sides after the set']},
+    cable_lateral:{name:'Cable lateral raise',muscles:{shoulders:1},type:'accessory',equip:['cable_machine'],repRange:[8,12],perSide:true,cues:['Set one cable arm low on the opposite side of the body — only need one cable for this','Grab the handle across your body with the far hand, palm in toward your hip','Raise the arm out to the side to shoulder height — lead with the elbow, not the hand','Lean very slightly away from the cable to keep tension across the full range','Lower slowly — cable keeps tension at the bottom too, which DBs can\'t','Switch sides after the set']},
     cable_fly:{name:'Cable fly',muscles:{chest:.8},type:'accessory',equip:['cable_machine'],repRange:[12,15],cues:['Set both cable arms at chest height, position the handles slightly behind your shoulders','Grab a handle in each hand, step forward into a staggered stance for stability','Slight bend in elbows — maintain throughout, this is a fly not a press','Bring hands together in front of your sternum in a wide arc — like hugging a barrel','Squeeze chest hard at the top where the handles meet, slow controlled return — full stretch at the bottom']},
     cable_face_pull:{name:'Cable face pull',muscles:{shoulders:.7,back:.3},type:'accessory',equip:['cable_machine'],repRange:[12,15],cues:['Set both cable arms at upper-chest or face height','Grab handles with thumbs pointing back, palms facing each other','Pull handles toward your face — elbows high, externally rotate so hands end up next to your ears at the top','Squeeze rear delts and upper back hard at the end position','Slow controlled return — this is a high-rep posture and shoulder-health movement, not a strength lift']},
     cable_pallof_press:{name:'Cable Pallof press',muscles:{core:1},type:'accessory',equip:['cable_machine'],repRange:[10,12],perSide:true,cues:['Set one cable arm at chest height — only need one side','Stand perpendicular to the cable, grab the handle with both hands at your chest','Step away from the machine to put tension on the cable, feet shoulder-width','Press the handle straight out from your sternum — the cable tries to rotate you, you resist','Hold the extended position for a second before pulling back to chest — zero rotation allowed','Switch sides after the set']},
@@ -2182,15 +2270,15 @@ button:active{opacity:.75;transform:scale(.97);}
     lat_isolation:      ['db_pullover','band_straight_arm_pulldown'],
     rear_delt:          ['cable_face_pull','incline_reverse_fly','db_rear_delt','band_face_pull'],
     posterior_finisher: ['db_y_raise','prone_y_raise','prone_t_raise','scapular_push_up','band_pull_apart','superman'],
-    trap_shrug:         ['db_shrug'],
-    bicep_curl:         ['db_incline_curl','cable_curl','preacher_curl','db_curl','concentration_curl','band_curl','inverted_curl'],
+    trap_shrug:         ['db_shrug','kb_upright_row'],
+    bicep_curl:         ['db_incline_curl','cable_curl','preacher_curl','kb_curl','db_curl','concentration_curl','band_curl','inverted_curl'],
     loaded_carry:       ['farmer_carry'],
     // Push patterns
     horizontal_press:   ['db_bench_press','db_incline_press','db_floor_press','single_arm_floor_press','push_up','archer_push_up','dip','cable_bench_press'],
     vertical_press:     ['db_ohp','arnold_press','pike_push_up','hindu_push_up','cable_ohp'],
     chest_isolation:    ['cable_fly','db_fly','db_squeeze_press'],
-    shoulder_isolation: ['cable_lateral','incline_lateral_raise','db_lateral'],
-    tricep_extension:   ['db_overhead_extension','db_skullcrusher','cable_tricep_pushdown','band_pushdown','bench_dip','diamond_push_up','floor_tricep_dip','db_kickback'],
+    shoulder_isolation: ['cable_lateral','incline_lateral_raise','kb_lateral','kb_upright_row','db_lateral'],
+    tricep_extension:   ['db_overhead_extension','kb_overhead_extension','db_skullcrusher','cable_tricep_pushdown','band_pushdown','bench_dip','diamond_push_up','floor_tricep_dip','db_kickback'],
     // Lower patterns
     squat:              ['goblet_squat','kb_goblet_squat','bw_squat','wall_sit','cossack_squat','cable_squat'],
     hinge:              ['db_rdl','sl_rdl','glute_bridge','single_leg_bridge','cable_rdl'],
@@ -2373,6 +2461,18 @@ button:active{opacity:.75;transform:scale(.97);}
         lastByKey[s.templateKey]=s.timestamp;
       }
     });
+    // Frequency-aware bias. At ≤4 effective days/week the split (push/pull/legs)
+    // needs more sessions than the user has to hit every muscle at adequate
+    // weekly volume — full_body and upper deliver broader coverage per session
+    // so they get +12, the split focuses get -6. Realized frequency over the
+    // last 14 days is the primary signal (what the user is actually doing
+    // beats what they intended); target dpw is the cold-start fallback when
+    // there isn't enough recent history to read realized reliably.
+    const recentN=state.sessions.filter(s=>(now-(s.timestamp||0))<=14*86400000).length;
+    const realizedDpw=recentN/2;
+    const targetDpw=(state.profile&&state.profile.daysPerWeek)||3;
+    const effectiveDpw=recentN>=3?realizedDpw:targetDpw;
+    const freqBias=effectiveDpw<=4?(k=>(k==='upper'||k==='full_body')?12:((k==='push'||k==='pull'||k==='legs')?-6:0)):(()=>0);
     return Object.keys(FOCUS_TYPES).map(key=>{
       const f=FOCUS_TYPES[key];
       let avgR=f.emphasis.reduce((s,m)=>s+rec[m],0)/f.emphasis.length;
@@ -2387,7 +2487,7 @@ button:active{opacity:.75;transform:scale(.97);}
       let staleBonus=0;
       if(daysSince>7)staleBonus=30;
       else if(daysSince>5)staleBonus=15;
-      return{key,focus:f,score:avgR+lastSame+staleBonus,avgRecovery:Math.round(rec[f.emphasis[0]]||100),_avgR:avgR,_stale:staleBonus,_same:lastSame,_days:daysSince};
+      return{key,focus:f,score:avgR+lastSame+staleBonus+freqBias(key),avgRecovery:Math.round(rec[f.emphasis[0]]||100),_avgR:avgR,_stale:staleBonus,_same:lastSame,_days:daysSince};
     }).sort((a,b)=>b.score-a.score).slice(0,4);
   }
   // Piece 1: the "why this session" line. Derived from the SAME scoring
@@ -2570,6 +2670,18 @@ button:active{opacity:.75;transform:scale(.97);}
         if(!e.sets.length)return;
         const workingW=e.sets[0].targetWeight;
         if(workingW==null)return;
+        // Cable machines have continuous resistance and no discrete weight pool,
+        // so the DB/KB pool-stepping below can't apply. Compute warm-up loads as
+        // percentages of working weight (~55% × 5, ~75% × 3), rounded to 5 lb.
+        if(ex.equip&&ex.equip.includes('cable_machine')){
+          const r5=w=>Math.max(5,Math.round(w/5)*5);
+          const w1=r5(workingW*0.55),w2=r5(workingW*0.75);
+          const cwu=[];
+          if(w1<w2)cwu.push({targetWeight:w1,targetReps:5,actualWeight:w1,actualReps:5,feedback:null,done:false,warmup:true});
+          cwu.push({targetWeight:w2,targetReps:3,actualWeight:w2,actualReps:3,feedback:null,done:false,warmup:true});
+          e.sets=[...cwu,...e.sets];
+          return;
+        }
         const pool=exPool(ex);
         if(!pool||!pool.length)return;
         const idx=pool.indexOf(workingW);
@@ -2674,7 +2786,7 @@ button:active{opacity:.75;transform:scale(.97);}
     if(ex.fixedWeight)return ex.fixedWeight;
     const d={
       db_row:30,single_arm_row:30,db_pullover:20,db_floor_press:30,db_bench_press:30,db_incline_press:20,db_fly:10,db_squeeze_press:20,db_ohp:20,db_lateral:10,db_rear_delt:10,db_y_raise:5,db_shrug:40,farmer_carry:40,db_curl:20,db_incline_curl:10,db_skullcrusher:10,db_kickback:10,weighted_crunch:15,db_overhead_extension:20,goblet_squat:40,db_rdl:30,bulgarian:20,db_step_up:20,sl_rdl:20,db_calf_raise:30,db_push_press:20,arnold_press:20,zottman_curl:10,concentration_curl:10,single_arm_floor_press:20,renegade_row:20,preacher_curl:10,incline_lateral_raise:10,incline_reverse_fly:10,
-      kb_swing:25,kb_row:25,kb_high_pull:25,kb_goblet_squat:35,kb_clean_press:25,kb_snatch:25,
+      kb_swing:25,kb_row:25,kb_high_pull:25,kb_goblet_squat:35,kb_clean_press:25,kb_snatch:25,kb_upright_row:20,kb_curl:20,kb_lateral:10,kb_overhead_extension:15,
       cable_bench_press:50,cable_squat:60,cable_rdl:50,cable_ohp:35,cable_row:50,cable_lat_pulldown:60,cable_curl:25,cable_tricep_pushdown:35,cable_lateral:15,cable_fly:25,cable_face_pull:25,cable_pallof_press:20
     };
     // Cable machines have continuous resistance (typically 1 lb increments) so
@@ -2994,6 +3106,123 @@ button:active{opacity:.75;transform:scale(.97);}
 
   function getMonday(d){const dt=new Date(d);const day=dt.getDay();const diff=dt.getDate()-day+(day===0?-6:1);dt.setHours(0,0,0,0);dt.setDate(diff);return dt;}
 
+  // ── CONSISTENCY HEATMAP ────────────────────────────────
+  const HM_MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function hmLocalDate(ts){const d=new Date(ts);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function hmDailyVolume(){
+    const m=new Map();
+    (state.sessions||[]).forEach(s=>{const ds=hmLocalDate(s.timestamp);m.set(ds,(m.get(ds)||0)+(s.totalVolume||0));});
+    return m;
+  }
+  function hmSessionsOn(ds){return (state.sessions||[]).filter(s=>hmLocalDate(s.timestamp)===ds);}
+  // Volume → 1-4 shade. Quartiles of the user's own non-zero daily volumes so the
+  // scale self-calibrates to their training; falls back to a flat mid-shade when
+  // there's too little data to bucket meaningfully.
+  function hmLeveler(){
+    const vols=[...hmDailyVolume().values()].filter(v=>v>0).sort((a,b)=>a-b);
+    if(vols.length<4)return v=>v>0?2:0;
+    const t1=vols[Math.floor(vols.length*0.25)],t2=vols[Math.floor(vols.length*0.5)],t3=vols[Math.floor(vols.length*0.75)];
+    return v=>v<=0?0:(v<=t1?1:v<=t2?2:v<=t3?3:4);
+  }
+  function hmWeeks(numWeeks){
+    const dv=hmDailyVolume(),lvl=hmLeveler();
+    const thisMon=getMonday(new Date()).getTime();
+    const todayDs=hmLocalDate(Date.now()),nowTs=Date.now();
+    const weeks=[];
+    for(let w=numWeeks-1;w>=0;w--){
+      const monTs=thisMon-w*7*86400000,days=[];
+      for(let d=0;d<7;d++){
+        const dayTs=monTs+d*86400000,ds=hmLocalDate(dayTs),vol=dv.get(ds)||0;
+        days.push({ds,vol,lvl:lvl(vol),isToday:ds===todayDs,isFuture:dayTs>nowTs});
+      }
+      weeks.push({monTs,days});
+    }
+    return weeks;
+  }
+  function hmGridHTML(weeks,tappable){
+    let c='';
+    weeks.forEach(wk=>wk.days.forEach(day=>{
+      if(day.isFuture){c+='<span class="hm-cell hm-future"></span>';return;}
+      const cls='hm-cell'+(day.lvl?' l'+day.lvl:'')+(day.isToday?' today':'');
+      c+='<span class="'+cls+'" data-d="'+day.ds+'"'+(tappable?' onclick="heatmapDay(\''+day.ds+'\')"':'')+'></span>';
+    }));
+    return c;
+  }
+  function hmMonthsHTML(weeks){
+    let h='',last=-1;
+    weeks.forEach((wk,i)=>{const m=new Date(wk.monTs).getMonth();if(m!==last){h+='<span style="grid-column:'+(i+1)+';">'+HM_MONTHS[m]+'</span>';last=m;}});
+    return h;
+  }
+  function hmStats(){
+    const now=new Date(),mp=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+    let thisMonth=0;
+    (state.sessions||[]).forEach(s=>{if(hmLocalDate(s.timestamp).startsWith(mp))thisMonth++;});
+    // Active-week streak: consecutive weeks (up to the most recent active one) with
+    // >=1 session. A still-empty current week doesn't break it — you haven't missed
+    // the week until it's over.
+    const wset=new Set();
+    (state.sessions||[]).forEach(s=>wset.add(getMonday(s.timestamp).getTime()));
+    let wk=getMonday(now).getTime();
+    if(!wset.has(wk))wk-=7*86400000;
+    let streak=0;
+    while(wset.has(wk)){streak++;wk-=7*86400000;}
+    return{thisMonth,allTime:(state.sessions||[]).length,activeStreak:streak};
+  }
+  // Dashboard card — 18-week compact grid. Whole card taps through to the
+  // full-history screen. Stats shown here are the two NOT already on the
+  // dashboard stat-grid (this month, all-time); week-streak lives in the
+  // stat-grid above (and uses a stricter >=3/wk definition there), so it's
+  // omitted here to avoid two contradictory streak numbers on one screen.
+  function renderHeatmapCard(){
+    const el=document.getElementById('heatmap-card');
+    if(!el)return;
+    if(!state.sessions||!state.sessions.length){el.innerHTML='';return;}
+    const weeks=hmWeeks(18),st=hmStats();
+    el.innerHTML='<div class="hm-card" onclick="showHeatmapDetail()">'
+      +'<div class="hm-head"><div class="hm-title">Consistency</div><div class="hm-sub">'+st.thisMonth+' this month · '+st.allTime+' all-time ›</div></div>'
+      +'<div class="hm-months" style="grid-template-columns:repeat('+weeks.length+',1fr);">'+hmMonthsHTML(weeks)+'</div>'
+      +'<div class="hm-grid-wrap"><div class="hm-days"><span>M</span><span>W</span><span>F</span></div>'
+      +'<div class="hm-grid" style="grid-template-columns:repeat('+weeks.length+',1fr);">'+hmGridHTML(weeks,false)+'</div></div>'
+      +'<div class="hm-leg">Less<div class="cells"><span class="hm-cell"></span><span class="hm-cell l1"></span><span class="hm-cell l2"></span><span class="hm-cell l3"></span><span class="hm-cell l4"></span></div>More</div>'
+      +'</div>';
+  }
+  // Expanded screen — 52 weeks (horizontally scrollable), full stats, tap-a-cell
+  // day detail. Active-week streak (>=1/wk) shown here, clearly its own metric.
+  function renderHeatmapDetail(){
+    const el=document.getElementById('heatmap-detail-body');
+    if(!el)return;
+    const weeks=hmWeeks(52),st=hmStats();
+    el.innerHTML='<div class="hm-stats">'
+      +'<div class="hm-stat"><div class="hm-stat-v accent">'+st.thisMonth+'</div><div class="hm-stat-l">This month</div></div>'
+      +'<div class="hm-stat"><div class="hm-stat-v">'+st.activeStreak+'</div><div class="hm-stat-l">Active weeks</div></div>'
+      +'<div class="hm-stat"><div class="hm-stat-v">'+st.allTime+'</div><div class="hm-stat-l">All-time</div></div></div>'
+      +'<div class="hm-scroll"><div class="hm-scroll-inner">'
+      +'<div class="hm-months" style="grid-template-columns:repeat('+weeks.length+',1fr);min-width:'+(weeks.length*16)+'px;">'+hmMonthsHTML(weeks)+'</div>'
+      +'<div class="hm-grid-wrap"><div class="hm-days"><span>M</span><span>W</span><span>F</span></div>'
+      +'<div class="hm-grid" style="grid-template-columns:repeat('+weeks.length+',1fr);min-width:'+(weeks.length*16)+'px;">'+hmGridHTML(weeks,true)+'</div></div>'
+      +'</div></div>'
+      +'<div class="hm-leg">Less<div class="cells"><span class="hm-cell"></span><span class="hm-cell l1"></span><span class="hm-cell l2"></span><span class="hm-cell l3"></span><span class="hm-cell l4"></span></div>More</div>'
+      +'<div id="hm-day-detail" class="hm-day-detail"><div class="hm-dd-hint">Tap any square to see that day.</div></div>';
+  }
+  window.showHeatmapDetail=function(){renderHeatmapDetail();showScreen('heatmap');};
+  window.heatmapDay=function(ds){
+    const el=document.getElementById('hm-day-detail');if(!el)return;
+    const sess=hmSessionsOn(ds);
+    const lbl=new Date(ds+'T00:00:00').toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
+    if(!sess.length){
+      el.innerHTML='<div class="hm-dd-date">'+lbl+'</div><div class="hm-dd-empty">Rest day — no session logged.</div>';
+    }else{
+      el.innerHTML='<div class="hm-dd-date">'+lbl+'</div>'+sess.map(s=>{
+        const dur=s.durationMin?s.durationMin+' min':'—';
+        const sets=(s.exercises||[]).reduce((a,e)=>a+e.sets.filter(x=>x.done&&!x.warmup).length,0);
+        const mode=s.quickMode?'Quick':'Full';
+        return'<div class="hm-dd-sess"><div class="hm-dd-name">'+(s.templateName||'Session')+'</div><div class="hm-dd-meta">'+mode+' · '+Math.round(s.totalVolume||0).toLocaleString()+' lb · '+dur+' · '+sets+' sets</div></div>';
+      }).join('');
+    }
+    document.querySelectorAll('.hm-cell.sel').forEach(c=>c.classList.remove('sel'));
+    const cell=document.querySelector('.hm-cell[data-d="'+ds+'"]');if(cell)cell.classList.add('sel');
+  };
+
   // Single-pass stats computation
   function calcAllStats(){
     const now=new Date();
@@ -3098,6 +3327,9 @@ button:active{opacity:.75;transform:scale(.97);}
 
     // Weekly structure card
     renderYourWeek();
+
+    // Consistency heatmap card
+    renderHeatmapCard();
 
     // Strength overview (full version, rendered inline on dashboard)
     showStrength();
@@ -3227,6 +3459,29 @@ button:active{opacity:.75;transform:scale(.97);}
         body=parts.join('. ')+'. That\u2019s the imbalance to fix before it compounds — pushing past it isn\u2019t more dedication, it\u2019s a lopsided physique and a lagging area.';
       }else{
         body=parts.join('. ')+'. Those extra sets are recovery cost without extra growth — trim them or redirect the volume somewhere that needs it.';
+      }
+    }
+    // Stale-muscle flag: closes the gap between "stopped training a muscle" and
+    // "weekly volume system catches it." Default threshold 10 days; legs gets a
+    // tighter 7-day threshold because a skipped leg week is the canonical balance
+    // bug. Suppressed for n<=2 — when overall consistency is the issue, stale
+    // detail is noise.
+    if(n>2){
+      const STALE_DEF=10,STALE_OV={legs:7};
+      const staleList=MUSCLES.map(m=>{
+        const d=getMuscleLastTrainedDays(m);
+        const t=STALE_OV[m]||STALE_DEF;
+        return(d!==null&&d>=t)?{m,d}:null;
+      }).filter(Boolean);
+      if(staleList.length){
+        const staleStr=staleList.map(s=>(MUSCLE_LABELS[s.m]||s.m)+' '+s.d+'d').join(' &middot; ');
+        const stalePara=' <strong>Stale:</strong> '+staleStr+' — bring them back in.';
+        if(cls==='affirm'){
+          cls='flag';
+          body='Volume across the week is in range, but some muscles have gone dark.'+stalePara;
+        }else{
+          body=body+stalePara;
+        }
       }
     }
     const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
@@ -3483,23 +3738,36 @@ button:active{opacity:.75;transform:scale(.97);}
 
     const firstEx=sess.exercises[firstEi];
 
-    // If part of a superset, rotate to the partner with the fewest completed sets
+    // If part of a superset, run all warm-ups in the pair first (in exercise
+    // order), THEN rotate working sets. Without the warm-up-first pass, a
+    // compound's warm-ups get interleaved with the partner's working sets
+    // (A1-warmup, A2-work, A1-warmup, A2-work...) because they inflate the
+    // done-count. Warm-ups prime the movement and belong up front, once.
     if(firstEx.group!=null){
       const members=[];
       for(let ei=0;ei<sess.exercises.length;ei++){
         if(sess.exercises[ei].group===firstEx.group)members.push(ei);
       }
+      // Pass 1: any incomplete warm-up in the pair comes first, in order.
+      for(const ei of members){
+        const e=sess.exercises[ei];
+        for(let si=0;si<e.sets.length;si++){
+          if(e.sets[si].warmup&&!e.sets[si].done)return{ei,si};
+        }
+      }
+      // Pass 2: warm-ups done — rotate to the partner with the fewest WORKING
+      // sets completed (warm-ups excluded so they don't skew the alternation).
       let bestEi=-1,minDone=Infinity;
       for(const ei of members){
         const e=sess.exercises[ei];
-        const doneCount=e.sets.filter(s=>s.done).length;
-        const hasIncomplete=e.sets.some(s=>!s.done);
+        const doneCount=e.sets.filter(s=>s.done&&!s.warmup).length;
+        const hasIncomplete=e.sets.some(s=>!s.done&&!s.warmup);
         if(hasIncomplete&&doneCount<minDone){minDone=doneCount;bestEi=ei;}
       }
       if(bestEi>=0){
         const e=sess.exercises[bestEi];
         for(let si=0;si<e.sets.length;si++){
-          if(!e.sets[si].done)return{ei:bestEi,si};
+          if(!e.sets[si].done&&!e.sets[si].warmup)return{ei:bestEi,si};
         }
       }
     }
@@ -4475,7 +4743,7 @@ button:active{opacity:.75;transform:scale(.97);}
       Object.keys(state.e1rmHistory).forEach(id=>{
         const hist=state.e1rmHistory[id];
         const ex=EX[id];if(!ex||!hist||!hist.length)return;
-        const current=hist[hist.length-1].e1rm;
+        const current=getRecentPeakE1RM(hist);
         const first=hist[0].e1rm;
         const change=current-first;
         out+=ex.name+': '+current+' lb e1RM';
@@ -5168,7 +5436,7 @@ button:active{opacity:.75;transform:scale(.97);}
       const hist=state.e1rmHistory[id];
       if(!hist||!hist.length)return;
       const ex=EX[id];if(!ex)return;
-      const current=hist[hist.length-1].e1rm;
+      const current=getRecentPeakE1RM(hist);
       const first=hist[0].e1rm;
       const change=current-first;
       liftData[id]={ex,hist,current,first,change};
@@ -5391,7 +5659,7 @@ button:active{opacity:.75;transform:scale(.97);}
   };
 
   function showDashScreen(name){
-    ['home','key','volume','muscle-priorities','strength-score','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'].forEach(s=>{
+    ['home','key','volume','muscle-priorities','strength-score','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','heatmap','settings'].forEach(s=>{
       const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('active',s===name);
     });
     if(activeTab!=='dash')switchTab('dash');
@@ -5408,7 +5676,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // Override showScreen for backward compat
   function showScreen(name){
-    const dashScreens=['home','key','volume','muscle-priorities','strength-score','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','settings'];
+    const dashScreens=['home','key','volume','muscle-priorities','strength-score','strength-prs','strength-bw','strength-muscles','strength-lifts','strength-achievements','strength-career','heatmap','settings'];
     const trainScreens=['train-home','pick','session','history'];
     if(dashScreens.includes(name))showDashScreen(name);
     else if(trainScreens.includes(name))showTrainScreen(name);
@@ -6557,7 +6825,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v65';
+    const APP_VERSION='v68';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6569,8 +6837,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v65')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v65';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v68')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v68';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
