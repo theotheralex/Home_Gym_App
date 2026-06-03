@@ -848,6 +848,19 @@ button:active{opacity:.75;transform:scale(.97);}
 .hm-dd-sess:first-of-type{border-top:none;}
 .hm-dd-name{font-size:14px;font-weight:600;}
 .hm-dd-meta{font-size:12px;color:var(--text-2);margin-top:3px;}
+/* Mid-session PR flash — global overlay, both orientations */
+.pr-flash{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,rgba(250,204,21,0.10),rgba(0,0,0,0.78));animation:prVeilIn .35s ease;padding:20px;}
+.pr-flash.out{animation:prVeilOut .3s ease forwards;}
+.pr-card{position:relative;background:linear-gradient(160deg,#1c1a12,#141414);border:1.5px solid var(--w-br);border-radius:clamp(16px,4vw,22px);padding:clamp(22px,5vw,30px) clamp(30px,8vw,50px);text-align:center;box-shadow:0 0 0 1px rgba(250,204,21,0.18),0 0 60px -8px rgba(250,204,21,0.45),0 24px 60px -20px rgba(0,0,0,0.85);animation:prCardIn .42s cubic-bezier(.2,.9,.25,1.35);max-width:90vw;}
+.pr-star{font-size:clamp(22px,6vw,30px);color:var(--w-fg);line-height:1;filter:drop-shadow(0 0 10px rgba(250,204,21,0.6));}
+.pr-kicker{font-size:clamp(13px,3.5vw,16px);color:var(--w-fg);text-transform:uppercase;letter-spacing:clamp(3px,1.2vw,5px);font-weight:800;margin-top:8px;}
+.pr-ex{font-size:clamp(15px,4vw,19px);color:var(--text-2);margin-top:10px;font-weight:600;}
+.pr-val{font-size:clamp(40px,12vw,56px);font-weight:800;color:var(--text);margin-top:6px;line-height:1;letter-spacing:-1px;}
+.pr-val .u{font-size:clamp(16px,4.5vw,22px);color:var(--text-3);font-weight:700;}
+.pr-delta{display:inline-block;margin-top:14px;background:var(--s-bg);color:var(--s-fg);font-size:clamp(14px,4vw,17px);font-weight:800;padding:5px 14px;border-radius:10px;}
+@keyframes prVeilIn{from{opacity:0;}to{opacity:1;}}
+@keyframes prVeilOut{from{opacity:1;}to{opacity:0;}}
+@keyframes prCardIn{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
 </style>
 </head>
 <body>
@@ -3636,6 +3649,7 @@ button:active{opacity:.75;transform:scale(.97);}
   window.pickTemplate=function(key){
     // Route to Quick or Full builder based on current pendingMode.
     state.currentSession=pendingMode==='quick'?buildQuickSess(key):buildSess(key,pendingTime);
+    _prFlashed.clear();
     saveNow();renderSess();showTrainScreen('session');requestWakeLock();
   };
 
@@ -3905,6 +3919,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const exData=sess.exercises[ei],set=exData.sets[si];
     if(!set)return;
     set.done=true; // intentionally no feedback — last set will carry the rating
+    maybeFlashPR(exData,set);
     save();reRSet(ei,si);updProg();
     updatePairProgressDots();
 
@@ -4081,6 +4096,51 @@ button:active{opacity:.75;transform:scale(.97);}
     dotsRow.innerHTML=dots.join('');
   }
 
+  // ── MID-SESSION PR FLASH ─────────────────────────────
+  // Celebrates a personal best the moment a working set is logged. Mirrors
+  // checkPRsForSession's per-type thresholds exactly, so a flash fires iff that
+  // set would be recorded as a PR at session end — but this only DISPLAYS.
+  // Recording stays centralized in checkPRsForSession to avoid duplicate records.
+  // One flash per exercise per session; getBest* read pre-session bests (history
+  // is only written at finishSession), so the comparison is against prior sessions.
+  let _prFlashed=new Set();
+  function fmtPRTime(s){return s<60?s+'s':Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+  function maybeFlashPR(exData,set){
+    if(!set||!set.done||set.warmup||!exData||_prFlashed.has(exData.id))return;
+    const ex=EX[exData.id];if(!ex)return;
+    const w=set.actualWeight||0,r=set.actualReps||0;
+    let info=null;
+    if(exIsWeighted(ex)){
+      if(w>0&&r>0){
+        const cur=e1rm(w,r),prev=getBestE1RM(exData.id);
+        if(cur>prev&&prev>0)info={big:Math.round(cur),unit:' lb e1RM',delta:'+'+Math.round(cur-prev)+' lb'};
+      }
+    }else if(exIsBW(ex)&&ex.unit!=='sec'){
+      const prev=getBestReps(exData.id);
+      if(r>prev&&prev>0){const d=r-prev;info={big:r,unit:' reps',delta:'+'+d+(d===1?' rep':' reps')};}
+    }else if(ex.unit==='sec'){
+      const prev=getBestTime(exData.id);
+      if(r>prev&&prev>0)info={big:fmtPRTime(r),unit:'',delta:'+'+(r-prev)+'s'};
+    }
+    if(info){_prFlashed.add(exData.id);showPRFlash(exData.name||ex.name,info);}
+  }
+  function showPRFlash(name,info){
+    const old=document.getElementById('pr-flash');if(old)old.remove();
+    const el=document.createElement('div');
+    el.id='pr-flash';el.className='pr-flash';
+    el.innerHTML='<div class="pr-card">'
+      +'<div class="pr-star">\u2605</div>'
+      +'<div class="pr-kicker">New PR</div>'
+      +'<div class="pr-ex">'+escHtml(name)+'</div>'
+      +'<div class="pr-val">'+info.big+'<span class="u">'+info.unit+'</span></div>'
+      +'<div class="pr-delta">'+info.delta+'</div>'
+    +'</div>';
+    const dismiss=()=>{if(!el.parentNode)return;el.classList.add('out');setTimeout(()=>el.remove(),300);};
+    el.onclick=dismiss;
+    document.body.appendChild(el);
+    setTimeout(dismiss,3000);
+  }
+
   window.setFB=function(ei,si,fb){
     const sess=state.currentSession;
     if(!sess||!sess.exercises[ei])return;
@@ -4089,6 +4149,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const ex=EX[exData.id];
     if(!ex){console.error('Exercise not found:',exData.id);return;}
     set.feedback=fb;set.done=true;
+    maybeFlashPR(exData,set);
 
     // REAL-TIME INTRA-SESSION ADAPTATION
     const usAdj=exIsAdj(ex);
@@ -4469,8 +4530,8 @@ button:active{opacity:.75;transform:scale(.97);}
     state.sessions.push(sess);state.lastSession=sess.templateKey;state.currentSession=null;
     renderLandscape();
 
-    // Detect PRs and check tier crossing
-    const newPRs=checkPRsForSession(sess);
+    // Detect + record PRs (surfaced live via the flash and on the Strength dashboard)
+    checkPRsForSession(sess);
     const newScore=getStrengthScore();
     const newTier=getStrengthTier(newScore);
     const tierUp=newTier!==oldTier&&STRENGTH_TIERS.indexOf(newTier)>STRENGTH_TIERS.indexOf(oldTier);
@@ -4503,26 +4564,15 @@ button:active{opacity:.75;transform:scale(.97);}
         banner('Tier up! '+oldTier.name+' → '+newTier.name,'Strength score: '+newScore,'easy');
       },800);
     }
-    // PR notifications (after tier-up)
-    if(newPRs.length>0){
-      const delay=tierUp?7000:1200;
-      setTimeout(()=>{
-        if(newPRs.length===1){
-          const pr=newPRs[0];
-          let detail='';
-          if(pr.type==='weight')detail=pr.weight+' lb × '+pr.reps+' (+'+pr.improvement+' e1RM)';
-          else if(pr.type==='reps')detail=pr.reps+' reps (+'+pr.improvement+')';
-          else if(pr.type==='time')detail=pr.seconds+'s (+'+pr.improvement+'s)';
-          banner('New PR · '+pr.exerciseName,detail,'good');
-        }else{
-          banner(newPRs.length+' new PRs!','Tap Strength on the dashboard to see them','good');
-        }
-      },delay);
-    }
+    // No end-of-session PR banner. Each PR is celebrated live mid-session by the
+    // gold flash (showPRFlash) — its detection mirrors checkPRsForSession exactly,
+    // so every PR announced here was already flashed seconds earlier. Re-announcing
+    // would double-celebrate. PRs are still recorded (checkPRsForSession above) and
+    // shown on the Strength dashboard.
 
-    // Achievement banners (after PRs, with extra delay)
+    // Achievement banners (tier-up plays first; no PR banner to wait on anymore)
     if(newAchievements.length>0){
-      const baseDelay=(tierUp?7000:1200)+(newPRs.length>0?6000:0);
+      const baseDelay=(tierUp?7000:1200);
       newAchievements.forEach((ach,i)=>{
         setTimeout(()=>{
           banner('Achievement unlocked',ach.name,'easy');
@@ -6918,7 +6968,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v70';
+    const APP_VERSION='v72';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6930,8 +6980,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v70')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v70';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v72')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v72';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
