@@ -2780,10 +2780,12 @@ button:active{opacity:.75;transform:scale(.97);}
         const sets=[];
         for(let j=0;j<QUICK_SETS;j++){
           let w=prog.weight;
-          // Optional: drop weight 30% as starting suggestion for adjustable equipment,
-          // since prog.weight is calibrated to lower-rep work.
+          // The 15-rep target sits only ~10-15% below the 8-12 working weight
+          // (12RM ≈ 70% 1RM, 15RM ≈ 65% 1RM), so 0.7× was dropping load far more than the
+          // rep change warrants — leaving reps in the tank. Start at 0.85× and let in-session
+          // feedback fine-tune from there.
           if(exIsAdj(ex)&&w!=null){
-            const lighter=Math.round(w*0.7);
+            const lighter=Math.round(w*0.85);
             if(exIsAdj(ex)){
               // Snap to available pool weight at or below the lighter target
               const pool=exPool(ex);
@@ -2916,12 +2918,15 @@ button:active{opacity:.75;transform:scale(.97);}
     return state.progressions[id];
   }
 
-  function adapt(id,fb,aReps,aWeight){
+  function adapt(id,fb,aReps,aWeight,isQuick){
     const ex=EX[id],prog=gProg(id);
     if(aWeight!=null&&!ex.fixedWeight)prog.weight=exIsAdj(ex)?nW(ex,aWeight):aWeight;
     // Use max of prescribed and actual — declining sets shouldn't ratchet the next session's reps backward.
     // Overachieving (doing more than prescribed) still gets recognized.
-    if(aReps!=null)prog.reps=Math.max(prog.reps,aReps);
+    // Quick Session prescribes a flat 15-rep target that sits above most exercises' native
+    // range top. Cap its contribution at repRange[1] so a Quick Session never writes an
+    // out-of-range rep count into the SHARED progression (Full Session reads prog.reps raw).
+    if(aReps!=null)prog.reps=Math.max(prog.reps,isQuick?Math.min(aReps,ex.repRange[1]):aReps);
     const usAdj=exIsAdj(ex), noL=exIsBW(ex);
 
     // Helper: bump weight if pool allows, otherwise climb reps past range (equipment ceiling)
@@ -4231,7 +4236,19 @@ button:active{opacity:.75;transform:scale(.97);}
           return fb==='easy'?'Already at limits — great set':'Logged ✓';
         }
       }else{
-        if(fb==='hard')return'Hard ✓ — perfect';
+        if(fb==='hard'){
+          // Quick Session has no rep-climbing lane (reps are pinned at the high-rep target),
+          // so Hard's only progression path is the 2-consecutive-Hard weight bump. consecutiveHard
+          // here still reflects the PRIOR session (this session's adapt runs at finishSession), so
+          // a stored value of 1 means this Hard will be the second → bump next session.
+          const qSess=state.currentSession;
+          if(qSess&&qSess.quickMode&&usAdj){
+            const p=gProg(exData.id),banked=(p.consecutiveHard||0)>=1,canBump=xW(ex,p.weight)>p.weight;
+            if(banked)return canBump?'Hard ✓ — two in a row, weight goes up next session':'Hard ✓ — two in a row, reps go up next session';
+            return'Hard ✓ — banked. One more solid session and it moves up';
+          }
+          return'Hard ✓ — perfect';
+        }
         if(fb==='easy'){
           if(usAdj){
             const nextW=xW(ex,origW);
@@ -4494,7 +4511,7 @@ button:active{opacity:.75;transform:scale(.97);}
       // Adapt off the last main working set, not the lighter dropset.
       if(completedMain.length){
         const lastMain=completedMain[completedMain.length-1];
-        adapt(e.id,agg,lastMain.actualReps,lastMain.actualWeight);
+        adapt(e.id,agg,lastMain.actualReps,lastMain.actualWeight,sess.quickMode);
       }
       const ex=EX[e.id];
       // Volume — exclude warmups (they're prep, not training stimulus); include dropsets (real work)
@@ -6968,7 +6985,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v72';
+    const APP_VERSION='v73';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6980,8 +6997,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v72')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v72';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v73')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v73';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
