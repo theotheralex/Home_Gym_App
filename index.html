@@ -58,6 +58,8 @@ button:active{opacity:.75;transform:scale(.97);}
 .stack{display:flex;flex-direction:column;gap:10px;}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
 .stat-card{background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid rgba(255,255,255,0.06);border-radius:var(--rl);padding:16px;display:flex;flex-direction:column;cursor:default;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04),0 1px 0 rgba(0,0,0,0.4);}
+.home-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+.home-stats .scard{cursor:default;padding:13px 12px;}
 .stat-head{display:flex;align-items:center;gap:6px;margin-bottom:12px;}
 .stat-icon{font-size:15px;color:var(--text-2);display:flex;align-items:center;}
 .stat-label{flex:1;font-size:12px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
@@ -138,6 +140,14 @@ button:active{opacity:.75;transform:scale(.97);}
 .rinput{background:var(--bg);color:var(--text);border:1px solid var(--border-strong);border-radius:var(--r);font-size:17px;font-weight:700;font-family:inherit;padding:8px 10px;height:48px;width:68px;text-align:center;}
 .iunit{font-size:13px;color:var(--text-2);font-weight:500;}
 .fb-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.set-card.failset{border-left-color:var(--s-fg);}
+.set-tofail{font-size:10px;font-weight:800;background:var(--s-bg);color:var(--s-fg);border:1px solid var(--s-br);border-radius:999px;padding:2px 8px;letter-spacing:.4px;margin-left:7px;}
+.set-tgt{font-size:11px;color:var(--text-3);font-weight:600;margin-top:9px;}
+.set-tgt b{color:var(--text-2);font-weight:700;}
+.qcue{background:linear-gradient(180deg,rgba(220,38,38,0.10),rgba(220,38,38,0.04));border:1px solid rgba(220,38,38,0.30);border-radius:var(--rl);padding:13px 15px;margin-bottom:16px;}
+.qcue .qch{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:6px;}
+.qcue p{margin:0;font-size:13px;line-height:1.5;color:var(--text-2);}
+.qcue b{color:var(--text);font-weight:700;}
 .fb-btn{min-height:50px;font-size:13px;font-weight:700;border-radius:var(--r);border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text-2);}
 .fb-btn.sel-easy{background:var(--d-bg);border-color:var(--d-br);color:var(--d-fg);box-shadow:inset 0 -3px 0 var(--d-fg);}
 .fb-btn.sel-good{background:var(--w-bg);border-color:var(--w-br);color:var(--w-fg);box-shadow:inset 0 -3px 0 var(--w-fg);}
@@ -831,6 +841,9 @@ button:active{opacity:.75;transform:scale(.97);}
 .lv-fb-btn.hard{box-shadow:inset 0 -3px 0 var(--i-fg);}
 .lv-fb-btn.fail{box-shadow:inset 0 -3px 0 var(--s-fg);}
 .lv-fb-btn.done-single{background:var(--s-bg);border-color:var(--s-fg);color:var(--s-fg);min-width:clamp(120px,16vw,260px);}
+.lv-effort-hint{font-size:clamp(9px,1.3vh,18px);color:var(--text-3);font-weight:600;text-align:center;margin-top:clamp(6px,1.2vh,16px);}
+.lv-effort-hint.fail{color:var(--s-fg);}
+.lv-tofail{font-size:clamp(8px,1.1vh,15px);font-weight:800;background:var(--s-bg);color:var(--s-fg);border:1px solid var(--s-br);border-radius:999px;padding:1px clamp(5px,0.7vw,9px);letter-spacing:.4px;margin-left:clamp(5px,0.7vw,10px);}
 .lv-dropset-btn{background:none;border:none;color:var(--text-2);font-size:clamp(9px,1.4vh,18px);font-family:inherit;font-weight:600;cursor:pointer;margin-top:clamp(6px,1vh,14px);text-decoration:underline;text-decoration-color:rgba(160,160,160,0.3);text-underline-offset:3px;-webkit-tap-highlight-color:transparent;padding:clamp(4px,0.7vh,10px) clamp(8px,1.2vw,18px);}
 .lv-dropset-btn:active{opacity:0.65;}
 .lv-timer-wrap{display:flex;flex-direction:column;align-items:center;gap:clamp(4px,0.8vh,12px);margin-top:clamp(6px,1.2vh,18px);}
@@ -1093,6 +1106,7 @@ button:active{opacity:.75;transform:scale(.97);}
       </div>
       <p class="sub" id="dash-greeting">Adaptive home gym training</p>
       <div id="today-hero"></div>
+      <div id="home-stats"></div>
       <div id="pr-strip"></div>
       <div id="your-week"></div>
       <div id="heatmap-card"></div>
@@ -1176,9 +1190,9 @@ button:active{opacity:.75;transform:scale(.97);}
         <h3>Quick Session</h3>
         <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">A high-density, time-efficient workout structured as three supersetted pairs. Each pair targets a different muscle area within the focus you picked.</p>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Three pairs of two</strong> — exercises A and B in each pair, done back-to-back with minimal rest. The progress dots at the top show your position across the three pairs (gray = pending, red = active, green = done).</div>
-        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>3 sets at 15 reps</strong> — fewer sets than Full Session but higher reps for a different stimulus. You'll feel the metabolic burn quickly.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>3 sets, 15+ reps, each one hard</strong> — fewer sets than Full Session, so each one has to count. Push to a rep or two from failure; stopping at a comfortable 15 with gas in the tank is the miss, not the goal.</div>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Lower starting weight</strong> — Quick Session starts you at ~70% of your usual weight to fit the higher rep target. The app auto-suggests this; adjust as needed on the first set.</div>
-        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Done button on sets 1-2, rating on set 3</strong> — first two sets are just "Done" with no feedback rating. Only the last set's rating updates your progression — that's the one that matters for adapting next session. The button only appears on the active set so you always know what's next.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rate every set</strong> — each Quick set gets the same Easy/Good/Hard/Fail tap as Full Session. It's one tap, but it tells the app how hard you actually pushed, which feeds your recovery and the weight you get next time. The last set is the explicit to-failure set: empty the tank, then rate it. The rating only appears on the active set so you always know what's next.</div>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Shared progression with Full Session</strong> — the app uses the same weight-tracking across both modes. If you've been doing DB bench at 50 lb in Full Session, Quick Session knows that too.</div>
       </div>
 
@@ -3096,12 +3110,13 @@ button:active{opacity:.75;transform:scale(.97);}
       const ageH=(now-sess.timestamp)/H;
       sess.exercises.forEach(e=>{
         const ex=EX[e.id];if(!ex)return;
-        const done=e.sets?e.sets.filter(s=>s.done&&s.feedback):[];
+        const doneSets=e.sets?e.sets.filter(s=>s.done&&!s.warmup):[];
+        const fbSets=doneSets.filter(s=>s.feedback);
         let fbMult=DEFAULT_FB_MULT;
-        if(done.length>0){
-          fbMult=done.reduce((sum,s)=>sum+(FB_FATIGUE[s.feedback]||DEFAULT_FB_MULT),0)/done.length;
+        if(fbSets.length>0){
+          fbMult=fbSets.reduce((sum,s)=>sum+(FB_FATIGUE[s.feedback]||DEFAULT_FB_MULT),0)/fbSets.length;
         }
-        const setMult=done.length>0?Math.min(done.length/SET_BASELINE,SET_CAP):1;
+        const setMult=doneSets.length>0?Math.min(doneSets.length/SET_BASELINE,SET_CAP):1;
         Object.keys(ex.muscles).forEach(m=>{
           const intensity=ex.muscles[m]*(ex.type==='compound'?1:ACCESSORY_MULT);
           const decay=Math.max(0,1-(ageH/RECOVERY_HOURS));
@@ -3255,6 +3270,8 @@ button:active{opacity:.75;transform:scale(.97);}
   }
   function hmWeeks(numWeeks,dv){
     const lvl=hmLeveler(dv);
+    const quickDates=new Set();
+    (state.sessions||[]).forEach(s=>{if(s.quickMode)quickDates.add(hmLocalDate(s.timestamp));});
     const thisMon=getMonday(new Date());
     const todayDs=hmLocalDate(Date.now()),nowTs=Date.now();
     const weeks=[];
@@ -3262,7 +3279,10 @@ button:active{opacity:.75;transform:scale(.97);}
       const monDate=addDays(thisMon,-w*7),days=[];
       for(let d=0;d<7;d++){
         const dayDate=addDays(monDate,d),dayTs=dayDate.getTime(),ds=hmLocalDate(dayTs),vol=dv.get(ds)||0;
-        days.push({ds,vol,lvl:lvl(vol),isToday:ds===todayDs,isFuture:dayTs>nowTs});
+        let dayLvl=lvl(vol);
+        if(vol>0)dayLvl=Math.max(dayLvl,2);
+        if(quickDates.has(ds))dayLvl=Math.max(dayLvl,3);
+        days.push({ds,vol,lvl:dayLvl,isToday:ds===todayDs,isFuture:dayTs>nowTs});
       }
       weeks.push({monTs:monDate.getTime(),days});
     }
@@ -3430,7 +3450,6 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="hero-top"><span class="hero-eyebrow">Today\u2019s focus</span><span class="hero-ready '+rCls+'">'+rLbl+' \u00b7 '+r+'%</span></div>'
       +'<div class="hero-focus">'+focusName+'</div>'
       +(muscles?'<div class="hero-muscles">'+muscles+'</div>':'')
-      +(phaseLine?'<div class="hero-phase">'+phaseLine+'</div>':'')
       +'<div class="hero-meta"><span class="hero-week">This week '+stats.thisWeek+'/'+target+' <span class="hero-dots">'+dots+'</span></span>'+streakHtml+'</div>'
       +'<button class="hero-start" onclick="startRecommended()">'+icon('barbell',16)+' Start '+focusName+' session</button>'
       +'</div>';
@@ -3468,6 +3487,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Today hero + recent-PR strip (replaces the old 4-card stat grid;
     // days-since retired; avg-vol/career relocate to the Strength area in pass 2).
     renderHero(stats,target);
+    renderHomeStats(stats);
     renderPRStrip();
 
     // Body composition
@@ -3481,6 +3501,22 @@ button:active{opacity:.75;transform:scale(.97);}
 
     // Strength overview (full version, rendered inline on dashboard)
     showStrength();
+  }
+
+  // Three glanceable stat cards under the hero: avg volume per session, career
+  // session count, and current phase (phase moved out of the hero line to here).
+  function renderHomeStats(stats){
+    const el=document.getElementById('home-stats');
+    if(!el)return;
+    if(!state.sessions||!state.sessions.length){el.innerHTML='';return;}
+    const fmtV=(v)=>v>=1000?(v/1000).toFixed(1).replace(/\.0$/,'')+'k':String(v);
+    const sessions=state.sessions.length;
+    let phaseName='\u2014',phaseSub='';
+    try{const ph=getPhase();if(ph&&ph.phase){phaseName=ph.phase.name;phaseSub='session '+ph.sessionInPhase+' of '+ph.totalInPhase;}}catch(e){}
+    el.innerHTML=
+      '<div class="scard"><div class="sh">Avg vol</div><div class="sv">'+fmtV(stats.avgVol)+'</div><div class="ss">lb / session</div></div>'
+     +'<div class="scard"><div class="sh">Sessions</div><div class="sv">'+sessions+'</div><div class="ss">career</div></div>'
+     +'<div class="scard"><div class="sh">Phase</div><div class="sv" style="font-size:15px;">'+phaseName+'</div><div class="ss">'+phaseSub+'</div></div>';
   }
 
   // ── YOUR WEEK ────────────────────────────────────────────
@@ -3857,6 +3893,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
     // Quick Session: prepend pair-progress dots at the top (one per pair)
     if(sess.quickMode){
+      html+='<div class="qcue"><div class="qch">How to run a quick set</div><p>These sets are <b>effort-capped, not rep-capped</b>. Push each one to a rep or two from failure \u2014 racking a comfy 15 with gas left barely counts. <b>Last set: empty the tank.</b></p></div>';
       const pairCount=Math.max.apply(null,sess.exercises.map(e=>e.group!=null?e.group:-1))+1;
       const progDotsHtml=[];
       for(let p=0;p<pairCount;p++){
@@ -4009,13 +4046,15 @@ button:active{opacity:.75;transform:scale(.97);}
       // on the one thing the user can act on right now.
       if(!isCurrentSet){
         btnRowHtml='';
-      }else if(!isLastSet){
-        // Sets 1 and 2: green Done button, no feedback rating
-        btnRowHtml='<div class="fb-row-done"><button class="fb-done" onclick="setDone('+ei+','+si+')"><i class="ti ti-check"></i>Done</button></div>';
       }else{
-        // Last set: rating buttons (this is where progression adaptation comes from)
+        // Every Quick set now gets the effort rating (was a bare Done on sets 1-2).
+        // One tap, same speed, but it feeds recovery + progression real intensity
+        // instead of a default guess. Last set is the explicit to-failure set.
         const fbs=['easy','good','hard','fail'].map(f=>{const sel=s.feedback===f?' sel-'+f:'';const lbl={easy:'Easy',good:'Good',hard:'Hard',fail:'Fail'};return'<button class="fb-btn'+sel+'" onclick="setFB('+ei+','+si+',\''+f+'\')">'+lbl[f]+'</button>';}).join('');
-        btnRowHtml='<div class="fb-row">'+fbs+'</div>';
+        const hint=isLastSet
+          ?'<div class="set-tgt">to failure \u2014 <b>as many as you can</b>, leave nothing</div>'
+          :'<div class="set-tgt">target <b>15+</b> \u00b7 the last 2\u20133 should be a fight</div>';
+        btnRowHtml='<div class="fb-row">'+fbs+'</div>'+hint;
       }
     }else if(isQuick&&s.done){
       // Already done — no buttons (badge already shows status)
@@ -4032,7 +4071,10 @@ button:active{opacity:.75;transform:scale(.97);}
     else if(s.done){bdg='<span class="set-bdg" style="background:var(--s-bg);color:var(--s-fg);">DONE</span>';}
     const currentPill=isCurrent?'<span class="set-next-pill">GO</span>':'';
     const dropTag=s.isDropset?'<span class="tag" style="background:var(--w-bg);color:var(--w-fg);">Dropset</span>':'';
-    return'<div class="set-card'+lc+isCurrent+'" id="set-'+ei+'-'+si+'"><div class="set-row1"><span class="set-lbl">Set '+(si+1)+currentPill+dropTag+bdg+'</span><div class="set-inputs">'+wIn+(wIn?'<span class="set-sep">·</span>':'')+rIn+'</div></div>'+btnRowHtml+'</div>';
+    const isFailSet=isQuick&&isLastSet;
+    const failCls=isFailSet?' failset':'';
+    const failBadge=(isFailSet&&!s.done)?'<span class="set-tofail">TO FAILURE</span>':'';
+    return'<div class="set-card'+lc+isCurrent+failCls+'" id="set-'+ei+'-'+si+'"><div class="set-row1"><span class="set-lbl">Set '+(si+1)+currentPill+dropTag+failBadge+bdg+'</span><div class="set-inputs">'+wIn+(wIn?'<span class="set-sep">·</span>':'')+rIn+'</div></div>'+btnRowHtml+'</div>';
   }
 
   // Mark a warmup set complete. No feedback collected, no intra-session
@@ -6546,15 +6588,22 @@ button:active{opacity:.75;transform:scale(.97);}
     const canDrop=exIsWeighted(ex)&&!isQuick&&!curSet.isDropset&&!curSet.warmup;
     const dropsetHtml=canDrop?'<button class="lv-dropset-btn" onclick="addDropset('+ei+');renderLandscape();">+ Add dropset</button>':'';
     // Warmups show a single Mark done button instead of the feedback grid
+    const isLastSet=si===totalSets-1;
+    const isFailSet=isQuick&&isLastSet&&!curSet.warmup;
+    const effortHint=(isQuick&&!curSet.warmup)
+      ?'<div class="lv-effort-hint'+(isFailSet?' fail':'')+'">'+(isFailSet?'To failure \u2014 as many as you can, leave nothing':'Push to a rep or two from failure \u2014 not a comfortable stop')+'</div>'
+      :'';
+    const failTag=isFailSet?'<span class="lv-tofail">TO FAILURE</span>':'';
     const actionHtml=curSet.warmup
       ?'<button class="lv-fb-btn done-single" style="background:var(--w-bg);border-color:var(--w-br);color:var(--w-fg);" onclick="setWarmupDone('+ei+','+si+');renderLandscape();">Mark warmup done</button>'
       :buildLvFbButtons(sess,ei,si,curEx);
-    return'<div class="lv-set-label"'+(curSet.warmup?' style="color:var(--w-fg);"':'')+'>'+setLabel+'</div>'
+    return'<div class="lv-set-label"'+(curSet.warmup?' style="color:var(--w-fg);"':'')+'>'+setLabel+failTag+'</div>'
       +'<div class="lv-ex-name">'+escHtml(curEx.name)+'</div>'
       +chipsHtml
       +rangeHint
       +timerHtml
       +'<div class="lv-history">'+histParts.join(' &nbsp;·&nbsp; ')+'</div>'
+      +effortHint
       +actionHtml
       +dropsetHtml;
   }
@@ -6774,10 +6823,6 @@ button:active{opacity:.75;transform:scale(.97);}
   }
 
   function buildLvFbButtons(sess,ei,si,curEx){
-    const isQuick=sess.quickMode,isLast=si===curEx.sets.length-1;
-    if(isQuick&&!isLast){
-      return'<div class="lv-fb-row"><button class="lv-fb-btn done-single" onclick="setDone('+ei+','+si+')">Done</button></div>';
-    }
     return'<div class="lv-fb-row">'
       +'<button class="lv-fb-btn easy" onclick="setFB('+ei+','+si+',\'easy\')">Easy</button>'
       +'<button class="lv-fb-btn good" onclick="setFB('+ei+','+si+',\'good\')">Good</button>'
@@ -7092,7 +7137,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v83';
+    const APP_VERSION='v86';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7104,8 +7149,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v83')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v83';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v86')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v86';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
