@@ -557,6 +557,46 @@ button:active{opacity:.75;transform:scale(.97);}
 .wm-bf-input{width:80px;height:44px;background:var(--bg);border:1px solid var(--i-br);border-radius:var(--r);font-size:18px;font-weight:700;text-align:center;color:var(--text);font-family:inherit;}
 
 /* Body comp card */
+/* Today hero — primary dashboard element */
+.hero{background:linear-gradient(180deg,var(--surface) 0%,var(--surface-2,#151515) 100%);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:10px;}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);}
+.hero-ready{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap;}
+.hero-ready.fresh{background:var(--s-bg);color:var(--s-fg);}
+.hero-ready.mid{background:var(--w-bg);color:var(--w-fg);}
+.hero-ready.low{background:var(--d-bg);color:var(--d-fg);}
+.hero-focus{font-size:30px;font-weight:800;line-height:1.05;margin-bottom:4px;}
+.hero-muscles{font-size:13px;color:var(--text-2);margin-bottom:8px;}
+.hero-phase{font-size:12px;color:var(--text-3);margin-bottom:14px;}
+.hero-meta{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:14px;font-size:12px;color:var(--text-2);}
+.hero-week{display:flex;align-items:center;gap:7px;}
+.hero-dots{display:flex;gap:3px;}
+.hero-dot{width:7px;height:7px;border-radius:50%;background:var(--border);}
+.hero-dot.on{background:var(--s-fg);}
+.hero-streak{display:flex;align-items:center;gap:4px;color:var(--w-fg);font-weight:600;}
+.hero-start{width:100%;padding:14px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.hero-start:active{transform:scale(0.99);}
+/* Recent-PR celebration strip */
+.pr-strip{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,rgba(234,179,8,0.10) 0%,var(--surface) 100%);border:1px solid rgba(234,179,8,0.30);border-radius:var(--rl);padding:12px 14px;margin-bottom:10px;cursor:pointer;}
+.pr-strip:active{transform:scale(0.99);}
+.pr-strip-ico{font-size:18px;line-height:1;}
+.pr-strip-txt{flex:1;font-size:13px;color:var(--text);}
+.pr-strip-txt b{color:#eab308;}
+.pr-strip-arrow{color:var(--text-3);font-size:18px;line-height:1;}
+/* segmented view pill (Your Week / Body comp toggles) */
+.sect-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.seg{display:inline-flex;background:#0e0e0e;border:1px solid var(--border);border-radius:10px;padding:3px;gap:2px;}
+.seg button{border:none;background:transparent;color:var(--text-2);font-size:12px;font-weight:600;padding:6px 13px;border-radius:8px;cursor:pointer;transition:all .12s;}
+.seg button.on{background:var(--surface-2);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,0.4);}
+/* recovery bars in Your Week recovery view (reuse .vbar shell) */
+.rbar-fill{position:absolute;top:0;bottom:0;left:0;border-radius:6px;}
+.rbar-fill.fresh{background:var(--s-fg);}
+.rbar-fill.recovering{background:var(--w-fg);}
+.rbar-fill.fatigued{background:var(--d-fg);}
+.yw-rv{width:108px;text-align:right;font-size:11px;font-weight:600;color:var(--text-2);}
+/* body-fat view headline */
+.bf-big{font-size:28px;font-weight:700;}
+.bf-big span{font-size:14px;font-weight:500;color:var(--text-2);}
 .bc-card{background:var(--surface);border-radius:var(--rl);padding:16px;margin-bottom:10px;}
 .bc-card.bc-good{border-left:4px solid var(--s-fg);}
 .bc-card.bc-flat{border-left:4px solid var(--w-fg);}
@@ -564,6 +604,11 @@ button:active{opacity:.75;transform:scale(.97);}
 .bc-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
 .bc-weight{font-size:28px;font-weight:700;}
 .bc-trend{font-size:14px;font-weight:700;}
+.bc-pct{font-size:11px;font-weight:600;color:var(--text-3);}
+.bc-d{font-weight:800;font-size:12px;margin-left:6px;}
+.bc-d.good{color:var(--s-fg);}
+.bc-d.cau{color:var(--w-fg);}
+.bc-d.flat{color:var(--text-3);}
 .bc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);padding:4px 0;}
 .bc-row span:last-child{font-weight:600;color:var(--text);}
 .bc-spark{width:100%;height:40px;margin-top:8px;}
@@ -691,14 +736,20 @@ button:active{opacity:.75;transform:scale(.97);}
 .yw-vsum b.u{color:var(--w-fg);}.yw-vsum b.k{color:var(--s-fg);}.yw-vsum b.o{color:var(--i-fg);}
 .yw-frq{display:flex;flex-direction:column;gap:8px;}
 .yw-row{display:flex;align-items:center;gap:11px;}
-.yw-name{font-size:13.5px;font-weight:600;width:74px;flex-shrink:0;}
-.yw-pips{display:flex;gap:3px;flex:1;}
-.yw-pip{height:9px;flex:1;border-radius:3px;background:var(--surface-2);border:1px solid var(--border);}
-.yw-pip.f{background:var(--s-fg);border-color:var(--s-fg);}
-.yw-pip.fa{background:var(--w-fg);border-color:var(--w-fg);}
-.yw-pip.over{background:var(--i-fg);border-color:var(--i-fg);}
+.yw-name{font-size:13.5px;font-weight:600;width:96px;flex-shrink:0;white-space:nowrap;display:inline-flex;align-items:center;}
+.vbar{position:relative;flex:1;height:13px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);overflow:hidden;}
+.vbar-band{position:absolute;top:0;bottom:0;background:rgba(255,255,255,0.085);}
+.vbar-fill{position:absolute;top:0;bottom:0;left:0;border-radius:6px 0 0 6px;}
+.vbar-fill.green{background:var(--s-fg);}
+.vbar-fill.yellow{background:var(--w-fg);}
+.vbar-fill.blue{background:var(--i-fg);}
+.vbar-fill.red{background:var(--d-fg);}
+.vbar-edge{position:absolute;top:0;bottom:0;width:2px;background:rgba(245,245,245,0.55);transform:translateX(-1px);}
+.pbadge{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;font-size:9px;font-weight:800;margin-left:7px;flex-shrink:0;line-height:1;}
+.pbadge.norm{background:var(--surface-2);border:1px solid var(--border-strong);color:var(--text-2);}
+.pbadge.alert{background:var(--d-fg);color:#160606;border:1px solid var(--d-fg);}
 .yw-sv{font-size:12px;font-weight:700;width:62px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;}
-.yw-sv.ok{color:var(--s-fg);}.yw-sv.low{color:var(--w-fg);}.yw-sv.over{color:var(--i-fg);}
+.yw-sv.ok{color:var(--s-fg);}.yw-sv.low{color:var(--w-fg);}.yw-sv.over{color:var(--i-fg);}.yw-sv.urgent{color:var(--d-fg);}
 .yw-sv .u{font-size:10px;font-weight:500;color:var(--text-3);}
 .yw-coach{display:flex;gap:9px;margin-top:15px;padding-top:14px;border-top:1px solid var(--border);}
 .yw-coach i{font-size:15px;flex-shrink:0;margin-top:1px;}
@@ -1013,17 +1064,11 @@ button:active{opacity:.75;transform:scale(.97);}
         <span id="streak" style="font-size:13px;color:var(--text-2);font-weight:600;"></span>
       </div>
       <p class="sub" id="dash-greeting">Adaptive home gym training</p>
-      <div class="stat-grid">
-        <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-streak-icon"></span><span class="stat-label">Week streak</span></div><div id="stat-streak" class="stat-value">0</div><div class="stat-sub" id="stat-streak-sub"></div><div class="stat-viz" id="stat-streak-viz"></div></div>
-        <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-week-icon"></span><span class="stat-label">This week</span></div><div id="stat-week" class="stat-value">0</div><div class="stat-sub" id="stat-week-sub"></div><div class="stat-viz" id="stat-week-viz"></div></div>
-        <div class="stat-card" id="stat-days-card"><div class="stat-head"><span class="stat-icon" id="stat-days-icon"></span><span class="stat-label">Days since last</span></div><div id="stat-days" class="stat-value">—</div><div class="stat-sub" id="stat-days-sub"></div></div>
-        <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-avgvol-icon"></span><span class="stat-label">Avg vol / session</span></div><div id="stat-avgvol" class="stat-value">0</div><div class="stat-sub" id="stat-avgvol-sub"></div><div class="stat-viz" id="stat-avgvol-viz"></div></div>
-      </div>
+      <div id="today-hero"></div>
+      <div id="pr-strip"></div>
       <div id="your-week"></div>
       <div id="heatmap-card"></div>
-      <h3>Body composition</h3>
       <div id="body-comp"></div>
-      <div id="gain-expectations"></div>
       <h3>Strength</h3>
       <div id="strength-body"></div>
       <div class="stack" style="margin-top:16px;">
@@ -2801,6 +2846,10 @@ button:active{opacity:.75;transform:scale(.97);}
 
   let state={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},prs:[],scoreHistory:[],achievements:{},strengthGoal:null,musclePriorities:{},weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
   let pendingTime=null,pendingMode='full',restIv=null,restTotal=0,restRem=0,pendingScroll=-1;
+  // Dashboard card view toggles (Your Week: volume/recovery; Body comp: weight/body-fat).
+  let bcCompView='wt',ywCardView='vol';
+  window.ywSetView=function(v){ywCardView=v;renderYourWeek();};
+  window.bcSetView=function(v){bcCompView=v;renderBodyComp();};
 
   function load(){
     try{const r=localStorage.getItem(SK);if(r)state=Object.assign(state,JSON.parse(r));}catch(e){}
@@ -3190,6 +3239,10 @@ button:active{opacity:.75;transform:scale(.97);}
       }
       weeks.push({monTs:monDate.getTime(),days});
     }
+    // Recent-first: most recent week becomes the leftmost column. Reversing here (the
+    // single shared builder) flips BOTH the dashboard card and the 52-week detail screen
+    // together, and the month labels in hmMonthsHTML follow automatically (read Jun→Feb).
+    weeks.reverse();
     return weeks;
   }
   function hmGridHTML(weeks,tappable){
@@ -3318,6 +3371,62 @@ button:active{opacity:.75;transform:scale(.97);}
     };
   }
 
+  // Today hero — recommended focus, readiness, phase, week progress, one-tap start.
+  // Pulls the same recommendation the picker shows (pickFocusTypes()[0]) so the focus
+  // name and recovery % match exactly.
+  function renderHero(stats,target){
+    const el=document.getElementById('today-hero');
+    if(!el)return;
+    const rec=(pickFocusTypes()||[])[0];
+    if(!rec){
+      el.innerHTML='<div class="hero"><div class="hero-top"><span class="hero-eyebrow">Today\u2019s focus</span></div>'
+        +'<div class="hero-focus" style="font-size:22px;">Ready when you are</div>'
+        +'<div class="hero-muscles">Pick a focus and start your first session.</div>'
+        +'<button class="hero-start" onclick="startFlow(60)">'+icon('barbell',16)+' Start a session</button></div>';
+      return;
+    }
+    const focusName=(rec.focus&&rec.focus.name)||rec.key;
+    const muscles=(YW_FOCUS_COVERS[rec.key]||[]).join(' \u00b7 ');
+    const r=Math.round(rec.avgRecovery||0);
+    let rCls='low',rLbl='Needs rest';
+    if(r>=75){rCls='fresh';rLbl='Recovered';}else if(r>=50){rCls='mid';rLbl='Recovering';}
+    let phaseLine='';
+    try{const ph=getPhase();if(ph&&ph.phase)phaseLine=ph.phase.name+' \u00b7 session '+ph.sessionInPhase+' of '+ph.totalInPhase;}catch(e){}
+    const monNow=getMonday(new Date());let dots='';
+    for(let i=3;i>=0;i--){
+      const ws=addDays(monNow,-i*7).getTime(),we=addDays(monNow,-i*7+7).getTime();
+      const c=state.sessions.filter(s=>s.timestamp>=ws&&s.timestamp<we).length;
+      dots+='<span class="hero-dot'+(c>=STREAK_THRESHOLD?' on':'')+'"></span>';
+    }
+    const streakHtml=stats.streak>0?'<span class="hero-streak">'+icon('flame',12)+' '+stats.streak+'wk</span>':'';
+    el.innerHTML='<div class="hero">'
+      +'<div class="hero-top"><span class="hero-eyebrow">Today\u2019s focus</span><span class="hero-ready '+rCls+'">'+rLbl+' \u00b7 '+r+'%</span></div>'
+      +'<div class="hero-focus">'+focusName+'</div>'
+      +(muscles?'<div class="hero-muscles">'+muscles+'</div>':'')
+      +(phaseLine?'<div class="hero-phase">'+phaseLine+'</div>':'')
+      +'<div class="hero-meta"><span class="hero-week">This week '+stats.thisWeek+'/'+target+' <span class="hero-dots">'+dots+'</span></span>'+streakHtml+'</div>'
+      +'<button class="hero-start" onclick="startRecommended()">'+icon('barbell',16)+' Start '+focusName+' session</button>'
+      +'</div>';
+  }
+
+  // Recent-PR celebration strip — only shows when the most recent session set a PR.
+  function renderPRStrip(){
+    const el=document.getElementById('pr-strip');
+    if(!el)return;
+    const prs=getRecentPRs(1);
+    const lastTs=state.sessions&&state.sessions.length?state.sessions[state.sessions.length-1].timestamp:0;
+    if(!prs.length||prs[0].date<lastTs){el.innerHTML='';return;}
+    const p=prs[0];
+    let val=p.exerciseName;
+    if(p.type==='weight')val=p.exerciseName+' '+p.weight+'\u00d7'+p.reps;
+    else if(p.type==='reps')val=p.exerciseName+' '+p.reps+' reps';
+    else if(p.type==='time'){const m=Math.floor(p.seconds/60),s=p.seconds%60;val=p.exerciseName+' '+(m?m+':'+String(s).padStart(2,'0'):p.seconds+'s');}
+    el.innerHTML='<div class="pr-strip" onclick="showStrengthPRs()">'
+      +'<span class="pr-strip-ico">\uD83C\uDFC6</span>'
+      +'<span class="pr-strip-txt"><b>New PR</b> \u00b7 '+val+'</span>'
+      +'<span class="pr-strip-arrow">\u203a</span></div>';
+  }
+
   function renderHome(){
     const name=state.profile?state.profile.name:'';
     const greetEl=document.getElementById('dash-greeting');
@@ -3327,55 +3436,12 @@ button:active{opacity:.75;transform:scale(.97);}
     const stats=calcAllStats();
     const target=state.profile&&state.profile.daysPerWeek?state.profile.daysPerWeek:3;
 
-    // Inject icons (called once per render — cheap, rare op)
-    document.getElementById('stat-streak-icon').innerHTML=icon('flame',15);
-    document.getElementById('stat-week-icon').innerHTML=icon('check',15);
-    document.getElementById('stat-days-icon').innerHTML=icon('clock',15);
-    document.getElementById('stat-avgvol-icon').innerHTML=icon('barbell',15);
-
-    // Week streak — last 4 weeks as dots
-    document.getElementById('stat-streak').textContent=stats.streak;
-    document.getElementById('stat-streak-sub').textContent=stats.streak===1?'week':'weeks';
+    // Header streak badge (top bar)
     document.getElementById('streak').textContent=stats.streak>0?stats.streak+'wk streak':'';
-    // Build streak dots: filled = ≥3 sessions that week, going back 4 weeks
-    const streakDots=(()=>{
-      const monNow=getMonday(new Date());
-      const dots=[];
-      for(let i=3;i>=0;i--){
-        const weekStart=addDays(monNow,-i*7).getTime();
-        const weekEnd=addDays(monNow,-i*7+7).getTime();
-        const count=state.sessions.filter(s=>s.timestamp>=weekStart&&s.timestamp<weekEnd).length;
-        dots.push(count>=STREAK_THRESHOLD?'<span class="stat-dot on"></span>':'<span class="stat-dot"></span>');
-      }
-      return'<div class="stat-dots">'+dots.join('')+'</div>';
-    })();
-    document.getElementById('stat-streak-viz').innerHTML=streakDots;
-
-    // This week — progress bar toward target
-    document.getElementById('stat-week').textContent=stats.thisWeek+' / '+target;
-    const weekCard=document.getElementById('stat-week').parentElement;
-    weekCard.className='stat-card'+(stats.thisWeek>=target?' stat-good':(stats.thisWeek>=target-1?' stat-good':''));
-    document.getElementById('stat-week-sub').textContent=stats.thisWeek>=target?'target hit':stats.thisWeek>=target-1?'almost there':(target-stats.thisWeek)+' more to go';
-    const weekPct=Math.min(100,Math.round((stats.thisWeek/target)*100));
-    const weekColor=stats.thisWeek>=target?'var(--s-fg)':'var(--accent)';
-    document.getElementById('stat-week-viz').innerHTML='<div class="stat-bar"><div class="stat-bar-fill" style="width:'+weekPct+'%;background:'+weekColor+';"></div></div>';
-
-    // Days since last
-    const daysEl=document.getElementById('stat-days');
-    const daysCard=document.getElementById('stat-days-card');
-    if(stats.daysSince===null){daysEl.textContent='—';daysCard.className='stat-card';document.getElementById('stat-days-sub').textContent='no sessions yet';}
-    else if(stats.daysSince===0){daysEl.textContent='Today';daysCard.className='stat-card stat-good';document.getElementById('stat-days-sub').textContent='nice';}
-    else{daysEl.textContent=stats.daysSince;daysCard.className='stat-card'+(stats.daysSince>=3?' stat-alert':'');document.getElementById('stat-days-sub').textContent=stats.daysSince===1?'day ago':'days ago';}
-
-    // Avg vol — sparkline of last 10 sessions' volumes
-    document.getElementById('stat-avgvol').textContent=stats.avgVol.toLocaleString();
-    document.getElementById('stat-avgvol-sub').textContent='lb / session';
-    const recentVols=state.sessions.slice(-10).map(s=>s.totalVolume||0).filter(v=>v>0);
-    if(recentVols.length>=2){
-      document.getElementById('stat-avgvol-viz').innerHTML='<div class="stat-spark">'+miniSpark(recentVols,160,22)+'</div>';
-    }else{
-      document.getElementById('stat-avgvol-viz').innerHTML='';
-    }
+    // Today hero + recent-PR strip (replaces the old 4-card stat grid;
+    // days-since retired; avg-vol/career relocate to the Strength area in pass 2).
+    renderHero(stats,target);
+    renderPRStrip();
 
     // Body composition
     renderBodyComp();
@@ -3391,10 +3457,18 @@ button:active{opacity:.75;transform:scale(.97);}
   }
 
   // ── YOUR WEEK ────────────────────────────────────────────
-  // Makes the emergent plan visible: rolling-7-day sessions, per-muscle
-  // frequency vs the 2x target, and a coach line that flags imbalance and
-  // prescribes a correction. No forward projection by design — a wrong
-  // prediction erodes trust more than a missing one.
+  // Makes the emergent plan visible in two parts: (1) a forward 7-day strip —
+  // today's REAL picker recommendation plus projected future training days
+  // (greedy fill, no repeated focus back-to-back, re-plans on every logged
+  // session, labeled provisional so a wrong projection can't pose as a promise);
+  // and (2) per-muscle weekly VOLUME — rolling-7-day set count (muscle
+  // contribution >=0.4, warmups and failed sets excluded) vs the per-muscle
+  // target ranges, classified under / in-range / over, with a coach line that
+  // flags imbalance or stale muscles and prescribes the correction.
+  // (Earlier this tracked per-muscle frequency vs a 2x target and had no
+  // projection; both were reversed on purpose — volume is the fuller metric,
+  // since landing in the range already implies the work was spread across days,
+  // and a clearly-provisional projection beats a blank week.)
   const YW_GROUPS=[
     {key:'Back',muscles:['back','traps']},
     {key:'Chest',muscles:['chest']},
@@ -3467,20 +3541,24 @@ button:active{opacity:.75;transform:scale(.97);}
       }
     }
     const strip='<div class="yw-strip">'+cells.join('')+'</div><div class="yw-key">↻ Blue = projected — re-plans as you train</div>';
+    // Each muscle: a bar that fills toward its target RANGE. The shaded band spans
+    // min→max with a tick at each end; the range ceiling sits at TOP_FRAC of the bar,
+    // leaving headroom so "over" reads past the top. Per-row normalized (the absolute
+    // count lives in the value column). Priority muscles get a P badge that — along with
+    // the bar — goes red only when that muscle is under its (higher) range: the work-on-it flag.
+    const TOP_FRAC=0.78;
     const rows=mstats.map(x=>{
-      const v=x.sets,st=x.status,unit=x.tgt.max/5;
-      const cls=st==='under'?'low':(st==='over'?'over':'ok');
-      let nf=Math.max(v>0?1:0,Math.min(5,Math.round(v/unit)));
-      if(st==='over')nf=5;
-      let pips='';
-      for(let i=0;i<5;i++){
-        let c='yw-pip';
-        if(i<nf)c+=st==='over'?(i===4?' over':' f'):(st==='under'?' fa':' f');
-        pips+='<span class="'+c+'"></span>';
-      }
-      return'<div class="yw-row"><span class="yw-name">'+(MUSCLE_LABELS[x.m]||x.m)+'</span>'
-        +'<span class="yw-pips">'+pips+'</span>'
-        +'<span class="yw-sv '+cls+'">'+v+' <span class="u">sets</span></span></div>';
+      const v=x.sets,st=x.status,pri=getMusclePriority(x.m)==='priority',urgent=pri&&st==='under';
+      const fc=urgent?'red':(st==='under'?'yellow':st==='over'?'blue':'green');
+      const sc=urgent?'urgent':(st==='under'?'low':st==='over'?'over':'ok');
+      const scale=x.tgt.max/TOP_FRAC,minN=x.tgt.min/scale*100,maxN=x.tgt.max/scale*100,fillN=Math.min(98,v/scale*100);
+      const minP=minN.toFixed(1),maxP=maxN.toFixed(1),fillP=fillN.toFixed(1),bandW=(maxN-minN).toFixed(1);
+      const badge=pri?'<span class="pbadge '+(st==='under'?'alert':'norm')+'">P</span>':'';
+      const bar='<div class="vbar"><div class="vbar-band" style="left:'+minP+'%;width:'+bandW+'%"></div>'
+        +'<div class="vbar-fill '+fc+'" style="width:'+fillP+'%"></div>'
+        +'<div class="vbar-edge" style="left:'+minP+'%"></div><div class="vbar-edge" style="left:'+maxP+'%"></div></div>';
+      return'<div class="yw-row"><span class="yw-name">'+(MUSCLE_LABELS[x.m]||x.m)+badge+'</span>'
+        +bar+'<span class="yw-sv '+sc+'">'+v+' <span class="u">sets</span></span></div>';
     }).join('');
     const sUnder=mstats.filter(x=>x.status==='under');
     const sOver=mstats.filter(x=>x.status==='over');
@@ -3540,12 +3618,30 @@ button:active{opacity:.75;transform:scale(.97);}
       }
     }
     const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
-    el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span><span class="yw-w">Plan &middot; '+dpw+' days/wk</span></div>'
+    // View pill — Volume (per-group sets toward goal) vs Recovery (per-muscle %).
+    const segHtml='<div class="seg"><button class="'+(ywCardView==='vol'?'on':'')+'" onclick="ywSetView(\'vol\')">Volume</button><button class="'+(ywCardView==='rec'?'on':'')+'" onclick="ywSetView(\'rec\')">Recovery</button></div>';
+    let viewContent;
+    if(ywCardView==='rec'){
+      const rec=getRec();
+      const RORDER=['back','chest','shoulders','biceps','triceps','legs','core','traps','forearms'];
+      const recRows=RORDER.map(m=>{
+        const sc=Math.round(rec[m]||0),rl=recLabel(sc),rc=sc>=75?'fresh':sc>=40?'recovering':'fatigued';
+        return'<div class="yw-row"><span class="yw-name">'+(MUSCLE_LABELS[m]||m)+'</span>'
+          +'<div class="vbar"><div class="rbar-fill '+rc+'" style="width:'+sc+'%"></div></div>'
+          +'<span class="yw-rv">'+rl.label+' &middot; '+sc+'%</span></div>';
+      }).join('');
+      viewContent='<div class="yw-cov-lbl">Recovery &middot; <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-3);">% recovered &middot; rebuilds to 100% over 48h</span></div>'
+        +'<div class="yw-frq">'+recRows+'</div>';
+    }else{
+      viewContent='<div class="yw-cov-lbl">Volume this week &middot; <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-3);">sets per muscle</span></div>'
+        +summary
+        +'<div class="yw-frq">'+rows+'</div>'
+        +'<div class="yw-coach '+cls+'"><i class="ti '+ic+'"></i><div class="yw-cb">'+body+'</div></div>';
+    }
+    el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span>'+segHtml+'</div>'
       +strip
-      +'<div class="yw-cov-lbl">Volume this week &middot; <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-3);">sets per muscle</span></div>'
-      +summary
-      +'<div class="yw-frq">'+rows+'</div>'
-      +'<div class="yw-coach '+cls+'"><i class="ti '+ic+'"></i><div class="yw-cb">'+body+'</div></div></div>';
+      +viewContent
+      +'</div>';
   }
 
   function miniSpark(vals,w,h){
@@ -3609,6 +3705,15 @@ button:active{opacity:.75;transform:scale(.97);}
     }
     return theoretical;
   }
+
+  // Hero "Start" — launch the top recommended focus directly, skipping the picker.
+  // Sets the same pending state startFlow uses, then routes through pickTemplate.
+  window.startRecommended=function(){
+    const rec=(pickFocusTypes()||[])[0];
+    if(!rec){startFlow(60);return;}
+    pendingTime=60;pendingMode='full';
+    pickTemplate(rec.key);
+  };
 
   window.startFlow=function(time){
     pendingTime=time;
@@ -5070,7 +5175,10 @@ button:active{opacity:.75;transform:scale(.97);}
     const topFive=volStats.slice().sort((a,b)=>b.sets-a.sets).slice(0,5);
     const miniBars=topFive.map(v=>{
       const pct=Math.min(120,Math.round((v.sets/v.target.max)*100));
-      const color=v.status==='zone'?'var(--s-fg)':v.status==='over'?'var(--w-fg)':'var(--d-fg)';
+      // Color semantics match Your Week exactly: yellow=under, green=in-range, blue=over,
+      // red reserved for a priority muscle that's under its range.
+      const urgent=v.priority==='priority'&&v.status==='under';
+      const color=urgent?'var(--d-fg)':v.status==='under'?'var(--w-fg)':v.status==='over'?'var(--i-fg)':'var(--s-fg)';
       return'<div class="vol-mini-bar"><div style="width:'+pct+'%;background:'+color+';"></div></div>';
     }).join('');
     if(priorityUnder){
@@ -5855,7 +5963,7 @@ button:active{opacity:.75;transform:scale(.97);}
   function renderBodyComp(){
     const el=document.getElementById('body-comp');
     if(!state.weightLog||!state.weightLog.length){
-      el.innerHTML='<div class="bc-empty">Log your first weigh-in tomorrow morning to start tracking.</div>';
+      el.innerHTML='<div class="sect-head"><h3>Body composition</h3></div><div class="bc-empty">Log your first weigh-in tomorrow morning to start tracking.</div>';
       return;
     }
     const log=state.weightLog;
@@ -5886,25 +5994,39 @@ button:active{opacity:.75;transform:scale(.97);}
       else if(ratePerWeek>0.3){trendColor='var(--d-fg)';trendText='+'+ratePerWeek+' lb/wk';cardClass='bc-up';}
       else{trendText=(ratePerWeek>=0?'+':'')+ratePerWeek+' lb/wk';}
     }
+    if(ratePerWeek!==null&&avg7){
+      trendText+='<span class="bc-pct"> · '+Math.abs(ratePerWeek/avg7*100).toFixed(2)+'%/wk</span>';
+    }
 
-    // BF data
-    let bfHtml='';
+    // BF data — split into a headline (big bf%) and the fat/lean/FFMI rows so the
+    // body-fat view can lead with the number. Trend vs first check-in is coloured by
+    // GOOD DIRECTION: fat down = green, lean & FFMI up = green; the wrong way = amber.
+    let bfHeader='',bfRows='';
     if(state.bfLog&&state.bfLog.length){
       const latestBf=state.bfLog[state.bfLog.length-1];
       const firstBf=state.bfLog[0];
       const fatMass=Math.round(avg7*(latestBf.bf/100)*10)/10;
       const leanMass=Math.round((avg7-fatMass)*10)/10;
       const startFat=Math.round(firstBf.bf*10)/10;
-      bfHtml='<div class="bc-row"><span>Body fat</span><span>'+latestBf.bf+'%'+(state.bfLog.length>1?' (started '+startFat+'%)':'')+'</span></div>'
-        +'<div class="bc-row"><span>Fat mass</span><span>'+fatMass+' lb</span></div>'
-        +'<div class="bc-row"><span>Lean mass</span><span>'+leanMass+' lb</span></div>';
-      // FFMI
+      const showD=state.bfLog.length>1;
+      const startFatMass=log[0].weight*firstBf.bf/100,startLeanMass=log[0].weight-startFatMass;
+      const dtag=(delta,goodUp)=>{
+        if(Math.abs(delta)<0.05)return ' <span class="bc-d flat">&mdash;</span>';
+        const up=delta>0,good=goodUp?up:!up;
+        return ' <span class="bc-d '+(good?'good':'cau')+'">'+(up?'&#9650;':'&#9660;')+Math.abs(delta).toFixed(1)+'</span>';
+      };
+      bfHeader='<div class="bf-big">'+latestBf.bf+'% <span>body fat</span></div>'
+        +(showD?'<div class="bc-trend" style="color:var(--text-3);font-size:12px;">started '+startFat+'%</div>':'');
+      bfRows='<div class="bc-row"><span>Fat mass</span><span>'+fatMass+' lb'+(showD?dtag(fatMass-startFatMass,false):'')+'</span></div>'
+        +'<div class="bc-row"><span>Lean mass</span><span>'+leanMass+' lb'+(showD?dtag(leanMass-startLeanMass,true):'')+'</span></div>';
       if(state.profile&&state.profile.heightIn){
         const heightM=state.profile.heightIn*0.0254;
         const leanKg=leanMass*0.453592;
         const ffmi=Math.round(leanKg/(heightM*heightM)*10)/10;
         const ffmiLabel=ffmi>=25?'Elite':ffmi>=22?'Muscular':ffmi>=20?'Athletic':'Average';
-        bfHtml+='<div class="bc-row"><span>FFMI</span><span>'+ffmi+' ('+ffmiLabel+')</span></div>';
+        let ffmiD='';
+        if(showD){const startFFMI=(startLeanMass*0.453592)/(heightM*heightM);ffmiD=dtag(ffmi-startFFMI,true);}
+        bfRows+='<div class="bc-row"><span>FFMI</span><span>'+ffmi+' ('+ffmiLabel+')'+ffmiD+'</span></div>';
       }
     }
 
@@ -5930,13 +6052,21 @@ button:active{opacity:.75;transform:scale(.97);}
       sparkHtml='<div class="bc-spark">'+miniSpark(vals,300,40).replace('var(--i-fg)',trendColor)+'</div>';
     }
 
-    el.innerHTML='<div class="bc-card '+cardClass+'">'
-      +'<div class="bc-header"><div class="bc-weight">'+avg7+' <span style="font-size:14px;font-weight:500;color:var(--text-2);">lb avg</span></div>'
-      +'<div class="bc-trend" style="color:'+trendColor+';">'+trendText+'</div></div>'
-      +'<div class="bc-row"><span>Latest weigh-in</span><span>'+latest.weight+' lb ('+latest.date+')</span></div>'
-      +'<div class="bc-row"><span>Entries (7d)</span><span>'+recent.length+'</span></div>'
-      +bfHtml+goalHtml+sparkHtml
-      +'</div>';
+    const segHtml='<div class="seg"><button class="'+(bcCompView==='wt'?'on':'')+'" onclick="bcSetView(\'wt\')">Weight</button><button class="'+(bcCompView==='bf'?'on':'')+'" onclick="bcSetView(\'bf\')">Body fat</button></div>';
+    let cardInner;
+    if(bcCompView==='bf'){
+      cardInner=bfRows
+        ?'<div class="bc-header">'+bfHeader+'</div>'+bfRows
+        :'<div class="bc-empty" style="padding:6px 0;">No body-fat readings yet — add one at your monthly weigh-in to track fat vs lean mass.</div>';
+    }else{
+      cardInner='<div class="bc-header"><div class="bc-weight">'+avg7+' <span style="font-size:14px;font-weight:500;color:var(--text-2);">lb avg</span></div>'
+        +'<div class="bc-trend" style="color:'+trendColor+';">'+trendText+'</div></div>'
+        +'<div class="bc-row"><span>Latest weigh-in</span><span>'+latest.weight+' lb ('+latest.date+')</span></div>'
+        +'<div class="bc-row"><span>Entries (7d)</span><span>'+recent.length+'</span></div>'
+        +goalHtml+sparkHtml;
+    }
+    el.innerHTML='<div class="sect-head"><h3>Body composition</h3>'+segHtml+'</div>'
+      +'<div class="bc-card '+cardClass+'">'+cardInner+'</div>';
 
     renderGainExpectations();
   }
@@ -6985,7 +7115,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v73';
+    const APP_VERSION='v79';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -6997,8 +7127,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v73')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v73';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v79')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v79';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
