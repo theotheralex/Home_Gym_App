@@ -585,9 +585,9 @@ button:active{opacity:.75;transform:scale(.97);}
 .pr-strip-arrow{color:var(--text-3);font-size:18px;line-height:1;}
 /* segmented view pill (Your Week / Body comp toggles) */
 .sect-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.seg{display:inline-flex;background:#0e0e0e;border:1px solid var(--border);border-radius:10px;padding:3px;gap:2px;}
-.seg button{border:none;background:transparent;color:var(--text-2);font-size:12px;font-weight:600;padding:6px 13px;border-radius:8px;cursor:pointer;transition:all .12s;}
-.seg button.on{background:var(--surface-2);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,0.4);}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px;}
+.seg button{border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:999px;cursor:pointer;letter-spacing:.2px;transition:all .12s;font-family:inherit;}
+.seg button.on{background:var(--text);color:#0a0a0a;}
 /* recovery bars in Your Week recovery view (reuse .vbar shell) */
 .rbar-fill{position:absolute;top:0;bottom:0;left:0;border-radius:6px;}
 .rbar-fill.fresh{background:var(--s-fg);}
@@ -5159,7 +5159,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const nextAchHtml=nextAch.length
       ?'<div class="ach-next"><i class="ti ti-target"></i>Next: '+nextAch[0].name+'</div>'
       :(earned.length===totalAch?'<div class="ach-next" style="color:var(--s-fg);"><i class="ti ti-check" style="color:var(--s-fg);"></i>All unlocked</div>':'');
-    html+='<div class="str-overview-card" style="aspect-ratio:auto;" onclick="showStrengthAchievements()">'
+    html+='<div class="str-overview-card" style="aspect-ratio:auto;margin-bottom:10px;" onclick="showStrengthAchievements()">'
       +cardHead('medal','Achievements')
       +'<div class="str-card-stat" style="color:var(--w-fg);">'+earned.length+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+totalAch+'</span></div>'
       +'<div class="str-card-fill"><div class="ach-progress" style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;margin-bottom:6px;"><div class="ach-progress-fill" style="height:100%;width:'+achPct+'%;background:var(--w-fg);border-radius:3px;"></div></div>'
@@ -7088,7 +7088,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v80';
+    const APP_VERSION='v81';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7100,8 +7100,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v80')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v80';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v81')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v81';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
