@@ -635,8 +635,8 @@ button:active{opacity:.75;transform:scale(.97);}
 .bc-d.flat{color:var(--text-3);}
 .bc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);padding:4px 0;}
 .bc-row span:last-child{font-weight:600;color:var(--text);}
-.bc-spark{width:120px;height:46px;flex-shrink:0;}
-.bc-spark svg{width:100%;height:100%;display:block;}
+.bc-spark{width:100%;height:40px;margin-top:8px;}
+.bc-spark svg{width:100%;height:100%;}
 .bc-fig{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;}
 .bc-num{font-size:30px;font-weight:800;letter-spacing:-0.5px;line-height:1;}
 .bc-num .un{font-size:14px;font-weight:700;color:var(--text-2);}
@@ -5975,38 +5975,72 @@ button:active{opacity:.75;transform:scale(.97);}
       trendText+='<span class="bc-pct"> · '+Math.abs(ratePerWeek/avg7*100).toFixed(2)+'%/wk</span>';
     }
 
-    // ── Weight view: 7-day avg + trend word + 30-day sparkline ──
-    let wtNum=avg7+'<span class="un"> lbs</span>';
-    let wtSub='7-day avg';
-    if(ratePerWeek!==null){
-      const w=Math.abs(ratePerWeek);
-      wtSub+=' · '+(ratePerWeek<-0.05?'down '+w+' lb/wk':ratePerWeek>0.05?'up '+w+' lb/wk':'holding');
-    }
-    let wtSpark='';
-    if(log.length>=3){wtSpark=miniSpark(log.slice(-30).map(e=>e.weight),120,46).replace('var(--i-fg)',trendColor);}
-
-    // ── Body-fat view: latest % + change since last check + sparkline ──
-    let bfNum='',bfSub='',bfSpark='',bfHas=false;
+    // BF data — split into a headline (big bf%) and the fat/lean/FFMI rows so the
+    // body-fat view can lead with the number. Trend vs first check-in is coloured by
+    // GOOD DIRECTION: fat down = green, lean & FFMI up = green; the wrong way = amber.
+    let bfHeader='',bfRows='';
     if(state.bfLog&&state.bfLog.length){
-      bfHas=true;
-      const bfLog=state.bfLog,latestBf=bfLog[bfLog.length-1];
-      bfNum=latestBf.bf+'<span class="un"> %</span>';
-      if(bfLog.length>1){
-        const prevBf=bfLog[bfLog.length-2],d=Math.round((latestBf.bf-prevBf.bf)*10)/10,ad=Math.abs(d);
-        bfSub='monthly check · '+(d<-0.05?'down '+ad+' pts':d>0.05?'up '+ad+' pts':'holding');
-      }else{bfSub='monthly check · first reading';}
-      const bfColor=(bfLog.length>1&&latestBf.bf<=bfLog[bfLog.length-2].bf)?'var(--s-fg)':(bfLog.length>1?'var(--d-fg)':'var(--i-fg)');
-      if(bfLog.length>=3){bfSpark=miniSpark(bfLog.map(b=>b.bf),120,46).replace('var(--i-fg)',bfColor);}
+      const latestBf=state.bfLog[state.bfLog.length-1];
+      const firstBf=state.bfLog[0];
+      const fatMass=Math.round(avg7*(latestBf.bf/100)*10)/10;
+      const leanMass=Math.round((avg7-fatMass)*10)/10;
+      const startFat=Math.round(firstBf.bf*10)/10;
+      const showD=state.bfLog.length>1;
+      const startFatMass=log[0].weight*firstBf.bf/100,startLeanMass=log[0].weight-startFatMass;
+      const dtag=(delta,goodUp)=>{
+        if(Math.abs(delta)<0.05)return ' <span class="bc-d flat">&mdash;</span>';
+        const up=delta>0,good=goodUp?up:!up;
+        return ' <span class="bc-d '+(good?'good':'cau')+'">'+(up?'&#9650;':'&#9660;')+Math.abs(delta).toFixed(1)+'</span>';
+      };
+      bfHeader='<div class="bf-big">'+latestBf.bf+'% <span>body fat</span></div>'
+        +(showD?'<div class="bc-trend" style="color:var(--text-3);font-size:12px;">started '+startFat+'%</div>':'');
+      bfRows='<div class="bc-row"><span>Fat mass</span><span>'+fatMass+' lb'+(showD?dtag(fatMass-startFatMass,false):'')+'</span></div>'
+        +'<div class="bc-row"><span>Lean mass</span><span>'+leanMass+' lb'+(showD?dtag(leanMass-startLeanMass,true):'')+'</span></div>';
+      if(state.profile&&state.profile.heightIn){
+        const heightM=state.profile.heightIn*0.0254;
+        const leanKg=leanMass*0.453592;
+        const ffmi=Math.round(leanKg/(heightM*heightM)*10)/10;
+        const ffmiLabel=ffmi>=25?'Elite':ffmi>=22?'Muscular':ffmi>=20?'Athletic':'Average';
+        let ffmiD='';
+        if(showD){const startFFMI=(startLeanMass*0.453592)/(heightM*heightM);ffmiD=dtag(ffmi-startFFMI,true);}
+        bfRows+='<div class="bc-row"><span>FFMI</span><span>'+ffmi+' ('+ffmiLabel+')'+ffmiD+'</span></div>';
+      }
+    }
+
+    // Goal
+    const target=calcTargetWeight();
+    let goalHtml='';
+    if(target){
+      const remaining=Math.round((avg7-target.weight)*10)/10;
+      const eta=ratePerWeek&&ratePerWeek<-0.1&&remaining>0?Math.round(remaining/Math.abs(ratePerWeek))+'wk':'—';
+      goalHtml='<div class="bc-row"><span>Target ('+target.categoryName+', '+target.targetBF+'% BF)</span><span>~'+target.weight+' lb</span></div>';
+      if(remaining>0)goalHtml+='<div class="bc-row"><span>To go</span><span>'+remaining+' lb · ETA '+eta+'</span></div>';
+    }else if(state.profile&&state.profile.goalWeight){
+      const goalWeight=state.profile.goalWeight;
+      const remaining=Math.round((avg7-goalWeight)*10)/10;
+      const eta=ratePerWeek&&ratePerWeek<-0.1?Math.round(remaining/Math.abs(ratePerWeek))+'wk':'—';
+      goalHtml='<div class="bc-row"><span>To goal ('+goalWeight+' lb)</span><span>'+remaining+' lb · ETA '+eta+'</span></div>';
+    }
+
+    // Sparkline
+    let sparkHtml='';
+    if(log.length>=3){
+      const vals=log.slice(-30).map(e=>e.weight);
+      sparkHtml='<div class="bc-spark">'+miniSpark(vals,300,40).replace('var(--i-fg)',trendColor)+'</div>';
     }
 
     const segHtml='<div class="seg"><button class="'+(bcCompView==='wt'?'on':'')+'" onclick="bcSetView(\'wt\')">Weight</button><button class="'+(bcCompView==='bf'?'on':'')+'" onclick="bcSetView(\'bf\')">Body fat</button></div>';
     let cardInner;
     if(bcCompView==='bf'){
-      cardInner=bfHas
-        ?'<div class="bc-fig"><div><div class="bc-num">'+bfNum+'</div><div class="bc-sub">'+bfSub+'</div></div>'+(bfSpark?'<div class="bc-spark">'+bfSpark+'</div>':'')+'</div>'
+      cardInner=bfRows
+        ?'<div class="bc-header">'+bfHeader+'</div>'+bfRows
         :'<div class="bc-empty" style="padding:6px 0;">No body-fat readings yet — add one at your monthly weigh-in to track fat vs lean mass.</div>';
     }else{
-      cardInner='<div class="bc-fig"><div><div class="bc-num">'+wtNum+'</div><div class="bc-sub">'+wtSub+'</div></div>'+(wtSpark?'<div class="bc-spark">'+wtSpark+'</div>':'')+'</div>';
+      cardInner='<div class="bc-header"><div class="bc-weight">'+avg7+' <span style="font-size:14px;font-weight:500;color:var(--text-2);">lb avg</span></div>'
+        +'<div class="bc-trend" style="color:'+trendColor+';">'+trendText+'</div></div>'
+        +'<div class="bc-row"><span>Latest weigh-in</span><span>'+latest.weight+' lb ('+latest.date+')</span></div>'
+        +'<div class="bc-row"><span>Entries (7d)</span><span>'+recent.length+'</span></div>'
+        +goalHtml+sparkHtml;
     }
     el.innerHTML='<div class="sect-head"><h3>Body composition</h3>'+segHtml+'</div>'
       +'<div class="bc-card '+cardClass+'">'+cardInner+'</div>';
@@ -7058,7 +7092,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v82';
+    const APP_VERSION='v83';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7070,8 +7104,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v82')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v82';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v83')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v83';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
