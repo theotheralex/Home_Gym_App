@@ -600,9 +600,10 @@ button:active{opacity:.75;transform:scale(.97);}
 .pr-strip-arrow{color:var(--text-3);font-size:18px;line-height:1;}
 /* segmented view pill (Your Week / Body comp toggles) */
 .sect-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.seg{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px;}
-.seg button{border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:999px;cursor:pointer;letter-spacing:.2px;transition:all .12s;font-family:inherit;}
-.seg button.on{background:var(--text);color:#0a0a0a;}
+.seg{position:relative;display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px;}
+.seg .thumb{position:absolute;top:3px;left:0;height:calc(100% - 6px);width:0;background:var(--text);border-radius:999px;transform:translateX(3px);transition:transform .18s cubic-bezier(.4,0,.2,1),width .18s cubic-bezier(.4,0,.2,1);will-change:transform,width;pointer-events:none;}
+.seg button{position:relative;z-index:1;border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:999px;cursor:pointer;letter-spacing:.2px;transition:color .15s ease;font-family:inherit;}
+.seg button.on{color:#0a0a0a;}
 /* recovery bars in Your Week recovery view (reuse .vbar shell) */
 .rbar-fill{position:absolute;top:0;bottom:0;left:0;border-radius:6px;}
 .rbar-fill.fresh{background:var(--s-fg);}
@@ -2892,8 +2893,8 @@ button:active{opacity:.75;transform:scale(.97);}
   let pendingTime=null,pendingMode='full',restIv=null,restTotal=0,restRem=0,pendingScroll=-1;
   // Dashboard card view toggles (Your Week: volume/recovery; Body comp: weight/body-fat).
   let bcCompView='wt',ywCardView='vol';
-  window.ywSetView=function(v){ywCardView=v;renderYourWeek();};
-  window.bcSetView=function(v){bcCompView=v;renderBodyComp();};
+  window.ywSetView=function(v){ywCardView=v;renderYourWeek();placeSegThumbs();};
+  window.bcSetView=function(v){bcCompView=v;renderBodyComp();placeSegThumbs();};
 
   function load(){
     try{const r=localStorage.getItem(SK);if(r)state=Object.assign(state,JSON.parse(r));}catch(e){}
@@ -3470,6 +3471,39 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<span class="pr-strip-arrow">\u203a</span></div>';
   }
 
+  // Slide the white selector ("thumb") under the active pill of each segmented
+  // toggle. Remembers each seg's previous active index so that when a card
+  // rebuilds (Your Week / Body comp) the thumb is dropped at the OLD spot and
+  // then animated to the new one — making the rebuild invisible and the move
+  // feel like a physical slide. Strength's toggle keeps its DOM, so it just slides.
+  var segPrev={};
+  function placeSegThumbs(){
+    document.querySelectorAll('.seg[data-seg]').forEach(function(seg){
+      var key=seg.getAttribute('data-seg');
+      var btns=[].slice.call(seg.querySelectorAll('button'));
+      var thumb=seg.querySelector('.thumb');
+      if(!btns.length||!thumb)return;
+      var activeIdx=btns.findIndex(function(b){return b.classList.contains('on');});
+      if(activeIdx<0)activeIdx=0;
+      function setTo(idx,anim){
+        var b=btns[idx];if(!b)return;
+        if(!anim)thumb.style.transition='none';
+        thumb.style.width=b.offsetWidth+'px';
+        thumb.style.transform='translateX('+b.offsetLeft+'px)';
+        if(!anim){void thumb.offsetWidth;thumb.style.transition='';}
+      }
+      var prev=segPrev[key];
+      if(prev!=null&&prev!==activeIdx&&btns[prev]){
+        setTo(prev,false);
+        requestAnimationFrame(function(){requestAnimationFrame(function(){setTo(activeIdx,true);});});
+      }else{
+        setTo(activeIdx,false);
+      }
+      segPrev[key]=activeIdx;
+    });
+  }
+  window.placeSegThumbs=placeSegThumbs;
+
   function renderHome(){
     const name=state.profile?state.profile.name:'';
     const greetEl=document.getElementById('dash-greeting');
@@ -3498,6 +3532,9 @@ button:active{opacity:.75;transform:scale(.97);}
 
     // Strength overview (full version, rendered inline on dashboard)
     showStrength();
+
+    // Position the sliding pill selectors now that all segs are in the DOM
+    placeSegThumbs();
   }
 
   // Three glanceable stat cards under the hero: avg volume per session, career
@@ -3679,7 +3716,7 @@ button:active{opacity:.75;transform:scale(.97);}
     }
     const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
     // View pill — Volume (per-group sets toward goal) vs Recovery (per-muscle %).
-    const segHtml='<div class="seg"><button class="'+(ywCardView==='vol'?'on':'')+'" onclick="ywSetView(\'vol\')">Volume</button><button class="'+(ywCardView==='rec'?'on':'')+'" onclick="ywSetView(\'rec\')">Recovery</button></div>';
+    const segHtml='<div class="seg" data-seg="yw"><span class="thumb"></span><button class="'+(ywCardView==='vol'?'on':'')+'" onclick="ywSetView(\'vol\')">Volume</button><button class="'+(ywCardView==='rec'?'on':'')+'" onclick="ywSetView(\'rec\')">Recovery</button></div>';
     let viewContent;
     if(ywCardView==='rec'){
       const rec=getRec();
@@ -5110,6 +5147,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const l=document.getElementById('str-bd-lift'),m=document.getElementById('str-bd-musc');
     if(l)l.style.display=v==='lift'?'block':'none';
     if(m)m.style.display=v==='musc'?'block':'none';
+    placeSegThumbs();
   };
   // "See all" — reveal/hide the extra strength cards (PRs, Bodyweight, Volume).
   window.strToggleMore=function(){
@@ -5205,7 +5243,7 @@ button:active{opacity:.75;transform:scale(.97);}
       '<div class="lift-row"><span class="lift-name">'+(MUSCLE_LABELS[x.m]||x.m)+'</span><div class="lift-bar"><div style="width:'+Math.round(x.e1rm/bdMaxM*100)+'%"></div></div><span class="lift-val">'+x.e1rm+'<span class="u"> lb</span></span></div>'
     ).join(''):'<div class="bc-empty">No muscle strength data yet.</div>';
     html+='<div class="str-toggle-card"><div class="str-toggle-head"><h4>Top strength</h4>'
-      +'<div class="seg" id="str-bd-seg"><button class="on" id="str-bd-btn-lift" onclick="strSetView(\'lift\')">By lift</button><button id="str-bd-btn-musc" onclick="strSetView(\'musc\')">By muscle</button></div></div>'
+      +'<div class="seg" id="str-bd-seg" data-seg="str"><span class="thumb"></span><button class="on" id="str-bd-btn-lift" onclick="strSetView(\'lift\')">By lift</button><button id="str-bd-btn-musc" onclick="strSetView(\'musc\')">By muscle</button></div></div>'
       +'<div id="str-bd-lift" onclick="showStrengthLifts()" style="cursor:pointer;">'+bdLiftRows+'</div>'
       +'<div id="str-bd-musc" onclick="showStrengthMuscles()" style="cursor:pointer;display:none;">'+bdMuscRows+'</div>'
       +'</div>';
@@ -6068,7 +6106,7 @@ button:active{opacity:.75;transform:scale(.97);}
       sparkHtml='<div class="bc-spark">'+miniSpark(vals,300,40).replace('var(--i-fg)',trendColor)+'</div>';
     }
 
-    const segHtml='<div class="seg"><button class="'+(bcCompView==='wt'?'on':'')+'" onclick="bcSetView(\'wt\')">Weight</button><button class="'+(bcCompView==='bf'?'on':'')+'" onclick="bcSetView(\'bf\')">Body fat</button></div>';
+    const segHtml='<div class="seg" data-seg="bc"><span class="thumb"></span><button class="'+(bcCompView==='wt'?'on':'')+'" onclick="bcSetView(\'wt\')">Weight</button><button class="'+(bcCompView==='bf'?'on':'')+'" onclick="bcSetView(\'bf\')">Body fat</button></div>';
     let cardInner;
     if(bcCompView==='bf'){
       cardInner=bfRows
@@ -7134,7 +7172,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v88';
+    const APP_VERSION='v89';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7146,8 +7184,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v88')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v88';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v89')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v89';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
