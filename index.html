@@ -58,8 +58,11 @@ button:active{opacity:.75;transform:scale(.97);}
 .stack{display:flex;flex-direction:column;gap:10px;}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
 .stat-card{background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid rgba(255,255,255,0.06);border-radius:var(--rl);padding:16px;display:flex;flex-direction:column;cursor:default;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04),0 1px 0 rgba(0,0,0,0.4);}
-.home-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
-.home-stats .scard{cursor:default;padding:13px 12px;}
+.home-stats{display:flex;gap:8px;margin-bottom:14px;}
+.home-stats .ministat{flex:1;background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid rgba(255,255,255,0.06);border-radius:var(--r);padding:11px 12px;min-width:0;}
+.home-stats .ms-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);}
+.home-stats .ms-v{font-size:18px;font-weight:800;margin-top:2px;line-height:1.1;}
+.home-stats .ms-s{font-size:10.5px;color:var(--text-3);font-weight:600;}
 .stat-head{display:flex;align-items:center;gap:6px;margin-bottom:12px;}
 .stat-icon{font-size:15px;color:var(--text-2);display:flex;align-items:center;}
 .stat-label{flex:1;font-size:12px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
@@ -570,11 +573,11 @@ button:active{opacity:.75;transform:scale(.97);}
 /* Today hero — primary dashboard element */
 .hero{background:linear-gradient(180deg,var(--surface) 0%,var(--surface-2,#151515) 100%);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:10px;}
 .hero-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;}
-.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);}
-.hero-ready{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap;}
-.hero-ready.fresh{background:var(--s-bg);color:var(--s-fg);}
-.hero-ready.mid{background:var(--w-bg);color:var(--w-fg);}
-.hero-ready.low{background:var(--d-bg);color:var(--d-fg);}
+.hero-eyebrow{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#f87171;}
+.hero-ready{font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:4px 10px;border-radius:999px;white-space:nowrap;border:1px solid transparent;}
+.hero-ready.fresh{background:var(--s-bg);color:var(--s-fg);border-color:var(--s-br);}
+.hero-ready.mid{background:var(--w-bg);color:var(--w-fg);border-color:var(--w-br);}
+.hero-ready.low{background:var(--d-bg);color:var(--d-fg);border-color:var(--d-br);}
 .hero-focus{font-size:30px;font-weight:800;line-height:1.05;margin-bottom:4px;}
 .hero-muscles{font-size:13px;color:var(--text-2);margin-bottom:8px;}
 .hero-phase{font-size:12px;color:var(--text-3);margin-bottom:14px;}
@@ -583,7 +586,9 @@ button:active{opacity:.75;transform:scale(.97);}
 .hero-dots{display:flex;gap:3px;}
 .hero-dot{width:7px;height:7px;border-radius:50%;background:var(--border);}
 .hero-dot.on{background:var(--s-fg);}
-.hero-streak{display:flex;align-items:center;gap:4px;color:var(--w-fg);font-weight:600;}
+.hero-streak{display:flex;align-items:center;gap:5px;color:var(--text-2);font-weight:600;}
+.hero-streak .flame{color:var(--w-fg);display:inline-flex;align-items:center;}
+.hero-meta b{color:var(--text);font-weight:700;}
 .hero-start{width:100%;padding:14px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
 .hero-start:active{transform:scale(0.99);}
 /* Recent-PR celebration strip */
@@ -596,7 +601,7 @@ button:active{opacity:.75;transform:scale(.97);}
 /* segmented view pill (Your Week / Body comp toggles) */
 .sect-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 .seg{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px;}
-.seg button{border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:999px;cursor:pointer;letter-spacing:.2px;transition:all .12s;font-family:inherit;}
+.seg button{border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:999px;cursor:pointer;letter-spacing:.2px;transition:all .12s;font-family:inherit;}
 .seg button.on{background:var(--text);color:#0a0a0a;}
 /* recovery bars in Your Week recovery view (reuse .vbar shell) */
 .rbar-fill{position:absolute;top:0;bottom:0;left:0;border-radius:6px;}
@@ -919,10 +924,8 @@ button:active{opacity:.75;transform:scale(.97);}
 .hm-days{display:flex;flex-direction:column;justify-content:space-around;font-size:9px;color:var(--text-3);width:15px;padding:1px 0;}
 .hm-grid{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;gap:3px;flex:1;}
 .hm-cell{aspect-ratio:1;border-radius:3px;background:var(--surface-2);}
-.hm-cell.l1{background:rgba(220,38,38,0.30);}
-.hm-cell.l2{background:rgba(220,38,38,0.55);}
-.hm-cell.l3{background:rgba(220,38,38,0.80);}
-.hm-cell.l4{background:var(--accent);box-shadow:0 0 5px rgba(220,38,38,0.5);}
+.hm-cell.quick{background:rgba(220,38,38,0.5);}
+.hm-cell.full{background:var(--accent);box-shadow:0 0 5px rgba(220,38,38,0.5);}
 .hm-cell.today{outline:1.5px solid var(--text);outline-offset:1px;}
 .hm-cell.sel{outline:2px solid var(--i-fg);outline-offset:1px;}
 .hm-cell.hm-future{background:transparent;}
@@ -3269,9 +3272,10 @@ button:active{opacity:.75;transform:scale(.97);}
     return v=>v<=0?0:(v<=t1?1:v<=t2?2:v<=t3?3:4);
   }
   function hmWeeks(numWeeks,dv){
-    const lvl=hmLeveler(dv);
-    const quickDates=new Set();
-    (state.sessions||[]).forEach(s=>{if(s.quickMode)quickDates.add(hmLocalDate(s.timestamp));});
+    // 3-state coloring by session type: a day with any FULL session is brightest,
+    // a day with only QUICK session(s) is half-red, a day with none is empty.
+    const fullDates=new Set(),quickDates=new Set();
+    (state.sessions||[]).forEach(s=>{const ds=hmLocalDate(s.timestamp);if(s.quickMode)quickDates.add(ds);else fullDates.add(ds);});
     const thisMon=getMonday(new Date());
     const todayDs=hmLocalDate(Date.now()),nowTs=Date.now();
     const weeks=[];
@@ -3279,10 +3283,8 @@ button:active{opacity:.75;transform:scale(.97);}
       const monDate=addDays(thisMon,-w*7),days=[];
       for(let d=0;d<7;d++){
         const dayDate=addDays(monDate,d),dayTs=dayDate.getTime(),ds=hmLocalDate(dayTs),vol=dv.get(ds)||0;
-        let dayLvl=lvl(vol);
-        if(vol>0)dayLvl=Math.max(dayLvl,2);
-        if(quickDates.has(ds))dayLvl=Math.max(dayLvl,3);
-        days.push({ds,vol,lvl:dayLvl,isToday:ds===todayDs,isFuture:dayTs>nowTs});
+        const kind=fullDates.has(ds)?'full':(quickDates.has(ds)?'quick':'');
+        days.push({ds,vol,kind,isToday:ds===todayDs,isFuture:dayTs>nowTs});
       }
       weeks.push({monTs:monDate.getTime(),days});
     }
@@ -3296,7 +3298,7 @@ button:active{opacity:.75;transform:scale(.97);}
     let c='';
     weeks.forEach(wk=>wk.days.forEach(day=>{
       if(day.isFuture){c+='<span class="hm-cell hm-future"></span>';return;}
-      const cls='hm-cell'+(day.lvl?' l'+day.lvl:'')+(day.isToday?' today':'');
+      const cls='hm-cell'+(day.kind?' '+day.kind:'')+(day.isToday?' today':'');
       c+='<span class="'+cls+'" data-d="'+day.ds+'"'+(tappable?' onclick="heatmapDay(\''+day.ds+'\')"':'')+'></span>';
     }));
     return c;
@@ -3336,7 +3338,6 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="hm-months" style="grid-template-columns:repeat('+weeks.length+',1fr);">'+hmMonthsHTML(weeks)+'</div>'
       +'<div class="hm-grid-wrap"><div class="hm-days"><span>M</span><span>W</span><span>F</span></div>'
       +'<div class="hm-grid" style="grid-template-columns:repeat('+weeks.length+',1fr);">'+hmGridHTML(weeks,false)+'</div></div>'
-      +'<div class="hm-leg">Less<div class="cells"><span class="hm-cell"></span><span class="hm-cell l1"></span><span class="hm-cell l2"></span><span class="hm-cell l3"></span><span class="hm-cell l4"></span></div>More</div>'
       +'</div>';
   }
   // Expanded screen — 52 weeks (horizontally scrollable), full stats, tap-a-cell
@@ -3354,7 +3355,6 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="hm-grid-wrap"><div class="hm-days"><span>M</span><span>W</span><span>F</span></div>'
       +'<div class="hm-grid" style="grid-template-columns:repeat('+weeks.length+',1fr);min-width:'+(weeks.length*16)+'px;">'+hmGridHTML(weeks,true)+'</div></div>'
       +'</div></div>'
-      +'<div class="hm-leg">Less<div class="cells"><span class="hm-cell"></span><span class="hm-cell l1"></span><span class="hm-cell l2"></span><span class="hm-cell l3"></span><span class="hm-cell l4"></span></div>More</div>'
       +'<div id="hm-day-detail" class="hm-day-detail"><div class="hm-dd-hint">Tap any square to see that day.</div></div>';
   }
   window.showHeatmapDetail=function(){renderHeatmapDetail();showScreen('heatmap');};
@@ -3437,21 +3437,18 @@ button:active{opacity:.75;transform:scale(.97);}
     const r=Math.round(rec.avgRecovery||0);
     let rCls='low',rLbl='Needs rest';
     if(r>=75){rCls='fresh';rLbl='Recovered';}else if(r>=50){rCls='mid';rLbl='Recovering';}
-    let phaseLine='';
-    try{const ph=getPhase();if(ph&&ph.phase)phaseLine=ph.phase.name+' \u00b7 session '+ph.sessionInPhase+' of '+ph.totalInPhase;}catch(e){}
-    const monNow=getMonday(new Date());let dots='';
-    for(let i=3;i>=0;i--){
-      const ws=addDays(monNow,-i*7).getTime(),we=addDays(monNow,-i*7+7).getTime();
-      const c=state.sessions.filter(s=>s.timestamp>=ws&&s.timestamp<we).length;
-      dots+='<span class="hero-dot'+(c>=STREAK_THRESHOLD?' on':'')+'"></span>';
-    }
-    const streakHtml=stats.streak>0?'<span class="hero-streak">'+icon('flame',12)+' '+stats.streak+'wk</span>':'';
+    const now=new Date();
+    const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const dateStr='Today \u00b7 '+WD[now.getDay()]+' '+MO[now.getMonth()]+' '+now.getDate();
+    let dots='';
+    for(let i=0;i<target;i++)dots+='<span class="hero-dot'+(i<stats.thisWeek?' on':'')+'"></span>';
+    const streakHtml=stats.streak>0?'<span class="hero-streak"><span class="flame">'+icon('flame',12)+'</span> <b>'+stats.streak+'-wk streak</b></span>':'';
     el.innerHTML='<div class="hero">'
-      +'<div class="hero-top"><span class="hero-eyebrow">Today\u2019s focus</span><span class="hero-ready '+rCls+'">'+rLbl+' \u00b7 '+r+'%</span></div>'
-      +'<div class="hero-focus">'+focusName+'</div>'
+      +'<div class="hero-top"><span class="hero-eyebrow">'+dateStr+'</span><span class="hero-ready '+rCls+'">'+rLbl+'</span></div>'
+      +'<div class="hero-focus">'+focusName+' Day</div>'
       +(muscles?'<div class="hero-muscles">'+muscles+'</div>':'')
-      +'<div class="hero-meta"><span class="hero-week">This week '+stats.thisWeek+'/'+target+' <span class="hero-dots">'+dots+'</span></span>'+streakHtml+'</div>'
-      +'<button class="hero-start" onclick="startRecommended()">'+icon('barbell',16)+' Start '+focusName+' session</button>'
+      +'<div class="hero-meta"><span class="hero-week">This week <span class="hero-dots">'+dots+'</span> <b>'+stats.thisWeek+'/'+target+'</b></span>'+streakHtml+'</div>'
+      +'<button class="hero-start" onclick="startRecommended()">Start '+focusName+' session &nbsp;&rarr;</button>'
       +'</div>';
   }
 
@@ -3514,9 +3511,9 @@ button:active{opacity:.75;transform:scale(.97);}
     let phaseName='\u2014',phaseSub='';
     try{const ph=getPhase();if(ph&&ph.phase){phaseName=ph.phase.name;phaseSub='session '+ph.sessionInPhase+' of '+ph.totalInPhase;}}catch(e){}
     el.innerHTML=
-      '<div class="scard"><div class="sh">Avg vol</div><div class="sv">'+fmtV(stats.avgVol)+'</div><div class="ss">lb / session</div></div>'
-     +'<div class="scard"><div class="sh">Sessions</div><div class="sv">'+sessions+'</div><div class="ss">career</div></div>'
-     +'<div class="scard"><div class="sh">Phase</div><div class="sv" style="font-size:15px;">'+phaseName+'</div><div class="ss">'+phaseSub+'</div></div>';
+      '<div class="ministat"><div class="ms-l">Avg vol</div><div class="ms-v">'+fmtV(stats.avgVol)+'</div><div class="ms-s">lb / session</div></div>'
+     +'<div class="ministat"><div class="ms-l">Sessions</div><div class="ms-v">'+sessions+'</div><div class="ms-s">career</div></div>'
+     +'<div class="ministat"><div class="ms-l">Phase</div><div class="ms-v" style="font-size:15px;">'+phaseName+'</div><div class="ms-s">'+phaseSub+'</div></div>';
   }
 
   // ── YOUR WEEK ────────────────────────────────────────────
@@ -7137,7 +7134,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v86';
+    const APP_VERSION='v87';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7149,8 +7146,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v86')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v86';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v87')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v87';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
