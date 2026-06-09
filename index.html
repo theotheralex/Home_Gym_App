@@ -41,7 +41,12 @@
 html{font-size:16px;background:#0a0a0a;}
 body{background:radial-gradient(ellipse at 50% 0%,#0d0d0d 0%,var(--bg) 60%,#050505 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;overflow-x:hidden;}
 html{overflow-x:hidden;}
-#app{max-width:430px;margin:0 auto;padding:20px 16px 160px;}
+/* App shell: #app is a fixed, viewport-anchored scroll region (not body scroll).
+   On iOS, position:fixed;bottom:0 over a body-scrolled page drifts mid-scroll;
+   moving the scroll into #app means the body never scrolls in app mode, so the
+   fixed tab-bar has no document scroll to react to and stays pinned. Onboarding
+   (in-flow, body-scrolled) and the landscape overlays are unaffected. */
+#app{position:fixed;top:0;left:0;right:0;bottom:0;max-width:430px;margin:0 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:calc(env(safe-area-inset-top) + 20px) 16px calc(env(safe-area-inset-bottom) + 96px);}
 .screen{display:none;}.screen.active{display:block;}
 h1{font-size:28px;font-weight:700;letter-spacing:-.5px;}
 h2{font-size:22px;font-weight:700;letter-spacing:-.3px;}
@@ -58,11 +63,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .stack{display:flex;flex-direction:column;gap:10px;}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
 .stat-card{background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid rgba(255,255,255,0.06);border-radius:var(--rl);padding:16px;display:flex;flex-direction:column;cursor:default;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04),0 1px 0 rgba(0,0,0,0.4);}
-#home-stats{display:flex;gap:8px;margin-bottom:14px;}
-#home-stats .ministat{flex:1;background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid rgba(255,255,255,0.06);border-radius:var(--r);padding:11px 12px;min-width:0;}
-#home-stats .ms-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);}
-#home-stats .ms-v{font-size:18px;font-weight:800;margin-top:2px;line-height:1.1;}
-#home-stats .ms-s{font-size:10.5px;color:var(--text-3);font-weight:600;}
 .stat-head{display:flex;align-items:center;gap:6px;margin-bottom:12px;}
 .stat-icon{font-size:15px;color:var(--text-2);display:flex;align-items:center;}
 .stat-label{flex:1;font-size:12px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;}
@@ -143,14 +143,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .rinput{background:var(--bg);color:var(--text);border:1px solid var(--border-strong);border-radius:var(--r);font-size:17px;font-weight:700;font-family:inherit;padding:8px 10px;height:48px;width:68px;text-align:center;}
 .iunit{font-size:13px;color:var(--text-2);font-weight:500;}
 .fb-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
-.set-card.failset{border-left-color:var(--s-fg);}
-.set-tofail{font-size:10px;font-weight:800;background:var(--s-bg);color:var(--s-fg);border:1px solid var(--s-br);border-radius:999px;padding:2px 8px;letter-spacing:.4px;margin-left:7px;}
-.set-tgt{font-size:11px;color:var(--text-3);font-weight:600;margin-top:9px;}
-.set-tgt b{color:var(--text-2);font-weight:700;}
-.qcue{background:linear-gradient(180deg,rgba(220,38,38,0.10),rgba(220,38,38,0.04));border:1px solid rgba(220,38,38,0.30);border-radius:var(--rl);padding:13px 15px;margin-bottom:16px;}
-.qcue .qch{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:6px;}
-.qcue p{margin:0;font-size:13px;line-height:1.5;color:var(--text-2);}
-.qcue b{color:var(--text);font-weight:700;}
 .fb-btn{min-height:50px;font-size:13px;font-weight:700;border-radius:var(--r);border:1.5px solid var(--border-strong);background:var(--surface);color:var(--text-2);}
 .fb-btn.sel-easy{background:var(--d-bg);border-color:var(--d-br);color:var(--d-fg);box-shadow:inset 0 -3px 0 var(--d-fg);}
 .fb-btn.sel-good{background:var(--w-bg);border-color:var(--w-br);color:var(--w-fg);box-shadow:inset 0 -3px 0 var(--w-fg);}
@@ -570,93 +562,17 @@ button:active{opacity:.75;transform:scale(.97);}
 .wm-bf-input{width:80px;height:44px;background:var(--bg);border:1px solid var(--i-br);border-radius:var(--r);font-size:18px;font-weight:700;text-align:center;color:var(--text);font-family:inherit;}
 
 /* Body comp card */
-/* Today hero — primary dashboard element */
-.hero{background:linear-gradient(180deg,var(--surface) 0%,var(--surface-2,#151515) 100%);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:10px;}
-.hero-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;}
-.hero-eyebrow{font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#f87171;}
-.hero-ready{font-size:10px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:4px 10px;border-radius:999px;white-space:nowrap;border:1px solid transparent;}
-.hero-ready.fresh{background:var(--s-bg);color:var(--s-fg);border-color:var(--s-br);}
-.hero-ready.mid{background:var(--w-bg);color:var(--w-fg);border-color:var(--w-br);}
-.hero-ready.low{background:var(--d-bg);color:var(--d-fg);border-color:var(--d-br);}
-.hero-focus{font-size:30px;font-weight:800;line-height:1.05;margin-bottom:4px;}
-.hero-muscles{font-size:13px;color:var(--text-2);margin-bottom:8px;}
-.hero-phase{font-size:12px;color:var(--text-3);margin-bottom:14px;}
-.hero-meta{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:14px;font-size:12px;color:var(--text-2);}
-.hero-week{display:flex;align-items:center;gap:7px;}
-.hero-dots{display:flex;gap:3px;}
-.hero-dot{width:7px;height:7px;border-radius:50%;background:var(--border);}
-.hero-dot.on{background:var(--s-fg);}
-.hero-streak{display:flex;align-items:center;gap:5px;color:var(--text-2);font-weight:600;}
-.hero-streak .flame{color:var(--w-fg);display:inline-flex;align-items:center;}
-.hero-meta b{color:var(--text);font-weight:700;}
-.hero-start{width:100%;padding:14px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
-.hero-start:active{transform:scale(0.99);}
-/* Recent-PR celebration strip */
-.pr-strip{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,rgba(234,179,8,0.10) 0%,var(--surface) 100%);border:1px solid rgba(234,179,8,0.30);border-radius:var(--rl);padding:12px 14px;margin-bottom:10px;cursor:pointer;}
-.pr-strip:active{transform:scale(0.99);}
-.pr-strip-ico{font-size:18px;line-height:1;}
-.pr-strip-txt{flex:1;font-size:13px;color:var(--text);}
-.pr-strip-txt b{color:#eab308;}
-.pr-strip-arrow{color:var(--text-3);font-size:18px;line-height:1;}
-/* segmented view pill (Your Week / Body comp toggles) */
-.sect-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.seg{position:relative;display:inline-flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px;}
-.seg .thumb{position:absolute;top:3px;left:0;height:calc(100% - 6px);width:0;background:var(--text);border-radius:999px;transform:translateX(3px);transition:transform .18s cubic-bezier(.4,0,.2,1),width .18s cubic-bezier(.4,0,.2,1);will-change:transform,width;pointer-events:none;}
-.seg button{position:relative;z-index:1;border:none;background:transparent;color:var(--text-2);font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:999px;cursor:pointer;letter-spacing:.2px;transition:color .15s ease;font-family:inherit;}
-.seg button.on{color:#0a0a0a;}
-/* recovery bars in Your Week recovery view (reuse .vbar shell) */
-.rbar-fill{position:absolute;top:0;bottom:0;left:0;border-radius:6px;}
-.rbar-fill.fresh{background:var(--s-fg);}
-.rbar-fill.recovering{background:var(--w-fg);}
-.rbar-fill.fatigued{background:var(--d-fg);}
-.yw-rv{width:108px;text-align:right;font-size:11px;font-weight:600;color:var(--text-2);}
-/* body-fat view headline */
-.bf-big{font-size:28px;font-weight:700;}
-.bf-big span{font-size:14px;font-weight:500;color:var(--text-2);}
-/* strength breakdown toggle card + see-all */
-.str-toggle-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:10px;}
-.str-toggle-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.str-toggle-head h4{font-size:13px;font-weight:700;}
-.lift-row{display:flex;align-items:center;gap:11px;margin-bottom:9px;}
-.lift-row:last-child{margin-bottom:0;}
-.lift-name{font-size:13px;font-weight:600;width:80px;flex-shrink:0;text-transform:capitalize;}
-.lift-bar{position:relative;flex:1;height:11px;border-radius:6px;background:var(--surface-2);overflow:hidden;}
-.lift-bar div{position:absolute;top:0;bottom:0;left:0;background:var(--i-fg);border-radius:6px;}
-.lift-val{font-size:12px;font-weight:700;width:56px;text-align:right;color:var(--text);font-variant-numeric:tabular-nums;}
-.lift-val .u{font-size:10px;color:var(--text-3);font-weight:500;}
-.str-seeall{display:block;width:100%;text-align:center;font-size:13px;font-weight:600;color:var(--i-fg);padding:12px;cursor:pointer;background:none;border:none;margin-bottom:10px;}
-.sec-h{display:flex;justify-content:space-between;align-items:baseline;margin:16px 2px 11px;}
-.sec-h .t{font-size:13px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:0.8px;}
-.see-all{font-size:12px;font-weight:700;color:var(--i-fg);cursor:pointer;}
-.str2{display:flex;gap:8px;margin-bottom:10px;}
-.scard{flex:1;background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid rgba(255,255,255,0.06);border-radius:var(--rl);padding:14px;cursor:pointer;position:relative;}
-.scard .sh{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-2);margin-bottom:9px;}
-.scard .sv{font-size:25px;font-weight:800;letter-spacing:-0.5px;line-height:1;}
-.scard .sv .sm{font-size:14px;color:var(--text-2);font-weight:700;}
-.scard .ss{font-size:11px;color:var(--text-3);font-weight:600;margin-top:5px;}
-.scard .pbar{height:5px;border-radius:3px;background:var(--surface-2);margin-top:9px;overflow:hidden;}
-.scard .pbar div{height:100%;background:var(--w-fg);border-radius:3px;}
-.scard .scv{position:absolute;top:13px;right:12px;color:var(--text-3);font-weight:700;}
-.bc-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:10px;}
-.bc-card.bc-good{border-color:var(--s-fg);}
-.bc-card.bc-flat{border-color:var(--w-fg);}
-.bc-card.bc-up{border-color:var(--d-fg);}
+.bc-card{background:var(--surface);border-radius:var(--rl);padding:16px;margin-bottom:10px;}
+.bc-card.bc-good{border-left:4px solid var(--s-fg);}
+.bc-card.bc-flat{border-left:4px solid var(--w-fg);}
+.bc-card.bc-up{border-left:4px solid var(--d-fg);}
 .bc-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
 .bc-weight{font-size:28px;font-weight:700;}
 .bc-trend{font-size:14px;font-weight:700;}
-.bc-pct{font-size:11px;font-weight:600;color:var(--text-3);}
-.bc-d{font-weight:800;font-size:12px;margin-left:6px;}
-.bc-d.good{color:var(--s-fg);}
-.bc-d.cau{color:var(--w-fg);}
-.bc-d.flat{color:var(--text-3);}
 .bc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text-2);padding:4px 0;}
 .bc-row span:last-child{font-weight:600;color:var(--text);}
 .bc-spark{width:100%;height:40px;margin-top:8px;}
 .bc-spark svg{width:100%;height:100%;}
-.bc-fig{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;}
-.bc-num{font-size:30px;font-weight:800;letter-spacing:-0.5px;line-height:1;}
-.bc-num .un{font-size:14px;font-weight:700;color:var(--text-2);}
-.bc-sub{font-size:11.5px;color:var(--text-3);font-weight:600;margin-top:5px;}
 .bc-empty{color:var(--text-3);font-size:13px;padding:4px 0 8px;}
 
 /* Onboarding */
@@ -780,20 +696,14 @@ button:active{opacity:.75;transform:scale(.97);}
 .yw-vsum b.u{color:var(--w-fg);}.yw-vsum b.k{color:var(--s-fg);}.yw-vsum b.o{color:var(--i-fg);}
 .yw-frq{display:flex;flex-direction:column;gap:8px;}
 .yw-row{display:flex;align-items:center;gap:11px;}
-.yw-name{font-size:13.5px;font-weight:600;width:96px;flex-shrink:0;white-space:nowrap;display:inline-flex;align-items:center;}
-.vbar{position:relative;flex:1;height:13px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);overflow:hidden;}
-.vbar-band{position:absolute;top:0;bottom:0;background:rgba(255,255,255,0.085);}
-.vbar-fill{position:absolute;top:0;bottom:0;left:0;border-radius:6px 0 0 6px;}
-.vbar-fill.green{background:var(--s-fg);}
-.vbar-fill.yellow{background:var(--w-fg);}
-.vbar-fill.blue{background:var(--i-fg);}
-.vbar-fill.red{background:var(--d-fg);}
-.vbar-edge{position:absolute;top:0;bottom:0;width:2px;background:rgba(245,245,245,0.55);transform:translateX(-1px);}
-.pbadge{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;font-size:9px;font-weight:800;margin-left:7px;flex-shrink:0;line-height:1;}
-.pbadge.norm{background:var(--surface-2);border:1px solid var(--border-strong);color:var(--text-2);}
-.pbadge.alert{background:var(--d-fg);color:#160606;border:1px solid var(--d-fg);}
+.yw-name{font-size:13.5px;font-weight:600;width:74px;flex-shrink:0;}
+.yw-pips{display:flex;gap:3px;flex:1;}
+.yw-pip{height:9px;flex:1;border-radius:3px;background:var(--surface-2);border:1px solid var(--border);}
+.yw-pip.f{background:var(--s-fg);border-color:var(--s-fg);}
+.yw-pip.fa{background:var(--w-fg);border-color:var(--w-fg);}
+.yw-pip.over{background:var(--i-fg);border-color:var(--i-fg);}
 .yw-sv{font-size:12px;font-weight:700;width:62px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;}
-.yw-sv.ok{color:var(--s-fg);}.yw-sv.low{color:var(--w-fg);}.yw-sv.over{color:var(--i-fg);}.yw-sv.urgent{color:var(--d-fg);}
+.yw-sv.ok{color:var(--s-fg);}.yw-sv.low{color:var(--w-fg);}.yw-sv.over{color:var(--i-fg);}
 .yw-sv .u{font-size:10px;font-weight:500;color:var(--text-3);}
 .yw-coach{display:flex;gap:9px;margin-top:15px;padding-top:14px;border-top:1px solid var(--border);}
 .yw-coach i{font-size:15px;flex-shrink:0;margin-top:1px;}
@@ -847,9 +757,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .lv-fb-btn.hard{box-shadow:inset 0 -3px 0 var(--i-fg);}
 .lv-fb-btn.fail{box-shadow:inset 0 -3px 0 var(--s-fg);}
 .lv-fb-btn.done-single{background:var(--s-bg);border-color:var(--s-fg);color:var(--s-fg);min-width:clamp(120px,16vw,260px);}
-.lv-effort-hint{font-size:clamp(9px,1.3vh,18px);color:var(--text-3);font-weight:600;text-align:center;margin-top:clamp(6px,1.2vh,16px);}
-.lv-effort-hint.fail{color:var(--s-fg);}
-.lv-tofail{font-size:clamp(8px,1.1vh,15px);font-weight:800;background:var(--s-bg);color:var(--s-fg);border:1px solid var(--s-br);border-radius:999px;padding:1px clamp(5px,0.7vw,9px);letter-spacing:.4px;margin-left:clamp(5px,0.7vw,10px);}
 .lv-dropset-btn{background:none;border:none;color:var(--text-2);font-size:clamp(9px,1.4vh,18px);font-family:inherit;font-weight:600;cursor:pointer;margin-top:clamp(6px,1vh,14px);text-decoration:underline;text-decoration-color:rgba(160,160,160,0.3);text-underline-offset:3px;-webkit-tap-highlight-color:transparent;padding:clamp(4px,0.7vh,10px) clamp(8px,1.2vw,18px);}
 .lv-dropset-btn:active{opacity:0.65;}
 .lv-timer-wrap{display:flex;flex-direction:column;align-items:center;gap:clamp(4px,0.8vh,12px);margin-top:clamp(6px,1.2vh,18px);}
@@ -925,8 +832,10 @@ button:active{opacity:.75;transform:scale(.97);}
 .hm-days{display:flex;flex-direction:column;justify-content:space-around;font-size:9px;color:var(--text-3);width:15px;padding:1px 0;}
 .hm-grid{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;gap:3px;flex:1;}
 .hm-cell{aspect-ratio:1;border-radius:3px;background:var(--surface-2);}
-.hm-cell.quick{background:rgba(220,38,38,0.5);}
-.hm-cell.full{background:var(--accent);box-shadow:0 0 5px rgba(220,38,38,0.5);}
+.hm-cell.l1{background:rgba(220,38,38,0.30);}
+.hm-cell.l2{background:rgba(220,38,38,0.55);}
+.hm-cell.l3{background:rgba(220,38,38,0.80);}
+.hm-cell.l4{background:var(--accent);box-shadow:0 0 5px rgba(220,38,38,0.5);}
 .hm-cell.today{outline:1.5px solid var(--text);outline-offset:1px;}
 .hm-cell.sel{outline:2px solid var(--i-fg);outline-offset:1px;}
 .hm-cell.hm-future{background:transparent;}
@@ -1109,12 +1018,18 @@ button:active{opacity:.75;transform:scale(.97);}
         <span id="streak" style="font-size:13px;color:var(--text-2);font-weight:600;"></span>
       </div>
       <p class="sub" id="dash-greeting">Adaptive home gym training</p>
-      <div id="today-hero"></div>
-      <div id="home-stats"></div>
-      <div id="pr-strip"></div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-streak-icon"></span><span class="stat-label">Week streak</span></div><div id="stat-streak" class="stat-value">0</div><div class="stat-sub" id="stat-streak-sub"></div><div class="stat-viz" id="stat-streak-viz"></div></div>
+        <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-week-icon"></span><span class="stat-label">This week</span></div><div id="stat-week" class="stat-value">0</div><div class="stat-sub" id="stat-week-sub"></div><div class="stat-viz" id="stat-week-viz"></div></div>
+        <div class="stat-card" id="stat-days-card"><div class="stat-head"><span class="stat-icon" id="stat-days-icon"></span><span class="stat-label">Days since last</span></div><div id="stat-days" class="stat-value">—</div><div class="stat-sub" id="stat-days-sub"></div></div>
+        <div class="stat-card"><div class="stat-head"><span class="stat-icon" id="stat-avgvol-icon"></span><span class="stat-label">Avg vol / session</span></div><div id="stat-avgvol" class="stat-value">0</div><div class="stat-sub" id="stat-avgvol-sub"></div><div class="stat-viz" id="stat-avgvol-viz"></div></div>
+      </div>
       <div id="your-week"></div>
       <div id="heatmap-card"></div>
+      <h3>Body composition</h3>
       <div id="body-comp"></div>
+      <div id="gain-expectations"></div>
+      <h3>Strength</h3>
       <div id="strength-body"></div>
       <div class="stack" style="margin-top:16px;">
         <button class="bs" onclick="showFeedbackKey()">How it works</button>
@@ -1194,9 +1109,9 @@ button:active{opacity:.75;transform:scale(.97);}
         <h3>Quick Session</h3>
         <p style="color:var(--text-2);font-size:13px;margin-bottom:10px;">A high-density, time-efficient workout structured as three supersetted pairs. Each pair targets a different muscle area within the focus you picked.</p>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Three pairs of two</strong> — exercises A and B in each pair, done back-to-back with minimal rest. The progress dots at the top show your position across the three pairs (gray = pending, red = active, green = done).</div>
-        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>3 sets, 15+ reps, each one hard</strong> — fewer sets than Full Session, so each one has to count. Push to a rep or two from failure; stopping at a comfortable 15 with gas in the tank is the miss, not the goal.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>3 sets at 15 reps</strong> — fewer sets than Full Session but higher reps for a different stimulus. You'll feel the metabolic burn quickly.</div>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Lower starting weight</strong> — Quick Session starts you at ~70% of your usual weight to fit the higher rep target. The app auto-suggests this; adjust as needed on the first set.</div>
-        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Rate every set</strong> — each Quick set gets the same Easy/Good/Hard/Fail tap as Full Session. It's one tap, but it tells the app how hard you actually pushed, which feeds your recovery and the weight you get next time. The last set is the explicit to-failure set: empty the tank, then rate it. The rating only appears on the active set so you always know what's next.</div>
+        <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Done button on sets 1-2, rating on set 3</strong> — first two sets are just "Done" with no feedback rating. Only the last set's rating updates your progression — that's the one that matters for adapting next session. The button only appears on the active set so you always know what's next.</div>
         <div class="key-row" style="background:var(--surface);color:var(--text);"><strong>Shared progression with Full Session</strong> — the app uses the same weight-tracking across both modes. If you've been doing DB bench at 50 lb in Full Session, Quick Session knows that too.</div>
       </div>
 
@@ -2870,12 +2785,10 @@ button:active{opacity:.75;transform:scale(.97);}
         const sets=[];
         for(let j=0;j<QUICK_SETS;j++){
           let w=prog.weight;
-          // The 15-rep target sits only ~10-15% below the 8-12 working weight
-          // (12RM ≈ 70% 1RM, 15RM ≈ 65% 1RM), so 0.7× was dropping load far more than the
-          // rep change warrants — leaving reps in the tank. Start at 0.85× and let in-session
-          // feedback fine-tune from there.
+          // Optional: drop weight 30% as starting suggestion for adjustable equipment,
+          // since prog.weight is calibrated to lower-rep work.
           if(exIsAdj(ex)&&w!=null){
-            const lighter=Math.round(w*0.85);
+            const lighter=Math.round(w*0.7);
             if(exIsAdj(ex)){
               // Snap to available pool weight at or below the lighter target
               const pool=exPool(ex);
@@ -2891,10 +2804,6 @@ button:active{opacity:.75;transform:scale(.97);}
 
   let state={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},prs:[],scoreHistory:[],achievements:{},strengthGoal:null,musclePriorities:{},weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
   let pendingTime=null,pendingMode='full',restIv=null,restTotal=0,restRem=0,pendingScroll=-1;
-  // Dashboard card view toggles (Your Week: volume/recovery; Body comp: weight/body-fat).
-  let bcCompView='wt',ywCardView='vol';
-  window.ywSetView=function(v){ywCardView=v;renderYourWeek();placeSegThumbs();};
-  window.bcSetView=function(v){bcCompView=v;renderBodyComp();placeSegThumbs();};
 
   function load(){
     try{const r=localStorage.getItem(SK);if(r)state=Object.assign(state,JSON.parse(r));}catch(e){}
@@ -3012,15 +2921,12 @@ button:active{opacity:.75;transform:scale(.97);}
     return state.progressions[id];
   }
 
-  function adapt(id,fb,aReps,aWeight,isQuick){
+  function adapt(id,fb,aReps,aWeight){
     const ex=EX[id],prog=gProg(id);
     if(aWeight!=null&&!ex.fixedWeight)prog.weight=exIsAdj(ex)?nW(ex,aWeight):aWeight;
     // Use max of prescribed and actual — declining sets shouldn't ratchet the next session's reps backward.
     // Overachieving (doing more than prescribed) still gets recognized.
-    // Quick Session prescribes a flat 15-rep target that sits above most exercises' native
-    // range top. Cap its contribution at repRange[1] so a Quick Session never writes an
-    // out-of-range rep count into the SHARED progression (Full Session reads prog.reps raw).
-    if(aReps!=null)prog.reps=Math.max(prog.reps,isQuick?Math.min(aReps,ex.repRange[1]):aReps);
+    if(aReps!=null)prog.reps=Math.max(prog.reps,aReps);
     const usAdj=exIsAdj(ex), noL=exIsBW(ex);
 
     // Helper: bump weight if pool allows, otherwise climb reps past range (equipment ceiling)
@@ -3114,13 +3020,12 @@ button:active{opacity:.75;transform:scale(.97);}
       const ageH=(now-sess.timestamp)/H;
       sess.exercises.forEach(e=>{
         const ex=EX[e.id];if(!ex)return;
-        const doneSets=e.sets?e.sets.filter(s=>s.done&&!s.warmup):[];
-        const fbSets=doneSets.filter(s=>s.feedback);
+        const done=e.sets?e.sets.filter(s=>s.done&&s.feedback):[];
         let fbMult=DEFAULT_FB_MULT;
-        if(fbSets.length>0){
-          fbMult=fbSets.reduce((sum,s)=>sum+(FB_FATIGUE[s.feedback]||DEFAULT_FB_MULT),0)/fbSets.length;
+        if(done.length>0){
+          fbMult=done.reduce((sum,s)=>sum+(FB_FATIGUE[s.feedback]||DEFAULT_FB_MULT),0)/done.length;
         }
-        const setMult=doneSets.length>0?Math.min(doneSets.length/SET_BASELINE,SET_CAP):1;
+        const setMult=done.length>0?Math.min(done.length/SET_BASELINE,SET_CAP):1;
         Object.keys(ex.muscles).forEach(m=>{
           const intensity=ex.muscles[m]*(ex.type==='compound'?1:ACCESSORY_MULT);
           const decay=Math.max(0,1-(ageH/RECOVERY_HOURS));
@@ -3273,10 +3178,7 @@ button:active{opacity:.75;transform:scale(.97);}
     return v=>v<=0?0:(v<=t1?1:v<=t2?2:v<=t3?3:4);
   }
   function hmWeeks(numWeeks,dv){
-    // 3-state coloring by session type: a day with any FULL session is brightest,
-    // a day with only QUICK session(s) is half-red, a day with none is empty.
-    const fullDates=new Set(),quickDates=new Set();
-    (state.sessions||[]).forEach(s=>{const ds=hmLocalDate(s.timestamp);if(s.quickMode)quickDates.add(ds);else fullDates.add(ds);});
+    const lvl=hmLeveler(dv);
     const thisMon=getMonday(new Date());
     const todayDs=hmLocalDate(Date.now()),nowTs=Date.now();
     const weeks=[];
@@ -3284,22 +3186,17 @@ button:active{opacity:.75;transform:scale(.97);}
       const monDate=addDays(thisMon,-w*7),days=[];
       for(let d=0;d<7;d++){
         const dayDate=addDays(monDate,d),dayTs=dayDate.getTime(),ds=hmLocalDate(dayTs),vol=dv.get(ds)||0;
-        const kind=fullDates.has(ds)?'full':(quickDates.has(ds)?'quick':'');
-        days.push({ds,vol,kind,isToday:ds===todayDs,isFuture:dayTs>nowTs});
+        days.push({ds,vol,lvl:lvl(vol),isToday:ds===todayDs,isFuture:dayTs>nowTs});
       }
       weeks.push({monTs:monDate.getTime(),days});
     }
-    // Recent-first: most recent week becomes the leftmost column. Reversing here (the
-    // single shared builder) flips BOTH the dashboard card and the 52-week detail screen
-    // together, and the month labels in hmMonthsHTML follow automatically (read Jun→Feb).
-    weeks.reverse();
     return weeks;
   }
   function hmGridHTML(weeks,tappable){
     let c='';
     weeks.forEach(wk=>wk.days.forEach(day=>{
       if(day.isFuture){c+='<span class="hm-cell hm-future"></span>';return;}
-      const cls='hm-cell'+(day.kind?' '+day.kind:'')+(day.isToday?' today':'');
+      const cls='hm-cell'+(day.lvl?' l'+day.lvl:'')+(day.isToday?' today':'');
       c+='<span class="'+cls+'" data-d="'+day.ds+'"'+(tappable?' onclick="heatmapDay(\''+day.ds+'\')"':'')+'></span>';
     }));
     return c;
@@ -3339,6 +3236,7 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="hm-months" style="grid-template-columns:repeat('+weeks.length+',1fr);">'+hmMonthsHTML(weeks)+'</div>'
       +'<div class="hm-grid-wrap"><div class="hm-days"><span>M</span><span>W</span><span>F</span></div>'
       +'<div class="hm-grid" style="grid-template-columns:repeat('+weeks.length+',1fr);">'+hmGridHTML(weeks,false)+'</div></div>'
+      +'<div class="hm-leg">Less<div class="cells"><span class="hm-cell"></span><span class="hm-cell l1"></span><span class="hm-cell l2"></span><span class="hm-cell l3"></span><span class="hm-cell l4"></span></div>More</div>'
       +'</div>';
   }
   // Expanded screen — 52 weeks (horizontally scrollable), full stats, tap-a-cell
@@ -3356,6 +3254,7 @@ button:active{opacity:.75;transform:scale(.97);}
       +'<div class="hm-grid-wrap"><div class="hm-days"><span>M</span><span>W</span><span>F</span></div>'
       +'<div class="hm-grid" style="grid-template-columns:repeat('+weeks.length+',1fr);min-width:'+(weeks.length*16)+'px;">'+hmGridHTML(weeks,true)+'</div></div>'
       +'</div></div>'
+      +'<div class="hm-leg">Less<div class="cells"><span class="hm-cell"></span><span class="hm-cell l1"></span><span class="hm-cell l2"></span><span class="hm-cell l3"></span><span class="hm-cell l4"></span></div>More</div>'
       +'<div id="hm-day-detail" class="hm-day-detail"><div class="hm-dd-hint">Tap any square to see that day.</div></div>';
   }
   window.showHeatmapDetail=function(){renderHeatmapDetail();showScreen('heatmap');};
@@ -3419,91 +3318,6 @@ button:active{opacity:.75;transform:scale(.97);}
     };
   }
 
-  // Today hero — recommended focus, readiness, phase, week progress, one-tap start.
-  // Pulls the same recommendation the picker shows (pickFocusTypes()[0]) so the focus
-  // name and recovery % match exactly.
-  function renderHero(stats,target){
-    const el=document.getElementById('today-hero');
-    if(!el)return;
-    const rec=(pickFocusTypes()||[])[0];
-    if(!rec){
-      el.innerHTML='<div class="hero"><div class="hero-top"><span class="hero-eyebrow">Today\u2019s focus</span></div>'
-        +'<div class="hero-focus" style="font-size:22px;">Ready when you are</div>'
-        +'<div class="hero-muscles">Pick a focus and start your first session.</div>'
-        +'<button class="hero-start" onclick="startFlow(60)">'+icon('barbell',16)+' Start a session</button></div>';
-      return;
-    }
-    const focusName=(rec.focus&&rec.focus.name)||rec.key;
-    const muscles=(YW_FOCUS_COVERS[rec.key]||[]).join(' \u00b7 ');
-    const r=Math.round(rec.avgRecovery||0);
-    let rCls='low',rLbl='Needs rest';
-    if(r>=75){rCls='fresh';rLbl='Recovered';}else if(r>=50){rCls='mid';rLbl='Recovering';}
-    const now=new Date();
-    const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const dateStr='Today \u00b7 '+WD[now.getDay()]+' '+MO[now.getMonth()]+' '+now.getDate();
-    let dots='';
-    for(let i=0;i<target;i++)dots+='<span class="hero-dot'+(i<stats.thisWeek?' on':'')+'"></span>';
-    const streakHtml=stats.streak>0?'<span class="hero-streak"><span class="flame">'+icon('flame',12)+'</span> <b>'+stats.streak+'-wk streak</b></span>':'';
-    el.innerHTML='<div class="hero">'
-      +'<div class="hero-top"><span class="hero-eyebrow">'+dateStr+'</span><span class="hero-ready '+rCls+'">'+rLbl+'</span></div>'
-      +'<div class="hero-focus">'+focusName+' Day</div>'
-      +(muscles?'<div class="hero-muscles">'+muscles+'</div>':'')
-      +'<div class="hero-meta"><span class="hero-week">This week <span class="hero-dots">'+dots+'</span> <b>'+stats.thisWeek+'/'+target+'</b></span>'+streakHtml+'</div>'
-      +'<button class="hero-start" onclick="startRecommended()">Start '+focusName+' session &nbsp;&rarr;</button>'
-      +'</div>';
-  }
-
-  // Recent-PR celebration strip — only shows when the most recent session set a PR.
-  function renderPRStrip(){
-    const el=document.getElementById('pr-strip');
-    if(!el)return;
-    const prs=getRecentPRs(1);
-    const lastTs=state.sessions&&state.sessions.length?state.sessions[state.sessions.length-1].timestamp:0;
-    if(!prs.length||prs[0].date<lastTs){el.innerHTML='';return;}
-    const p=prs[0];
-    let val=p.exerciseName;
-    if(p.type==='weight')val=p.exerciseName+' '+p.weight+'\u00d7'+p.reps;
-    else if(p.type==='reps')val=p.exerciseName+' '+p.reps+' reps';
-    else if(p.type==='time'){const m=Math.floor(p.seconds/60),s=p.seconds%60;val=p.exerciseName+' '+(m?m+':'+String(s).padStart(2,'0'):p.seconds+'s');}
-    el.innerHTML='<div class="pr-strip" onclick="showStrengthPRs()">'
-      +'<span class="pr-strip-ico">\uD83C\uDFC6</span>'
-      +'<span class="pr-strip-txt"><b>New PR</b> \u00b7 '+val+'</span>'
-      +'<span class="pr-strip-arrow">\u203a</span></div>';
-  }
-
-  // Slide the white selector ("thumb") under the active pill of each segmented
-  // toggle. Remembers each seg's previous active index so that when a card
-  // rebuilds (Your Week / Body comp) the thumb is dropped at the OLD spot and
-  // then animated to the new one — making the rebuild invisible and the move
-  // feel like a physical slide. Strength's toggle keeps its DOM, so it just slides.
-  var segPrev={};
-  function placeSegThumbs(){
-    document.querySelectorAll('.seg[data-seg]').forEach(function(seg){
-      var key=seg.getAttribute('data-seg');
-      var btns=[].slice.call(seg.querySelectorAll('button'));
-      var thumb=seg.querySelector('.thumb');
-      if(!btns.length||!thumb)return;
-      var activeIdx=btns.findIndex(function(b){return b.classList.contains('on');});
-      if(activeIdx<0)activeIdx=0;
-      function setTo(idx,anim){
-        var b=btns[idx];if(!b)return;
-        if(!anim)thumb.style.transition='none';
-        thumb.style.width=b.offsetWidth+'px';
-        thumb.style.transform='translateX('+b.offsetLeft+'px)';
-        if(!anim){void thumb.offsetWidth;thumb.style.transition='';}
-      }
-      var prev=segPrev[key];
-      if(prev!=null&&prev!==activeIdx&&btns[prev]){
-        setTo(prev,false);
-        requestAnimationFrame(function(){requestAnimationFrame(function(){setTo(activeIdx,true);});});
-      }else{
-        setTo(activeIdx,false);
-      }
-      segPrev[key]=activeIdx;
-    });
-  }
-  window.placeSegThumbs=placeSegThumbs;
-
   function renderHome(){
     const name=state.profile?state.profile.name:'';
     const greetEl=document.getElementById('dash-greeting');
@@ -3513,13 +3327,55 @@ button:active{opacity:.75;transform:scale(.97);}
     const stats=calcAllStats();
     const target=state.profile&&state.profile.daysPerWeek?state.profile.daysPerWeek:3;
 
-    // Header streak badge (top bar)
+    // Inject icons (called once per render — cheap, rare op)
+    document.getElementById('stat-streak-icon').innerHTML=icon('flame',15);
+    document.getElementById('stat-week-icon').innerHTML=icon('check',15);
+    document.getElementById('stat-days-icon').innerHTML=icon('clock',15);
+    document.getElementById('stat-avgvol-icon').innerHTML=icon('barbell',15);
+
+    // Week streak — last 4 weeks as dots
+    document.getElementById('stat-streak').textContent=stats.streak;
+    document.getElementById('stat-streak-sub').textContent=stats.streak===1?'week':'weeks';
     document.getElementById('streak').textContent=stats.streak>0?stats.streak+'wk streak':'';
-    // Today hero + recent-PR strip (replaces the old 4-card stat grid;
-    // days-since retired; avg-vol/career relocate to the Strength area in pass 2).
-    renderHero(stats,target);
-    renderHomeStats(stats);
-    renderPRStrip();
+    // Build streak dots: filled = ≥3 sessions that week, going back 4 weeks
+    const streakDots=(()=>{
+      const monNow=getMonday(new Date());
+      const dots=[];
+      for(let i=3;i>=0;i--){
+        const weekStart=addDays(monNow,-i*7).getTime();
+        const weekEnd=addDays(monNow,-i*7+7).getTime();
+        const count=state.sessions.filter(s=>s.timestamp>=weekStart&&s.timestamp<weekEnd).length;
+        dots.push(count>=STREAK_THRESHOLD?'<span class="stat-dot on"></span>':'<span class="stat-dot"></span>');
+      }
+      return'<div class="stat-dots">'+dots.join('')+'</div>';
+    })();
+    document.getElementById('stat-streak-viz').innerHTML=streakDots;
+
+    // This week — progress bar toward target
+    document.getElementById('stat-week').textContent=stats.thisWeek+' / '+target;
+    const weekCard=document.getElementById('stat-week').parentElement;
+    weekCard.className='stat-card'+(stats.thisWeek>=target?' stat-good':(stats.thisWeek>=target-1?' stat-good':''));
+    document.getElementById('stat-week-sub').textContent=stats.thisWeek>=target?'target hit':stats.thisWeek>=target-1?'almost there':(target-stats.thisWeek)+' more to go';
+    const weekPct=Math.min(100,Math.round((stats.thisWeek/target)*100));
+    const weekColor=stats.thisWeek>=target?'var(--s-fg)':'var(--accent)';
+    document.getElementById('stat-week-viz').innerHTML='<div class="stat-bar"><div class="stat-bar-fill" style="width:'+weekPct+'%;background:'+weekColor+';"></div></div>';
+
+    // Days since last
+    const daysEl=document.getElementById('stat-days');
+    const daysCard=document.getElementById('stat-days-card');
+    if(stats.daysSince===null){daysEl.textContent='—';daysCard.className='stat-card';document.getElementById('stat-days-sub').textContent='no sessions yet';}
+    else if(stats.daysSince===0){daysEl.textContent='Today';daysCard.className='stat-card stat-good';document.getElementById('stat-days-sub').textContent='nice';}
+    else{daysEl.textContent=stats.daysSince;daysCard.className='stat-card'+(stats.daysSince>=3?' stat-alert':'');document.getElementById('stat-days-sub').textContent=stats.daysSince===1?'day ago':'days ago';}
+
+    // Avg vol — sparkline of last 10 sessions' volumes
+    document.getElementById('stat-avgvol').textContent=stats.avgVol.toLocaleString();
+    document.getElementById('stat-avgvol-sub').textContent='lb / session';
+    const recentVols=state.sessions.slice(-10).map(s=>s.totalVolume||0).filter(v=>v>0);
+    if(recentVols.length>=2){
+      document.getElementById('stat-avgvol-viz').innerHTML='<div class="stat-spark">'+miniSpark(recentVols,160,22)+'</div>';
+    }else{
+      document.getElementById('stat-avgvol-viz').innerHTML='';
+    }
 
     // Body composition
     renderBodyComp();
@@ -3532,40 +3388,13 @@ button:active{opacity:.75;transform:scale(.97);}
 
     // Strength overview (full version, rendered inline on dashboard)
     showStrength();
-
-    // Position the sliding pill selectors now that all segs are in the DOM
-    placeSegThumbs();
-  }
-
-  // Three glanceable stat cards under the hero: avg volume per session, career
-  // session count, and current phase (phase moved out of the hero line to here).
-  function renderHomeStats(stats){
-    const el=document.getElementById('home-stats');
-    if(!el)return;
-    if(!state.sessions||!state.sessions.length){el.innerHTML='';return;}
-    const fmtV=(v)=>v>=1000?(v/1000).toFixed(1).replace(/\.0$/,'')+'k':String(v);
-    const sessions=state.sessions.length;
-    let phaseName='\u2014',phaseSub='';
-    try{const ph=getPhase();if(ph&&ph.phase){phaseName=ph.phase.name;phaseSub='session '+ph.sessionInPhase+' of '+ph.totalInPhase;}}catch(e){}
-    el.innerHTML=
-      '<div class="ministat"><div class="ms-l">Avg vol</div><div class="ms-v">'+fmtV(stats.avgVol)+'</div><div class="ms-s">lb / session</div></div>'
-     +'<div class="ministat"><div class="ms-l">Sessions</div><div class="ms-v">'+sessions+'</div><div class="ms-s">career</div></div>'
-     +'<div class="ministat"><div class="ms-l">Phase</div><div class="ms-v" style="font-size:15px;">'+phaseName+'</div><div class="ms-s">'+phaseSub+'</div></div>';
   }
 
   // ── YOUR WEEK ────────────────────────────────────────────
-  // Makes the emergent plan visible in two parts: (1) a forward 7-day strip —
-  // today's REAL picker recommendation plus projected future training days
-  // (greedy fill, no repeated focus back-to-back, re-plans on every logged
-  // session, labeled provisional so a wrong projection can't pose as a promise);
-  // and (2) per-muscle weekly VOLUME — rolling-7-day set count (muscle
-  // contribution >=0.4, warmups and failed sets excluded) vs the per-muscle
-  // target ranges, classified under / in-range / over, with a coach line that
-  // flags imbalance or stale muscles and prescribes the correction.
-  // (Earlier this tracked per-muscle frequency vs a 2x target and had no
-  // projection; both were reversed on purpose — volume is the fuller metric,
-  // since landing in the range already implies the work was spread across days,
-  // and a clearly-provisional projection beats a blank week.)
+  // Makes the emergent plan visible: rolling-7-day sessions, per-muscle
+  // frequency vs the 2x target, and a coach line that flags imbalance and
+  // prescribes a correction. No forward projection by design — a wrong
+  // prediction erodes trust more than a missing one.
   const YW_GROUPS=[
     {key:'Back',muscles:['back','traps']},
     {key:'Chest',muscles:['chest']},
@@ -3638,24 +3467,20 @@ button:active{opacity:.75;transform:scale(.97);}
       }
     }
     const strip='<div class="yw-strip">'+cells.join('')+'</div><div class="yw-key">↻ Blue = projected — re-plans as you train</div>';
-    // Each muscle: a bar that fills toward its target RANGE. The shaded band spans
-    // min→max with a tick at each end; the range ceiling sits at TOP_FRAC of the bar,
-    // leaving headroom so "over" reads past the top. Per-row normalized (the absolute
-    // count lives in the value column). Priority muscles get a P badge that — along with
-    // the bar — goes red only when that muscle is under its (higher) range: the work-on-it flag.
-    const TOP_FRAC=0.78;
     const rows=mstats.map(x=>{
-      const v=x.sets,st=x.status,pri=getMusclePriority(x.m)==='priority',urgent=pri&&st==='under';
-      const fc=urgent?'red':(st==='under'?'yellow':st==='over'?'blue':'green');
-      const sc=urgent?'urgent':(st==='under'?'low':st==='over'?'over':'ok');
-      const scale=x.tgt.max/TOP_FRAC,minN=x.tgt.min/scale*100,maxN=x.tgt.max/scale*100,fillN=Math.min(98,v/scale*100);
-      const minP=minN.toFixed(1),maxP=maxN.toFixed(1),fillP=fillN.toFixed(1),bandW=(maxN-minN).toFixed(1);
-      const badge=pri?'<span class="pbadge '+(st==='under'?'alert':'norm')+'">P</span>':'';
-      const bar='<div class="vbar"><div class="vbar-band" style="left:'+minP+'%;width:'+bandW+'%"></div>'
-        +'<div class="vbar-fill '+fc+'" style="width:'+fillP+'%"></div>'
-        +'<div class="vbar-edge" style="left:'+minP+'%"></div><div class="vbar-edge" style="left:'+maxP+'%"></div></div>';
-      return'<div class="yw-row"><span class="yw-name">'+(MUSCLE_LABELS[x.m]||x.m)+badge+'</span>'
-        +bar+'<span class="yw-sv '+sc+'">'+v+' <span class="u">sets</span></span></div>';
+      const v=x.sets,st=x.status,unit=x.tgt.max/5;
+      const cls=st==='under'?'low':(st==='over'?'over':'ok');
+      let nf=Math.max(v>0?1:0,Math.min(5,Math.round(v/unit)));
+      if(st==='over')nf=5;
+      let pips='';
+      for(let i=0;i<5;i++){
+        let c='yw-pip';
+        if(i<nf)c+=st==='over'?(i===4?' over':' f'):(st==='under'?' fa':' f');
+        pips+='<span class="'+c+'"></span>';
+      }
+      return'<div class="yw-row"><span class="yw-name">'+(MUSCLE_LABELS[x.m]||x.m)+'</span>'
+        +'<span class="yw-pips">'+pips+'</span>'
+        +'<span class="yw-sv '+cls+'">'+v+' <span class="u">sets</span></span></div>';
     }).join('');
     const sUnder=mstats.filter(x=>x.status==='under');
     const sOver=mstats.filter(x=>x.status==='over');
@@ -3715,30 +3540,12 @@ button:active{opacity:.75;transform:scale(.97);}
       }
     }
     const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
-    // View pill — Volume (per-group sets toward goal) vs Recovery (per-muscle %).
-    const segHtml='<div class="seg" data-seg="yw"><span class="thumb"></span><button class="'+(ywCardView==='vol'?'on':'')+'" onclick="ywSetView(\'vol\')">Volume</button><button class="'+(ywCardView==='rec'?'on':'')+'" onclick="ywSetView(\'rec\')">Recovery</button></div>';
-    let viewContent;
-    if(ywCardView==='rec'){
-      const rec=getRec();
-      const RORDER=['back','chest','shoulders','biceps','triceps','legs','core','traps','forearms'];
-      const recRows=RORDER.map(m=>{
-        const sc=Math.round(rec[m]||0),rl=recLabel(sc),rc=sc>=75?'fresh':sc>=40?'recovering':'fatigued';
-        return'<div class="yw-row"><span class="yw-name">'+(MUSCLE_LABELS[m]||m)+'</span>'
-          +'<div class="vbar"><div class="rbar-fill '+rc+'" style="width:'+sc+'%"></div></div>'
-          +'<span class="yw-rv">'+rl.label+' &middot; '+sc+'%</span></div>';
-      }).join('');
-      viewContent='<div class="yw-cov-lbl">Recovery &middot; <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-3);">% recovered &middot; rebuilds to 100% over 48h</span></div>'
-        +'<div class="yw-frq">'+recRows+'</div>';
-    }else{
-      viewContent='<div class="yw-cov-lbl">Volume this week &middot; <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-3);">sets per muscle</span></div>'
-        +summary
-        +'<div class="yw-frq">'+rows+'</div>'
-        +'<div class="yw-coach '+cls+'"><i class="ti '+ic+'"></i><div class="yw-cb">'+body+'</div></div>';
-    }
-    el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span>'+segHtml+'</div>'
+    el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span><span class="yw-w">Plan &middot; '+dpw+' days/wk</span></div>'
       +strip
-      +viewContent
-      +'</div>';
+      +'<div class="yw-cov-lbl">Volume this week &middot; <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-3);">sets per muscle</span></div>'
+      +summary
+      +'<div class="yw-frq">'+rows+'</div>'
+      +'<div class="yw-coach '+cls+'"><i class="ti '+ic+'"></i><div class="yw-cb">'+body+'</div></div></div>';
   }
 
   function miniSpark(vals,w,h){
@@ -3802,15 +3609,6 @@ button:active{opacity:.75;transform:scale(.97);}
     }
     return theoretical;
   }
-
-  // Hero "Start" — launch the top recommended focus directly, skipping the picker.
-  // Sets the same pending state startFlow uses, then routes through pickTemplate.
-  window.startRecommended=function(){
-    const rec=(pickFocusTypes()||[])[0];
-    if(!rec){startFlow(60);return;}
-    pendingTime=60;pendingMode='full';
-    pickTemplate(rec.key);
-  };
 
   window.startFlow=function(time){
     pendingTime=time;
@@ -3927,7 +3725,6 @@ button:active{opacity:.75;transform:scale(.97);}
 
     // Quick Session: prepend pair-progress dots at the top (one per pair)
     if(sess.quickMode){
-      html+='<div class="qcue"><div class="qch">How to run a quick set</div><p>These sets are <b>effort-capped, not rep-capped</b>. Push each one to a rep or two from failure \u2014 racking a comfy 15 with gas left barely counts. <b>Last set: empty the tank.</b></p></div>';
       const pairCount=Math.max.apply(null,sess.exercises.map(e=>e.group!=null?e.group:-1))+1;
       const progDotsHtml=[];
       for(let p=0;p<pairCount;p++){
@@ -4080,15 +3877,13 @@ button:active{opacity:.75;transform:scale(.97);}
       // on the one thing the user can act on right now.
       if(!isCurrentSet){
         btnRowHtml='';
+      }else if(!isLastSet){
+        // Sets 1 and 2: green Done button, no feedback rating
+        btnRowHtml='<div class="fb-row-done"><button class="fb-done" onclick="setDone('+ei+','+si+')"><i class="ti ti-check"></i>Done</button></div>';
       }else{
-        // Every Quick set now gets the effort rating (was a bare Done on sets 1-2).
-        // One tap, same speed, but it feeds recovery + progression real intensity
-        // instead of a default guess. Last set is the explicit to-failure set.
+        // Last set: rating buttons (this is where progression adaptation comes from)
         const fbs=['easy','good','hard','fail'].map(f=>{const sel=s.feedback===f?' sel-'+f:'';const lbl={easy:'Easy',good:'Good',hard:'Hard',fail:'Fail'};return'<button class="fb-btn'+sel+'" onclick="setFB('+ei+','+si+',\''+f+'\')">'+lbl[f]+'</button>';}).join('');
-        const hint=isLastSet
-          ?'<div class="set-tgt">to failure \u2014 <b>as many as you can</b>, leave nothing</div>'
-          :'<div class="set-tgt">target <b>15+</b> \u00b7 the last 2\u20133 should be a fight</div>';
-        btnRowHtml='<div class="fb-row">'+fbs+'</div>'+hint;
+        btnRowHtml='<div class="fb-row">'+fbs+'</div>';
       }
     }else if(isQuick&&s.done){
       // Already done — no buttons (badge already shows status)
@@ -4105,10 +3900,7 @@ button:active{opacity:.75;transform:scale(.97);}
     else if(s.done){bdg='<span class="set-bdg" style="background:var(--s-bg);color:var(--s-fg);">DONE</span>';}
     const currentPill=isCurrent?'<span class="set-next-pill">GO</span>':'';
     const dropTag=s.isDropset?'<span class="tag" style="background:var(--w-bg);color:var(--w-fg);">Dropset</span>':'';
-    const isFailSet=isQuick&&isLastSet;
-    const failCls=isFailSet?' failset':'';
-    const failBadge=(isFailSet&&!s.done)?'<span class="set-tofail">TO FAILURE</span>':'';
-    return'<div class="set-card'+lc+isCurrent+failCls+'" id="set-'+ei+'-'+si+'"><div class="set-row1"><span class="set-lbl">Set '+(si+1)+currentPill+dropTag+failBadge+bdg+'</span><div class="set-inputs">'+wIn+(wIn?'<span class="set-sep">·</span>':'')+rIn+'</div></div>'+btnRowHtml+'</div>';
+    return'<div class="set-card'+lc+isCurrent+'" id="set-'+ei+'-'+si+'"><div class="set-row1"><span class="set-lbl">Set '+(si+1)+currentPill+dropTag+bdg+'</span><div class="set-inputs">'+wIn+(wIn?'<span class="set-sep">·</span>':'')+rIn+'</div></div>'+btnRowHtml+'</div>';
   }
 
   // Mark a warmup set complete. No feedback collected, no intra-session
@@ -4444,19 +4236,7 @@ button:active{opacity:.75;transform:scale(.97);}
           return fb==='easy'?'Already at limits — great set':'Logged ✓';
         }
       }else{
-        if(fb==='hard'){
-          // Quick Session has no rep-climbing lane (reps are pinned at the high-rep target),
-          // so Hard's only progression path is the 2-consecutive-Hard weight bump. consecutiveHard
-          // here still reflects the PRIOR session (this session's adapt runs at finishSession), so
-          // a stored value of 1 means this Hard will be the second → bump next session.
-          const qSess=state.currentSession;
-          if(qSess&&qSess.quickMode&&usAdj){
-            const p=gProg(exData.id),banked=(p.consecutiveHard||0)>=1,canBump=xW(ex,p.weight)>p.weight;
-            if(banked)return canBump?'Hard ✓ — two in a row, weight goes up next session':'Hard ✓ — two in a row, reps go up next session';
-            return'Hard ✓ — banked. One more solid session and it moves up';
-          }
-          return'Hard ✓ — perfect';
-        }
+        if(fb==='hard')return'Hard ✓ — perfect';
         if(fb==='easy'){
           if(usAdj){
             const nextW=xW(ex,origW);
@@ -4719,7 +4499,7 @@ button:active{opacity:.75;transform:scale(.97);}
       // Adapt off the last main working set, not the lighter dropset.
       if(completedMain.length){
         const lastMain=completedMain[completedMain.length-1];
-        adapt(e.id,agg,lastMain.actualReps,lastMain.actualWeight,sess.quickMode);
+        adapt(e.id,agg,lastMain.actualReps,lastMain.actualWeight);
       }
       const ex=EX[e.id];
       // Volume — exclude warmups (they're prep, not training stimulus); include dropsets (real work)
@@ -5118,7 +4898,7 @@ button:active{opacity:.75;transform:scale(.97);}
     document.querySelectorAll('.hiw-topic').forEach(el=>{
       el.hidden=el.dataset.cat!==catKey;
     });
-    window.scrollTo(0,0);
+    appScrollTop();
     const screen=document.getElementById('screen-key');
     if(screen)screen.scrollTop=0;
   };
@@ -5128,7 +4908,7 @@ button:active{opacity:.75;transform:scale(.97);}
     if(list)list.hidden=false;
     if(title)title.textContent='How it works';
     document.querySelectorAll('.hiw-topic').forEach(el=>el.hidden=true);
-    window.scrollTo(0,0);
+    appScrollTop();
     const screen=document.getElementById('screen-key');
     if(screen)screen.scrollTop=0;
   };
@@ -5139,30 +4919,11 @@ button:active{opacity:.75;transform:scale(.97);}
     else{goHome();}
   };
 
-  // Strength breakdown toggle (by-lift / by-muscle) — pure show/hide, no re-render.
-  window.strSetView=function(v){
-    const seg=document.getElementById('str-bd-seg');if(!seg)return;
-    seg.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
-    const btn=document.getElementById('str-bd-btn-'+v);if(btn)btn.classList.add('on');
-    const l=document.getElementById('str-bd-lift'),m=document.getElementById('str-bd-musc');
-    if(l)l.style.display=v==='lift'?'block':'none';
-    if(m)m.style.display=v==='musc'?'block':'none';
-    placeSegThumbs();
-  };
-  // "See all" — reveal/hide the extra strength cards (PRs, Bodyweight, Volume).
-  window.strToggleMore=function(){
-    const m=document.getElementById('strength-more'),b=document.getElementById('str-seeall-btn');
-    if(!m)return;
-    const show=(m.style.display==='none'||!m.style.display);
-    m.style.display=show?'block':'none';
-    if(b)b.textContent=show?'Hide \u2039':'See all \u203a';
-  };
-
   // ── STRENGTH OVERVIEW (card-based dashboard) ────────────
   window.showStrength=function(){
     const body=document.getElementById('strength-body');
     if(!state.e1rmHistory||!Object.keys(state.e1rmHistory).length){
-      body.innerHTML='<div class="sec-h"><span class="t">Strength</span></div><p style="color:var(--text-2);font-size:15px;padding:8px 0;">No strength data yet. Complete a few sessions to see your strength score grow.</p>';
+      body.innerHTML='<p style="color:var(--text-2);font-size:15px;padding:8px 0;">No strength data yet. Complete a few sessions to see your strength score grow.</p>';
       return;
     }
 
@@ -5211,17 +4972,14 @@ button:active{opacity:.75;transform:scale(.97);}
       return'<div class="'+cls+'"><div class="str-tier-dot" style="background:'+(reached?t.color:'var(--surface-2)')+';"></div><div class="str-tier-name">'+t.name+'</div><div class="str-tier-min">'+t.min+'</div></div>';
     }).join('')+'</div>';
 
-    // Achievements (for the two-up scard)
-    const earned=getEarnedAchievements();
-    const totalAch=ACHIEVEMENTS.length;
-    const achPct=Math.round((earned.length/totalAch)*100);
-    const achSub=earned.length?('latest: '+earned[earned.length-1].name):'train to unlock';
-
-    // Strength header + two-up: Strength Score | Achievements
-    let html='<div class="sec-h"><span class="t">Strength</span><span class="see-all" id="str-seeall-btn" onclick="strToggleMore()">See all \u203a</span></div>';
-    html+='<div class="str2">'
-      +'<div class="scard" onclick="showStrengthScore()"><div class="scv">\u203a</div><div class="sh">Strength Score</div><div class="sv">'+score+'</div><div class="ss">'+tier.name+' &middot; '+progressLabel+'</div></div>'
-      +'<div class="scard" onclick="showStrengthAchievements()"><div class="scv">\u203a</div><div class="sh">Achievements</div><div class="sv">'+earned.length+'<span class="sm"> / '+totalAch+'</span></div><div class="ss">'+achSub+'</div><div class="pbar"><div style="width:'+achPct+'%"></div></div></div>'
+    let html='<div class="str-score-card str-score-card-detail" onclick="showStrengthScore()" style="cursor:pointer;position:relative;">'
+      +'<div style="position:absolute;top:18px;right:18px;color:var(--text-3);font-size:16px;display:flex;align-items:center;"><i class="ti ti-chevron-right"></i></div>'
+      +'<div class="str-score-label">Strength Score</div>'
+      +'<div class="str-score-val">'+score+'</div>'
+      +'<div class="str-score-tier" style="color:'+tier.color+';">'+tier.name+'</div>'
+      +'<div class="str-progress-bar"><div class="str-progress-fill" style="width:'+progressPct+'%;background:'+tier.color+';"></div></div>'
+      +'<div class="str-progress-meta"'+(progressReached?' style="color:var(--s-fg);font-weight:700;"':'')+'>'+progressLabel+'</div>'
+      +tierDotsHtml
       +'</div>';
 
     // Cards section — categorized into 3 groups:
@@ -5229,58 +4987,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Score + Goal moved into the headline Score Card's tappable detail screen.
 
     // ─── Records: PRs + Bodyweight ───
-    // ── Breakdown toggle: By lift (score contribution) / By muscle (best e1RM) ──
-    const bdLifts=getScoreBreakdown();
-    const bdMaxL=bdLifts.length?(Math.max(...bdLifts.map(l=>l.e1rm))||1):1;
-    const bdLiftRows=bdLifts.length?bdLifts.slice(0,5).map(l=>
-      '<div class="lift-row"><span class="lift-name">'+l.name+'</span><div class="lift-bar"><div style="width:'+Math.round(l.e1rm/bdMaxL*100)+'%"></div></div><span class="lift-val">'+l.e1rm+'<span class="u"> lb</span></span></div>'
-    ).join(''):'<div class="bc-empty">Log compound lifts to see your breakdown.</div>';
-    const bdMB=[];
-    MUSCLES.forEach(m=>{const b=getBestForMuscle(m);if(b)bdMB.push({m,e1rm:b.e1rm});});
-    bdMB.sort((a,b)=>b.e1rm-a.e1rm);
-    const bdMaxM=bdMB.length?(bdMB[0].e1rm||1):1;
-    const bdMuscRows=bdMB.length?bdMB.slice(0,5).map(x=>
-      '<div class="lift-row"><span class="lift-name">'+(MUSCLE_LABELS[x.m]||x.m)+'</span><div class="lift-bar"><div style="width:'+Math.round(x.e1rm/bdMaxM*100)+'%"></div></div><span class="lift-val">'+x.e1rm+'<span class="u"> lb</span></span></div>'
-    ).join(''):'<div class="bc-empty">No muscle strength data yet.</div>';
-    html+='<div class="str-toggle-card"><div class="str-toggle-head"><h4>Top strength</h4>'
-      +'<div class="seg" id="str-bd-seg" data-seg="str"><span class="thumb"></span><button class="on" id="str-bd-btn-lift" onclick="strSetView(\'lift\')">By lift</button><button id="str-bd-btn-musc" onclick="strSetView(\'musc\')">By muscle</button></div></div>'
-      +'<div id="str-bd-lift" onclick="showStrengthLifts()" style="cursor:pointer;">'+bdLiftRows+'</div>'
-      +'<div id="str-bd-musc" onclick="showStrengthMuscles()" style="cursor:pointer;display:none;">'+bdMuscRows+'</div>'
-      +'</div>';
-
-    // Career (wide)
-    const lt=getLifetimeStats();
-    const fmtVol=(v)=>{
-      if(v>=1000000)return(v/1000000).toFixed(1).replace(/\.0$/,'')+'M';
-      if(v>=1000)return(v/1000).toFixed(1).replace(/\.0$/,'')+'k';
-      return String(v);
-    };
-    let careerSparkSvg='';
-    if(state.sessions&&state.sessions.length>=2){
-      const firstTs=state.sessions[0].timestamp;
-      const lastTs=state.sessions[state.sessions.length-1].timestamp;
-      const span=Math.max(1,lastTs-firstTs);
-      const buckets=Math.max(6,Math.min(20,Math.round(span/(7*86400000))));
-      const bucketSize=span/buckets;
-      const counts=new Array(buckets).fill(0);
-      state.sessions.forEach(s=>{const idx=Math.min(buckets-1,Math.floor((s.timestamp-firstTs)/bucketSize));counts[idx]++;});
-      const maxC=Math.max(...counts)||1;
-      const w=300,h=30;
-      const pts=counts.map((c,i)=>{const x=(i/(counts.length-1))*w;const y=h-(c/maxC)*(h-2)-1;return x.toFixed(1)+','+y.toFixed(1);}).join(' ');
-      careerSparkSvg='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="var(--i-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    }
-    html+='<div id="strength-more" style="display:none;">';
-    html+='<div class="career-card" onclick="showStrengthCareer()" style="margin-bottom:10px;">'
-      +cardHead('calendar','Career')
-      +'<div class="career-stats">'
-        +'<div class="career-stat"><div class="career-stat-num">'+lt.sessionCount+'</div><div class="career-stat-lbl">Sessions</div></div>'
-        +'<div class="career-stat"><div class="career-stat-num">'+lt.trainingAgeMonths+'</div><div class="career-stat-lbl">Mo training</div></div>'
-        +'<div class="career-stat"><div class="career-stat-num">'+fmtVol(lt.totalVolume)+'</div><div class="career-stat-lbl">Lb lifted</div></div>'
-      +'</div>'
-      +(careerSparkSvg?'<div class="career-spark">'+careerSparkSvg+'</div>':'')
-      +'</div>';
-
-    // PRs, Bodyweight, Volume (inside strength-more)
+    html+='<h3>Records</h3>';
     html+='<div class="str-cards-grid">';
 
     // Card: PRs — type breakdown bucket viz fills the bottom
@@ -5304,6 +5011,7 @@ button:active{opacity:.75;transform:scale(.97);}
     const bwBenchmarks=getBWBenchmarks();
     if(bwBenchmarks.length){
       const top=bwBenchmarks[0];
+      // Mini-list of next benchmarks (skipping the headline one)
       const restBenchmarks=bwBenchmarks.slice(1,3);
       let bwFillHtml='';
       if(restBenchmarks.length){
@@ -5329,19 +5037,32 @@ button:active{opacity:.75;transform:scale(.97);}
         +'</div>';
     }
 
+    html+='</div>'; // close Records grid
+
+    // ─── Training: Volume + Muscles + Lifts + Achievements ───
+    html+='<h3>Training</h3>';
+    html+='<div class="str-cards-grid">';
+
     // Card: Volume — weekly sets per muscle with mini-viz
     const wkVol=getWeeklyVolume();
-    const volStats=MUSCLES.map(m=>{const sets=wkVol[m].sets;const target=getMuscleTarget(m);return{muscle:m,sets,target,status:getVolumeStatus(sets,target),priority:getMusclePriority(m)};});
+    const volStats=MUSCLES.map(m=>{
+      const sets=wkVol[m].sets;
+      const target=getMuscleTarget(m);
+      return{muscle:m,sets,target,status:getVolumeStatus(sets,target),priority:getMusclePriority(m)};
+    });
     const inZone=volStats.filter(v=>v.status==='zone').length;
+    const totalTracked=volStats.filter(v=>v.sets>0||v.priority!=='normal').length||MUSCLES.length;
+    // Find priority muscles that are under target — drives alert state
     const priorityUnder=volStats.find(v=>v.priority==='priority'&&v.status==='under'&&v.sets<v.target.min);
+    // Mini-viz: 5 highest-volume muscles' bars relative to top of zone
     const topFive=volStats.slice().sort((a,b)=>b.sets-a.sets).slice(0,5);
     const miniBars=topFive.map(v=>{
       const pct=Math.min(120,Math.round((v.sets/v.target.max)*100));
-      const urgent=v.priority==='priority'&&v.status==='under';
-      const color=urgent?'var(--d-fg)':v.status==='under'?'var(--w-fg)':v.status==='over'?'var(--i-fg)':'var(--s-fg)';
+      const color=v.status==='zone'?'var(--s-fg)':v.status==='over'?'var(--w-fg)':'var(--d-fg)';
       return'<div class="vol-mini-bar"><div style="width:'+pct+'%;background:'+color+';"></div></div>';
     }).join('');
     if(priorityUnder){
+      // Alert state: red border, calls attention to priority gap
       html+='<div class="str-overview-card" onclick="showMusclePriorities()" style="border-color:var(--accent);background:linear-gradient(180deg,var(--d-bg) 0%,var(--surface) 100%);">'
         +'<div class="str-card-head"><span style="color:var(--accent);display:flex;align-items:center;">'+icon('stack-2',15)+'</span><span style="flex:1;color:var(--accent);">Volume</span><span style="color:var(--text-3);">'+icon('chevron-right',13)+'</span></div>'
         +'<div class="str-card-stat" style="font-size:18px;color:var(--accent);">'+(MUSCLE_LABELS[priorityUnder.muscle]||priorityUnder.muscle)+' low</div>'
@@ -5357,7 +5078,112 @@ button:active{opacity:.75;transform:scale(.97);}
         +'</div>';
     }
 
-    html+='</div></div>'; // close more grid + strength-more
+    // Card: By muscle group — taller vertical bar viz
+    const muscleBests=[];
+    MUSCLES.forEach(m=>{
+      const best=getBestForMuscle(m);
+      if(best)muscleBests.push({muscle:m,e1rm:best.e1rm,...best});
+    });
+    if(muscleBests.length){
+      const sortedBests=muscleBests.slice().sort((a,b)=>b.e1rm-a.e1rm);
+      const maxE=sortedBests[0].e1rm||1;
+      const barCount=Math.min(6,sortedBests.length);
+      const barsHtml='<div class="str-card-fill"><div class="muscle-bars">'+sortedBests.slice(0,barCount).map((mb,i)=>{
+        const h=Math.max(20,Math.round((mb.e1rm/maxE)*100));
+        const op=(0.4+(1-i/barCount)*0.6).toFixed(2);
+        return'<div class="muscle-bar" style="height:'+h+'%;opacity:'+op+';"></div>';
+      }).join('')+'</div></div>';
+      html+='<div class="str-overview-card" onclick="showStrengthMuscles()">'
+        +cardHead('chart-bar','Muscles')
+        +'<div class="str-card-stat" style="color:var(--i-fg);">'+muscleBests.length+'</div>'
+        +'<div class="str-card-sub">tracked · top: '+(MUSCLE_LABELS[muscleBests[0].muscle]||muscleBests[0].muscle).toLowerCase()+'</div>'
+        +barsHtml
+        +'</div>';
+    }else{
+      html+='<div class="str-overview-card" onclick="showStrengthMuscles()">'
+        +cardHead('chart-bar','Muscles')
+        +'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">no data yet</div>'
+        +'</div>';
+    }
+
+    // Card: Achievements — progress bar + next achievement hint
+    const earned=getEarnedAchievements();
+    const totalAch=ACHIEVEMENTS.length;
+    const achPct=Math.round((earned.length/totalAch)*100);
+    const nextAch=getNextAchievements(1);
+    const nextAchHtml=nextAch.length
+      ?'<div class="ach-next"><i class="ti ti-target"></i>Next: '+nextAch[0].name+'</div>'
+      :(earned.length===totalAch?'<div class="ach-next" style="color:var(--s-fg);"><i class="ti ti-check" style="color:var(--s-fg);"></i>All unlocked</div>':'');
+    html+='<div class="str-overview-card" onclick="showStrengthAchievements()">'
+      +cardHead('medal','Achievements')
+      +'<div class="str-card-stat" style="color:var(--w-fg);">'+earned.length+'<span style="font-size:14px;color:var(--text-2);font-weight:600;"> / '+totalAch+'</span></div>'
+      +(earned.length
+        ?'<div class="str-card-sub">latest unlocked</div>'
+        :'<div class="str-card-sub">train to unlock</div>')
+      +'<div class="str-card-fill"><div class="ach-progress" style="height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;"><div class="ach-progress-fill" style="height:100%;width:'+achPct+'%;background:var(--w-fg);border-radius:3px;"></div></div>'
+      +nextAchHtml
+      +'</div>'
+      +'</div>';
+
+    // Card: All tracked lifts — top 2 e1RM fill the bottom
+    const trackedLiftCount=Object.keys(state.e1rmHistory||{}).filter(id=>ALL_COMPOUNDS.includes(id)&&state.e1rmHistory[id].length).length;
+    const topLifts=getScoreBreakdown().slice(0,2);
+    const liftsFillHtml=topLifts.length
+      ?'<div class="str-card-fill"><div class="mini-list">'+topLifts.map(l=>
+          '<div class="mini-row"><span class="mini-row-name">'+l.name+'</span><span class="mini-row-val">'+l.e1rm+' <span style="color:var(--text-3);font-weight:600;">e1RM</span></span></div>'
+        ).join('')+'</div></div>'
+      :'';
+    html+='<div class="str-overview-card" onclick="showStrengthLifts()">'
+      +cardHead('trending-up','Lifts')
+      +'<div class="str-card-stat" style="color:var(--i-fg);">'+trackedLiftCount+'</div>'
+      +'<div class="str-card-sub">tracked compounds</div>'
+      +liftsFillHtml
+      +'</div>';
+
+    html+='</div>'; // close Training grid
+
+    // ─── Lifetime: Career ───
+    // Career uses a different shape than the squares — wide rectangle with stats grid + sparkline.
+    // Reaches outside the str-cards-grid so we can apply different layout rules.
+    html+='<h3>Lifetime</h3>';
+    const lt=getLifetimeStats();
+    // Format total volume (e.g. 13.4k, 487, 1.2M)
+    const fmtVol=(v)=>{
+      if(v>=1000000)return(v/1000000).toFixed(1).replace(/\.0$/,'')+'M';
+      if(v>=1000)return(v/1000).toFixed(1).replace(/\.0$/,'')+'k';
+      return String(v);
+    };
+    // Career sparkline — sessions per week over career
+    let careerSparkSvg='';
+    if(state.sessions&&state.sessions.length>=2){
+      const firstTs=state.sessions[0].timestamp;
+      const lastTs=state.sessions[state.sessions.length-1].timestamp;
+      const span=Math.max(1,lastTs-firstTs);
+      const buckets=Math.max(6,Math.min(20,Math.round(span/(7*86400000))));
+      const bucketSize=span/buckets;
+      const counts=new Array(buckets).fill(0);
+      state.sessions.forEach(s=>{
+        const idx=Math.min(buckets-1,Math.floor((s.timestamp-firstTs)/bucketSize));
+        counts[idx]++;
+      });
+      const maxC=Math.max(...counts)||1;
+      const w=300,h=30;
+      const pts=counts.map((c,i)=>{
+        const x=(i/(counts.length-1))*w;
+        const y=h-(c/maxC)*(h-2)-1;
+        return x.toFixed(1)+','+y.toFixed(1);
+      }).join(' ');
+      careerSparkSvg='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="var(--i-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+    html+='<div class="career-card" onclick="showStrengthCareer()">'
+      +cardHead('calendar','Career')
+      +'<div class="career-stats">'
+        +'<div class="career-stat"><div class="career-stat-num">'+lt.sessionCount+'</div><div class="career-stat-lbl">Sessions</div></div>'
+        +'<div class="career-stat"><div class="career-stat-num">'+lt.trainingAgeMonths+'</div><div class="career-stat-lbl">Mo training</div></div>'
+        +'<div class="career-stat"><div class="career-stat-num">'+fmtVol(lt.totalVolume)+'</div><div class="career-stat-lbl">Lb lifted</div></div>'
+      +'</div>'
+      +(careerSparkSvg?'<div class="career-spark">'+careerSparkSvg+'</div>':'')
+      +'</div>';
 
     body.innerHTML=html;
     // rendered inline on dashboard
@@ -5901,6 +5727,9 @@ button:active{opacity:.75;transform:scale(.97);}
   function releaseWakeLock(){
     if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
   }
+  // Scroll the app container (not the body — #app is the scroll region now) to top.
+  function appScrollTop(){const a=document.getElementById('app');if(a)a.scrollTop=0;}
+
   // Re-acquire wake lock when tab becomes visible again (iOS/Android minimize)
   document.addEventListener('visibilitychange',()=>{
     if(document.visibilityState==='visible'&&activeTab==='train')requestWakeLock();
@@ -5913,7 +5742,7 @@ button:active{opacity:.75;transform:scale(.97);}
     if(activeTab===tab){
       if(tab==='dash'){showDashScreen('home');renderHome();}
       else if(tab==='train'){showTrainScreen('train-home');renderTrainHome();}
-      window.scrollTo(0,0);
+      appScrollTop();
       return;
     }
     activeTab=tab;
@@ -5923,7 +5752,7 @@ button:active{opacity:.75;transform:scale(.97);}
     document.getElementById('tab-btn-'+tab).classList.add('active');
     if(tab==='dash'){renderHome();releaseWakeLock();}
     else if(tab==='train'){renderTrainHome();requestWakeLock();}
-    window.scrollTo(0,0);
+    appScrollTop();
   };
 
   function showDashScreen(name){
@@ -5931,7 +5760,7 @@ button:active{opacity:.75;transform:scale(.97);}
       const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('active',s===name);
     });
     if(activeTab!=='dash')switchTab('dash');
-    window.scrollTo(0,0);
+    appScrollTop();
   }
 
   function showTrainScreen(name){
@@ -5939,7 +5768,7 @@ button:active{opacity:.75;transform:scale(.97);}
       const el=document.getElementById('screen-'+s);if(el)el.classList.toggle('active',s===name);
     });
     if(activeTab!=='train')switchTab('train');
-    window.scrollTo(0,0);
+    appScrollTop();
   }
 
   // Override showScreen for backward compat
@@ -6017,7 +5846,7 @@ button:active{opacity:.75;transform:scale(.97);}
   function renderBodyComp(){
     const el=document.getElementById('body-comp');
     if(!state.weightLog||!state.weightLog.length){
-      el.innerHTML='<div class="sect-head"><h3>Body composition</h3></div><div class="bc-empty">Log your first weigh-in tomorrow morning to start tracking.</div>';
+      el.innerHTML='<div class="bc-empty">Log your first weigh-in tomorrow morning to start tracking.</div>';
       return;
     }
     const log=state.weightLog;
@@ -6048,39 +5877,25 @@ button:active{opacity:.75;transform:scale(.97);}
       else if(ratePerWeek>0.3){trendColor='var(--d-fg)';trendText='+'+ratePerWeek+' lb/wk';cardClass='bc-up';}
       else{trendText=(ratePerWeek>=0?'+':'')+ratePerWeek+' lb/wk';}
     }
-    if(ratePerWeek!==null&&avg7){
-      trendText+='<span class="bc-pct"> · '+Math.abs(ratePerWeek/avg7*100).toFixed(2)+'%/wk</span>';
-    }
 
-    // BF data — split into a headline (big bf%) and the fat/lean/FFMI rows so the
-    // body-fat view can lead with the number. Trend vs first check-in is coloured by
-    // GOOD DIRECTION: fat down = green, lean & FFMI up = green; the wrong way = amber.
-    let bfHeader='',bfRows='';
+    // BF data
+    let bfHtml='';
     if(state.bfLog&&state.bfLog.length){
       const latestBf=state.bfLog[state.bfLog.length-1];
       const firstBf=state.bfLog[0];
       const fatMass=Math.round(avg7*(latestBf.bf/100)*10)/10;
       const leanMass=Math.round((avg7-fatMass)*10)/10;
       const startFat=Math.round(firstBf.bf*10)/10;
-      const showD=state.bfLog.length>1;
-      const startFatMass=log[0].weight*firstBf.bf/100,startLeanMass=log[0].weight-startFatMass;
-      const dtag=(delta,goodUp)=>{
-        if(Math.abs(delta)<0.05)return ' <span class="bc-d flat">&mdash;</span>';
-        const up=delta>0,good=goodUp?up:!up;
-        return ' <span class="bc-d '+(good?'good':'cau')+'">'+(up?'&#9650;':'&#9660;')+Math.abs(delta).toFixed(1)+'</span>';
-      };
-      bfHeader='<div class="bf-big">'+latestBf.bf+'% <span>body fat</span></div>'
-        +(showD?'<div class="bc-trend" style="color:var(--text-3);font-size:12px;">started '+startFat+'%</div>':'');
-      bfRows='<div class="bc-row"><span>Fat mass</span><span>'+fatMass+' lb'+(showD?dtag(fatMass-startFatMass,false):'')+'</span></div>'
-        +'<div class="bc-row"><span>Lean mass</span><span>'+leanMass+' lb'+(showD?dtag(leanMass-startLeanMass,true):'')+'</span></div>';
+      bfHtml='<div class="bc-row"><span>Body fat</span><span>'+latestBf.bf+'%'+(state.bfLog.length>1?' (started '+startFat+'%)':'')+'</span></div>'
+        +'<div class="bc-row"><span>Fat mass</span><span>'+fatMass+' lb</span></div>'
+        +'<div class="bc-row"><span>Lean mass</span><span>'+leanMass+' lb</span></div>';
+      // FFMI
       if(state.profile&&state.profile.heightIn){
         const heightM=state.profile.heightIn*0.0254;
         const leanKg=leanMass*0.453592;
         const ffmi=Math.round(leanKg/(heightM*heightM)*10)/10;
         const ffmiLabel=ffmi>=25?'Elite':ffmi>=22?'Muscular':ffmi>=20?'Athletic':'Average';
-        let ffmiD='';
-        if(showD){const startFFMI=(startLeanMass*0.453592)/(heightM*heightM);ffmiD=dtag(ffmi-startFFMI,true);}
-        bfRows+='<div class="bc-row"><span>FFMI</span><span>'+ffmi+' ('+ffmiLabel+')'+ffmiD+'</span></div>';
+        bfHtml+='<div class="bc-row"><span>FFMI</span><span>'+ffmi+' ('+ffmiLabel+')</span></div>';
       }
     }
 
@@ -6106,21 +5921,13 @@ button:active{opacity:.75;transform:scale(.97);}
       sparkHtml='<div class="bc-spark">'+miniSpark(vals,300,40).replace('var(--i-fg)',trendColor)+'</div>';
     }
 
-    const segHtml='<div class="seg" data-seg="bc"><span class="thumb"></span><button class="'+(bcCompView==='wt'?'on':'')+'" onclick="bcSetView(\'wt\')">Weight</button><button class="'+(bcCompView==='bf'?'on':'')+'" onclick="bcSetView(\'bf\')">Body fat</button></div>';
-    let cardInner;
-    if(bcCompView==='bf'){
-      cardInner=bfRows
-        ?'<div class="bc-header">'+bfHeader+'</div>'+bfRows
-        :'<div class="bc-empty" style="padding:6px 0;">No body-fat readings yet — add one at your monthly weigh-in to track fat vs lean mass.</div>';
-    }else{
-      cardInner='<div class="bc-header"><div class="bc-weight">'+avg7+' <span style="font-size:14px;font-weight:500;color:var(--text-2);">lb avg</span></div>'
-        +'<div class="bc-trend" style="color:'+trendColor+';">'+trendText+'</div></div>'
-        +'<div class="bc-row"><span>Latest weigh-in</span><span>'+latest.weight+' lb ('+latest.date+')</span></div>'
-        +'<div class="bc-row"><span>Entries (7d)</span><span>'+recent.length+'</span></div>'
-        +goalHtml+sparkHtml;
-    }
-    el.innerHTML='<div class="sect-head"><h3>Body composition</h3>'+segHtml+'</div>'
-      +'<div class="bc-card '+cardClass+'">'+cardInner+'</div>';
+    el.innerHTML='<div class="bc-card '+cardClass+'">'
+      +'<div class="bc-header"><div class="bc-weight">'+avg7+' <span style="font-size:14px;font-weight:500;color:var(--text-2);">lb avg</span></div>'
+      +'<div class="bc-trend" style="color:'+trendColor+';">'+trendText+'</div></div>'
+      +'<div class="bc-row"><span>Latest weigh-in</span><span>'+latest.weight+' lb ('+latest.date+')</span></div>'
+      +'<div class="bc-row"><span>Entries (7d)</span><span>'+recent.length+'</span></div>'
+      +bfHtml+goalHtml+sparkHtml
+      +'</div>';
 
     renderGainExpectations();
   }
@@ -6623,22 +6430,15 @@ button:active{opacity:.75;transform:scale(.97);}
     const canDrop=exIsWeighted(ex)&&!isQuick&&!curSet.isDropset&&!curSet.warmup;
     const dropsetHtml=canDrop?'<button class="lv-dropset-btn" onclick="addDropset('+ei+');renderLandscape();">+ Add dropset</button>':'';
     // Warmups show a single Mark done button instead of the feedback grid
-    const isLastSet=si===totalSets-1;
-    const isFailSet=isQuick&&isLastSet&&!curSet.warmup;
-    const effortHint=(isQuick&&!curSet.warmup)
-      ?'<div class="lv-effort-hint'+(isFailSet?' fail':'')+'">'+(isFailSet?'To failure \u2014 as many as you can, leave nothing':'Push to a rep or two from failure \u2014 not a comfortable stop')+'</div>'
-      :'';
-    const failTag=isFailSet?'<span class="lv-tofail">TO FAILURE</span>':'';
     const actionHtml=curSet.warmup
       ?'<button class="lv-fb-btn done-single" style="background:var(--w-bg);border-color:var(--w-br);color:var(--w-fg);" onclick="setWarmupDone('+ei+','+si+');renderLandscape();">Mark warmup done</button>'
       :buildLvFbButtons(sess,ei,si,curEx);
-    return'<div class="lv-set-label"'+(curSet.warmup?' style="color:var(--w-fg);"':'')+'>'+setLabel+failTag+'</div>'
+    return'<div class="lv-set-label"'+(curSet.warmup?' style="color:var(--w-fg);"':'')+'>'+setLabel+'</div>'
       +'<div class="lv-ex-name">'+escHtml(curEx.name)+'</div>'
       +chipsHtml
       +rangeHint
       +timerHtml
       +'<div class="lv-history">'+histParts.join(' &nbsp;·&nbsp; ')+'</div>'
-      +effortHint
       +actionHtml
       +dropsetHtml;
   }
@@ -6858,6 +6658,10 @@ button:active{opacity:.75;transform:scale(.97);}
   }
 
   function buildLvFbButtons(sess,ei,si,curEx){
+    const isQuick=sess.quickMode,isLast=si===curEx.sets.length-1;
+    if(isQuick&&!isLast){
+      return'<div class="lv-fb-row"><button class="lv-fb-btn done-single" onclick="setDone('+ei+','+si+')">Done</button></div>';
+    }
     return'<div class="lv-fb-row">'
       +'<button class="lv-fb-btn easy" onclick="setFB('+ei+','+si+',\'easy\')">Easy</button>'
       +'<button class="lv-fb-btn good" onclick="setFB('+ei+','+si+',\'good\')">Good</button>'
@@ -7172,7 +6976,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v89';
+    const APP_VERSION='v73';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7184,8 +6988,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v89')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v89';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v73')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v73';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
