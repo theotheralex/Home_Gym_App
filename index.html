@@ -39,14 +39,15 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
 html{font-size:16px;background:#0a0a0a;}
-body{background:radial-gradient(ellipse at 50% 0%,#0d0d0d 0%,var(--bg) 60%,#050505 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);min-height:100dvh;overflow-x:hidden;}
+body{background:radial-gradient(ellipse at 50% 0%,#0d0d0d 0%,var(--bg) 60%,#050505 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);height:100dvh;display:flex;flex-direction:column;align-items:center;overflow:hidden;}
 html{overflow-x:hidden;}
-/* App shell: #app is a fixed, viewport-anchored scroll region (not body scroll).
-   On iOS, position:fixed;bottom:0 over a body-scrolled page drifts mid-scroll;
-   moving the scroll into #app means the body never scrolls in app mode, so the
-   fixed tab-bar has no document scroll to react to and stays pinned. Onboarding
-   (in-flow, body-scrolled) and the landscape overlays are unaffected. */
-#app{position:fixed;top:0;left:0;right:0;bottom:0;max-width:430px;margin:0 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:calc(env(safe-area-inset-top) + 20px) 16px calc(env(safe-area-inset-bottom) + 96px);}
+/* App shell: body is a viewport-height flex column, #app is the scrollable middle,
+   and the tab-bar is a real flex footer (see .tab-bar). The body never scrolls, so
+   there's no document scroll for a fixed bar to drift with — and because the bar is
+   a footer (not position:fixed), it sits at the true bottom with no iOS viewport gap.
+   Onboarding is hidden in app mode; when shown it fills the column and scrolls itself. */
+#app{flex:1 1 auto;min-height:0;width:100%;max-width:430px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:20px 16px 24px;}
+#onboarding{flex:1 1 auto;min-height:0;width:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .screen{display:none;}.screen.active{display:block;}
 h1{font-size:28px;font-weight:700;letter-spacing:-.5px;}
 h2{font-size:22px;font-weight:700;letter-spacing:-.3px;}
@@ -550,7 +551,7 @@ button:active{opacity:.75;transform:scale(.97);}
 .support-nudge a{color:var(--text-2);text-decoration:none;font-weight:500;}
 
 /* Tab bar */
-.tab-bar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:linear-gradient(180deg,#070707 0%,#040404 100%);border-top:1px solid var(--border);box-shadow:inset 0 2px 8px rgba(0,0,0,0.5),0 -1px 0 rgba(255,255,255,0.04);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom));gap:6px;}
+.tab-bar{flex-shrink:0;width:100%;z-index:50;background:linear-gradient(180deg,#070707 0%,#040404 100%);border-top:1px solid var(--border);box-shadow:inset 0 2px 8px rgba(0,0,0,0.5),0 -1px 0 rgba(255,255,255,0.04);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom));gap:6px;}
 .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 0;background:var(--surface);border:none;border-radius:var(--r);min-height:48px;color:var(--text-3);font-size:12px;font-weight:600;letter-spacing:0.3px;}
 .tab-btn:active{transform:none;opacity:1;}
 .tab-btn.active{background:linear-gradient(180deg,var(--surface-2) 0%,var(--surface) 100%);color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);}
@@ -7179,7 +7180,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v90';
+    const APP_VERSION='v91';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7191,8 +7192,8 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v90')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v90';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v91')caches.delete(n);});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v91';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
