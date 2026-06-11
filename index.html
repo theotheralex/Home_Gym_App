@@ -41,10 +41,9 @@
 html{font-size:16px;background:#0a0a0a;}
 body{background:radial-gradient(ellipse at 50% 0%,#0d0d0d 0%,var(--bg) 60%,#050505 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top);height:100dvh;display:flex;flex-direction:column;align-items:center;overflow:hidden;}
 html{overflow-x:hidden;}
-/* App shell: body is a viewport-height flex column, #app is the scrollable middle,
-   and the tab-bar is a real flex footer (see .tab-bar). The body never scrolls, so
-   there's no document scroll for a fixed bar to drift with — and because the bar is
-   a footer (not position:fixed), it sits at the true bottom with no iOS viewport gap.
+/* App shell: body is a viewport-height flex column that never scrolls; #app is the
+   scrollable middle. The tab-bar is a floating fixed capsule (see the Tab bar block) —
+   safe because the body doesn't scroll, so there's no document scroll to drift against.
    Onboarding is hidden in app mode; when shown it fills the column and scrolls itself. */
 #app{flex:1 1 auto;min-height:0;width:100%;max-width:430px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:20px 16px calc(env(safe-area-inset-bottom) + 104px);}
 #onboarding{flex:1 1 auto;min-height:0;width:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;}
@@ -525,14 +524,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .ach-featured-prog-row .lbl{color:var(--text-3);}
 .ach-featured-bar{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;}
 .ach-featured-bar-fill{height:100%;background:linear-gradient(90deg,var(--w-fg) 0%,#fde047 100%);border-radius:4px;}
-.ach-text{flex:1;}
-.ach-name{font-size:14px;font-weight:700;}
-.ach-desc{font-size:12px;color:var(--text-3);margin-top:2px;line-height:1.4;}
-.ach-pending{opacity:0.7;}
-.ach-pending .ach-icon{background:var(--surface-2);color:var(--text-3);border-color:var(--border);}
-.ach-progress-mini{height:4px;background:var(--bg);border-radius:2px;margin-top:6px;overflow:hidden;}
-.ach-progress-fill{height:100%;background:var(--accent);border-radius:2px;}
-.ach-progress-label{font-size:10px;color:var(--text-3);margin-top:2px;font-weight:500;}
 
 /* PR major styling */
 .pr-big{border-left-width:4px !important;border-left-color:var(--accent) !important;background:linear-gradient(90deg,var(--s-bg) 0%,var(--surface) 60%) !important;}
@@ -1514,7 +1505,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 
 <script>
 /*
- * The Toji Method · v6
+ * The Toji Method · v96
  * Built by Alexander Ortega (theotheralex) — © 2025
  * github.com/theotheralex · ko-fi.com/theotheralex
  *
@@ -6029,7 +6020,11 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
   }
 
   // WEIGHT CHECK-IN
-  function todayStr(){return new Date().toISOString().slice(0,10);}
+  // LOCAL date string (YYYY-MM-DD). Was toISOString() — that's UTC, which stamped
+  // tomorrow's date on anything logged after ~4-5pm Pacific: an evening weigh-in
+  // suppressed the next morning's check-in prompt and displayed dates ran a day
+  // ahead. hmLocalDate already does this correctly for the heatmap — reuse it.
+  function todayStr(){return hmLocalDate(Date.now());}
   function thisMonth(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1);}
 
   function checkWeighIn(){
@@ -6917,7 +6912,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     });
     // Stats: exercise N of total · minutes in · volume moved
     const totalEx=sess.exercises.length;
-    const elapsed=sess.startTime?Math.round((Date.now()-sess.startTime)/60000):0;
+    const elapsed=sess.timestamp?Math.round((Date.now()-sess.timestamp)/60000):0;
     let vol=0;
     sess.exercises.forEach(e=>{const ex=EX[e.id];const isW=exIsWeighted(ex)||ex.hasWeight;e.sets.forEach(s=>{if(s.done&&isW)vol+=(s.actualWeight||0)*(s.actualReps||0);});});
     const volK=vol>=1000?(vol/1000).toFixed(1)+'k':vol;
@@ -7131,7 +7126,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     const target=calcTargetWeight();
 
     let html='<div class="set-section"><div class="set-section-title">Profile</div>'
-      +'<div class="set-row editable" onclick="editName()"><span class="set-row-label">Name</span><span class="set-row-value">'+(p.name||'—')+'</span></div>'
+      +'<div class="set-row editable" onclick="editName()"><span class="set-row-label">Name</span><span class="set-row-value">'+escHtml(p.name||'—')+'</span></div>'
       +'<div class="set-row editable" onclick="editSex()"><span class="set-row-label">Sex</span><span class="set-row-value">'+(p.sex==='male'?'Male':p.sex==='female'?'Female':'—')+'</span></div>'
       +'<div class="set-row editable" onclick="editHeight()"><span class="set-row-label">Height</span><span class="set-row-value">'+(p.heightDisplay||'—')+'</span></div>'
       +'<div class="set-row editable" onclick="editStartWeight()"><span class="set-row-label">Starting weight</span><span class="set-row-value">'+(p.startWeight?p.startWeight+' lb':'—')+'</span></div>'
@@ -7175,7 +7170,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       +'<div class="set-row"><span class="set-row-label">Weight entries</span><span class="set-row-value">'+(state.weightLog?state.weightLog.length:0)+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">BF% entries</span><span class="set-row-value">'+(state.bfLog?state.bfLog.length:0)+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">Exercises tracked</span><span class="set-row-value">'+Object.keys(state.progressions).length+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">App version</span><span class="set-row-value">v6</span></div>'
+      +'<div class="set-row"><span class="set-row-label">App version</span><span class="set-row-value">v96</span></div>'
       +'</div>';
 
     html+='<div class="support-card">'
@@ -7184,7 +7179,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       +'</div>';
 
     html+='<div style="text-align:center;margin-top:24px;padding:16px 0;font-size:11px;color:var(--text-3);line-height:1.6;">'
-      +'The Toji Method · v6<br>'
+      +'The Toji Method · v96<br>'
       +'© 2025 Alexander Ortega · <a href="https://github.com/theotheralex" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">theotheralex</a><br>'
       +'<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">Licensed under CC BY-NC-SA 4.0</a>'
       +'</div>';
@@ -7198,7 +7193,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
-    a.href=url;a.download='toji-method-backup-'+new Date().toISOString().slice(0,10)+'.json';
+    a.href=url;a.download='toji-method-backup-'+todayStr()+'.json';
     document.body.appendChild(a);a.click();document.body.removeChild(a);
     URL.revokeObjectURL(url);
     toast('Data exported','hard');
@@ -7240,7 +7235,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v95';
+    const APP_VERSION='v96';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7252,10 +7247,10 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v95')caches.delete(n);});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v96')caches.delete(n);});});
     // Ask the browser to protect our storage from eviction (localStorage is the only copy of the user's data)
     if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v95';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{const fp=fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;});e.respondWith(Promise.race([fp,new Promise((_,rej)=>setTimeout(rej,3000))]).catch(()=>caches.match(e.request).then(c=>c||fp)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v96';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{const fp=fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;});e.respondWith(Promise.race([fp,new Promise((_,rej)=>setTimeout(rej,3000))]).catch(()=>caches.match(e.request).then(c=>c||fp)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
