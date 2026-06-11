@@ -46,7 +46,7 @@ html{overflow-x:hidden;}
    there's no document scroll for a fixed bar to drift with — and because the bar is
    a footer (not position:fixed), it sits at the true bottom with no iOS viewport gap.
    Onboarding is hidden in app mode; when shown it fills the column and scrolls itself. */
-#app{flex:1 1 auto;min-height:0;width:100%;max-width:430px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:20px 16px 24px;}
+#app{flex:1 1 auto;min-height:0;width:100%;max-width:430px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:20px 16px calc(env(safe-area-inset-bottom) + 104px);}
 #onboarding{flex:1 1 auto;min-height:0;width:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .screen{display:none;}.screen.active{display:block;}
 h1{font-size:28px;font-weight:700;letter-spacing:-.5px;}
@@ -219,7 +219,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
 /* Action banner (tier 2 — instructions, fixed floating) */
 .action-banner{
-  position:fixed;bottom:calc(env(safe-area-inset-bottom) + 76px);left:8px;right:8px;z-index:90;
+  position:fixed;bottom:calc(env(safe-area-inset-bottom) + 88px);left:8px;right:8px;z-index:90;
   margin:0;padding:10px 14px;border-radius:var(--rl);
   font-size:14px;font-weight:700;line-height:1.3;
   display:flex;justify-content:space-between;align-items:center;gap:10px;
@@ -550,12 +550,18 @@ button:active{opacity:.75;transform:scale(.97);}
 .support-nudge{font-size:13px;color:var(--text-3);text-align:center;margin-top:12px;}
 .support-nudge a{color:var(--text-2);text-decoration:none;font-weight:500;}
 
-/* Tab bar */
-.tab-bar{flex-shrink:0;width:100%;z-index:50;background:linear-gradient(180deg,#070707 0%,#040404 100%);border-top:1px solid var(--border);box-shadow:inset 0 2px 8px rgba(0,0,0,0.5),0 -1px 0 rgba(255,255,255,0.04);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom));gap:6px;}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 0;background:var(--surface);border:none;border-radius:var(--r);min-height:48px;color:var(--text-3);font-size:12px;font-weight:600;letter-spacing:0.3px;}
+/* Tab bar — floating capsule dock. White thumb slides between tabs (same mechanic
+   and timing as the segmented controls' .seg .thumb). Content scrolls behind it;
+   .nav-scrim softens the cutoff at the screen edge. Body never scrolls (v91 shell),
+   so the fixed dock can't drift. */
+.nav-scrim{position:fixed;left:0;right:0;bottom:0;height:90px;z-index:49;background:linear-gradient(180deg,rgba(5,5,5,0) 0%,rgba(5,5,5,0.8) 80%);pointer-events:none;}
+.tab-bar{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 14px);margin:0 auto;width:fit-content;z-index:50;display:flex;gap:4px;padding:5px;border-radius:999px;background:rgba(18,18,18,0.72);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--border);box-shadow:0 8px 28px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.05);}
+.tab-bar .thumb{position:absolute;top:5px;left:0;height:calc(100% - 10px);width:0;background:var(--text);border-radius:999px;transform:translateX(5px);transition:transform .18s cubic-bezier(.4,0,.2,1),width .18s cubic-bezier(.4,0,.2,1);will-change:transform,width;pointer-events:none;}
+.tab-btn{position:relative;z-index:1;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:8px;padding:13px 22px;background:transparent;border:none;border-radius:999px;min-height:0;color:var(--text-2);font-size:14px;font-weight:700;letter-spacing:0.2px;transition:color .15s ease;}
 .tab-btn:active{transform:none;opacity:1;}
-.tab-btn.active{background:linear-gradient(180deg,var(--surface-2) 0%,var(--surface) 100%);color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);}
-.tab-btn-icon{font-size:18px;}
+.tab-btn.active{color:#0a0a0a;background:transparent;box-shadow:none;}
+.tab-btn-icon{width:20px;height:20px;flex-shrink:0;}
+body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 .tab-page{display:none;}
 .tab-page.active{display:block;}
 
@@ -814,9 +820,9 @@ button:active{opacity:.75;transform:scale(.97);}
 #landscape-prompt .lp-title{font-size:clamp(18px,4vh,42px);font-weight:800;letter-spacing:-0.5px;}
 #landscape-prompt .lp-sub{font-size:clamp(13px,2.4vh,26px);color:var(--text-2);}
 @media (orientation:landscape){
-  body.has-session #app,body.has-session .tab-bar,body.has-session #rest-overlay{display:none!important;}
+  body.has-session #app,body.has-session .tab-bar,body.has-session .nav-scrim,body.has-session #rest-overlay{display:none!important;}
   body.has-session #landscape-view{display:grid;grid-template-columns:22% 1fr 24%;grid-template-rows:1fr clamp(30px,5.5vh,68px);}
-  body:not(.has-session) #app,body:not(.has-session) .tab-bar,body:not(.has-session) #onboarding{display:none!important;}
+  body:not(.has-session) #app,body:not(.has-session) .tab-bar,body:not(.has-session) .nav-scrim,body:not(.has-session) #onboarding{display:none!important;}
   body:not(.has-session) #landscape-prompt{display:flex;}
 }
 .lv-rail{padding:clamp(8px,1.4vh,20px) clamp(6px,1vw,16px);overflow:hidden;display:flex;flex-direction:column;gap:clamp(3px,0.6vh,8px);}
@@ -963,6 +969,11 @@ button:active{opacity:.75;transform:scale(.97);}
 @keyframes prVeilIn{from{opacity:0;}to{opacity:1;}}
 @keyframes prVeilOut{from{opacity:1;}to{opacity:0;}}
 @keyframes prCardIn{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+/* Reduced motion: snap all animation/transitions to instant. Delays are preserved
+   on purpose — the toast's auto-hide (tout … 2.7s forwards) still fires on time. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}
+}
 </style>
 </head>
 <body>
@@ -1493,10 +1504,12 @@ button:active{opacity:.75;transform:scale(.97);}
 
 </div>
 
-<!-- TAB BAR -->
+<!-- TAB BAR — floating capsule dock -->
+<div class="nav-scrim" id="nav-scrim"></div>
 <div class="tab-bar">
-  <button class="tab-btn active" id="tab-btn-dash" onclick="switchTab('dash')"><i class="ti ti-layout-dashboard tab-btn-icon"></i><span>Dashboard</span></button>
-  <button class="tab-btn" id="tab-btn-train" onclick="switchTab('train')"><i class="ti ti-barbell tab-btn-icon"></i><span>Train</span></button>
+  <div class="thumb"></div>
+  <button class="tab-btn active" id="tab-btn-dash" onclick="switchTab('dash')"><svg class="tab-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="7" rx="1.5"/><rect x="4" y="15" width="6" height="5" rx="1.5"/><rect x="14" y="4" width="6" height="5" rx="1.5"/><rect x="14" y="13" width="6" height="7" rx="1.5"/></svg><span>Dashboard</span></button>
+  <button class="tab-btn" id="tab-btn-train" onclick="switchTab('train')"><svg class="tab-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><rect x="3" y="9" width="3" height="6" rx="0.5"/><rect x="18" y="9" width="3" height="6" rx="0.5"/><rect x="6" y="10" width="2" height="4" rx="0.5"/><rect x="16" y="10" width="2" height="4" rx="0.5"/></svg><span>Train</span></button>
 </div>
 
 <script>
@@ -3541,6 +3554,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
     // Position the sliding pill selectors now that all segs are in the DOM
     placeSegThumbs();
+    maybeBackupNudge();
   }
 
   // Three glanceable stat cards under the hero: avg volume per session, career
@@ -5886,6 +5900,7 @@ button:active{opacity:.75;transform:scale(.97);}
       state={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};saveNow();
       document.getElementById('app').style.display='none';
       document.querySelector('.tab-bar').style.display='none';
+      document.getElementById('nav-scrim').style.display='none';
       document.getElementById('onboarding').style.display='block';
       obStep=1;obRender();
       btn.textContent='Reset all data';btn.style.color='';btn.style.borderColor='';
@@ -5894,24 +5909,63 @@ button:active{opacity:.75;transform:scale(.97);}
   window.goHome=function(){showDashScreen('home');renderHome();};
   window.goTrain=function(){showTrainScreen('train-home');renderTrainHome();};
 
-  // WAKE LOCK — keep screen on during training
+  // WAKE LOCK — keep the screen on while training. We want it whenever a session is live
+  // (the portrait session screen OR the landscape workout view) or the Train tab is open.
   let wakeLock=null;
+  function wantWakeLock(){ return !!state.currentSession || activeTab==='train'; }
   async function requestWakeLock(){
     try{
-      if('wakeLock' in navigator){
+      if(wakeLock)return; // already held — don't orphan a second sentinel
+      if('wakeLock' in navigator && document.visibilityState==='visible' && wantWakeLock()){
         wakeLock=await navigator.wakeLock.request('screen');
-        wakeLock.addEventListener('release',()=>{wakeLock=null;});
+        // iOS auto-releases on hide/rotate/system events and fires 'release'. If the page is
+        // still visible and we still want it, re-acquire — otherwise the screen sleeps mid-set
+        // (notably in landscape, where nothing else re-triggers acquisition).
+        wakeLock.addEventListener('release',()=>{
+          wakeLock=null;
+          if(document.visibilityState==='visible'&&wantWakeLock())requestWakeLock();
+        });
       }
     }catch(e){}
   }
   function releaseWakeLock(){
     if(wakeLock){wakeLock.release().catch(()=>{});wakeLock=null;}
   }
+  // Acquire or release to match current intent (used on tab switch and orientation change).
+  function syncWakeLock(){ if(wantWakeLock())requestWakeLock(); else releaseWakeLock(); }
   // Scroll the app container (not the body — #app is the scroll region now) to top.
   function appScrollTop(){const a=document.getElementById('app');if(a)a.scrollTop=0;}
-  // Re-acquire wake lock when tab becomes visible again (iOS/Android minimize)
+  // Slide the nav dock's white thumb under the active tab — same measure/set mechanic
+  // and timing as placeSegThumbs. anim=false snaps (initial placement / resize).
+  function placeTabThumb(anim){
+    const bar=document.querySelector('.tab-bar');if(!bar)return;
+    const t=bar.querySelector('.thumb'),a=bar.querySelector('.tab-btn.active');
+    if(!t||!a||!a.offsetWidth)return; // bar hidden (onboarding/landscape) — keep last position
+    if(anim===false)t.style.transition='none';
+    t.style.width=a.offsetWidth+'px';
+    t.style.transform='translateX('+a.offsetLeft+'px)';
+    if(anim===false){void t.offsetWidth;t.style.transition='';}
+  }
+  window.addEventListener('resize',()=>placeTabThumb(false));
+  // Hide the dock while the keyboard is up — iOS floats fixed elements above the
+  // keyboard, which would park the nav over the focused input. The focusout→focusin
+  // hop between inputs is debounced so the dock doesn't flash mid-form.
+  let kbT=null;
+  document.addEventListener('focusin',e=>{if(e.target.matches&&e.target.matches('input,select,textarea')){clearTimeout(kbT);document.body.classList.add('kb-open');}});
+  document.addEventListener('focusout',e=>{if(e.target.matches&&e.target.matches('input,select,textarea')){clearTimeout(kbT);kbT=setTimeout(()=>{const a=document.activeElement;if(!a||!a.matches||!a.matches('input,select,textarea'))document.body.classList.remove('kb-open');},120);}});
+  // Backup nudge — every 15 sessions, remind that the data lives only on this device.
+  // Decoupled from session-finish so it never steps on tier-up/achievement reveals.
+  function maybeBackupNudge(){
+    const n=(state.sessions||[]).length;
+    if(n<15||state.currentSession)return;
+    if(n>=(state.lastBackupNudgeAt||0)+15){
+      state.lastBackupNudgeAt=n;save();
+      toast(n+' sessions logged — back up in Settings','good',4500);
+    }
+  }
+  // Re-acquire wake lock when the tab becomes visible again (iOS/Android minimize/relock).
   document.addEventListener('visibilitychange',()=>{
-    if(document.visibilityState==='visible'&&activeTab==='train')requestWakeLock();
+    if(document.visibilityState==='visible'&&wantWakeLock())requestWakeLock();
   });
 
   // TAB SWITCHING
@@ -5929,8 +5983,10 @@ button:active{opacity:.75;transform:scale(.97);}
     document.getElementById('tab-'+tab).classList.add('active');
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
     document.getElementById('tab-btn-'+tab).classList.add('active');
-    if(tab==='dash'){renderHome();releaseWakeLock();}
-    else if(tab==='train'){renderTrainHome();requestWakeLock();}
+    placeTabThumb(true);
+    if(tab==='dash'){renderHome();}
+    else if(tab==='train'){renderTrainHome();}
+    syncWakeLock();
     appScrollTop();
   };
 
@@ -6408,12 +6464,15 @@ button:active{opacity:.75;transform:scale(.97);}
     document.getElementById('onboarding').style.display='none';
     document.getElementById('app').style.display='block';
     document.querySelector('.tab-bar').style.display='flex';
+    document.getElementById('nav-scrim').style.display='block';
     renderHome();
+    placeTabThumb(false);
   };
 
   window.rerunOnboarding=function(){
     document.getElementById('app').style.display='none';
     document.querySelector('.tab-bar').style.display='none';
+    document.getElementById('nav-scrim').style.display='none';
     document.getElementById('onboarding').style.display='block';
     // Pre-fill with existing profile
     if(state.profile){
@@ -6883,7 +6942,7 @@ button:active{opacity:.75;transform:scale(.97);}
 
   // Listen for orientation changes and trigger landscape re-render
   window.addEventListener('orientationchange',()=>setTimeout(()=>{
-    renderLandscape();
+    renderLandscape();syncWakeLock();
     // If we just rotated to portrait with an active session, scroll to the active set
     if(!window.matchMedia('(orientation:landscape)').matches&&state.currentSession){
       const cur=getCurrentSet();
@@ -6891,7 +6950,7 @@ button:active{opacity:.75;transform:scale(.97);}
     }
   },100));
   window.matchMedia('(orientation:landscape)').addEventListener('change',e=>{
-    renderLandscape();
+    renderLandscape();syncWakeLock();
     if(!e.matches&&state.currentSession){
       const cur=getCurrentSet();
       if(cur.ei>=0)scrollToActiveSet(cur.ei,200);
@@ -7160,6 +7219,7 @@ button:active{opacity:.75;transform:scale(.97);}
         const fresh={sessions:[],progressions:{},lastSession:null,currentSession:null,e1rmHistory:{},prs:[],scoreHistory:[],achievements:{},strengthGoal:null,musclePriorities:{},weightLog:[],bfLog:[],lastWeighInDate:null,lastBfMonth:null,profile:null};
         state=Object.assign(fresh,imported);
         if(!Array.isArray(state.sessions))state.sessions=[];
+        if(state.lastBackupNudgeAt==null)state.lastBackupNudgeAt=state.sessions.length;
         saveNow();loadDBW();loadKBW();invalidateRecCache();
         renderHome();
         toast('Data restored — '+state.sessions.length+' sessions','hard');
@@ -7180,7 +7240,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v91';
+    const APP_VERSION='v95';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7192,8 +7252,10 @@ button:active{opacity:.75;transform:scale(.97);}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v91')caches.delete(n);});});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v91';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;}).catch(()=>caches.match(e.request)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v95')caches.delete(n);});});
+    // Ask the browser to protect our storage from eviction (localStorage is the only copy of the user's data)
+    if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v95';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{const fp=fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;});e.respondWith(Promise.race([fp,new Promise((_,rej)=>setTimeout(rej,3000))]).catch(()=>caches.match(e.request).then(c=>c||fp)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
@@ -7203,6 +7265,7 @@ button:active{opacity:.75;transform:scale(.97);}
     // First time — show onboarding
     document.getElementById('app').style.display='none';
     document.querySelector('.tab-bar').style.display='none';
+    document.getElementById('nav-scrim').style.display='none';
     document.getElementById('onboarding').style.display='block';
   }else if(state.currentSession){
     renderSess();showTrainScreen('session');requestWakeLock();
@@ -7210,6 +7273,7 @@ button:active{opacity:.75;transform:scale(.97);}
     renderHome();checkWeighIn();
   }
   renderLandscape();
+  placeTabThumb(false);
 })();
 </script>
 </body>
