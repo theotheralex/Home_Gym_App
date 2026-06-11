@@ -630,7 +630,6 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 .str-seeall{display:block;width:100%;text-align:center;font-size:13px;font-weight:600;color:var(--i-fg);padding:12px;cursor:pointer;background:none;border:none;margin-bottom:10px;}
 .sec-h{display:flex;justify-content:space-between;align-items:baseline;margin:16px 2px 11px;}
 .sec-h .t{font-size:13px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:0.8px;}
-.see-all{font-size:12px;font-weight:700;color:var(--i-fg);cursor:pointer;}
 .str2{display:flex;gap:8px;margin-bottom:10px;}
 .scard{flex:1;background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid rgba(255,255,255,0.06);border-radius:var(--rl);padding:14px;cursor:pointer;position:relative;}
 .scard .sh{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-2);margin-bottom:9px;}
@@ -1505,7 +1504,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 
 <script>
 /*
- * The Toji Method · v96
+ * The Toji Method · v97
  * Built by Alexander Ortega (theotheralex) — © 2025
  * github.com/theotheralex · ko-fi.com/theotheralex
  *
@@ -5160,13 +5159,17 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     if(m)m.style.display=v==='musc'?'block':'none';
     placeSegThumbs();
   };
-  // "See all" — reveal/hide the extra strength cards (PRs, Bodyweight, Volume).
+  // "Show all" — full-width expander BELOW the Top strength card, adjacent to
+  // the cards it reveals (the old header "See all ›" sat two cards above its
+  // own content and read as navigation). Open state lives in a module-scope
+  // flag so expansion survives dashboard re-renders — previously every
+  // renderHome() rebuilt the section hardcoded back to collapsed.
+  let _strMoreOpen=false;
   window.strToggleMore=function(){
+    _strMoreOpen=!_strMoreOpen;
     const m=document.getElementById('strength-more'),b=document.getElementById('str-seeall-btn');
-    if(!m)return;
-    const show=(m.style.display==='none'||!m.style.display);
-    m.style.display=show?'block':'none';
-    if(b)b.textContent=show?'Hide \u2039':'See all \u203a';
+    if(m)m.style.display=_strMoreOpen?'block':'none';
+    if(b)b.textContent=_strMoreOpen?'Show less \u2039':'Show all \u203a';
   };
 
   // ── STRENGTH OVERVIEW (card-based dashboard) ────────────
@@ -5229,7 +5232,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     const achSub=earned.length?('latest: '+earned[earned.length-1].name):'train to unlock';
 
     // Strength header + two-up: Strength Score | Achievements
-    let html='<div class="sec-h"><span class="t">Strength</span><span class="see-all" id="str-seeall-btn" onclick="strToggleMore()">See all \u203a</span></div>';
+    let html='<div class="sec-h"><span class="t">Strength</span></div>';
     html+='<div class="str2">'
       +'<div class="scard" onclick="showStrengthScore()"><div class="scv">\u203a</div><div class="sh">Strength Score</div><div class="sv">'+score+'</div><div class="ss">'+tier.name+' &middot; '+progressLabel+'</div></div>'
       +'<div class="scard" onclick="showStrengthAchievements()"><div class="scv">\u203a</div><div class="sh">Achievements</div><div class="sv">'+earned.length+'<span class="sm"> / '+totalAch+'</span></div><div class="ss">'+achSub+'</div><div class="pbar"><div style="width:'+achPct+'%"></div></div></div>'
@@ -5280,7 +5283,8 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       const pts=counts.map((c,i)=>{const x=(i/(counts.length-1))*w;const y=h-(c/maxC)*(h-2)-1;return x.toFixed(1)+','+y.toFixed(1);}).join(' ');
       careerSparkSvg='<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><polyline points="'+pts+'" fill="none" stroke="var(--i-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     }
-    html+='<div id="strength-more" style="display:none;">';
+    html+='<button class="str-seeall" id="str-seeall-btn" onclick="strToggleMore()">'+(_strMoreOpen?'Show less \u2039':'Show all \u203a')+'</button>';
+    html+='<div id="strength-more" style="display:'+(_strMoreOpen?'block':'none')+';">';
     html+='<div class="career-card" onclick="showStrengthCareer()" style="margin-bottom:10px;">'
       +cardHead('calendar','Career')
       +'<div class="career-stats">'
@@ -7170,7 +7174,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       +'<div class="set-row"><span class="set-row-label">Weight entries</span><span class="set-row-value">'+(state.weightLog?state.weightLog.length:0)+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">BF% entries</span><span class="set-row-value">'+(state.bfLog?state.bfLog.length:0)+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">Exercises tracked</span><span class="set-row-value">'+Object.keys(state.progressions).length+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">App version</span><span class="set-row-value">v96</span></div>'
+      +'<div class="set-row"><span class="set-row-label">App version</span><span class="set-row-value">v97</span></div>'
       +'</div>';
 
     html+='<div class="support-card">'
@@ -7179,7 +7183,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       +'</div>';
 
     html+='<div style="text-align:center;margin-top:24px;padding:16px 0;font-size:11px;color:var(--text-3);line-height:1.6;">'
-      +'The Toji Method · v96<br>'
+      +'The Toji Method · v97<br>'
       +'© 2025 Alexander Ortega · <a href="https://github.com/theotheralex" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">theotheralex</a><br>'
       +'<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">Licensed under CC BY-NC-SA 4.0</a>'
       +'</div>';
@@ -7235,7 +7239,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v96';
+    const APP_VERSION='v97';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7247,10 +7251,10 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v96')caches.delete(n);});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v97')caches.delete(n);});});
     // Ask the browser to protect our storage from eviction (localStorage is the only copy of the user's data)
     if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v96';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{const fp=fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;});e.respondWith(Promise.race([fp,new Promise((_,rej)=>setTimeout(rej,3000))]).catch(()=>caches.match(e.request).then(c=>c||fp)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v97';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{const fp=fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;});e.respondWith(Promise.race([fp,new Promise((_,rej)=>setTimeout(rej,3000))]).catch(()=>caches.match(e.request).then(c=>c||fp)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
