@@ -21,7 +21,6 @@
 <meta name="apple-mobile-web-app-title" content="The Toji Method">
 <meta name="mobile-web-app-capable" content="yes">
 <title>The Toji Method</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.34.0/dist/tabler-icons.min.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ETM%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23dc2626'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='white' font-family='system-ui' font-weight='700'%3ETM%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22The%20Toji%20Method%22%2C%22short_name%22%3A%22The%20Toji%20Method%22%2C%22description%22%3A%22Adaptive%20home%20gym%20training%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22any%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%2520512%2520512%2527%253E%253Crect%2520width%253D%2527512%2527%2520height%253D%2527512%2527%2520rx%253D%2527102%2527%2520fill%253D%2527%2523dc2626%2527%252F%253E%253Ctext%2520x%253D%2527256%2527%2520y%253D%2527338%2527%2520font-size%253D%2527266%2527%2520text-anchor%253D%2527middle%2527%2520fill%253D%2527white%2527%2520font-family%253D%2527system-ui%2527%2520font-weight%253D%2527700%2527%253ETM%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
@@ -119,7 +118,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .sets-wrap{padding:0 10px 12px;display:flex;flex-direction:column;gap:8px;}
 .set-card{background:var(--surface-2);border-radius:var(--rl);padding:14px;border-left:4px solid transparent;transition:background .15s,border-color .15s,box-shadow .15s;}
 .sets-divider{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;margin:12px 0 6px;display:flex;align-items:center;gap:6px;}
-.sets-divider i{font-size:13px;}
 .sets-divider.warmup{color:var(--w-fg);}
 .wu-row{background:var(--surface-2);border-radius:var(--r);padding:10px 14px;margin-bottom:6px;border-left:3px solid transparent;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s;}
 .wu-row.current{background:linear-gradient(90deg,rgba(234,179,8,0.10),rgba(234,179,8,0.02));border-left-color:var(--w-fg);box-shadow:0 0 0 1.5px rgba(234,179,8,0.35),inset 0 1px 0 rgba(255,255,255,0.04);}
@@ -130,7 +128,7 @@ button:active{opacity:.75;transform:scale(.97);}
 .wu-row.done .wu-prescription{text-decoration:line-through;color:var(--text-3);}
 .wu-action{flex-shrink:0;}
 .wu-done-btn{background:var(--w-bg);border:1px solid var(--w-br);color:var(--w-fg);font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;font-family:inherit;-webkit-appearance:none;appearance:none;cursor:pointer;letter-spacing:0.3px;min-height:36px;}
-.wu-check{color:var(--w-fg);font-size:18px;}
+.wu-check{color:var(--w-fg);}
 .set-card.logged-easy{background:var(--d-bg);border-left-color:var(--d-fg);}
 .set-card.logged-good{background:var(--w-bg);border-left-color:var(--w-fg);}
 .set-card.logged-hard{background:var(--i-bg);border-left-color:var(--i-fg);}
@@ -167,7 +165,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .session-cta:active{transform:scale(0.99);background:var(--surface-2);}
 .session-cta.primary{background:linear-gradient(135deg,rgba(220,38,38,0.22) 0%,rgba(220,38,38,0.05) 60%,#161616 100%);border:1.5px solid rgba(220,38,38,0.5);box-shadow:inset 0 1px 0 rgba(255,255,255,0.06),0 0 24px rgba(220,38,38,0.15);}
 .session-cta-icon{width:32px;height:32px;border-radius:8px;background:#242424;display:flex;align-items:center;justify-content:center;color:var(--text);}
-.session-cta-icon i{font-size:18px;}
 .session-cta.primary .session-cta-icon{background:linear-gradient(135deg,rgba(220,38,38,0.35),rgba(220,38,38,0.15));color:var(--accent);box-shadow:0 0 12px rgba(220,38,38,0.4),inset 0 1px 0 rgba(255,255,255,0.1);}
 .session-cta-name{font-size:18px;font-weight:800;letter-spacing:-0.3px;margin-top:4px;}
 .session-cta-meta{font-size:11px;color:var(--text-3);font-weight:600;}
@@ -176,18 +173,16 @@ button:active{opacity:.75;transform:scale(.97);}
 .hiw-cat-card{background:linear-gradient(180deg,#1a1a1a 0%,#151515 100%);border:1px solid rgba(255,255,255,0.06);border-radius:var(--rl);padding:14px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background 0.15s,transform 0.1s;text-align:left;font-family:inherit;color:var(--text);width:100%;-webkit-appearance:none;appearance:none;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
 .hiw-cat-card:active{background:var(--surface-2);transform:scale(0.99);}
 .hiw-cat-icon{width:40px;height:40px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.hiw-cat-icon i{font-size:20px;color:var(--accent);}
+.hiw-cat-icon svg{color:var(--accent);}
 .hiw-cat-info{flex:1;min-width:0;}
 .hiw-cat-name{font-size:15px;font-weight:800;letter-spacing:-0.2px;margin-bottom:2px;}
 .hiw-cat-desc{font-size:12px;color:var(--text-3);font-weight:500;line-height:1.4;}
 .hiw-cat-chev{color:var(--text-3);flex-shrink:0;}
-.hiw-cat-chev i{font-size:18px;}
 .hiw-topic h3:first-child{margin-top:0;}
 /* Quick Session — Done button replaces feedback buttons on non-last sets */
 .fb-row-done{display:flex;}
 .fb-done{flex:1;min-height:50px;font-size:13px;font-weight:700;border-radius:var(--r);border:1.5px solid var(--s-fg);background:var(--s-bg);color:var(--s-fg);font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
 .fb-done:active{background:rgba(34,197,94,0.25);transform:scale(0.99);}
-.fb-done i{font-size:15px;}
 /* Quick Session — pair structure visualization */
 .pair-progress-row{display:flex;gap:6px;margin-bottom:14px;}
 .pair-prog-dot{flex:1;height:4px;background:var(--surface-2);border-radius:2px;}
@@ -195,7 +190,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .pair-prog-dot.active{background:linear-gradient(90deg,var(--accent),#ef4444);box-shadow:0 0 10px rgba(220,38,38,0.5);}
 .pair-header{display:flex;align-items:center;gap:8px;margin:18px 0 8px;font-size:11px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:1px;padding:0 4px;}
 .pair-header:first-of-type{margin-top:8px;}
-.pair-header i{font-size:13px;}
 .pair-header .pair-tag{margin-left:auto;background:var(--surface-2);color:var(--text-3);padding:3px 8px;border-radius:5px;font-weight:700;letter-spacing:0.5px;font-size:9px;}
 .pair-letter{display:inline-block;width:20px;height:20px;border-radius:50%;background:var(--bg);font-size:10px;font-weight:800;color:var(--accent);text-align:center;line-height:20px;margin-right:8px;flex-shrink:0;}
 .ex-card.in-pair .ex-name{display:flex;align-items:center;}
@@ -372,7 +366,6 @@ button:active{opacity:.75;transform:scale(.97);}
 /* BW empty state pills */
 .bw-empty-row{display:flex;gap:4px;}
 .bw-empty-pill{flex:1;background:var(--surface-2);border-radius:6px;padding:6px;display:flex;align-items:center;justify-content:center;gap:3px;color:var(--text-3);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;}
-.bw-empty-pill i{font-size:11px;}
 
 /* Vertical muscle bars (replaces .str-card-bars on Muscles square) */
 .muscle-bars{display:flex;gap:2px;align-items:flex-end;height:32px;}
@@ -386,7 +379,6 @@ button:active{opacity:.75;transform:scale(.97);}
 
 /* Achievement "next" hint */
 .ach-next{font-size:10px;color:var(--text-3);margin-top:6px;font-weight:600;display:flex;align-items:center;gap:4px;line-height:1.3;}
-.ach-next i{font-size:11px;color:var(--w-fg);flex-shrink:0;}
 
 /* Career wide rectangle (overrides square aspect for full-width) */
 .career-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;cursor:pointer;display:flex;flex-direction:column;transition:transform 0.1s,background 0.15s;}
@@ -463,7 +455,6 @@ button:active{opacity:.75;transform:scale(.97);}
 .goal-active .goal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 .goal-tier-name{font-size:24px;font-weight:800;letter-spacing:-0.5px;line-height:1.1;}
 .goal-target-pill{font-size:11px;font-weight:700;background:rgba(239,68,68,0.15);color:var(--accent);padding:5px 9px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0;}
-.goal-target-pill i{font-size:12px;}
 .goal-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-top:8px;}
 .goal-bar-fill{height:100%;background:var(--accent);border-radius:4px;}
 .goal-active .goal-eta{font-size:12px;color:var(--text-2);margin-top:8px;font-weight:600;}
@@ -747,7 +738,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 @keyframes fade-in{from{opacity:0;}to{opacity:1;}}
 /* Strength-drop notice — reuses .edit-overlay backdrop */
 .sd-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-.sd-head i{font-size:16px;color:var(--w-fg);}
+.sd-head svg{color:var(--w-fg);}
 .sd-title{font-size:13px;font-weight:800;color:var(--w-fg);text-transform:uppercase;letter-spacing:0.8px;}
 .sd-body{font-size:14px;color:var(--text);line-height:1.55;}
 .sd-body strong{font-weight:700;}
@@ -798,15 +789,15 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 .yw-sv.ok{color:var(--s-fg);}.yw-sv.low{color:var(--w-fg);}.yw-sv.over{color:var(--i-fg);}.yw-sv.urgent{color:var(--d-fg);}
 .yw-sv .u{font-size:10px;font-weight:500;color:var(--text-3);}
 .yw-coach{display:flex;gap:9px;margin-top:15px;padding-top:14px;border-top:1px solid var(--border);}
-.yw-coach i{font-size:15px;flex-shrink:0;margin-top:1px;}
-.yw-coach.affirm i{color:var(--s-fg);}
-.yw-coach.flag i{color:var(--w-fg);}
+.yw-coach svg{flex-shrink:0;margin-top:1px;}
+.yw-coach.affirm svg{color:var(--s-fg);}
+.yw-coach.flag svg{color:var(--w-fg);}
 .yw-cb{font-size:13px;line-height:1.6;color:var(--text);}
 .yw-cb strong{font-weight:700;}
 /* Landscape view — fullscreen workout display when device rotates */
 #landscape-view{display:none;position:fixed;inset:0;background:radial-gradient(ellipse at 50% 35%,#0d0d0d 0%,var(--bg) 50%,#050505 100%);color:var(--text);z-index:200;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);box-sizing:border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,0.04);}
 #landscape-prompt{display:none;position:fixed;inset:0;background:var(--bg);color:var(--text);z-index:200;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:clamp(8px,1.5vh,20px);}
-#landscape-prompt .lp-icon{font-size:clamp(48px,12vh,140px);color:var(--text-3);line-height:1;}
+#landscape-prompt .lp-icon{width:clamp(48px,12vh,140px);height:clamp(48px,12vh,140px);color:var(--text-3);}
 #landscape-prompt .lp-title{font-size:clamp(18px,4vh,42px);font-weight:800;letter-spacing:-0.5px;}
 #landscape-prompt .lp-sub{font-size:clamp(13px,2.4vh,26px);color:var(--text-2);}
 @media (orientation:landscape){
@@ -973,7 +964,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
   <div class="edit-card">
     <div class="edit-header">
       <span class="edit-title" id="edit-title">Edit</span>
-      <button class="edit-close" onclick="closeEditModal()" aria-label="Close"><i class="ti ti-x"></i></button>
+      <button class="edit-close" onclick="closeEditModal()" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="edit-body" id="edit-body"></div>
     <div class="edit-actions">
@@ -1001,7 +992,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 <!-- Landscape view — fullscreen workout display when device rotates -->
 <div id="landscape-view" aria-hidden="true"></div>
 <div id="landscape-prompt" aria-hidden="true">
-  <i class="ti ti-rotate-360 lp-icon"></i>
+  <svg class="lp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/></svg>
   <div class="lp-title">Active session required</div>
   <div class="lp-sub">Rotate back to portrait</div>
 </div>
@@ -1138,44 +1129,44 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
         <p style="color:var(--text-2);font-size:13px;margin-bottom:16px;">Tap a topic to learn more.</p>
         <div class="hiw-cat-list">
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('training')">
-            <div class="hiw-cat-icon"><i class="ti ti-barbell"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><rect x="3" y="9" width="3" height="6" rx="0.5"/><rect x="18" y="9" width="3" height="6" rx="0.5"/><rect x="6" y="10" width="2" height="4" rx="0.5"/><rect x="16" y="10" width="2" height="4" rx="0.5"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Training</div>
               <div class="hiw-cat-desc">Sessions, ratings, supersets, dropsets, periodization</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('body')">
-            <div class="hiw-cat-icon"><i class="ti ti-scale"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M6 6l6 -1l6 1"/><path d="M12 3v17"/><path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0"/><path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Body composition</div>
               <div class="hiw-cat-desc">Targets, tracking weight &amp; body fat, FFMI</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('strength')">
-            <div class="hiw-cat-icon"><i class="ti ti-trophy"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1 -10 0z"/><path d="M17 5h2a2 2 0 0 1 2 2v0a4 4 0 0 1 -4 4M7 5h-2a2 2 0 0 0 -2 2v0a4 4 0 0 0 4 4"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Strength dashboard</div>
               <div class="hiw-cat-desc">Score, tiers, goals, PRs, achievements</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('recovery')">
-            <div class="hiw-cat-icon"><i class="ti ti-heartbeat"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.566"/><path d="M3 13h2l2 3l2 -6l1 3h3"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Recovery &amp; dashboard</div>
               <div class="hiw-cat-desc">Muscle recovery, weekly stats</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
           <button class="hiw-cat-card" onclick="showHowItWorksCategory('equipment')">
-            <div class="hiw-cat-icon"><i class="ti ti-tool"></i></div>
+            <div class="hiw-cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/></svg></div>
             <div class="hiw-cat-info">
               <div class="hiw-cat-name">Equipment &amp; data</div>
               <div class="hiw-cat-desc">Available exercises, backup, export</div>
             </div>
-            <div class="hiw-cat-chev"><i class="ti ti-chevron-right"></i></div>
+            <div class="hiw-cat-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></div>
           </button>
         </div>
       </div>
@@ -1446,12 +1437,12 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       <p class="sub" id="train-phase-info">Pick your session length</p>
       <div class="session-cta-pair">
         <button class="session-cta primary" onclick="startFlow(60)">
-          <div class="session-cta-icon"><i class="ti ti-flame"></i></div>
+          <div class="session-cta-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2 -2.96 0 -7 -1 -8c0 3.038 -1.773 4.741 -3 6c-1.226 1.26 -2 3.24 -2 5a6 6 0 1 0 12 0c0 -1.532 -1.056 -3.94 -2 -5c-1.786 3 -2.791 3 -4 2z"/></svg></div>
           <div class="session-cta-name">Full Session</div>
           <div class="session-cta-meta">~50 min · 8 exercises</div>
         </button>
         <button class="session-cta" onclick="startQuickFlow()">
-          <div class="session-cta-icon"><i class="ti ti-bolt"></i></div>
+          <div class="session-cta-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3l-9 12h7l-1 6l9 -12h-7l1 -6z"/></svg></div>
           <div class="session-cta-name">Quick Session</div>
           <div class="session-cta-meta">~22 min · 6 exercises</div>
         </button>
@@ -1472,21 +1463,21 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 
     <div id="screen-session" class="screen">
       <div class="sess-hdr">
-        <button class="bg" id="cancel-btn" onclick="abandonSession()"><i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel</button>
+        <button class="bg" id="cancel-btn" onclick="abandonSession()"><svg style="margin-right:4px;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Cancel</button>
         <span id="session-progress" class="sess-prog"></span>
       </div>
       <h2 id="session-title" style="margin-bottom:2px;"></h2>
       <p id="session-subtitle" class="sub"></p>
       <div id="action-banner-area"></div>
       <div id="session-body"></div>
-      <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:16px;margin-bottom:8px;"><i class="ti ti-check" style="font-size:18px;margin-right:6px;"></i>Complete session</button>
+      <button id="session-finish" class="bp" onclick="finishSession()" style="display:none;margin-top:16px;margin-bottom:8px;"><svg style="margin-right:6px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Complete session</button>
       <div id="session-support-nudge"></div>
     </div>
 
     <div id="screen-history" class="screen">
       <button class="bg" onclick="goTrain()" style="margin-bottom:16px;">← Back</button>
       <h2 style="margin-bottom:16px;">Training history</h2>
-      <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;"><i class="ti ti-clipboard-text" style="font-size:16px;margin-right:6px;"></i>Copy for AI coach</button>
+      <button class="bs" onclick="exportForCoach()" style="margin-bottom:16px;"><svg style="margin-right:6px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>Copy for AI coach</button>
       <div id="history-body"></div>
     </div>
 
@@ -1504,7 +1495,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 
 <script>
 /*
- * The Toji Method · v97
+ * The Toji Method · v98
  * Built by Alexander Ortega (theotheralex) — © 2025
  * github.com/theotheralex · ko-fi.com/theotheralex
  *
@@ -1533,7 +1524,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     'package':'<path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"/><path d="M12 12l8 -4.5"/><line x1="12" y1="12" x2="12" y2="21"/><line x1="12" y1="12" x2="4" y2="7.5"/>',
     'mountain':'<path d="M3 20l5 -8l4 4l4 -8l5 12z"/>',
     'check':'<polyline points="20 6 9 17 4 12"/>',
-    'x':'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="6"/>',
+    'x':'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
     'plus':'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
     'star':'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
     'bolt':'<path d="M13 3l-9 12h7l-1 6l9 -12h-7l1 -6z"/>',
@@ -1544,11 +1535,19 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     'barbell':'<line x1="2" y1="12" x2="22" y2="12"/><rect x="3" y="9" width="3" height="6" rx="0.5"/><rect x="18" y="9" width="3" height="6" rx="0.5"/><rect x="6" y="10" width="2" height="4" rx="0.5"/><rect x="16" y="10" width="2" height="4" rx="0.5"/>',
     'stack-2':'<polyline points="12 2 22 8 12 14 2 8 12 2"/><polyline points="2 12 12 18 22 12"/><polyline points="2 16 12 22 22 16"/>',
     'star-filled':'<polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" fill="currentColor"/>',
+    'alert-triangle':'<path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/>',
+    'arrow-up':'<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>',
+    'arrow-down':'<line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>',
+    'clipboard-text':'<path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6"/><path d="M9 16h6"/>',
+    'heartbeat':'<path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.566"/><path d="M3 13h2l2 3l2 -6l1 3h3"/>',
+    'scale':'<path d="M7 20h10"/><path d="M6 6l6 -1l6 1"/><path d="M12 3v17"/><path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0"/><path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0"/>',
+    'tool':'<path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/>',
+    'rotate':'<path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/>',
   };
-  function icon(name,size){
+  function icon(name,size,extra){
     const sz=size||16;
     const path=ICONS[name];if(!path)return'';
-    return'<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">'+path+'</svg>';
+    return'<svg '+(extra?extra+' ':'')+'width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">'+path+'</svg>';
   }
   // Helper: build card header (icon + title + chevron) — sized for square cards
   function cardHead(iconName,title){
@@ -3724,7 +3723,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
         }
       }
     }
-    const ic=cls==='affirm'?'ti-check':'ti-alert-triangle';
+    const ic=cls==='affirm'?'check':'alert-triangle';
     // View pill — Volume (per-group sets toward goal) vs Recovery (per-muscle %).
     const segHtml='<div class="seg" data-seg="yw"><span class="thumb"></span><button class="'+(ywCardView==='vol'?'on':'')+'" onclick="ywSetView(\'vol\')">Volume</button><button class="'+(ywCardView==='rec'?'on':'')+'" onclick="ywSetView(\'rec\')">Recovery</button></div>';
     let viewContent;
@@ -3743,7 +3742,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       viewContent='<div class="yw-cov-lbl">Volume this week &middot; <span style="text-transform:none;letter-spacing:0;font-weight:600;color:var(--text-3);">sets per muscle</span></div>'
         +summary
         +'<div class="yw-frq">'+rows+'</div>'
-        +'<div class="yw-coach '+cls+'"><i class="ti '+ic+'"></i><div class="yw-cb">'+body+'</div></div>';
+        +'<div class="yw-coach '+cls+'">'+icon(ic,15)+'<div class="yw-cb">'+body+'</div></div>';
     }
     el.innerHTML='<div class="yw"><div class="yw-h"><span class="yw-t">Your Week</span>'+segHtml+'</div>'
       +strip
@@ -3902,7 +3901,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       const tagHtml=tags.map(t=>'<span class="tag">'+t+'</span>').join('');
       const demoQuery=encodeURIComponent('how to '+ex.name.replace(/ \(.*\)/,'')+' form');
       const demoLink='<a class="cue-demo" href="https://www.youtube.com/results?search_query='+demoQuery+'" onclick="event.preventDefault();openExt(this.href);">Watch a demo ›</a>';
-      const cueHtml=ex.cues&&ex.cues.length?'<button class="cue-toggle" onclick="toggleCues(\''+ei+'\')" id="cue-btn-'+ei+'"><i class="ti ti-chevron-right" style="font-size:14px;margin-right:4px;" id="cue-chev-'+ei+'"></i>Form cues</button><div class="cue-panel" id="cue-'+ei+'"><ol>'+ex.cues.map(c=>'<li>'+c+'</li>').join('')+'</ol>'+demoLink+'</div>':'';
+      const cueHtml=ex.cues&&ex.cues.length?'<button class="cue-toggle" onclick="toggleCues(\''+ei+'\')" id="cue-btn-'+ei+'">'+icon('chevron-right',14,'style="margin-right:4px;" id="cue-chev-'+ei+'"')+'Form cues</button><div class="cue-panel" id="cue-'+ei+'"><ol>'+ex.cues.map(c=>'<li>'+c+'</li>').join('')+'</ol>'+demoLink+'</div>':'';
       const tSecs=ex.unit==='sec'?ex.repRange[0]:null;
       const tHtml=tSecs?'<div class="ex-timer-wrap" id="ex-timer-'+ei+'"><div class="ex-timer-disp">'+Math.floor(tSecs/60)+':'+(tSecs%60<10?'0':'')+tSecs%60+'</div><div class="ex-timer-row"><button class="ex-tbtn bs ex-sbt">Start</button><button class="ex-tbtn bs ex-rbt">Reset</button></div></div>':'';
       // Dropset button — only for weighted exercises (skip in quickMode to keep flow tight)
@@ -3915,10 +3914,10 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       if(hasWarmups){
         const wuCount=e.sets.filter(s=>s.warmup).length;
         const wkCount=e.sets.filter(s=>!s.warmup).length;
-        setsHtml+='<div class="sets-divider warmup"><i class="ti ti-flame"></i> Warmup · '+wuCount+(wuCount===1?' set':' sets')+'</div>';
+        setsHtml+='<div class="sets-divider warmup">'+icon('flame',13)+' Warmup · '+wuCount+(wuCount===1?' set':' sets')+'</div>';
         e.sets.forEach((s,si)=>{
           if(!s.warmup&&(si===0||e.sets[si-1].warmup)){
-            setsHtml+='<div class="sets-divider"><i class="ti ti-barbell"></i> Working · '+wkCount+(wkCount===1?' set':' sets')+'</div>';
+            setsHtml+='<div class="sets-divider">'+icon('barbell',13)+' Working · '+wkCount+(wkCount===1?' set':' sets')+'</div>';
           }
           setsHtml+=rSet(ei,si,s,ex);
         });
@@ -3970,7 +3969,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
           }
           const tagText=muscles.length?'<span class="pair-tag">'+muscles.join(' · ')+'</span>':'';
           const labelText=sess.quickMode?'Pair '+(gid+1):'Superset';
-          html+='<div class="pair-header"><i class="ti ti-stack-2"></i>'+labelText+tagText+'</div>';
+          html+='<div class="pair-header">'+icon('stack-2',13)+labelText+tagText+'</div>';
           for(let k=i;k<j;k++){
             const letter=String.fromCharCode(65+(k-i)); // A, B, C…
             const cardHtml=cards[k].html.replace('<div class="ex-name">','<div class="ex-name"><span class="pair-letter">'+letter+'</span>');
@@ -4056,7 +4055,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       const wuCurrent=(()=>{const c=getCurrentSet();return c.ei===ei&&c.si===si;})();
       const cls='wu-row'+(s.done?' done':(wuCurrent?' current':''));
       const action=s.done
-        ?'<i class="ti ti-check wu-check"></i>'
+        ?icon('check',18,'class="wu-check"')
         :(wuCurrent?'<button class="wu-done-btn" onclick="setWarmupDone('+ei+','+si+')">Mark done</button>':'');
       return'<div class="'+cls+'" id="set-'+ei+'-'+si+'"><div class="wu-num">SET '+(si+1)+'</div><div class="wu-prescription">'+s.actualWeight+' lb × '+s.actualReps+' reps</div><div class="wu-action">'+action+'</div></div>';
     }
@@ -4202,7 +4201,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     const el=document.createElement('div');
     el.className='action-banner';
     el.style.background=c.bg;el.style.color=c.fg;
-    el.innerHTML='<div class="ab-msg">'+msg+subHtml+'</div><button class="ab-x" onclick="dismissBanner()" aria-label="Dismiss"><i class="ti ti-x"></i></button>';
+    el.innerHTML='<div class="ab-msg">'+msg+subHtml+'</div><button class="ab-x" onclick="dismissBanner()" aria-label="Dismiss">'+icon('x',16)+'</button>';
     document.body.appendChild(el);
     bannerEl=el;
     bannerTimer=setTimeout(()=>{
@@ -4257,7 +4256,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     const ov=document.createElement('div');
     ov.className='edit-overlay show';
     ov.innerHTML='<div class="edit-card">'
-      +'<div class="sd-head"><i class="ti ti-alert-triangle"></i><span class="sd-title">Strength check</span></div>'
+      +'<div class="sd-head">'+icon('alert-triangle',16)+'<span class="sd-title">Strength check</span></div>'
       +'<div class="sd-body">'+body+'</div>'+ctx
       +'<div class="sd-actions">'
       +'<button class="sd-dismiss">Got it</button>'
@@ -4839,13 +4838,13 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     const btn=document.getElementById('cancel-btn');
     if(!cancelPending){
       cancelPending=true;
-      btn.innerHTML='<i class="ti ti-alert-triangle" style="font-size:14px;margin-right:4px;"></i>Tap again to discard';
+      btn.innerHTML=icon('alert-triangle',14,'style="margin-right:4px;"')+'Tap again to discard';
       btn.style.color='var(--d-fg)';
-      setTimeout(()=>{cancelPending=false;btn.innerHTML='<i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel';btn.style.color='';},3000);
+      setTimeout(()=>{cancelPending=false;btn.innerHTML=icon('x',14,'style="margin-right:4px;"')+'Cancel';btn.style.color='';},3000);
     }else{
       cancelPending=false;
       state.currentSession=null;saveNow();showTrainScreen('train-home');renderTrainHome();renderLandscape();
-      btn.innerHTML='<i class="ti ti-x" style="font-size:14px;margin-right:4px;"></i>Cancel';btn.style.color='';
+      btn.innerHTML=icon('x',14,'style="margin-right:4px;"')+'Cancel';btn.style.color='';
     }
   };
 
@@ -5337,9 +5336,9 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
         +cardHead('stretching','Bodyweight')
         +'<div class="str-card-stat" style="color:var(--text-3);">—</div><div class="str-card-sub">log BW exercises</div>'
         +'<div class="str-card-fill"><div class="bw-empty-row">'
-          +'<div class="bw-empty-pill"><i class="ti ti-arrow-up"></i>Push</div>'
-          +'<div class="bw-empty-pill"><i class="ti ti-arrow-down"></i>Pull</div>'
-          +'<div class="bw-empty-pill"><i class="ti ti-clock"></i>Hold</div>'
+          +'<div class="bw-empty-pill">'+icon('arrow-up',11)+'Push</div>'
+          +'<div class="bw-empty-pill">'+icon('arrow-down',11)+'Pull</div>'
+          +'<div class="bw-empty-pill">'+icon('clock',11)+'Hold</div>'
         +'</div></div>'
         +'</div>';
     }
@@ -5498,7 +5497,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
             +'<div class="goal-tier-name">'+goal.targetTier+'</div>'
             +'<div class="goal-meta">'+goal.targetScore+' strength score · started '+daysSinceStart+' day'+(daysSinceStart===1?'':'s')+' ago</div>'
           +'</div>'
-          +'<div class="goal-target-pill"><i class="ti ti-target"></i> Target</div>'
+          +'<div class="goal-target-pill">'+icon('target',12)+' Target</div>'
         +'</div>'
         +'<div class="goal-bar"><div class="goal-bar-fill" style="width:'+goalProgressPct+'%;"></div></div>'
         +'<div class="goal-eta">'+(eta.etaWeeks!==null
@@ -7174,7 +7173,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       +'<div class="set-row"><span class="set-row-label">Weight entries</span><span class="set-row-value">'+(state.weightLog?state.weightLog.length:0)+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">BF% entries</span><span class="set-row-value">'+(state.bfLog?state.bfLog.length:0)+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">Exercises tracked</span><span class="set-row-value">'+Object.keys(state.progressions).length+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">App version</span><span class="set-row-value">v97</span></div>'
+      +'<div class="set-row"><span class="set-row-label">App version</span><span class="set-row-value">v98</span></div>'
       +'</div>';
 
     html+='<div class="support-card">'
@@ -7183,7 +7182,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       +'</div>';
 
     html+='<div style="text-align:center;margin-top:24px;padding:16px 0;font-size:11px;color:var(--text-3);line-height:1.6;">'
-      +'The Toji Method · v97<br>'
+      +'The Toji Method · v98<br>'
       +'© 2025 Alexander Ortega · <a href="https://github.com/theotheralex" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">theotheralex</a><br>'
       +'<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">Licensed under CC BY-NC-SA 4.0</a>'
       +'</div>';
@@ -7239,7 +7238,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v97';
+    const APP_VERSION='v98';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7251,10 +7250,10 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v97')caches.delete(n);});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v98')caches.delete(n);});});
     // Ask the browser to protect our storage from eviction (localStorage is the only copy of the user's data)
     if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v97';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{const fp=fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;});e.respondWith(Promise.race([fp,new Promise((_,rej)=>setTimeout(rej,3000))]).catch(()=>caches.match(e.request).then(c=>c||fp)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v98';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{const fp=fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;});e.respondWith(Promise.race([fp,new Promise((_,rej)=>setTimeout(rej,3000))]).catch(()=>caches.match(e.request).then(c=>c||fp)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
