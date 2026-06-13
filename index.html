@@ -1495,7 +1495,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 
 <script>
 /*
- * The Toji Method · v98
+ * The Toji Method · v99
  * Built by Alexander Ortega (theotheralex) — © 2025
  * github.com/theotheralex · ko-fi.com/theotheralex
  *
@@ -1778,6 +1778,33 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     const recent=hist.filter(h=>h.date>=cutoff);
     if(recent.length)return Math.max(...recent.map(h=>h.e1rm));
     return hist[hist.length-1].e1rm;
+  }
+
+  // Collapse e1RM history to one entry per local day per lift (that day's best),
+  // preserving chronological order. e1rmHistory is appended to on every session
+  // and never otherwise pruned — over years it's the most likely thing to blow
+  // the localStorage quota (the whole state is JSON.stringify'd on each save) and
+  // it's re-scanned on every dashboard render. Every consumer only cares about
+  // daily granularity and all-time/recent maxima, so intra-day duplicates cost
+  // storage without adding signal. Must run AFTER checkPRsForSession, whose
+  // slice(0,-1) assumes the just-pushed entry is still a distinct last element.
+  // Returns true if anything was removed (so the caller can persist).
+  function collapseE1rmHistory(){
+    const h=state.e1rmHistory;if(!h)return false;
+    let changed=false;
+    Object.keys(h).forEach(id=>{
+      const arr=h[id];if(!arr||arr.length<2)return;
+      // arr is chronological; Map keeps first-seen day order, so the result stays
+      // chronological. Keep the higher e1RM when a day has multiple entries.
+      const byDay=new Map();
+      arr.forEach(e=>{
+        const day=hmLocalDate(e.date);
+        const prev=byDay.get(day);
+        if(!prev||e.e1rm>prev.e1rm)byDay.set(day,e);
+      });
+      if(byDay.size<arr.length){h[id]=Array.from(byDay.values());changed=true;}
+    });
+    return changed;
   }
 
   // Strength-drop detection. Flags a compound when its last 2 logged sessions
@@ -2913,6 +2940,9 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       state.profile.createdAt=state.sessions&&state.sessions.length?state.sessions[0].timestamp:Date.now();
       save();
     }
+    // Migration: collapse any pre-existing intra-day e1RM duplicates (history was
+    // appended unbounded before the daily-best collapse). One-time shrink on load.
+    if(collapseE1rmHistory())save();
     loadDBW();loadKBW();
   }
   function loadKBW(){
@@ -4766,6 +4796,9 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
 
     // Detect + record PRs (surfaced live via the flash and on the Strength dashboard)
     checkPRsForSession(sess);
+    // Collapse this day's e1RM entries to a single daily best now that PR detection
+    // (which needs the just-pushed entry distinct) has run. Keeps history bounded.
+    collapseE1rmHistory();
     const newScore=getStrengthScore();
     const newTier=getStrengthTier(newScore);
     const tierUp=newTier!==oldTier&&STRENGTH_TIERS.indexOf(newTier)>STRENGTH_TIERS.indexOf(oldTier);
@@ -7173,7 +7206,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       +'<div class="set-row"><span class="set-row-label">Weight entries</span><span class="set-row-value">'+(state.weightLog?state.weightLog.length:0)+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">BF% entries</span><span class="set-row-value">'+(state.bfLog?state.bfLog.length:0)+'</span></div>'
       +'<div class="set-row"><span class="set-row-label">Exercises tracked</span><span class="set-row-value">'+Object.keys(state.progressions).length+'</span></div>'
-      +'<div class="set-row"><span class="set-row-label">App version</span><span class="set-row-value">v98</span></div>'
+      +'<div class="set-row"><span class="set-row-label">App version</span><span class="set-row-value">v99</span></div>'
       +'</div>';
 
     html+='<div class="support-card">'
@@ -7182,7 +7215,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       +'</div>';
 
     html+='<div style="text-align:center;margin-top:24px;padding:16px 0;font-size:11px;color:var(--text-3);line-height:1.6;">'
-      +'The Toji Method · v98<br>'
+      +'The Toji Method · v99<br>'
       +'© 2025 Alexander Ortega · <a href="https://github.com/theotheralex" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">theotheralex</a><br>'
       +'<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" onclick="event.preventDefault();openExt(this.href);" style="color:var(--text-3);text-decoration:underline;">Licensed under CC BY-NC-SA 4.0</a>'
       +'</div>';
@@ -7238,7 +7271,7 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
     // Aggressive upgrade path: if the user is coming from a different shipped
     // version, force-unregister all SWs and nuke all caches, then reload once.
     // The sessionStorage flag prevents a reload loop if SW state races.
-    const APP_VERSION='v98';
+    const APP_VERSION='v99';
     const seen=localStorage.getItem('app_version');
     if(seen&&seen!==APP_VERSION&&!sessionStorage.getItem('upgraded')){
       sessionStorage.setItem('upgraded','1');
@@ -7250,10 +7283,10 @@ body.kb-open .tab-bar,body.kb-open .nav-scrim{display:none;}
       localStorage.setItem('app_version',APP_VERSION);
     }
     // Routine cache cleanup on load (handles passive upgrades for users without the version-check path)
-    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v98')caches.delete(n);});});
+    caches.keys().then(names=>{names.forEach(n=>{if(n!=='toji-v99')caches.delete(n);});});
     // Ask the browser to protect our storage from eviction (localStorage is the only copy of the user's data)
     if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
-    window.addEventListener('load',()=>{const sw=`const C='toji-v98';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{const fp=fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;});e.respondWith(Promise.race([fp,new Promise((_,rej)=>setTimeout(rej,3000))]).catch(()=>caches.match(e.request).then(c=>c||fp)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
+    window.addEventListener('load',()=>{const sw=`const C='toji-v99';self.addEventListener('install',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))).then(()=>caches.open(C).then(c=>c.add('./'))));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{const fp=fetch(e.request).then(resp=>{const cl=resp.clone();caches.open(C).then(c=>c.put(e.request,cl));return resp;});e.respondWith(Promise.race([fp,new Promise((_,rej)=>setTimeout(rej,3000))]).catch(()=>caches.match(e.request).then(c=>c||fp)));});`;navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});});
   }
 
   load();
