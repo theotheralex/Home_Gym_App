@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toji Method — Natural progression ("v100")</title>
+<!-- MOCKUP ONLY. Throwaway. Keeps the app's CURRENT tokens; only Barlow Condensed is new (cheap to embed). -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ===== current app tokens, unchanged ===== */
+    --bg:#0a0a0a; --surface:#181818; --surface-2:#242424;
+    --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.18);
+    --text:#f5f5f5; --text-2:#a0a0a0; --text-3:#555;
+    --accent:#dc2626;
+    --s-fg:#4ade80; --s-bg:rgba(34,197,94,.15); --s-br:rgba(34,197,94,.35);
+    --i-fg:#60a5fa; --i-bg:rgba(59,130,246,.15);
+    --w-fg:#facc15; --w-bg:rgba(234,179,8,.15);
+    --r:12px; --rl:18px; --tap:52px;
+    /* ===== additions: type scale + one display face ===== */
+    --num:'Barlow Condensed',sans-serif; --ui:'Inter',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#000;color:var(--text);font-family:var(--ui);-webkit-font-smoothing:antialiased;padding:40px 20px 80px;min-height:100vh}
+  .page-head{max-width:1180px;margin:0 auto 36px;padding:0 8px}
+  .page-head h1{font-size:22px;font-weight:700;letter-spacing:-0.02em}
+  .page-head p{color:var(--text-2);font-size:14px;margin-top:8px;max-width:760px;line-height:1.55}
+  .tag{display:inline-block;font-family:var(--num);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--accent);background:rgba(220,38,38,.14);border:1px solid rgba(220,38,38,.3);padding:4px 12px;border-radius:99px;margin-bottom:14px}
+  .stage{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;max-width:1180px;margin:0 auto}
+  .frame-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .frame-label{font-family:var(--num);font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+  .phone{width:340px;height:720px;border-radius:40px;padding:10px;background:linear-gradient(160deg,#1a1a1a,#0c0c0c);box-shadow:0 0 0 1px rgba(255,255,255,.06),0 40px 80px -20px rgba(0,0,0,.9)}
+  .screen{position:relative;width:100%;height:100%;border-radius:32px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+  .statusbar{display:flex;justify-content:space-between;padding:14px 20px 4px;font-size:12px;color:var(--text-2);font-weight:500}
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 18px 14px}
+  .brand{font-family:var(--num);font-weight:700;font-size:22px;letter-spacing:.02em}.brand b{color:var(--accent)}
+  .icon-btn{width:36px;height:36px;border-radius:11px;background:var(--surface);border:1px solid var(--border);display:grid;place-items:center;color:var(--text-2);font-size:15px}
+  .body{flex:1;overflow-y:auto;padding:4px 16px 16px}.body::-webkit-scrollbar{display:none}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:13px}
+  .ct{font-family:var(--num);font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2)}
+  .link{font-size:12px;color:var(--text-3);font-weight:500}
+  .row-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+
+  /* hero — current red kept, just given room + the display face */
+  .hero{text-align:center;padding:22px 0 10px}
+  .hero .ey{font-family:var(--num);font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2)}
+  .hero .num{font-family:var(--num);font-weight:700;font-size:104px;line-height:.82;letter-spacing:.005em;margin-top:2px}
+  .delta{display:inline-flex;align-items:center;gap:5px;font-family:var(--num);font-size:15px;font-weight:600;color:var(--s-fg);background:var(--s-bg);border:1px solid var(--s-br);padding:3px 12px;border-radius:99px;margin-top:8px}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:13px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px 12px}
+  .stat .v{font-family:var(--num);font-weight:700;font-size:36px;line-height:.85}.stat .v small{font-size:15px;color:var(--text-3);font-weight:500}
+  .stat .k{font-family:var(--num);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2);margin-top:5px}
+  /* semantic colors retained, used meaningfully */
+  .stat.info .v{color:var(--i-fg)} .stat.warn .v{color:var(--w-fg)}
+
+  .pr{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}.pr:last-child{border-bottom:0}
+  .pr .b{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-family:var(--num);font-weight:700;font-size:16px;background:rgba(220,38,38,.15);border:1px solid rgba(220,38,38,.3);color:var(--accent)}
+  .pr .b.gold{background:var(--w-bg);border-color:var(--w-fg);color:var(--w-fg)}
+  .pr .m{flex:1}.pr .m .t{font-weight:600;font-size:14px}.pr .m .s{font-size:12px;color:var(--text-2);margin-top:1px}
+  .pr .e{font-family:var(--num);font-weight:700;font-size:28px;text-align:right;line-height:.85}.pr .e small{display:block;font-family:var(--ui);font-size:11px;color:var(--s-fg);font-weight:600}
+
+  .next{display:flex;align-items:center;gap:13px;border:1px solid rgba(220,38,38,.28);background:linear-gradient(120deg,rgba(220,38,38,.12),transparent)}
+  .next .play{width:46px;height:46px;border-radius:13px;background:var(--accent);display:grid;place-items:center;color:#fff;font-size:17px}
+  .next .t{font-weight:600;font-size:14px}.next .s{font-size:12px;color:var(--text-2)}
+
+  .nav{display:flex;padding:10px 22px 16px;border-top:1px solid var(--border);background:var(--bg)}
+  .nav a{flex:1;text-align:center;font-family:var(--num);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);text-decoration:none}
+  .nav a .ic{display:block;font-family:var(--ui);font-size:18px;margin-bottom:3px}.nav a.on{color:var(--text)}.nav a.on .ic{color:var(--accent)}
+
+  .sh{padding:4px 0 12px}.sh .lift{font-family:var(--num);font-weight:700;font-size:38px;line-height:.9}.sh .sub{font-size:12px;color:var(--text-2);margin-top:4px}
+  .set{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .set .n{font-family:var(--num);font-weight:700;font-size:22px;color:var(--text-3);width:20px}.set.done .n{color:var(--s-fg)}
+  .set .w{flex:1;font-weight:600;font-size:15px}.set .w small{color:var(--text-3);font-weight:400}
+  .set .e{font-family:var(--num);font-weight:600;font-size:20px;color:var(--text-2)}
+  .set.active{background:rgba(220,38,38,.1);margin:0 -16px;padding:12px 16px;border-radius:var(--r);border-bottom:0}.set.active .n{color:var(--accent)}
+  .bn{display:flex;align-items:baseline;justify-content:center;gap:9px;padding:16px 0 8px}
+  .bn .w{font-family:var(--num);font-weight:700;font-size:76px;line-height:.78}.bn .x{font-family:var(--num);font-size:22px;color:var(--text-3);font-weight:600}
+  .bn .r{font-family:var(--num);font-weight:700;font-size:76px;line-height:.78;color:var(--accent)}
+  .rpe{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:6px 0 13px}
+  .rpe button{font-family:var(--ui);font-weight:600;font-size:14px;padding:14px;border-radius:var(--r);background:var(--surface-2);border:1px solid var(--border);color:var(--text);min-height:var(--tap)}
+  .rpe button .l{display:block;font-family:var(--num);font-size:13px;color:var(--text-3);letter-spacing:.06em;text-transform:uppercase;margin-top:3px}
+  .rpe button.fail{grid-column:1/-1;background:rgba(220,38,38,.14);border-color:rgba(220,38,38,.4);color:var(--accent)}
+  .cta{display:block;width:100%;font-family:var(--num);font-weight:700;font-size:18px;letter-spacing:.04em;text-transform:uppercase;padding:15px;border-radius:var(--r);background:var(--accent);color:#fff;border:0;min-height:var(--tap)}
+
+  .pills{display:flex;gap:7px;margin:0 0 13px}
+  .pill{font-family:var(--num);font-size:14px;font-weight:600;letter-spacing:.04em;padding:6px 14px;border-radius:99px;background:var(--surface);border:1px solid var(--border);color:var(--text-2)}
+  .pill.on{background:rgba(220,38,38,.14);border-color:rgba(220,38,38,.35);color:var(--accent)}
+  .chart{width:100%;height:128px;display:block}.axis{display:flex;justify-content:space-between;font-family:var(--num);font-size:12px;color:var(--text-3);margin-top:4px}
+  @media(max-width:560px){.phone{transform:scale(.92);margin:-28px 0}}
+</style>
+</head>
+<body>
+<div class="page-head">
+  <span class="tag">05 · Natural progression</span>
+  <h1>"v100" — the current app, leveled up (my pick for shippability)</h1>
+  <p>No new identity — every existing token kept (the #0a0a0a base, #dc2626 red, the green/blue/yellow semantic set, 12–18px radii, 52px taps). The only addition is Barlow Condensed for figures, so the Strength Score, e1RM and working sets get presence without changing the app's character. Refined spacing and hierarchy throughout. This is what a clean v100 looks like — lowest risk, fastest to ship, and it still respects offline-first (one cheap font to embed).</p>
+</div>
+<div class="stage">
+
+  <!-- DASHBOARD -->
+  <div class="frame-wrap"><div class="phone"><div class="screen">
+    <div class="statusbar"><span>9:41</span><span>● ● ●  100%</span></div>
+    <div class="topbar"><div class="brand">THE <b>TOJI</b> METHOD</div><div class="icon-btn">⚙</div></div>
+    <div class="body">
+      <div class="hero"><div class="ey">Strength Score</div><div class="num">847</div><div><span class="delta">▲ 23 this month</span></div></div>
+      <div class="stats">
+        <div class="stat"><div class="v">14<small>t</small></div><div class="k">Volume/wk</div></div>
+        <div class="stat info"><div class="v">4<small>/5</small></div><div class="k">Sessions</div></div>
+        <div class="stat warn"><div class="v">96<small>%</small></div><div class="k">Consistency</div></div>
+      </div>
+      <div class="card">
+        <div class="row-head"><span class="ct">Recent PRs</span><span class="link">All →</span></div>
+        <div class="pr"><div class="b gold">PR</div><div class="m"><div class="t">Deadlift</div><div class="s">180 kg × 3 · today</div></div><div class="e">198<small>+6</small></div></div>
+        <div class="pr"><div class="b">PR</div><div class="m"><div class="t">Bench Press</div><div class="s">110 kg × 5 · 2d ago</div></div><div class="e">127<small>+4</small></div></div>
+        <div class="pr"><div class="b">PR</div><div class="m"><div class="t">Back Squat</div><div class="s">150 kg × 4 · 4d ago</div></div><div class="e">165<small>+2</small></div></div>
+      </div>
+      <div class="card next"><div class="play">▶</div><div style="flex:1"><div class="t">Push Day · 5 lifts</div><div class="s">~48 min</div></div><div style="font-family:var(--num);font-weight:700;font-size:24px;color:var(--text-3)">›</div></div>
+    </div>
+    <div class="nav"><a class="on"><span class="ic">◉</span>Dash</a><a><span class="ic">▦</span>Train</a></div>
+  </div></div><div class="frame-label">Dashboard</div></div>
+
+  <!-- SESSION -->
+  <div class="frame-wrap"><div class="phone"><div class="screen">
+    <div class="statusbar"><span>9:41</span><span>● ● ●  100%</span></div>
+    <div class="topbar"><div class="icon-btn">←</div><div class="brand" style="font-size:16px;letter-spacing:.06em">SESSION · 03</div><div class="icon-btn">✕</div></div>
+    <div class="body">
+      <div class="sh"><div class="lift">Bench Press</div><div class="sub">set 3 of 5 · target 5 reps @ RPE 8</div></div>
+      <div class="set done"><div class="n">1</div><div class="w">100 <small>kg × 5</small></div><div class="e">116</div></div>
+      <div class="set done"><div class="n">2</div><div class="w">105 <small>kg × 5</small></div><div class="e">122</div></div>
+      <div class="set active"><div class="n">3</div><div class="w">110 <small>kg × ?</small></div><div class="e" style="color:var(--accent)">—</div></div>
+      <div class="bn"><span class="w">110</span><span class="x">kg ×</span><span class="r">5</span></div>
+      <div class="rpe">
+        <button>Easy<span class="l">RPE 6–7</span></button><button>Good<span class="l">RPE 8</span></button>
+        <button>Hard<span class="l">RPE 9</span></button><button class="fail">TO FAILURE<span class="l" style="color:rgba(220,38,38,.7)">RPE 10</span></button>
+      </div>
+      <button class="cta">Log Set · e1RM 127</button>
+    </div>
+    <div class="nav"><a><span class="ic">◉</span>Dash</a><a class="on"><span class="ic">▦</span>Train</a></div>
+  </div></div><div class="frame-label">Active session</div></div>
+
+  <!-- LIFT DETAIL -->
+  <div class="frame-wrap"><div class="phone"><div class="screen">
+    <div class="statusbar"><span>9:41</span><span>● ● ●  100%</span></div>
+    <div class="topbar"><div class="icon-btn">←</div><div class="brand" style="font-size:16px;letter-spacing:.06em">LIFTS</div><div class="icon-btn">⋯</div></div>
+    <div class="body">
+      <div class="hero" style="padding-top:12px"><div class="ey">Bench Press · e1RM</div><div class="num" style="font-size:92px">127<small style="font-size:20px;color:var(--text-3);font-weight:500"> kg</small></div><div><span class="delta">▲ 11 kg in 90 days</span></div></div>
+      <div class="pills"><span class="pill">6W</span><span class="pill on">3M</span><span class="pill">1Y</span><span class="pill">ALL</span></div>
+      <div class="card" style="padding:16px 14px 10px">
+        <svg class="chart" viewBox="0 0 300 128" preserveAspectRatio="none">
+          <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dc2626" stop-opacity=".35"/><stop offset="1" stop-color="#dc2626" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0,94 L43,88 L86,92 L129,74 L172,64 L215,52 L258,40 L300,26 L300,128 L0,128 Z" fill="url(#g)"/>
+          <path d="M0,94 L43,88 L86,92 L129,74 L172,64 L215,52 L258,40 L300,26" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="300" cy="26" r="4" fill="#f5f5f5"/>
+        </svg>
+        <div class="axis"><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span></div>
+      </div>
+      <div class="card">
+        <div class="row-head"><span class="ct">Top sets</span></div>
+        <div class="pr"><div class="b gold">PR</div><div class="m"><div class="t">110 kg × 5</div><div class="s">today · RPE 9</div></div><div class="e">127</div></div>
+        <div class="pr"><div class="b">2</div><div class="m"><div class="t">107.5 kg × 5</div><div class="s">5d ago · RPE 8</div></div><div class="e">124</div></div>
+        <div class="pr"><div class="b">3</div><div class="m"><div class="t">105 kg × 6</div><div class="s">12d ago · failure</div></div><div class="e">126</div></div>
+      </div>
+    </div>
+    <div class="nav"><a><span class="ic">◉</span>Dash</a><a class="on"><span class="ic">▦</span>Train</a></div>
+  </div></div><div class="frame-label">Lift detail · e1RM</div></div>
+
+</div>
+</body>
+</html>

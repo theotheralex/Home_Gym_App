@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toji Method — Warm ("Ember")</title>
+<!-- MOCKUP ONLY. Throwaway. Fonts via CDN for preview; shipping = self-host. -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#161210; --bg-2:#1d1714; --surface:#221b17; --surface-2:#2b231d;
+    --border:rgba(255,235,210,0.1); --border-strong:rgba(255,235,210,0.2);
+    --text:#f4ece2; --text-2:#b6a695; --text-3:#7a6c5e;
+    --accent:#ea580c; --accent-hot:#f97316; --accent-dim:rgba(234,88,12,0.16);
+    --good:#84cc16; --gold:#f5b945;
+    --r:20px; --rl:26px; --tap:52px;
+    --head:'Sora',sans-serif; --body:'DM Sans',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0c0907;color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased;padding:40px 20px 80px;min-height:100vh}
+  .page-head{max-width:1180px;margin:0 auto 36px;padding:0 8px}
+  .page-head h1{font-family:var(--head);font-weight:700;font-size:22px;letter-spacing:-0.02em}
+  .page-head p{color:var(--text-2);font-size:14px;margin-top:8px;max-width:760px;line-height:1.6}
+  .tag{display:inline-block;font-family:var(--head);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent-hot);background:var(--accent-dim);border:1px solid rgba(249,115,22,.3);padding:5px 12px;border-radius:99px;margin-bottom:14px}
+  .stage{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;max-width:1180px;margin:0 auto}
+  .frame-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .frame-label{font-family:var(--head);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+  .phone{width:340px;height:720px;border-radius:44px;padding:11px;background:linear-gradient(160deg,#2a211b,#120d0a);
+    box-shadow:0 0 0 1px rgba(255,235,210,.07),0 44px 84px -22px rgba(0,0,0,.9),0 0 140px -50px rgba(234,88,12,.4)}
+  .screen{position:relative;width:100%;height:100%;border-radius:34px;overflow:hidden;display:flex;flex-direction:column;
+    background:radial-gradient(120% 70% at 50% -8%,rgba(234,88,12,.16),transparent 55%),radial-gradient(80% 50% at 100% 108%,rgba(245,185,69,.07),transparent 60%),var(--bg)}
+  .statusbar{display:flex;justify-content:space-between;padding:15px 22px 6px;font-family:var(--head);font-size:12px;color:var(--text-2);font-weight:500}
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:6px 20px 12px}
+  .brand{font-family:var(--head);font-weight:800;font-size:18px;letter-spacing:-0.01em}.brand b{color:var(--accent-hot)}
+  .icon-btn{width:38px;height:38px;border-radius:13px;background:var(--surface);border:1px solid var(--border);display:grid;place-items:center;color:var(--text-2);font-size:15px}
+  .body{flex:1;overflow-y:auto;padding:6px 18px 18px}.body::-webkit-scrollbar{display:none}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:0 2px 0 rgba(0,0,0,.2)}
+  .ct{font-family:var(--head);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+  .link{font-family:var(--head);font-size:12px;color:var(--text-3)}
+  .row-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+
+  .hero{text-align:center;padding:24px 0 12px}
+  .hero .ey{font-family:var(--head);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--text-2)}
+  .hero .num{font-family:var(--head);font-weight:800;font-size:88px;line-height:.9;letter-spacing:-0.04em;margin-top:6px;
+    background:linear-gradient(160deg,#fff,#fcd9b0 55%,#f97316);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .delta{display:inline-flex;align-items:center;gap:5px;font-family:var(--head);font-size:13px;font-weight:600;color:#a3e635;
+    background:rgba(132,204,22,.12);border:1px solid rgba(132,204,22,.3);padding:5px 12px;border-radius:99px;margin-top:10px}
+
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 12px}
+  .stat .v{font-family:var(--head);font-weight:700;font-size:30px;line-height:.9;letter-spacing:-0.02em}.stat .v small{font-size:13px;color:var(--text-3);font-weight:500}
+  .stat .k{font-family:var(--head);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);margin-top:6px}
+
+  .pr{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}.pr:last-child{border-bottom:0}
+  .pr .b{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-family:var(--head);font-weight:700;font-size:13px;background:var(--accent-dim);border:1px solid rgba(249,115,22,.3);color:var(--accent-hot)}
+  .pr .b.gold{background:rgba(245,185,69,.16);border-color:rgba(245,185,69,.36);color:var(--gold)}
+  .pr .m{flex:1}.pr .m .t{font-family:var(--head);font-weight:600;font-size:15px}.pr .m .s{font-size:12px;color:var(--text-2);margin-top:1px}
+  .pr .e{font-family:var(--head);font-weight:700;font-size:24px;text-align:right;letter-spacing:-0.02em}.pr .e small{display:block;font-size:11px;color:#a3e635;font-weight:600}
+
+  .next{display:flex;align-items:center;gap:15px;background:linear-gradient(120deg,var(--accent-dim),rgba(245,185,69,.06));border-color:rgba(249,115,22,.28)}
+  .next .play{width:48px;height:48px;border-radius:15px;background:linear-gradient(140deg,var(--accent-hot),var(--accent));display:grid;place-items:center;color:#fff;font-size:17px;box-shadow:0 10px 28px -6px rgba(234,88,12,.6)}
+  .next .t{font-family:var(--head);font-weight:600;font-size:15px}.next .s{font-size:12px;color:var(--text-2)}
+
+  .nav{display:flex;padding:10px 22px 16px;border-top:1px solid var(--border);background:rgba(18,13,10,.7);backdrop-filter:blur(16px)}
+  .nav a{flex:1;text-align:center;font-family:var(--head);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);text-decoration:none}
+  .nav a .ic{display:block;font-size:18px;margin-bottom:4px}.nav a.on{color:var(--text)}.nav a.on .ic{color:var(--accent-hot)}
+
+  .sh{padding:4px 0 14px}.sh .lift{font-family:var(--head);font-weight:800;font-size:32px;letter-spacing:-0.03em}.sh .sub{font-family:var(--head);font-size:12px;color:var(--text-2);margin-top:4px}
+  .set{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .set .n{font-family:var(--head);font-weight:700;font-size:20px;color:var(--text-3);width:22px}.set.done .n{color:#a3e635}
+  .set .w{flex:1;font-family:var(--head);font-weight:600;font-size:15px}.set .w small{color:var(--text-3);font-weight:400}
+  .set .e{font-family:var(--head);font-weight:700;font-size:18px;color:var(--text-2)}
+  .bn{display:flex;align-items:baseline;justify-content:center;gap:10px;padding:18px 0 10px}
+  .bn .w{font-family:var(--head);font-weight:800;font-size:72px;line-height:.8;letter-spacing:-0.04em}.bn .x{font-family:var(--head);font-size:20px;color:var(--text-3);font-weight:600}
+  .bn .r{font-family:var(--head);font-weight:800;font-size:72px;line-height:.8;letter-spacing:-0.04em;color:var(--accent-hot)}
+  .rpe{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:6px 0 14px}
+  .rpe button{font-family:var(--head);font-weight:600;font-size:14px;padding:15px;border-radius:15px;background:var(--surface);border:1px solid var(--border);color:var(--text);min-height:var(--tap)}
+  .rpe button .l{display:block;font-size:10px;color:var(--text-3);letter-spacing:.08em;text-transform:uppercase;margin-top:3px}
+  .rpe button.fail{grid-column:1/-1;background:var(--accent-dim);border-color:rgba(249,115,22,.4);color:var(--accent-hot)}
+  .cta{display:block;width:100%;font-family:var(--head);font-weight:700;font-size:15px;letter-spacing:.02em;padding:17px;border-radius:16px;color:#fff;border:0;min-height:var(--tap);
+    background:linear-gradient(120deg,var(--accent-hot),var(--accent));box-shadow:0 12px 32px -8px rgba(234,88,12,.6)}
+
+  .pills{display:flex;gap:7px;margin:0 0 14px}
+  .pill{font-family:var(--head);font-size:12px;font-weight:600;padding:7px 13px;border-radius:99px;background:var(--surface);border:1px solid var(--border);color:var(--text-2)}
+  .pill.on{background:var(--accent-dim);border-color:rgba(249,115,22,.4);color:var(--accent-hot)}
+  .chart{width:100%;height:130px;display:block}.axis{display:flex;justify-content:space-between;font-family:var(--head);font-size:10px;color:var(--text-3);margin-top:5px}
+  @media(max-width:560px){.phone{transform:scale(.92);margin:-28px 0}}
+</style>
+</head>
+<body>
+<div class="page-head">
+  <span class="tag">04 · Warm</span>
+  <h1>"Ember" — warmth and grit, sunrise-training energy</h1>
+  <p>Espresso base instead of cold black, warm off-white text, an ember/amber accent with gold for milestones, softer rounded surfaces, a heavy humanist (Sora). Feels like chalk, iron and early mornings rather than a clinical readout. Inviting and physical — the cozy end of strong.</p>
+</div>
+<div class="stage">
+
+  <!-- DASHBOARD -->
+  <div class="frame-wrap"><div class="phone"><div class="screen">
+    <div class="statusbar"><span>9:41</span><span>● ● ●  100%</span></div>
+    <div class="topbar"><div class="brand">THE TOJI <b>METHOD</b></div><div class="icon-btn">⚙</div></div>
+    <div class="body">
+      <div class="hero"><div class="ey">Strength Score</div><div class="num">847</div><div><span class="delta">▲ 23 this month</span></div></div>
+      <div class="stats">
+        <div class="stat"><div class="v">14<small>t</small></div><div class="k">Volume/wk</div></div>
+        <div class="stat"><div class="v">4<small>/5</small></div><div class="k">Sessions</div></div>
+        <div class="stat"><div class="v">96<small>%</small></div><div class="k">Consistency</div></div>
+      </div>
+      <div class="card">
+        <div class="row-head"><span class="ct">Recent PRs</span><span class="link">All →</span></div>
+        <div class="pr"><div class="b gold">PR</div><div class="m"><div class="t">Deadlift</div><div class="s">180 kg × 3 · today</div></div><div class="e">198<small>+6</small></div></div>
+        <div class="pr"><div class="b">PR</div><div class="m"><div class="t">Bench Press</div><div class="s">110 kg × 5 · 2d ago</div></div><div class="e">127<small>+4</small></div></div>
+        <div class="pr"><div class="b">PR</div><div class="m"><div class="t">Back Squat</div><div class="s">150 kg × 4 · 4d ago</div></div><div class="e">165<small>+2</small></div></div>
+      </div>
+      <div class="card next"><div class="play">▶</div><div style="flex:1"><div class="t">Push Day · 5 lifts</div><div class="s">~48 min</div></div><div style="font-family:var(--head);font-weight:700;font-size:22px;color:var(--text-3)">▶</div></div>
+    </div>
+    <div class="nav"><a class="on"><span class="ic">◉</span>Dash</a><a><span class="ic">▦</span>Train</a></div>
+  </div></div><div class="frame-label">Dashboard</div></div>
+
+  <!-- SESSION -->
+  <div class="frame-wrap"><div class="phone"><div class="screen">
+    <div class="statusbar"><span>9:41</span><span>● ● ●  100%</span></div>
+    <div class="topbar"><div class="icon-btn">←</div><div class="brand" style="font-size:15px;letter-spacing:.04em">SESSION · 03</div><div class="icon-btn">✕</div></div>
+    <div class="body">
+      <div class="sh"><div class="lift">Bench Press</div><div class="sub">set 3 of 5 · target 5 reps @ RPE 8</div></div>
+      <div class="set done"><div class="n">1</div><div class="w">100 <small>kg × 5</small></div><div class="e">116</div></div>
+      <div class="set done"><div class="n">2</div><div class="w">105 <small>kg × 5</small></div><div class="e">122</div></div>
+      <div class="bn"><span class="w">110</span><span class="x">kg ×</span><span class="r">5</span></div>
+      <div class="rpe">
+        <button>Easy<span class="l">RPE 6–7</span></button><button>Good<span class="l">RPE 8</span></button>
+        <button>Hard<span class="l">RPE 9</span></button><button class="fail">TO FAILURE<span class="l" style="color:rgba(249,115,22,.7)">RPE 10</span></button>
+      </div>
+      <button class="cta">LOG SET · e1RM 127</button>
+    </div>
+    <div class="nav"><a><span class="ic">◉</span>Dash</a><a class="on"><span class="ic">▦</span>Train</a></div>
+  </div></div><div class="frame-label">Active session</div></div>
+
+  <!-- LIFT DETAIL -->
+  <div class="frame-wrap"><div class="phone"><div class="screen">
+    <div class="statusbar"><span>9:41</span><span>● ● ●  100%</span></div>
+    <div class="topbar"><div class="icon-btn">←</div><div class="brand" style="font-size:15px;letter-spacing:.04em">LIFTS</div><div class="icon-btn">⋯</div></div>
+    <div class="body">
+      <div class="hero" style="padding-top:14px"><div class="ey">Bench Press · e1RM</div><div class="num" style="font-size:78px">127<small style="font-family:var(--head);font-size:18px;color:var(--text-3);-webkit-text-fill-color:var(--text-3)"> kg</small></div><div><span class="delta">▲ 11 kg in 90 days</span></div></div>
+      <div class="pills"><span class="pill">6W</span><span class="pill on">3M</span><span class="pill">1Y</span><span class="pill">ALL</span></div>
+      <div class="card" style="padding:16px 14px 10px">
+        <svg class="chart" viewBox="0 0 300 130" preserveAspectRatio="none">
+          <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f97316" stop-opacity=".4"/><stop offset="1" stop-color="#f97316" stop-opacity="0"/></linearGradient></defs>
+          <path d="M0,96 L43,90 L86,94 L129,76 L172,66 L215,52 L258,40 L300,26 L300,130 L0,130 Z" fill="url(#g)"/>
+          <path d="M0,96 L43,90 L86,94 L129,76 L172,66 L215,52 L258,40 L300,26" fill="none" stroke="#f97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="300" cy="26" r="4" fill="#fff"/>
+        </svg>
+        <div class="axis"><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span></div>
+      </div>
+      <div class="card">
+        <div class="row-head"><span class="ct">Top sets</span></div>
+        <div class="pr"><div class="b gold">PR</div><div class="m"><div class="t">110 kg × 5</div><div class="s">today · RPE 9</div></div><div class="e">127</div></div>
+        <div class="pr"><div class="b">2</div><div class="m"><div class="t">107.5 kg × 5</div><div class="s">5d ago · RPE 8</div></div><div class="e">124</div></div>
+      </div>
+    </div>
+    <div class="nav"><a><span class="ic">◉</span>Dash</a><a class="on"><span class="ic">▦</span>Train</a></div>
+  </div></div><div class="frame-label">Lift detail · e1RM</div></div>
+
+</div>
+</body>
+</html>

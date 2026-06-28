@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toji Method — Hybrid mockup (Cinema base + Brutal numerals)</title>
+<!-- MOCKUP ONLY. Throwaway. Fonts via CDN for preview; shipping = self-host to keep offline-first. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050506; --bg-2:#0a0a0c;
+    --glass:rgba(255,255,255,0.045); --glass-2:rgba(255,255,255,0.07);
+    --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.16);
+    --text:#f5f5f5; --text-2:#9a9aa2; --text-3:#56565e;
+    --accent:#dc2626; --accent-hot:#ef4444; --accent-dim:rgba(220,38,38,0.16);
+    --good:#4ade80; --gold:#fbbf24;
+    --r:16px; --rl:22px; --tap:52px;
+    --display:'Bebas Neue',sans-serif;
+    --head:'Space Grotesk',sans-serif;
+    --body:'DM Sans',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:#000; color:var(--text); font-family:var(--body);
+    -webkit-font-smoothing:antialiased; padding:40px 20px 80px; min-height:100vh;
+  }
+  .page-head{max-width:1180px;margin:0 auto 36px;padding:0 8px}
+  .page-head h1{font-family:var(--head);font-weight:700;font-size:22px;letter-spacing:-0.01em}
+  .page-head p{color:var(--text-2);font-size:14px;margin-top:8px;max-width:760px;line-height:1.55}
+  .page-head .tag{display:inline-block;font-family:var(--head);font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent-hot);background:var(--accent-dim);
+    border:1px solid rgba(239,68,68,.3);padding:5px 11px;border-radius:99px;margin-bottom:14px}
+
+  .stage{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;max-width:1180px;margin:0 auto}
+  .frame-wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .frame-label{font-family:var(--head);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+
+  /* phone */
+  .phone{
+    width:340px;height:720px;border-radius:42px;padding:11px;
+    background:linear-gradient(160deg,#1a1a1e,#0c0c0e);
+    box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 40px 80px -20px rgba(0,0,0,.9), 0 0 120px -40px rgba(220,38,38,.25);
+  }
+  .screen{
+    position:relative;width:100%;height:100%;border-radius:32px;overflow:hidden;
+    background:
+      radial-gradient(120% 80% at 50% -10%, rgba(220,38,38,.14), transparent 55%),
+      radial-gradient(90% 60% at 100% 110%, rgba(80,80,120,.06), transparent 60%),
+      var(--bg);
+    display:flex;flex-direction:column;
+  }
+  .screen::-webkit-scrollbar{display:none}
+
+  /* status + topbar */
+  .statusbar{display:flex;justify-content:space-between;align-items:center;padding:14px 22px 6px;font-size:12px;color:var(--text-2);font-family:var(--head);font-weight:500}
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 20px 14px}
+  .brand{font-family:var(--display);font-size:22px;letter-spacing:.04em;line-height:1}
+  .brand b{color:var(--accent-hot)}
+  .icon-btn{width:36px;height:36px;border-radius:11px;background:var(--glass);border:1px solid var(--border);
+    display:grid;place-items:center;color:var(--text-2);font-size:16px}
+
+  .body{flex:1;overflow-y:auto;padding:4px 18px 18px}
+  .body::-webkit-scrollbar{display:none}
+
+  /* cards */
+  .card{background:var(--glass);border:1px solid var(--border);border-radius:var(--r);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:16px;margin-bottom:14px}
+  .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .card-title{font-family:var(--head);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+  .link{font-family:var(--head);font-size:12px;color:var(--text-3);font-weight:500}
+
+  /* HERO — the brutal moment */
+  .hero{position:relative;text-align:center;padding:22px 0 10px}
+  .hero .eyebrow{font-family:var(--head);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--text-2);margin-bottom:2px}
+  .hero .num{font-family:var(--display);font-size:118px;line-height:.82;letter-spacing:.01em;
+    background:linear-gradient(180deg,#fff 30%,#d8d8dc);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 6px 30px rgba(220,38,38,.35))}
+  .hero .unit{font-family:var(--head);font-size:14px;color:var(--text-3);font-weight:600;letter-spacing:.1em}
+  .delta{display:inline-flex;align-items:center;gap:5px;font-family:var(--head);font-size:13px;font-weight:600;
+    color:var(--good);background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.28);
+    padding:4px 10px;border-radius:99px;margin-top:8px}
+
+  /* stat row */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .stat{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:13px 12px}
+  .stat .v{font-family:var(--display);font-size:34px;line-height:.9;letter-spacing:.02em}
+  .stat .v small{font-family:var(--head);font-size:13px;color:var(--text-3);font-weight:600;letter-spacing:0}
+  .stat .k{font-family:var(--head);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-top:5px}
+
+  /* PR list */
+  .row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+  .row:last-child{border-bottom:0}
+  .row .badge{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-family:var(--display);font-size:17px;
+    background:var(--accent-dim);border:1px solid rgba(239,68,68,.3);color:var(--accent-hot)}
+  .row .badge.gold{background:rgba(251,191,36,.14);border-color:rgba(251,191,36,.32);color:var(--gold)}
+  .row .meta{flex:1}
+  .row .meta .t{font-family:var(--head);font-weight:600;font-size:14px}
+  .row .meta .s{font-size:12px;color:var(--text-2);margin-top:1px}
+  .row .val{text-align:right}
+  .row .val .e{font-family:var(--display);font-size:26px;line-height:.9}
+  .row .val .d{font-family:var(--head);font-size:11px;font-weight:600;color:var(--good)}
+
+  /* up next */
+  .next{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,var(--accent-dim),transparent);
+    border:1px solid rgba(239,68,68,.28)}
+  .next .play{width:46px;height:46px;border-radius:14px;background:var(--accent);display:grid;place-items:center;color:#fff;font-size:18px;
+    box-shadow:0 8px 24px -6px rgba(220,38,38,.6)}
+
+  /* bottom nav */
+  .nav{display:flex;padding:10px 22px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--border);
+    background:rgba(8,8,10,.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+  .nav a{flex:1;text-align:center;font-family:var(--head);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);text-decoration:none}
+  .nav a .ic{display:block;font-size:19px;margin-bottom:4px}
+  .nav a.on{color:var(--text)}
+  .nav a.on .ic{color:var(--accent-hot)}
+
+  /* ===== Session screen ===== */
+  .sess-head{padding:2px 2px 14px}
+  .sess-head .lift{font-family:var(--display);font-size:40px;line-height:.9;letter-spacing:.02em}
+  .sess-head .sub{font-family:var(--head);font-size:12px;color:var(--text-2);font-weight:500;letter-spacing:.04em;margin-top:4px}
+  .set{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+  .set .n{font-family:var(--display);font-size:22px;color:var(--text-3)}
+  .set.done .n{color:var(--good)}
+  .set .wr{font-family:var(--head);font-weight:600;font-size:15px}
+  .set .wr small{color:var(--text-3);font-weight:500}
+  .set .e{font-family:var(--display);font-size:20px;color:var(--text-2)}
+  .set.active{background:var(--accent-dim);margin:0 -16px;padding:12px 16px;border-radius:12px;border-bottom:0}
+  .set.active .n{color:var(--accent-hot)}
+
+  .bignum{display:flex;align-items:baseline;justify-content:center;gap:10px;padding:16px 0 10px}
+  .bignum .w{font-family:var(--display);font-size:80px;line-height:.8}
+  .bignum .x{font-family:var(--head);font-size:22px;color:var(--text-3);font-weight:600}
+  .bignum .reps{font-family:var(--display);font-size:80px;line-height:.8;color:var(--accent-hot)}
+
+  .rpe{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:6px 0 14px}
+  .rpe button{font-family:var(--head);font-weight:600;font-size:13px;letter-spacing:.04em;padding:14px;border-radius:13px;
+    background:var(--glass);border:1px solid var(--border);color:var(--text);min-height:var(--tap)}
+  .rpe button .l{font-size:10px;color:var(--text-3);display:block;letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+  .rpe button.fail{grid-column:1/-1;background:var(--accent-dim);border-color:rgba(239,68,68,.4);color:var(--accent-hot)}
+
+  .timer{text-align:center;padding:18px 0}
+  .timer .t{font-family:var(--display);font-size:64px;line-height:.85;letter-spacing:.03em}
+  .timer .k{font-family:var(--head);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-2)}
+  .bar{height:5px;border-radius:99px;background:var(--glass-2);overflow:hidden;margin-top:12px}
+  .bar i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--accent),var(--accent-hot))}
+
+  .cta{display:block;width:100%;text-align:center;font-family:var(--head);font-weight:700;font-size:15px;letter-spacing:.04em;
+    padding:16px;border-radius:14px;background:var(--accent);color:#fff;border:0;min-height:var(--tap);
+    box-shadow:0 10px 30px -8px rgba(220,38,38,.6)}
+
+  /* ===== Lift detail / chart ===== */
+  .chartcard{padding:16px 16px 8px}
+  .chart{width:100%;height:130px;display:block;margin:6px 0 4px}
+  .axis{display:flex;justify-content:space-between;font-family:var(--head);font-size:10px;color:var(--text-3);letter-spacing:.06em}
+  .pills{display:flex;gap:7px;margin:14px 0}
+  .pill{font-family:var(--head);font-size:12px;font-weight:600;padding:7px 12px;border-radius:99px;background:var(--glass);border:1px solid var(--border);color:var(--text-2)}
+  .pill.on{background:var(--accent-dim);border-color:rgba(239,68,68,.3);color:var(--accent-hot)}
+
+  @media(max-width:560px){.phone{transform:scale(.92);margin:-28px 0}}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <span class="tag">Hybrid · Cinema base + Brutal numerals</span>
+  <h1>The Toji Method — UI direction</h1>
+  <p>Cinematic depth and glass surfaces for everyday calm; oversized condensed numerals (Bebas Neue) where it counts — the Strength Score, your e1RM, the rep that goes to failure. Space Grotesk for structure, DM Sans for reading, the blood-red accent kept from today. Three representative screens below.</p>
+</div>
+
+<div class="stage">
+
+  <!-- ===== 1. DASHBOARD ===== -->
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp;100%</span></div>
+      <div class="topbar">
+        <div class="brand">THE <b>TOJI</b> METHOD</div>
+        <div class="icon-btn">⚙</div>
+      </div>
+      <div class="body">
+        <div class="hero">
+          <div class="eyebrow">Strength Score</div>
+          <div class="num">847</div>
+          <div><span class="delta">▲ 23 this month</span></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="v">14<small> t</small></div><div class="k">Volume / wk</div></div>
+          <div class="stat"><div class="v">4<small>/5</small></div><div class="k">Sessions</div></div>
+          <div class="stat"><div class="v">96<small>%</small></div><div class="k">Consistency</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Recent PRs</span><span class="link">All →</span></div>
+          <div class="row">
+            <div class="badge gold">PR</div>
+            <div class="meta"><div class="t">Deadlift</div><div class="s">180 kg × 3 · today</div></div>
+            <div class="val"><div class="e">198</div><div class="d">+6 e1RM</div></div>
+          </div>
+          <div class="row">
+            <div class="badge">PR</div>
+            <div class="meta"><div class="t">Bench Press</div><div class="s">110 kg × 5 · 2d ago</div></div>
+            <div class="val"><div class="e">127</div><div class="d">+4 e1RM</div></div>
+          </div>
+          <div class="row">
+            <div class="badge">PR</div>
+            <div class="meta"><div class="t">Back Squat</div><div class="s">150 kg × 4 · 4d ago</div></div>
+            <div class="val"><div class="e">165</div><div class="d">+2 e1RM</div></div>
+          </div>
+        </div>
+        <div class="card next">
+          <div class="play">▶</div>
+          <div class="meta" style="flex:1">
+            <div class="card-title" style="margin:0">Up next</div>
+            <div class="t" style="font-family:var(--head);font-weight:600;font-size:15px;margin-top:3px">Push Day · 5 lifts</div>
+          </div>
+          <div style="font-family:var(--display);font-size:24px;color:var(--text-3)">~48′</div>
+        </div>
+      </div>
+      <div class="nav">
+        <a class="on"><span class="ic">◉</span>Dash</a>
+        <a><span class="ic">▦</span>Train</a>
+      </div>
+    </div></div>
+    <div class="frame-label">Dashboard</div>
+  </div>
+
+  <!-- ===== 2. ACTIVE SESSION ===== -->
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp;100%</span></div>
+      <div class="topbar">
+        <div class="icon-btn">←</div>
+        <div class="brand" style="font-size:16px;letter-spacing:.1em">SESSION · 03</div>
+        <div class="icon-btn">✕</div>
+      </div>
+      <div class="body">
+        <div class="sess-head">
+          <div class="lift">Bench Press</div>
+          <div class="sub">Set 3 of 5 · target 5 reps @ RPE 8</div>
+        </div>
+        <div class="set done"><div class="n">1</div><div class="wr">100 <small>kg × 5</small></div><div class="e">116</div></div>
+        <div class="set done"><div class="n">2</div><div class="wr">105 <small>kg × 5</small></div><div class="e">122</div></div>
+        <div class="set active"><div class="n">3</div><div class="wr">110 <small>kg × ?</small></div><div class="e" style="color:var(--accent-hot)">—</div></div>
+
+        <div class="bignum">
+          <span class="w">110</span><span class="x">kg ×</span><span class="reps">5</span>
+        </div>
+        <div class="rpe">
+          <button>Easy<span class="l">RPE 6–7</span></button>
+          <button>Good<span class="l">RPE 8</span></button>
+          <button>Hard<span class="l">RPE 9</span></button>
+          <button class="fail">TO FAILURE<span class="l" style="color:rgba(239,68,68,.7)">RPE 10</span></button>
+        </div>
+        <button class="cta">LOG SET · e1RM 127</button>
+      </div>
+      <div class="nav">
+        <a><span class="ic">◉</span>Dash</a>
+        <a class="on"><span class="ic">▦</span>Train</a>
+      </div>
+    </div></div>
+    <div class="frame-label">Active session</div>
+  </div>
+
+  <!-- ===== 3. LIFT DETAIL ===== -->
+  <div class="frame-wrap">
+    <div class="phone"><div class="screen">
+      <div class="statusbar"><span>9:41</span><span>● ● ● &nbsp;100%</span></div>
+      <div class="topbar">
+        <div class="icon-btn">←</div>
+        <div class="brand" style="font-size:16px;letter-spacing:.06em">LIFTS</div>
+        <div class="icon-btn">⋯</div>
+      </div>
+      <div class="body">
+        <div class="hero" style="padding-top:10px">
+          <div class="eyebrow">Bench Press · e1RM</div>
+          <div class="num" style="font-size:104px">127</div>
+          <div class="unit">KILOGRAMS</div>
+          <div><span class="delta">▲ 11 kg in 90 days</span></div>
+        </div>
+        <div class="pills">
+          <span class="pill">6W</span><span class="pill on">3M</span><span class="pill">1Y</span><span class="pill">ALL</span>
+        </div>
+        <div class="card chartcard">
+          <svg class="chart" viewBox="0 0 300 130" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ef4444" stop-opacity=".35"/>
+                <stop offset="1" stop-color="#ef4444" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,98 L40,92 L80,96 L120,78 L160,70 L200,58 L240,46 L300,30 L300,130 L0,130 Z" fill="url(#g)"/>
+            <path d="M0,98 L40,92 L80,96 L120,78 L160,70 L200,58 L240,46 L300,30" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="300" cy="30" r="4" fill="#fff"/><circle cx="300" cy="30" r="8" fill="none" stroke="#ef4444" stroke-width="1.5" opacity=".6"/>
+          </svg>
+          <div class="axis"><span>MAR</span><span>APR</span><span>MAY</span><span>JUN</span></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Top sets</span></div>
+          <div class="row">
+            <div class="badge gold">PR</div>
+            <div class="meta"><div class="t">110 kg × 5</div><div class="s">Today · RPE 9</div></div>
+            <div class="val"><div class="e">127</div></div>
+          </div>
+          <div class="row">
+            <div class="badge">2</div>
+            <div class="meta"><div class="t">107.5 kg × 5</div><div class="s">5d ago · RPE 8</div></div>
+            <div class="val"><div class="e">124</div></div>
+          </div>
+          <div class="row">
+            <div class="badge">3</div>
+            <div class="meta"><div class="t">105 kg × 6</div><div class="s">12d ago · failure</div></div>
+            <div class="val"><div class="e">126</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="nav">
+        <a><span class="ic">◉</span>Dash</a>
+        <a class="on"><span class="ic">▦</span>Train</a>
+      </div>
+    </div></div>
+    <div class="frame-label">Lift detail · e1RM</div>
+  </div>
+
+</div>
+</body>
+</html>
